@@ -23,7 +23,7 @@ async function createPackageJson(packageName: string, packageDir: string) {
 
   const packageJson = {
     ...rootPackageJson,
-    name: `@chrome-devtools/${packageName}`,
+    name: `Bobjoy/${packageName}`,
   };
 
   await fs.writeFile(
