@@ -34,6 +34,9 @@ jobs:
 
       - name: Run builder
         run: bun run builder.ts
+        
+      - name: Configure npm authentication
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       - name: Process and publish packages
         run: |
