@@ -3,6 +3,12 @@
 // found in the LICENSE file.
 import * as MarkdownView from '../../ui/components/markdown_view/markdown_view.js';
 let registeredLinks = false;
+export var VideoType;
+(function (VideoType) {
+    VideoType["WHATS_NEW"] = "WhatsNew";
+    VideoType["DEVTOOLS_TIPS"] = "DevtoolsTips";
+    VideoType["OTHER"] = "Other";
+})(VideoType || (VideoType = {}));
 export function setReleaseNoteForTest(testReleaseNote) {
     releaseNote = testReleaseNote;
 }
@@ -16,8 +22,8 @@ export function getReleaseNote() {
     return releaseNote;
 }
 let releaseNote = {
-    version: 152,
-    header: 'What’s new in DevTools 152',
+    version: 153,
+    header: 'New in DevTools (September 2026)',
     markdownLinks: [
         {
             key: 'devtools-for-agents',

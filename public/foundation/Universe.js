@@ -58,14 +58,11 @@ export class Universe {
         context.set(SDK.FrameManager.FrameManager, frameManager);
         const multitargetNetworkManager = new SDK.NetworkManager.MultitargetNetworkManager(targetManager);
         context.set(SDK.NetworkManager.MultitargetNetworkManager, multitargetNetworkManager);
-        const workspace = new Workspace.Workspace.WorkspaceImpl();
-        context.set(Workspace.Workspace.WorkspaceImpl, workspace);
-        const fileManager = new Workspace.FileManager.FileManager();
-        context.set(Workspace.FileManager.FileManager, fileManager);
         this.supportsEmulation = options.supportsEmulation;
         let deviceModeModel = null;
         if (options.supportsEmulation) {
-            deviceModeModel = new Emulation.DeviceModeModel.DeviceModeModel(targetManager, settings, multitargetNetworkManager, fileManager);
+            deviceModeModel =
+                new Emulation.DeviceModeModel.DeviceModeModel(targetManager, settings, multitargetNetworkManager);
             context.set(Emulation.DeviceModeModel.DeviceModeModel, deviceModeModel);
         }
         const pageResourceLoader = new SDK.PageResourceLoader.PageResourceLoader(targetManager, settings, multitargetNetworkManager, null);
@@ -91,6 +88,10 @@ export class Universe {
         context.set(SDK.EventBreakpointsModel.EventBreakpointsManager, eventBreakpointsManager);
         const domModelUndoStack = new SDK.DOMModel.DOMModelUndoStack();
         context.set(SDK.DOMModel.DOMModelUndoStack, domModelUndoStack);
+        const workspace = new Workspace.Workspace.WorkspaceImpl();
+        context.set(Workspace.Workspace.WorkspaceImpl, workspace);
+        const fileManager = new Workspace.FileManager.FileManager();
+        context.set(Workspace.FileManager.FileManager, fileManager);
         if (automaticFileSystemManager) {
             const automaticFileSystemWorkspaceBinding = new Persistence.AutomaticFileSystemWorkspaceBinding.AutomaticFileSystemWorkspaceBinding(automaticFileSystemManager, isolatedFileSystemManager, workspace);
             context.set(Persistence.AutomaticFileSystemWorkspaceBinding.AutomaticFileSystemWorkspaceBinding, automaticFileSystemWorkspaceBinding);
@@ -123,6 +124,8 @@ export class Universe {
         context.set(Logs.LogManager.LogManager, logManager);
         const issuesManager = new IssuesManager.IssuesManager.IssuesManager(IssuesManager.Issue.getShowThirdPartyIssuesSetting(settings), IssuesManager.IssuesManager.getHideIssueByCodeSetting(settings), frameManager, targetManager, workspace, debuggerWorkspaceBinding, cssWorkspaceBinding);
         context.set(IssuesManager.IssuesManager.IssuesManager, issuesManager);
+        const domIssuesManager = new IssuesManager.DOMIssuesManager.DOMIssuesManager(issuesManager, targetManager);
+        context.set(IssuesManager.DOMIssuesManager.DOMIssuesManager, domIssuesManager);
         const javaScriptMetadata = new JavaScriptMetadata.JavaScriptMetadata.JavaScriptMetadataImpl();
         context.set(JavaScriptMetadata.JavaScriptMetadata.JavaScriptMetadataImpl, javaScriptMetadata);
         const liveMetrics = new LiveMetrics.LiveMetrics(targetManager, settings, deviceModeModel);
@@ -184,6 +187,9 @@ export class Universe {
     }
     get domDebuggerManager() {
         return this.context.get(SDK.DOMDebuggerModel.DOMDebuggerManager);
+    }
+    get domIssuesManager() {
+        return this.context.get(IssuesManager.DOMIssuesManager.DOMIssuesManager);
     }
     get domModelUndoStack() {
         return this.context.get(SDK.DOMModel.DOMModelUndoStack);

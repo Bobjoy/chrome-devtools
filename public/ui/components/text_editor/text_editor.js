@@ -4,23 +4,23 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/text_editor/AccessiblePlaceholder.js
+// ../../front_end/ui/components/text_editor/AccessiblePlaceholder.ts
 var AccessiblePlaceholder_exports = {};
 __export(AccessiblePlaceholder_exports, {
   AccessiblePlaceholder: () => AccessiblePlaceholder,
   flattenRect: () => flattenRect
 });
-import * as CM from "./../../../third_party/codemirror.next/codemirror.next.js";
+import * as CM from "../../../third_party/codemirror.next/codemirror.next.js";
 function flattenRect(rect, left) {
   const x = left ? rect.left : rect.right;
   return { left: x, right: x, top: rect.top, bottom: rect.bottom };
 }
 var AccessiblePlaceholder = class extends CM.WidgetType {
-  teaser;
   constructor(teaser) {
     super();
     this.teaser = teaser;
   }
+  teaser;
   toDOM() {
     const wrap = document.createElement("span");
     wrap.classList.add("cm-placeholder");
@@ -59,20 +59,20 @@ var AccessiblePlaceholder = class extends CM.WidgetType {
   }
 };
 
-// gen/front_end/ui/components/text_editor/AiCodeCompletionDisclaimer.js
+// ../../front_end/ui/components/text_editor/AiCodeCompletionDisclaimer.ts
 var AiCodeCompletionDisclaimer_exports = {};
 __export(AiCodeCompletionDisclaimer_exports, {
   AiCodeCompletionDisclaimer: () => AiCodeCompletionDisclaimer,
   DEFAULT_SUMMARY_TOOLBAR_VIEW: () => DEFAULT_SUMMARY_TOOLBAR_VIEW
 });
-import "./../spinners/spinners.js";
-import "./../tooltips/tooltips.js";
-import * as Host from "./../../../core/host/host.js";
-import * as i18n from "./../../../core/i18n/i18n.js";
-import * as Root from "./../../../core/root/root.js";
-import * as UI from "./../../legacy/legacy.js";
-import { Directives, html, nothing, render } from "./../../lit/lit.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
+import "../spinners/spinners.js";
+import "../tooltips/tooltips.js";
+import * as Host from "../../../core/host/host.js";
+import * as i18n from "../../../core/i18n/i18n.js";
+import * as Root from "../../../core/root/root.js";
+import * as UI from "../../legacy/legacy.js";
+import { Directives, html, nothing, render } from "../../lit/lit.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
 
 // gen/front_end/ui/components/text_editor/aiCodeCompletionDisclaimer.css.js
 var aiCodeCompletionDisclaimer_css_default = `/*
@@ -134,7 +134,7 @@ var aiCodeCompletionDisclaimer_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./aiCodeCompletionDisclaimer.css")} */`;
 
-// gen/front_end/ui/components/text_editor/AiCodeCompletionDisclaimer.js
+// ../../front_end/ui/components/text_editor/AiCodeCompletionDisclaimer.ts
 var UIStringsNotTranslate = {
   /**
    * @description Disclaimer text for AI code completion
@@ -193,7 +193,7 @@ function getTooltipDisclaimerText(noLogging, disclaimerTextVariant) {
   }
 }
 var DEFAULT_SUMMARY_TOOLBAR_VIEW = (input, output, target) => {
-  if (input.aidaAvailability !== "available" || !input.disclaimerTooltipId || !input.spinnerTooltipId || !input.disclaimerTextVariant) {
+  if (input.aidaAvailability !== Host.AidaClient.AidaAccessPreconditions.AVAILABLE || !input.disclaimerTooltipId || !input.spinnerTooltipId || !input.disclaimerTextVariant) {
     render(nothing, target);
     return;
   }
@@ -350,18 +350,25 @@ var AiCodeCompletionDisclaimer = class extends UI.Widget.Widget {
     void UI.ViewManager.ViewManager.instance().showView("chrome-ai");
   }
   performUpdate() {
-    this.#view({
-      disclaimerTooltipId: this.#disclaimerTooltipId,
-      spinnerTooltipId: this.#spinnerTooltipId,
-      noLogging: this.#noLogging,
-      aidaAvailability: this.#aidaAvailability,
-      onManageInSettingsTooltipClick: this.#onManageInSettingsTooltipClick.bind(this),
-      disclaimerTextVariant: this.#disclaimerTextVariant
-    }, this.#viewOutput, this.contentElement);
+    this.#view(
+      {
+        disclaimerTooltipId: this.#disclaimerTooltipId,
+        spinnerTooltipId: this.#spinnerTooltipId,
+        noLogging: this.#noLogging,
+        aidaAvailability: this.#aidaAvailability,
+        onManageInSettingsTooltipClick: this.#onManageInSettingsTooltipClick.bind(this),
+        disclaimerTextVariant: this.#disclaimerTextVariant
+      },
+      this.#viewOutput,
+      this.contentElement
+    );
   }
   wasShown() {
     super.wasShown();
-    Host.AidaClient.HostConfigTracker.instance().addEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host.AidaClient.HostConfigTracker.instance().addEventListener(
+      Host.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
     const initialAvailability = Host.AidaClient.HostConfigTracker.instance().aidaAvailability;
     if (initialAvailability !== void 0) {
       this.#updateAidaAvailability(initialAvailability);
@@ -369,11 +376,14 @@ var AiCodeCompletionDisclaimer = class extends UI.Widget.Widget {
   }
   willHide() {
     super.willHide();
-    Host.AidaClient.HostConfigTracker.instance().removeEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host.AidaClient.HostConfigTracker.instance().removeEventListener(
+      Host.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
   }
 };
 
-// gen/front_end/ui/components/text_editor/AiCodeCompletionProvider.js
+// ../../front_end/ui/components/text_editor/AiCodeCompletionProvider.ts
 var AiCodeCompletionProvider_exports = {};
 __export(AiCodeCompletionProvider_exports, {
   AIDA_REQUEST_DEBOUNCE_TIMEOUT_MS: () => AIDA_REQUEST_DEBOUNCE_TIMEOUT_MS,
@@ -384,34 +394,34 @@ __export(AiCodeCompletionProvider_exports, {
   aiCodeCompletionTeaserModeState: () => aiCodeCompletionTeaserModeState,
   setAiCodeCompletionTeaserMode: () => setAiCodeCompletionTeaserMode
 });
-import * as Common5 from "./../../../core/common/common.js";
-import * as Host6 from "./../../../core/host/host.js";
-import * as i18n12 from "./../../../core/i18n/i18n.js";
-import * as Root5 from "./../../../core/root/root.js";
-import * as AiCodeCompletion from "./../../../models/ai_code_completion/ai_code_completion.js";
-import * as AiCodeGeneration5 from "./../../../models/ai_code_generation/ai_code_generation.js";
-import * as CodeMirror3 from "./../../../third_party/codemirror.next/codemirror.next.js";
-import * as UI7 from "./../../legacy/legacy.js";
-import * as VisualLogging6 from "./../../visual_logging/visual_logging.js";
+import * as Common5 from "../../../core/common/common.js";
+import * as Host6 from "../../../core/host/host.js";
+import * as i18n12 from "../../../core/i18n/i18n.js";
+import * as Root5 from "../../../core/root/root.js";
+import * as AiCodeCompletion from "../../../models/ai_code_completion/ai_code_completion.js";
+import * as AiCodeGeneration5 from "../../../models/ai_code_generation/ai_code_generation.js";
+import * as CodeMirror3 from "../../../third_party/codemirror.next/codemirror.next.js";
+import * as UI7 from "../../legacy/legacy.js";
+import * as VisualLogging6 from "../../visual_logging/visual_logging.js";
 
-// gen/front_end/ui/components/text_editor/AiCodeCompletionTeaser.js
+// ../../front_end/ui/components/text_editor/AiCodeCompletionTeaser.ts
 var AiCodeCompletionTeaser_exports = {};
 __export(AiCodeCompletionTeaser_exports, {
   AiCodeCompletionTeaser: () => AiCodeCompletionTeaser,
   DEFAULT_VIEW: () => DEFAULT_VIEW
 });
-import "./../../kit/kit.js";
-import * as Common from "./../../../core/common/common.js";
-import * as Host2 from "./../../../core/host/host.js";
-import * as i18n3 from "./../../../core/i18n/i18n.js";
-import * as Root2 from "./../../../core/root/root.js";
-import * as AIAssistance from "./../../../models/ai_assistance/ai_assistance.js";
-import * as AiCodeGeneration from "./../../../models/ai_code_generation/ai_code_generation.js";
-import * as UI2 from "./../../legacy/legacy.js";
-import { html as html2, nothing as nothing2, render as render2 } from "./../../lit/lit.js";
-import * as VisualLogging2 from "./../../visual_logging/visual_logging.js";
-import * as Dialogs from "./../dialogs/dialogs.js";
-import * as Snackbars from "./../snackbars/snackbars.js";
+import "../../kit/kit.js";
+import * as Common from "../../../core/common/common.js";
+import * as Host2 from "../../../core/host/host.js";
+import * as i18n3 from "../../../core/i18n/i18n.js";
+import * as Root2 from "../../../core/root/root.js";
+import * as AIAssistance from "../../../models/ai_assistance/ai_assistance.js";
+import * as AiCodeGeneration from "../../../models/ai_code_generation/ai_code_generation.js";
+import * as UI2 from "../../legacy/legacy.js";
+import { html as html2, nothing as nothing2, render as render2 } from "../../lit/lit.js";
+import * as VisualLogging2 from "../../visual_logging/visual_logging.js";
+import * as Dialogs from "../dialogs/dialogs.js";
+import * as Snackbars from "../snackbars/snackbars.js";
 
 // gen/front_end/ui/components/text_editor/aiCodeCompletionTeaser.css.js
 var aiCodeCompletionTeaser_css_default = `/*
@@ -470,7 +480,7 @@ var aiCodeCompletionTeaser_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./aiCodeCompletionTeaser.css")} */`;
 
-// gen/front_end/ui/components/text_editor/AiCodeCompletionTeaser.js
+// ../../front_end/ui/components/text_editor/AiCodeCompletionTeaser.ts
 var UIStringsNotTranslate2 = {
   /**
    * @description Text for `ctrl` key.
@@ -554,7 +564,7 @@ var lockedString2 = i18n3.i18n.lockedString;
 var CODE_SNIPPET_WARNING_URL = "https://support.google.com/legal/answer/13505487";
 var PROMOTION_ID = "ai-code-completion";
 var DEFAULT_VIEW = (input, _output, target) => {
-  if (input.aidaAvailability !== "available") {
+  if (input.aidaAvailability !== Host2.AidaClient.AidaAccessPreconditions.AVAILABLE) {
     render2(nothing2, target);
     return;
   }
@@ -562,7 +572,8 @@ var DEFAULT_VIEW = (input, _output, target) => {
   const teaserAriaLabel = lockedString2(UIStringsNotTranslate2.press) + " " + cmdOrCtrl + " " + lockedString2(UIStringsNotTranslate2.i) + " " + lockedString2(UIStringsNotTranslate2.toTurnOnCodeSuggestions) + " " + lockedString2(UIStringsNotTranslate2.press) + " " + cmdOrCtrl + " " + lockedString2(UIStringsNotTranslate2.x) + " " + lockedString2(UIStringsNotTranslate2.toDisableCodeSuggestions);
   const newBadge = UI2.UIUtils.maybeCreateNewBadge(PROMOTION_ID);
   const newBadgeTemplate = newBadge ? html2`&nbsp;${newBadge}` : nothing2;
-  render2(html2`
+  render2(
+    html2`
           <style>${aiCodeCompletionTeaser_css_default}</style>
           <style>@scope to (devtools-widget > *) { ${UI2.inspectorCommonStyles} }</style>
           <div class="ai-code-completion-teaser-screen-reader-only">${teaserAriaLabel}</div>
@@ -576,18 +587,20 @@ var DEFAULT_VIEW = (input, _output, target) => {
               tabindex="0"
               @click=${input.onDismiss}
               @keydown=${(e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      input.onDismiss(e);
-      e.stopPropagation();
-      e.preventDefault();
-    }
-  }}
+      if (e.key === "Enter" || e.key === " ") {
+        input.onDismiss(e);
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    }}
               jslog=${VisualLogging2.action("ai-code-completion-teaser.dismiss").track({ click: true })}>
                 ${lockedString2(UIStringsNotTranslate2.dontShowAgain)}
             </span>
             ${newBadgeTemplate}
           </div>
-        `, target);
+        `,
+    target
+  );
 };
 var AiCodeCompletionTeaser = class extends UI2.Widget.Widget {
   #view;
@@ -646,27 +659,33 @@ var AiCodeCompletionTeaser = class extends UI2.Widget.Widget {
     }];
     const devtoolsLocale = i18n3.DevToolsLocale.DevToolsLocale.instance();
     if (AiCodeGeneration.AiCodeGeneration.AiCodeGeneration.isAiCodeGenerationEnabled(devtoolsLocale.locale)) {
-      reminderItems.push({
-        iconName: "code",
-        content: lockedString2(UIStringsNotTranslate2.freDisclaimerTextAsYouType)
-      }, {
-        iconName: "text-analysis",
-        content: Host2.Platform.isMac() ? lockedString2(UIStringsNotTranslate2.freDisclaimerDescribeCodeInCommentForMacOs) : lockedString2(UIStringsNotTranslate2.freDisclaimerDescribeCodeInComment)
-      });
+      reminderItems.push(
+        {
+          iconName: "code",
+          content: lockedString2(UIStringsNotTranslate2.freDisclaimerTextAsYouType)
+        },
+        {
+          iconName: "text-analysis",
+          content: Host2.Platform.isMac() ? lockedString2(UIStringsNotTranslate2.freDisclaimerDescribeCodeInCommentForMacOs) : lockedString2(UIStringsNotTranslate2.freDisclaimerDescribeCodeInComment)
+        }
+      );
     }
-    reminderItems.push({
-      iconName: "google",
-      content: this.#noLogging ? lockedString2(UIStringsNotTranslate2.freDisclaimerTextPrivacyNoLogging) : lockedString2(UIStringsNotTranslate2.freDisclaimerTextPrivacy)
-    }, {
-      iconName: "warning",
-      // clang-format off
-      content: html2`<devtools-link
+    reminderItems.push(
+      {
+        iconName: "google",
+        content: this.#noLogging ? lockedString2(UIStringsNotTranslate2.freDisclaimerTextPrivacyNoLogging) : lockedString2(UIStringsNotTranslate2.freDisclaimerTextPrivacy)
+      },
+      {
+        iconName: "warning",
+        // clang-format off
+        content: html2`<devtools-link
             href=${CODE_SNIPPET_WARNING_URL}
             class="link devtools-link"
             jslogcontext="code-snippets-explainer.ai-code-completion-teaser"
           >${lockedString2(UIStringsNotTranslate2.freDisclaimerTextUseWithCaution)}</devtools-link>`
-      // clang-format on
-    });
+        // clang-format on
+      }
+    );
     return reminderItems;
   }
   onAction = async (event) => {
@@ -701,15 +720,22 @@ var AiCodeCompletionTeaser = class extends UI2.Widget.Widget {
   };
   performUpdate() {
     const output = {};
-    this.#view({
-      aidaAvailability: this.#aidaAvailability,
-      onAction: this.onAction,
-      onDismiss: this.onDismiss
-    }, output, this.contentElement);
+    this.#view(
+      {
+        aidaAvailability: this.#aidaAvailability,
+        onAction: this.onAction,
+        onDismiss: this.onDismiss
+      },
+      output,
+      this.contentElement
+    );
   }
   wasShown() {
     super.wasShown();
-    Host2.AidaClient.HostConfigTracker.instance().addEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host2.AidaClient.HostConfigTracker.instance().addEventListener(
+      Host2.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
     this.#aiCodeCompletionFreCompletedSetting.addChangeListener(this.#boundOnAiCodeCompletionSettingChanged);
     this.#aiCodeCompletionTeaserDismissedSetting.addChangeListener(this.#boundOnAiCodeCompletionSettingChanged);
     const initialAvailability = Host2.AidaClient.HostConfigTracker.instance().aidaAvailability;
@@ -719,7 +745,10 @@ var AiCodeCompletionTeaser = class extends UI2.Widget.Widget {
   }
   willHide() {
     super.willHide();
-    Host2.AidaClient.HostConfigTracker.instance().removeEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host2.AidaClient.HostConfigTracker.instance().removeEventListener(
+      Host2.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
     this.#aiCodeCompletionFreCompletedSetting.removeChangeListener(this.#boundOnAiCodeCompletionSettingChanged);
     this.#aiCodeCompletionTeaserDismissedSetting.removeChangeListener(this.#boundOnAiCodeCompletionSettingChanged);
   }
@@ -728,28 +757,28 @@ var AiCodeCompletionTeaser = class extends UI2.Widget.Widget {
   }
 };
 
-// gen/front_end/ui/components/text_editor/AiCodeGenerationProvider.js
+// ../../front_end/ui/components/text_editor/AiCodeGenerationProvider.ts
 var AiCodeGenerationProvider_exports = {};
 __export(AiCodeGenerationProvider_exports, {
   AiCodeGenerationProvider: () => AiCodeGenerationProvider,
   AiCodeGenerationTeaserMode: () => AiCodeGenerationTeaserMode,
   setAiCodeGenerationTeaserMode: () => setAiCodeGenerationTeaserMode
 });
-import * as Common4 from "./../../../core/common/common.js";
-import * as Host5 from "./../../../core/host/host.js";
-import * as i18n11 from "./../../../core/i18n/i18n.js";
-import * as Root4 from "./../../../core/root/root.js";
-import * as AiCodeGeneration3 from "./../../../models/ai_code_generation/ai_code_generation.js";
-import * as CodeMirror2 from "./../../../third_party/codemirror.next/codemirror.next.js";
-import * as UI6 from "./../../legacy/legacy.js";
-import * as VisualLogging5 from "./../../visual_logging/visual_logging.js";
+import * as Common4 from "../../../core/common/common.js";
+import * as Host5 from "../../../core/host/host.js";
+import * as i18n11 from "../../../core/i18n/i18n.js";
+import * as Root4 from "../../../core/root/root.js";
+import * as AiCodeGeneration3 from "../../../models/ai_code_generation/ai_code_generation.js";
+import * as CodeMirror2 from "../../../third_party/codemirror.next/codemirror.next.js";
+import * as UI6 from "../../legacy/legacy.js";
+import * as VisualLogging5 from "../../visual_logging/visual_logging.js";
 
-// gen/front_end/ui/components/text_editor/AiCodeGenerationParser.js
+// ../../front_end/ui/components/text_editor/AiCodeGenerationParser.ts
 var AiCodeGenerationParser_exports = {};
 __export(AiCodeGenerationParser_exports, {
   AiCodeGenerationParser: () => AiCodeGenerationParser
 });
-import * as CodeMirror from "./../../../third_party/codemirror.next/codemirror.next.js";
+import * as CodeMirror from "../../../third_party/codemirror.next/codemirror.next.js";
 var LINE_COMMENT_PATTERN = /^(?:\/\/|#)\s*/gm;
 var BLOCK_COMMENT_START_PATTERN = /^\/\*+\s*/;
 var BLOCK_COMMENT_END_PATTERN = /\s*\*+\/$/;
@@ -838,7 +867,7 @@ var AiCodeGenerationParser = class {
   }
 };
 
-// gen/front_end/ui/components/text_editor/AiCodeGenerationTeaser.js
+// ../../front_end/ui/components/text_editor/AiCodeGenerationTeaser.ts
 var AiCodeGenerationTeaser_exports = {};
 __export(AiCodeGenerationTeaser_exports, {
   AiCodeGenerationTeaser: () => AiCodeGenerationTeaser,
@@ -846,15 +875,15 @@ __export(AiCodeGenerationTeaser_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW2,
   PROMOTION_ID: () => PROMOTION_ID2
 });
-import "./../tooltips/tooltips.js";
-import * as Common2 from "./../../../core/common/common.js";
-import * as Host3 from "./../../../core/host/host.js";
-import * as i18n5 from "./../../../core/i18n/i18n.js";
-import * as Root3 from "./../../../core/root/root.js";
-import * as UI3 from "./../../legacy/legacy.js";
-import { Directives as Directives2, html as html3, nothing as nothing3, render as render3 } from "./../../lit/lit.js";
-import * as VisualLogging3 from "./../../visual_logging/visual_logging.js";
-import * as Buttons from "./../buttons/buttons.js";
+import "../tooltips/tooltips.js";
+import * as Common2 from "../../../core/common/common.js";
+import * as Host3 from "../../../core/host/host.js";
+import * as i18n5 from "../../../core/i18n/i18n.js";
+import * as Root3 from "../../../core/root/root.js";
+import * as UI3 from "../../legacy/legacy.js";
+import { Directives as Directives2, html as html3, nothing as nothing3, render as render3 } from "../../lit/lit.js";
+import * as VisualLogging3 from "../../visual_logging/visual_logging.js";
+import * as Buttons from "../buttons/buttons.js";
 
 // gen/front_end/ui/components/text_editor/aiCodeGenerationTeaser.css.js
 var aiCodeGenerationTeaser_css_default = `/*
@@ -964,7 +993,7 @@ var aiCodeGenerationTeaser_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./aiCodeGenerationTeaser.css")} */`;
 
-// gen/front_end/ui/components/text_editor/AiCodeGenerationTeaser.js
+// ../../front_end/ui/components/text_editor/AiCodeGenerationTeaser.ts
 var UIStringsNotTranslate3 = {
   /**
    * @description Text for teaser to generate code.
@@ -1073,13 +1102,13 @@ var UIStringsNotTranslate3 = {
 };
 var lockedString3 = i18n5.i18n.lockedString;
 var PROMOTION_ID2 = "ai-code-generation";
-var AiCodeGenerationTeaserDisplayState;
-(function(AiCodeGenerationTeaserDisplayState2) {
+var AiCodeGenerationTeaserDisplayState = /* @__PURE__ */ ((AiCodeGenerationTeaserDisplayState2) => {
   AiCodeGenerationTeaserDisplayState2["TRIGGER"] = "trigger";
   AiCodeGenerationTeaserDisplayState2["DISCOVERY"] = "discovery";
   AiCodeGenerationTeaserDisplayState2["LOADING"] = "loading";
   AiCodeGenerationTeaserDisplayState2["GENERATED"] = "generated";
-})(AiCodeGenerationTeaserDisplayState || (AiCodeGenerationTeaserDisplayState = {}));
+  return AiCodeGenerationTeaserDisplayState2;
+})(AiCodeGenerationTeaserDisplayState || {});
 function getTooltipDisclaimerText2(noLogging, disclaimerTextVariant) {
   switch (disclaimerTextVariant) {
     case "console":
@@ -1097,7 +1126,7 @@ var DEFAULT_VIEW2 = (input, output, target) => {
   }
   let teaserLabel;
   switch (input.displayState) {
-    case AiCodeGenerationTeaserDisplayState.TRIGGER: {
+    case "trigger" /* TRIGGER */: {
       if (!input.disclaimerTooltipId) {
         render3(nothing3, target);
         return;
@@ -1123,9 +1152,9 @@ var DEFAULT_VIEW2 = (input, output, target) => {
         &nbsp;<devtools-button
           .data=${{
         title: lockedString3(UIStringsNotTranslate3.learnMoreAboutHowYourDataIsBeingUsed),
-        size: "MICRO",
+        size: Buttons.Button.Size.MICRO,
         iconName: "info",
-        variant: "icon",
+        variant: Buttons.Button.Variant.ICON,
         jslogContext: "ai-code-generation-teaser.info-button"
       }}
             aria-details=${input.disclaimerTooltipId}
@@ -1161,7 +1190,7 @@ var DEFAULT_VIEW2 = (input, output, target) => {
                   </div>`;
       break;
     }
-    case AiCodeGenerationTeaserDisplayState.DISCOVERY: {
+    case "discovery" /* DISCOVERY */: {
       if (!input.showDiscoveryTeaser) {
         teaserLabel = nothing3;
         break;
@@ -1171,7 +1200,7 @@ var DEFAULT_VIEW2 = (input, output, target) => {
       teaserLabel = newBadge ? html3`${teaserText}&nbsp;${newBadge}` : nothing3;
       break;
     }
-    case AiCodeGenerationTeaserDisplayState.LOADING: {
+    case "loading" /* LOADING */: {
       const teaserAriaLabel = lockedString3(UIStringsNotTranslate3.generatingAriaLabel);
       teaserLabel = html3`
         <div class="ai-code-generation-teaser-screen-reader-only">${teaserAriaLabel}</div>
@@ -1189,7 +1218,7 @@ var DEFAULT_VIEW2 = (input, output, target) => {
       })}></span>`;
       break;
     }
-    case AiCodeGenerationTeaserDisplayState.GENERATED: {
+    case "generated" /* GENERATED */: {
       teaserLabel = html3`<div class="ai-code-generation-teaser-generated">
           <span>${lockedString3(UIStringsNotTranslate3.tab)}</span>
           &nbsp;${lockedString3(UIStringsNotTranslate3.or)}&nbsp;
@@ -1199,18 +1228,21 @@ var DEFAULT_VIEW2 = (input, output, target) => {
       break;
     }
   }
-  render3(html3`
+  render3(
+    html3`
           <style>${aiCodeGenerationTeaser_css_default}</style>
           <style>@scope to (devtools-widget > *) { ${UI3.inspectorCommonStyles} }</style>
           <div class="ai-code-generation-teaser">
             &nbsp;${teaserLabel}
           </div>
-        `, target);
+        `,
+    target
+  );
 };
 var AiCodeGenerationTeaser = class _AiCodeGenerationTeaser extends UI3.Widget.Widget {
   #view;
   #viewOutput = {};
-  #displayState = AiCodeGenerationTeaserDisplayState.DISCOVERY;
+  #displayState = "discovery" /* DISCOVERY */;
   #disclaimerTooltipId;
   #noLogging;
   // Whether the enterprise setting is `ALLOW_WITHOUT_LOGGING` or not.
@@ -1228,15 +1260,19 @@ var AiCodeGenerationTeaser = class _AiCodeGenerationTeaser extends UI3.Widget.Wi
     this.requestUpdate();
   }
   performUpdate() {
-    this.#view({
-      displayState: this.#displayState,
-      onManageInSettingsTooltipClick: this.#onManageInSettingsTooltipClick.bind(this),
-      disclaimerTooltipId: this.#disclaimerTooltipId,
-      noLogging: this.#noLogging,
-      showDataUsageTeaser: _AiCodeGenerationTeaser.#showDataUsageTeaser,
-      showDiscoveryTeaser: !this.#aiCodeGenerationUsedSetting.get() && !_AiCodeGenerationTeaser.#discoveryTeaserShownInSession,
-      disclaimerTextVariant: this.#disclaimerTextVariant
-    }, this.#viewOutput, this.contentElement);
+    this.#view(
+      {
+        displayState: this.#displayState,
+        onManageInSettingsTooltipClick: this.#onManageInSettingsTooltipClick.bind(this),
+        disclaimerTooltipId: this.#disclaimerTooltipId,
+        noLogging: this.#noLogging,
+        showDataUsageTeaser: _AiCodeGenerationTeaser.#showDataUsageTeaser,
+        showDiscoveryTeaser: !this.#aiCodeGenerationUsedSetting.get() && !_AiCodeGenerationTeaser.#discoveryTeaserShownInSession,
+        disclaimerTextVariant: this.#disclaimerTextVariant
+      },
+      this.#viewOutput,
+      this.contentElement
+    );
   }
   willHide() {
     super.willHide();
@@ -1249,15 +1285,15 @@ var AiCodeGenerationTeaser = class _AiCodeGenerationTeaser extends UI3.Widget.Wi
     if (displayState === this.#displayState) {
       return;
     }
-    if (this.#displayState === AiCodeGenerationTeaserDisplayState.TRIGGER) {
+    if (this.#displayState === "trigger" /* TRIGGER */) {
       _AiCodeGenerationTeaser.#showDataUsageTeaser = false;
     }
-    if (this.#displayState === AiCodeGenerationTeaserDisplayState.DISCOVERY) {
+    if (this.#displayState === "discovery" /* DISCOVERY */) {
       _AiCodeGenerationTeaser.#discoveryTeaserShownInSession = true;
     }
     this.#displayState = displayState;
     this.requestUpdate();
-    if (this.#displayState === AiCodeGenerationTeaserDisplayState.LOADING) {
+    if (this.#displayState === "loading" /* LOADING */) {
       void this.updateComplete.then(() => {
         void this.#startLoadingAnimation();
       });
@@ -1308,16 +1344,16 @@ var AiCodeGenerationTeaser = class _AiCodeGenerationTeaser extends UI3.Widget.Wi
   }
 };
 
-// gen/front_end/ui/components/text_editor/AiCodeGenerationUpgradeDialog.js
+// ../../front_end/ui/components/text_editor/AiCodeGenerationUpgradeDialog.ts
 var AiCodeGenerationUpgradeDialog_exports = {};
 __export(AiCodeGenerationUpgradeDialog_exports, {
   AiCodeGenerationUpgradeDialog: () => AiCodeGenerationUpgradeDialog
 });
-import * as Host4 from "./../../../core/host/host.js";
-import * as i18n7 from "./../../../core/i18n/i18n.js";
-import * as UI4 from "./../../legacy/legacy.js";
-import * as Lit from "./../../lit/lit.js";
-import * as Buttons2 from "./../buttons/buttons.js";
+import * as Host4 from "../../../core/host/host.js";
+import * as i18n7 from "../../../core/i18n/i18n.js";
+import * as UI4 from "../../legacy/legacy.js";
+import * as Lit from "../../lit/lit.js";
+import * as Buttons2 from "../buttons/buttons.js";
 
 // gen/front_end/ui/components/text_editor/aiCodeGenerationUpgradeDialog.css.js
 var aiCodeGenerationUpgradeDialog_css_default = `/*
@@ -1402,7 +1438,7 @@ var aiCodeGenerationUpgradeDialog_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./aiCodeGenerationUpgradeDialog.css")} */`;
 
-// gen/front_end/ui/components/text_editor/AiCodeGenerationUpgradeDialog.js
+// ../../front_end/ui/components/text_editor/AiCodeGenerationUpgradeDialog.ts
 var { html: html4 } = Lit;
 var UIStringsNotTranslate4 = {
   /**
@@ -1482,7 +1518,7 @@ var AiCodeGenerationUpgradeDialog = class {
       void UI4.ViewManager.ViewManager.instance().showView("chrome-ai");
     }}
               jslogcontext="ai-code-generation-upgrade-dialog.manage-in-settings"
-              .variant=${"outlined"}
+              .variant=${Buttons2.Button.Variant.OUTLINED}
               aria-label=${lockedString4(UIStringsNotTranslate4.manageInSettings)}>
               ${lockedString4(UIStringsNotTranslate4.manageInSettings)}
             </devtools-button>
@@ -1492,7 +1528,7 @@ var AiCodeGenerationUpgradeDialog = class {
       dialog.hide();
     }}
               jslogcontext="ai-code-generation-upgrade-dialog.continue"
-              .variant=${"primary"}>
+              .variant=${Buttons2.Button.Variant.PRIMARY}>
               ${lockedString4(UIStringsNotTranslate4.generateCode)}
             </devtools-button>
           </div>
@@ -1504,10 +1540,7 @@ var AiCodeGenerationUpgradeDialog = class {
     dialog.setOnHideCallback(() => {
       result.resolve(false);
     });
-    dialog.setSizeBehavior(
-      "MeasureContent"
-      /* UI.GlassPane.SizeBehavior.MEASURE_CONTENT */
-    );
+    dialog.setSizeBehavior(UI4.GlassPane.SizeBehavior.MEASURE_CONTENT);
     dialog.setDimmed(true);
     dialog.show();
     return result.promise;
@@ -1516,9 +1549,11 @@ var AiCodeGenerationUpgradeDialog = class {
   }
 };
 
-// gen/front_end/ui/components/text_editor/config.js
+// ../../front_end/ui/components/text_editor/config.ts
 var config_exports = {};
 __export(config_exports, {
+  AiSuggestionSource: () => AiSuggestionSource,
+  CompletionHintPlugin: () => CompletionHintPlugin,
   DynamicSetting: () => DynamicSetting,
   acceptAiAutoCompleteSuggestion: () => acceptAiAutoCompleteSuggestion,
   aiAutoCompleteSuggestion: () => aiAutoCompleteSuggestion,
@@ -1546,18 +1581,18 @@ __export(config_exports, {
   theme: () => theme,
   themeSelection: () => themeSelection
 });
-import * as Common3 from "./../../../core/common/common.js";
-import * as i18n9 from "./../../../core/i18n/i18n.js";
-import * as TextUtils from "./../../../core/text_utils/text_utils.js";
-import * as CM3 from "./../../../third_party/codemirror.next/codemirror.next.js";
-import { Icon } from "./../../kit/kit.js";
-import * as UI5 from "./../../legacy/legacy.js";
-import * as SettingsUI from "./../../settings/settings.js";
-import * as VisualLogging4 from "./../../visual_logging/visual_logging.js";
-import * as CodeHighlighter from "./../code_highlighter/code_highlighter.js";
+import * as Common3 from "../../../core/common/common.js";
+import * as i18n9 from "../../../core/i18n/i18n.js";
+import * as TextUtils from "../../../core/text_utils/text_utils.js";
+import * as CM3 from "../../../third_party/codemirror.next/codemirror.next.js";
+import { Icon } from "../../kit/kit.js";
+import * as UI5 from "../../legacy/legacy.js";
+import * as SettingsUI from "../../settings/settings.js";
+import * as VisualLogging4 from "../../visual_logging/visual_logging.js";
+import * as CodeHighlighter from "../code_highlighter/code_highlighter.js";
 
-// gen/front_end/ui/components/text_editor/theme.js
-import * as CM2 from "./../../../third_party/codemirror.next/codemirror.next.js";
+// ../../front_end/ui/components/text_editor/theme.ts
+import * as CM2 from "../../../third_party/codemirror.next/codemirror.next.js";
 var editorTheme = CM2.EditorView.theme({
   "&.cm-editor": {
     color: "color: var(--sys-color-on-subtle)",
@@ -1750,7 +1785,7 @@ var editorTheme = CM2.EditorView.theme({
   }
 });
 
-// gen/front_end/ui/components/text_editor/config.js
+// ../../front_end/ui/components/text_editor/config.ts
 var LINES_TO_SCAN_FOR_INDENTATION_GUESSING = 1e3;
 var RECOMPUTE_INDENT_MAX_SIZE = 200;
 var UIStrings = {
@@ -1771,15 +1806,18 @@ var i18nString = i18n9.i18n.getLocalizedString.bind(void 0, str_);
 var empty = [];
 var dynamicSetting = CM3.Facet.define();
 var DynamicSetting = class _DynamicSetting {
-  settingName;
+  constructor(setting, getExtension) {
+    this.getExtension = getExtension;
+    this.setting = setting;
+  }
   getExtension;
   compartment = new CM3.Compartment();
-  constructor(settingName, getExtension) {
-    this.settingName = settingName;
-    this.getExtension = getExtension;
+  setting;
+  get settingName() {
+    return typeof this.setting === "string" ? this.setting : this.setting.name;
   }
   settingValue() {
-    return Common3.Settings.Settings.instance().moduleSetting(this.settingName).get();
+    return (typeof this.setting === "string" ? Common3.Settings.Settings.instance().moduleSetting(this.setting) : Common3.Settings.Settings.instance().resolve(this.setting)).get();
   }
   instance() {
     return [
@@ -1792,8 +1830,8 @@ var DynamicSetting = class _DynamicSetting {
     const needed = this.getExtension(value);
     return cur === needed ? null : this.compartment.reconfigure(needed);
   }
-  static bool(name, enabled, disabled = empty) {
-    return new _DynamicSetting(name, (val) => val ? enabled : disabled);
+  static bool(setting, enabled, disabled = empty) {
+    return new _DynamicSetting(setting, (val) => val ? enabled : disabled);
   }
   static none = [];
 };
@@ -1863,31 +1901,34 @@ function announceSelectedCompletionInfo(view) {
   });
   UI5.ARIAUtils.LiveAnnouncer.alert(ariaMessage);
 }
-var autocompletion2 = new DynamicSetting("text-editor-autocompletion", (activateOnTyping) => [
-  CM3.autocompletion({
-    activateOnTyping,
-    icons: false,
-    optionClass: (option) => option.type === "secondary" ? "cm-secondaryCompletion" : "",
-    tooltipClass: (state) => {
-      return state.field(conservativeCompletion, false) ? "cm-conservativeCompletion" : "";
-    },
-    defaultKeymap: false,
-    updateSyncTime: 100
-  }),
-  CM3.Prec.highest(CM3.keymap.of([
-    { key: "End", run: acceptCompletionIfAtEndOfLine },
-    { key: "ArrowRight", run: acceptCompletionIfAtEndOfLine },
-    { key: "Ctrl-Space", run: CM3.startCompletion },
-    { key: "Escape", run: CM3.closeCompletion },
-    { key: "ArrowDown", run: moveCompletionSelectionIfNotConservative(true) },
-    { key: "ArrowUp", run: moveCompletionSelectionBackwardWrapper() },
-    { mac: "Ctrl-n", run: moveCompletionSelectionIfNotConservative(true) },
-    { mac: "Ctrl-p", run: moveCompletionSelectionBackwardWrapper() },
-    { key: "PageDown", run: CM3.moveCompletionSelection(true, "page") },
-    { key: "PageUp", run: CM3.moveCompletionSelection(false, "page") },
-    { key: "Enter", run: acceptCompletionIfNotConservative }
-  ]))
-]);
+var autocompletion2 = new DynamicSetting(
+  "text-editor-autocompletion",
+  (activateOnTyping) => [
+    CM3.autocompletion({
+      activateOnTyping,
+      icons: false,
+      optionClass: (option) => option.type === "secondary" ? "cm-secondaryCompletion" : "",
+      tooltipClass: (state) => {
+        return state.field(conservativeCompletion, false) ? "cm-conservativeCompletion" : "";
+      },
+      defaultKeymap: false,
+      updateSyncTime: 100
+    }),
+    CM3.Prec.highest(CM3.keymap.of([
+      { key: "End", run: acceptCompletionIfAtEndOfLine },
+      { key: "ArrowRight", run: acceptCompletionIfAtEndOfLine },
+      { key: "Ctrl-Space", run: CM3.startCompletion },
+      { key: "Escape", run: CM3.closeCompletion },
+      { key: "ArrowDown", run: moveCompletionSelectionIfNotConservative(true) },
+      { key: "ArrowUp", run: moveCompletionSelectionBackwardWrapper() },
+      { mac: "Ctrl-n", run: moveCompletionSelectionIfNotConservative(true) },
+      { mac: "Ctrl-p", run: moveCompletionSelectionBackwardWrapper() },
+      { key: "PageDown", run: CM3.moveCompletionSelection(true, "page") },
+      { key: "PageUp", run: CM3.moveCompletionSelection(false, "page") },
+      { key: "Enter", run: acceptCompletionIfNotConservative }
+    ]))
+  ]
+);
 var bracketMatching2 = DynamicSetting.bool("text-editor-bracket-matching", CM3.bracketMatching());
 var codeFolding = DynamicSetting.bool("text-editor-code-folding", [
   CM3.foldGutter({
@@ -1924,14 +1965,17 @@ function detectIndentation(doc) {
 }
 var autoDetectIndent = DynamicSetting.bool("text-editor-auto-detect-indent", AutoDetectIndent);
 function matcher(decorator) {
-  return CM3.ViewPlugin.define((view) => ({
-    decorations: decorator.createDeco(view),
-    update(u) {
-      this.decorations = decorator.updateDeco(u, this.decorations);
+  return CM3.ViewPlugin.define(
+    (view) => ({
+      decorations: decorator.createDeco(view),
+      update(u) {
+        this.decorations = decorator.updateDeco(u, this.decorations);
+      }
+    }),
+    {
+      decorations: (v) => v.decorations
     }
-  }), {
-    decorations: (v) => v.decorations
-  });
+  );
 }
 var WhitespaceDeco = /* @__PURE__ */ new Map();
 function getWhitespaceDeco(space) {
@@ -2071,11 +2115,11 @@ function removeTooltipHost() {
   }
 }
 var CompletionHint = class extends CM3.WidgetType {
-  text;
   constructor(text) {
     super();
     this.text = text;
   }
+  text;
   eq(other) {
     return this.text === other.text;
   }
@@ -2086,7 +2130,7 @@ var CompletionHint = class extends CM3.WidgetType {
     return span;
   }
 };
-var showCompletionHint = CM3.ViewPlugin.fromClass(class {
+var CompletionHintPlugin = class {
   decorations = CM3.Decoration.none;
   currentHint = null;
   update(update) {
@@ -2094,7 +2138,9 @@ var showCompletionHint = CM3.ViewPlugin.fromClass(class {
     if (!top || update.state.field(conservativeCompletion, false)) {
       this.decorations = CM3.Decoration.none;
     } else {
-      this.decorations = CM3.Decoration.set([CM3.Decoration.widget({ widget: new CompletionHint(top), side: 1 }).range(update.state.selection.main.head)]);
+      this.decorations = CM3.Decoration.set(
+        [CM3.Decoration.widget({ widget: new CompletionHint(top), side: 1 }).range(update.state.selection.main.head)]
+      );
     }
   }
   topCompletion(state) {
@@ -2121,7 +2167,11 @@ var showCompletionHint = CM3.ViewPlugin.fromClass(class {
     }
     return label.slice(partBefore ? partBefore[0].length : 0);
   }
-}, { decorations: (p) => p.decorations });
+};
+var showCompletionHint = CM3.ViewPlugin.fromClass(
+  CompletionHintPlugin,
+  { decorations: (p) => p.decorations }
+);
 function contentIncludingHint(view) {
   const plugin = view.plugin(showCompletionHint);
   let content = view.state.doc.toString();
@@ -2132,6 +2182,11 @@ function contentIncludingHint(view) {
   return content;
 }
 var setAiAutoCompleteSuggestion = CM3.StateEffect.define();
+var AiSuggestionSource = /* @__PURE__ */ ((AiSuggestionSource2) => {
+  AiSuggestionSource2["COMPLETION"] = "completion";
+  AiSuggestionSource2["GENERATION"] = "generation";
+  return AiSuggestionSource2;
+})(AiSuggestionSource || {});
 var aiAutoCompleteSuggestionState = CM3.StateField.define({
   create: () => null,
   update(value, tr) {
@@ -2195,84 +2250,87 @@ function acceptAiAutoCompleteSuggestion(view) {
 }
 var aiAutoCompleteSuggestion = [
   aiAutoCompleteSuggestionState,
-  CM3.ViewPlugin.fromClass(class {
-    decorations = CM3.Decoration.none;
-    #lastLoggedSuggestion = null;
-    update(update) {
-      if (update.state.doc.length === 0) {
-        this.decorations = CM3.Decoration.none;
-        return;
-      }
-      const activeSuggestion = update.state.field(aiAutoCompleteSuggestionState);
-      if (!activeSuggestion) {
-        this.decorations = CM3.Decoration.none;
-        return;
-      }
-      if (CM3.completionStatus(update.view.state) === "pending") {
-        this.decorations = CM3.Decoration.none;
-        return;
-      }
-      const selectedCompletionIndex2 = CM3.selectedCompletionIndex(update.state);
-      if (selectedCompletionIndex2 && selectedCompletionIndex2 > 0) {
-        this.decorations = CM3.Decoration.none;
-        return;
-      }
-      const { head } = update.state.selection.main;
-      if (head < activeSuggestion.from) {
-        this.decorations = CM3.Decoration.none;
-        return;
-      }
-      const selectedCompletion2 = CM3.selectedCompletion(update.state);
-      const additionallyTypedText = update.state.doc.sliceString(activeSuggestion.from, head);
-      if (!activeSuggestion.text.startsWith(additionallyTypedText)) {
-        this.decorations = CM3.Decoration.none;
-        return;
-      }
-      let ghostText = activeSuggestion.text.slice(additionallyTypedText.length);
-      if (selectedCompletion2) {
-        if (selectedCompletion2.type?.includes("keyword")) {
+  CM3.ViewPlugin.fromClass(
+    class {
+      decorations = CM3.Decoration.none;
+      #lastLoggedSuggestion = null;
+      update(update) {
+        if (update.state.doc.length === 0) {
           this.decorations = CM3.Decoration.none;
           return;
         }
-        const overlappingText = TextUtils.TextUtils.getOverlap(selectedCompletion2.label, ghostText) ?? "";
-        const lineAtAiSuggestion = update.state.doc.lineAt(activeSuggestion.from).text;
-        const overlapsWithSelectedCompletion = (lineAtAiSuggestion + overlappingText).endsWith(selectedCompletion2.label);
-        if (!overlapsWithSelectedCompletion) {
+        const activeSuggestion = update.state.field(aiAutoCompleteSuggestionState);
+        if (!activeSuggestion) {
           this.decorations = CM3.Decoration.none;
           return;
         }
+        if (CM3.completionStatus(update.view.state) === "pending") {
+          this.decorations = CM3.Decoration.none;
+          return;
+        }
+        const selectedCompletionIndex2 = CM3.selectedCompletionIndex(update.state);
+        if (selectedCompletionIndex2 && selectedCompletionIndex2 > 0) {
+          this.decorations = CM3.Decoration.none;
+          return;
+        }
+        const { head } = update.state.selection.main;
+        if (head < activeSuggestion.from) {
+          this.decorations = CM3.Decoration.none;
+          return;
+        }
+        const selectedCompletion2 = CM3.selectedCompletion(update.state);
+        const additionallyTypedText = update.state.doc.sliceString(activeSuggestion.from, head);
+        if (!activeSuggestion.text.startsWith(additionallyTypedText)) {
+          this.decorations = CM3.Decoration.none;
+          return;
+        }
+        let ghostText = activeSuggestion.text.slice(additionallyTypedText.length);
+        if (selectedCompletion2) {
+          if (selectedCompletion2.type?.includes("keyword")) {
+            this.decorations = CM3.Decoration.none;
+            return;
+          }
+          const overlappingText = TextUtils.TextUtils.getOverlap(selectedCompletion2.label, ghostText) ?? "";
+          const lineAtAiSuggestion = update.state.doc.lineAt(activeSuggestion.from).text;
+          const overlapsWithSelectedCompletion = (lineAtAiSuggestion + overlappingText).endsWith(selectedCompletion2.label);
+          if (!overlapsWithSelectedCompletion) {
+            this.decorations = CM3.Decoration.none;
+            return;
+          }
+        }
+        const currentMenuHint = update.view.plugin(showCompletionHint)?.currentHint;
+        const conservativeCompletionEnabled = update.state.field(conservativeCompletion, false);
+        if (!conservativeCompletionEnabled && currentMenuHint) {
+          ghostText = ghostText.slice(currentMenuHint.length);
+        }
+        this.decorations = CM3.Decoration.set([CM3.Decoration.widget({ widget: new CompletionHint(ghostText), side: 1 }).range(head)]);
+        this.#registerImpressionIfNeeded(activeSuggestion);
       }
-      const currentMenuHint = update.view.plugin(showCompletionHint)?.currentHint;
-      const conservativeCompletionEnabled = update.state.field(conservativeCompletion, false);
-      if (!conservativeCompletionEnabled && currentMenuHint) {
-        ghostText = ghostText.slice(currentMenuHint.length);
+      #registerImpressionIfNeeded(activeSuggestion) {
+        if (!activeSuggestion.rpcGlobalId) {
+          return;
+        }
+        if (this.#lastLoggedSuggestion?.rpcGlobalId === activeSuggestion?.rpcGlobalId && this.#lastLoggedSuggestion?.sampleId === activeSuggestion?.sampleId) {
+          return;
+        }
+        const latency = performance.now() - activeSuggestion.startTime;
+        activeSuggestion.onImpression(activeSuggestion.rpcGlobalId, latency, activeSuggestion.sampleId);
+        this.#lastLoggedSuggestion = activeSuggestion;
       }
-      this.decorations = CM3.Decoration.set([CM3.Decoration.widget({ widget: new CompletionHint(ghostText), side: 1 }).range(head)]);
-      this.#registerImpressionIfNeeded(activeSuggestion);
-    }
-    #registerImpressionIfNeeded(activeSuggestion) {
-      if (!activeSuggestion.rpcGlobalId) {
-        return;
-      }
-      if (this.#lastLoggedSuggestion?.rpcGlobalId === activeSuggestion?.rpcGlobalId && this.#lastLoggedSuggestion?.sampleId === activeSuggestion?.sampleId) {
-        return;
-      }
-      const latency = performance.now() - activeSuggestion.startTime;
-      activeSuggestion.onImpression(activeSuggestion.rpcGlobalId, latency, activeSuggestion.sampleId);
-      this.#lastLoggedSuggestion = activeSuggestion;
-    }
-  }, { decorations: (p) => p.decorations })
+    },
+    { decorations: (p) => p.decorations }
+  )
 ];
 
-// gen/front_end/ui/components/text_editor/AiCodeGenerationProvider.js
-var AiCodeGenerationTeaserMode;
-(function(AiCodeGenerationTeaserMode2) {
+// ../../front_end/ui/components/text_editor/AiCodeGenerationProvider.ts
+var AiCodeGenerationTeaserMode = /* @__PURE__ */ ((AiCodeGenerationTeaserMode2) => {
   AiCodeGenerationTeaserMode2["ACTIVE"] = "active";
   AiCodeGenerationTeaserMode2["DISMISSED"] = "dismissed";
-})(AiCodeGenerationTeaserMode || (AiCodeGenerationTeaserMode = {}));
+  return AiCodeGenerationTeaserMode2;
+})(AiCodeGenerationTeaserMode || {});
 var setAiCodeGenerationTeaserMode = CodeMirror2.StateEffect.define();
 var aiCodeGenerationTeaserModeState = CodeMirror2.StateField.define({
-  create: () => AiCodeGenerationTeaserMode.ACTIVE,
+  create: () => "active" /* ACTIVE */,
   update(value, tr) {
     return tr.effects.find((effect) => effect.is(setAiCodeGenerationTeaserMode))?.value ?? value;
   }
@@ -2328,11 +2386,17 @@ var AiCodeGenerationProvider = class _AiCodeGenerationProvider {
     this.#controller.abort();
     this.#cleanupAiCodeGeneration();
     this.#aiCodeGenerationEnabledSetting.removeChangeListener(this.#boundOnSettingChange);
-    Host5.AidaClient.HostConfigTracker.instance().removeEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host5.AidaClient.HostConfigTracker.instance().removeEventListener(
+      Host5.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
   }
   editorInitialized(editor) {
     this.#editor = editor;
-    Host5.AidaClient.HostConfigTracker.instance().addEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host5.AidaClient.HostConfigTracker.instance().addEventListener(
+      Host5.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
     this.#aiCodeGenerationEnabledSetting.addChangeListener(this.#boundOnSettingChange);
     const initialAvailability = Host5.AidaClient.HostConfigTracker.instance().aidaAvailability;
     if (initialAvailability !== void 0) {
@@ -2361,7 +2425,7 @@ var AiCodeGenerationProvider = class _AiCodeGenerationProvider {
     });
   }
   async #updateAiCodeGenerationStateWithAvailability(aidaAvailability) {
-    const isAvailable = aidaAvailability === "available";
+    const isAvailable = aidaAvailability === Host5.AidaClient.AidaAccessPreconditions.AVAILABLE;
     const devtoolsLocale = i18n11.DevToolsLocale.DevToolsLocale.instance().locale;
     const aiCodeGenerationEnabled = AiCodeGeneration3.AiCodeGeneration.AiCodeGeneration.isAiCodeGenerationEnabled(devtoolsLocale);
     const isSettingEnabled = this.#aiCodeGenerationEnabledSetting.get();
@@ -2384,13 +2448,13 @@ var AiCodeGenerationProvider = class _AiCodeGenerationProvider {
             return false;
           }
           if (hasActiveAiSuggestion(this.#editor.state)) {
-            if (this.#editor.state.field(aiAutoCompleteSuggestionState)?.source === "completion") {
+            if (this.#editor.state.field(aiAutoCompleteSuggestionState)?.source === "completion" /* COMPLETION */) {
               return false;
             }
             this.#dismissTeaserAndSuggestion();
             return true;
           }
-          const generationTeaserIsLoading = this.#generationTeaser.displayState === AiCodeGenerationTeaserDisplayState.LOADING;
+          const generationTeaserIsLoading = this.#generationTeaser.displayState === "loading" /* LOADING */;
           if (this.#generationTeaser.isShowing() && generationTeaserIsLoading) {
             this.#controller.abort();
             this.#controller = new AbortController();
@@ -2450,10 +2514,10 @@ var AiCodeGenerationProvider = class _AiCodeGenerationProvider {
     return resolved;
   }
   #dismissTeaserAndSuggestion() {
-    this.#generationTeaser.displayState = AiCodeGenerationTeaserDisplayState.TRIGGER;
+    this.#generationTeaser.displayState = "trigger" /* TRIGGER */;
     this.#editor?.dispatch({
       effects: [
-        setAiCodeGenerationTeaserMode.of(AiCodeGenerationTeaserMode.DISMISSED),
+        setAiCodeGenerationTeaserMode.of("dismissed" /* DISMISSED */),
         setAiAutoCompleteSuggestion.of(null)
       ]
     });
@@ -2474,13 +2538,13 @@ var AiCodeGenerationProvider = class _AiCodeGenerationProvider {
   }
   #activateTeaser(update) {
     const currentTeaserMode = update.state.field(aiCodeGenerationTeaserModeState);
-    if (currentTeaserMode === AiCodeGenerationTeaserMode.ACTIVE) {
+    if (currentTeaserMode === "active" /* ACTIVE */) {
       return;
     }
     if (!update.docChanged && update.state.selection.main.head === update.startState.selection.main.head) {
       return;
     }
-    update.view.dispatch({ effects: setAiCodeGenerationTeaserMode.of(AiCodeGenerationTeaserMode.ACTIVE) });
+    update.view.dispatch({ effects: setAiCodeGenerationTeaserMode.of("active" /* ACTIVE */) });
   }
   /**
    * Monitors editor changes to cancel an ongoing AI generation or dismiss one
@@ -2495,18 +2559,18 @@ var AiCodeGenerationProvider = class _AiCodeGenerationProvider {
       return;
     }
     const currentTeaserMode = update.state.field(aiCodeGenerationTeaserModeState);
-    if (currentTeaserMode === AiCodeGenerationTeaserMode.DISMISSED) {
+    if (currentTeaserMode === "dismissed" /* DISMISSED */) {
       return;
     }
-    if (this.#generationTeaser.displayState === AiCodeGenerationTeaserDisplayState.LOADING) {
+    if (this.#generationTeaser.displayState === "loading" /* LOADING */) {
       this.#controller.abort();
       this.#controller = new AbortController();
       this.#dismissTeaserAndSuggestion();
       return;
     }
-    if (this.#generationTeaser.displayState === AiCodeGenerationTeaserDisplayState.GENERATED) {
+    if (this.#generationTeaser.displayState === "generated" /* GENERATED */) {
       update.view.dispatch({ effects: setAiAutoCompleteSuggestion.of(null) });
-      this.#generationTeaser.displayState = AiCodeGenerationTeaserDisplayState.DISCOVERY;
+      this.#generationTeaser.displayState = "discovery" /* DISCOVERY */;
       return;
     }
   }
@@ -2526,13 +2590,18 @@ var AiCodeGenerationProvider = class _AiCodeGenerationProvider {
     if (!query || query.trim().length === 0) {
       return;
     }
-    this.#generationTeaser.displayState = AiCodeGenerationTeaserDisplayState.LOADING;
+    this.#generationTeaser.displayState = "loading" /* LOADING */;
     try {
       const startTime = performance.now();
       this.#aiCodeGenerationConfig.onRequestTriggered();
       Host5.userMetrics.actionTaken(Host5.UserMetrics.Action.AiCodeGenerationRequestTriggered);
       const preamble = AiCodeGeneration3.AiCodeGeneration.basePreamble + this.#aiCodeGenerationConfig.generationContext.additionalPreambleContext;
-      const generationResponse = await this.#aiCodeGeneration.generateCode(query, preamble, this.#aiCodeGenerationConfig.generationContext.inferenceLanguage, options);
+      const generationResponse = await this.#aiCodeGeneration.generateCode(
+        query,
+        preamble,
+        this.#aiCodeGenerationConfig.generationContext.inferenceLanguage,
+        options
+      );
       if (this.#generationTeaser) {
         this.#dismissTeaserAndSuggestion();
       }
@@ -2557,12 +2626,12 @@ var AiCodeGenerationProvider = class _AiCodeGenerationProvider {
             sampleId: topSample.sampleId,
             startTime,
             onImpression: this.#aiCodeGeneration?.registerUserImpression.bind(this.#aiCodeGeneration),
-            source: "generation"
+            source: "generation" /* GENERATION */
           }),
-          setAiCodeGenerationTeaserMode.of(AiCodeGenerationTeaserMode.ACTIVE)
+          setAiCodeGenerationTeaserMode.of("active" /* ACTIVE */)
         ]
       });
-      this.#generationTeaser.displayState = AiCodeGenerationTeaserDisplayState.GENERATED;
+      this.#generationTeaser.displayState = "generated" /* GENERATED */;
       AiCodeGeneration3.debugLog("Suggestion dispatched to the editor", suggestionText);
       const citations = topSample.attributionMetadata?.citations ?? [];
       this.#aiCodeGenerationCitations = citations;
@@ -2596,7 +2665,7 @@ function aiCodeGenerationTeaserExtension(teaser) {
     }
     get decorations() {
       const teaserMode = this.#view.state.field(aiCodeGenerationTeaserModeState);
-      if (teaserMode === AiCodeGenerationTeaserMode.DISMISSED) {
+      if (teaserMode === "dismissed" /* DISMISSED */) {
         return CodeMirror2.Decoration.none;
       }
       const cursorPosition = this.#view.state.selection.main.head;
@@ -2618,16 +2687,16 @@ function aiCodeGenerationTeaserExtension(teaser) {
       return CodeMirror2.Decoration.none;
     }
     #updateTeaserState(state) {
-      if (teaser.displayState === AiCodeGenerationTeaserDisplayState.LOADING || teaser.displayState === AiCodeGenerationTeaserDisplayState.GENERATED) {
+      if (teaser.displayState === "loading" /* LOADING */ || teaser.displayState === "generated" /* GENERATED */) {
         return;
       }
       const cursorPosition = state.selection.main.head;
       const line = state.doc.lineAt(cursorPosition);
       const isEmptyLine = line.length === 0;
       if (isEmptyLine) {
-        teaser.displayState = AiCodeGenerationTeaserDisplayState.DISCOVERY;
+        teaser.displayState = "discovery" /* DISCOVERY */;
       } else {
-        teaser.displayState = AiCodeGenerationTeaserDisplayState.TRIGGER;
+        teaser.displayState = "trigger" /* TRIGGER */;
       }
     }
   }, {
@@ -2649,12 +2718,16 @@ function aiCodeGenerationTeaserExtension(teaser) {
         return true;
       },
       keydown(event) {
-        if (!UI6.KeyboardShortcut.KeyboardShortcut.eventHasCtrlEquivalentKey(event) || teaser.displayState !== AiCodeGenerationTeaserDisplayState.TRIGGER) {
+        if (!UI6.KeyboardShortcut.KeyboardShortcut.eventHasCtrlEquivalentKey(event) || teaser.displayState !== "trigger" /* TRIGGER */) {
           return false;
         }
         if (event.key === ".") {
           event.consume(true);
-          void VisualLogging5.logKeyDown(event.currentTarget, event, "ai-code-generation-teaser.show-disclaimer-info-tooltip");
+          void VisualLogging5.logKeyDown(
+            event.currentTarget,
+            event,
+            "ai-code-generation-teaser.show-disclaimer-info-tooltip"
+          );
           teaser.showTooltip();
           return true;
         }
@@ -2664,16 +2737,16 @@ function aiCodeGenerationTeaserExtension(teaser) {
   });
 }
 
-// gen/front_end/ui/components/text_editor/AiCodeCompletionProvider.js
-var AiCodeCompletionTeaserMode;
-(function(AiCodeCompletionTeaserMode2) {
+// ../../front_end/ui/components/text_editor/AiCodeCompletionProvider.ts
+var AiCodeCompletionTeaserMode = /* @__PURE__ */ ((AiCodeCompletionTeaserMode2) => {
   AiCodeCompletionTeaserMode2["OFF"] = "off";
   AiCodeCompletionTeaserMode2["ON"] = "on";
   AiCodeCompletionTeaserMode2["ONLY_SHOW_ON_EMPTY"] = "onlyShowOnEmpty";
-})(AiCodeCompletionTeaserMode || (AiCodeCompletionTeaserMode = {}));
+  return AiCodeCompletionTeaserMode2;
+})(AiCodeCompletionTeaserMode || {});
 var setAiCodeCompletionTeaserMode = CodeMirror3.StateEffect.define();
 var aiCodeCompletionTeaserModeState = CodeMirror3.StateField.define({
-  create: () => AiCodeCompletionTeaserMode.OFF,
+  create: () => "off" /* OFF */,
   update(value, tr) {
     return tr.effects.find((effect) => effect.is(setAiCodeCompletionTeaserMode))?.value ?? value;
   }
@@ -2744,7 +2817,10 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
     this.#detachTeaser();
     this.#teaser = void 0;
     this.#aiCodeCompletionSetting.removeChangeListener(this.#boundOnSettingChange);
-    Host6.AidaClient.HostConfigTracker.instance().removeEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host6.AidaClient.HostConfigTracker.instance().removeEventListener(
+      Host6.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
     this.#cleanupAiCodeCompletion();
     this.#aiCodeGenerationProvider?.dispose();
   }
@@ -2755,9 +2831,14 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
         onDetach: () => this.#detachTeaser.bind(this),
         disclaimerTextVariant: this.#aiCodeCompletionConfig?.disclaimerTextVariant
       });
-      this.#editor.editor.dispatch({ effects: this.#teaserCompartment.reconfigure([aiCodeCompletionTeaserExtension(this.#teaser)]) });
+      this.#editor.editor.dispatch(
+        { effects: this.#teaserCompartment.reconfigure([aiCodeCompletionTeaserExtension(this.#teaser)]) }
+      );
     }
-    Host6.AidaClient.HostConfigTracker.instance().addEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host6.AidaClient.HostConfigTracker.instance().addEventListener(
+      Host6.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
     this.#aiCodeCompletionSetting.addChangeListener(this.#boundOnSettingChange);
     const initialAvailability = Host6.AidaClient.HostConfigTracker.instance().aidaAvailability;
     if (initialAvailability !== void 0) {
@@ -2775,10 +2856,14 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
     if (this.#aiCodeCompletion) {
       return;
     }
-    this.#aiCodeCompletion = new AiCodeCompletion.AiCodeCompletion.AiCodeCompletion({
-      aidaClient: this.#aidaClient,
-      serverSideLoggingEnabled: !Root5.Runtime.hostConfig.aidaAvailability?.disallowLogging
-    }, void 0, this.#aiCodeCompletionConfig.completionContext.stopSequences);
+    this.#aiCodeCompletion = new AiCodeCompletion.AiCodeCompletion.AiCodeCompletion(
+      {
+        aidaClient: this.#aidaClient,
+        serverSideLoggingEnabled: !Root5.Runtime.hostConfig.aidaAvailability?.disallowLogging
+      },
+      void 0,
+      this.#aiCodeCompletionConfig.completionContext.stopSequences
+    );
     this.#aiCodeCompletionConfig.onFeatureEnabled();
   }
   #cleanupAiCodeCompletion() {
@@ -2796,7 +2881,7 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
     this.#aiCodeCompletionConfig?.onFeatureDisabled();
   }
   #updateAiCodeCompletionStateWithAvailability(aidaAvailability) {
-    const isAvailable = aidaAvailability === "available";
+    const isAvailable = aidaAvailability === Host6.AidaClient.AidaAccessPreconditions.AVAILABLE;
     const devtoolsLocale = i18n12.DevToolsLocale.DevToolsLocale.instance().locale;
     const aiCodeCompletionEnabled = AiCodeCompletion.AiCodeCompletion.AiCodeCompletion.isAiCodeCompletionEnabled(devtoolsLocale);
     const isSettingEnabled = this.#aiCodeCompletionSetting.get();
@@ -2806,7 +2891,9 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
         this.#setupAiCodeCompletion();
       } else {
         if (this.#teaser && !this.#aiCodeCompletionTeaserDismissedSetting.get()) {
-          this.#editor?.editor.dispatch({ effects: this.#teaserCompartment.reconfigure([aiCodeCompletionTeaserExtension(this.#teaser)]) });
+          this.#editor?.editor.dispatch(
+            { effects: this.#teaserCompartment.reconfigure([aiCodeCompletionTeaserExtension(this.#teaser)]) }
+          );
         }
         this.#cleanupAiCodeCompletion();
       }
@@ -2823,7 +2910,7 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
           if (!this.#aiCodeCompletion || !this.#editor || !hasActiveAiSuggestion(this.#editor.state)) {
             return false;
           }
-          if (this.#editor.state.field(aiAutoCompleteSuggestionState)?.source === "generation") {
+          if (this.#editor.state.field(aiAutoCompleteSuggestionState)?.source === "generation" /* GENERATION */) {
             return false;
           }
           this.#editor.dispatch({
@@ -2891,11 +2978,20 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
       prefix = prefix.substring(prefix.length - MAX_PREFIX_SUFFIX_LENGTH);
     }
     const suffix = query.substring(cursor, cursor + MAX_PREFIX_SUFFIX_LENGTH);
-    this.#debouncedRequestAidaSuggestion(prefix, suffix, cursor, this.#aiCodeCompletionConfig?.completionContext.inferenceLanguage, this.#aiCodeCompletionConfig?.completionContext.additionalFiles);
+    this.#debouncedRequestAidaSuggestion(
+      prefix,
+      suffix,
+      cursor,
+      this.#aiCodeCompletionConfig?.completionContext.inferenceLanguage,
+      this.#aiCodeCompletionConfig?.completionContext.additionalFiles
+    );
   }
-  #debouncedRequestAidaSuggestion = Common5.Debouncer.debounce((prefix, suffix, cursorPositionAtRequest, inferenceLanguage, additionalFiles) => {
-    void this.#requestAidaSuggestion(prefix, suffix, cursorPositionAtRequest, inferenceLanguage, additionalFiles);
-  }, AIDA_REQUEST_DEBOUNCE_TIMEOUT_MS);
+  #debouncedRequestAidaSuggestion = Common5.Debouncer.debounce(
+    (prefix, suffix, cursorPositionAtRequest, inferenceLanguage, additionalFiles) => {
+      void this.#requestAidaSuggestion(prefix, suffix, cursorPositionAtRequest, inferenceLanguage, additionalFiles);
+    },
+    AIDA_REQUEST_DEBOUNCE_TIMEOUT_MS
+  );
   async #requestAidaSuggestion(prefix, suffix, cursorPositionAtRequest, inferenceLanguage, additionalFiles) {
     this.#aiCodeCompletionCitations = [];
     if (!this.#aiCodeCompletion) {
@@ -2913,7 +3009,13 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
       Host6.userMetrics.actionTaken(Host6.UserMetrics.Action.AiCodeCompletionRequestTriggeredFromSources);
     }
     try {
-      const completionResponse = await this.#aiCodeCompletion.completeCode(prefix, suffix, cursorPositionAtRequest, inferenceLanguage, additionalFiles);
+      const completionResponse = await this.#aiCodeCompletion.completeCode(
+        prefix,
+        suffix,
+        cursorPositionAtRequest,
+        inferenceLanguage,
+        additionalFiles
+      );
       if (!completionResponse) {
         this.#aiCodeCompletionConfig?.onResponseReceived();
         return;
@@ -2928,7 +3030,12 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
         this.#aiCodeCompletionConfig?.onResponseReceived();
         return;
       }
-      const { suggestionText, sampleId, citations, rpcGlobalId } = sampleResponse;
+      const {
+        suggestionText,
+        sampleId,
+        citations,
+        rpcGlobalId
+      } = sampleResponse;
       const remainingDelay = Math.max(DELAY_BEFORE_SHOWING_RESPONSE_MS - (performance.now() - startTime), 0);
       this.#suggestionRenderingTimeout = window.setTimeout(() => {
         const currentCursorPosition = this.#editor?.editor.state.selection.main.head;
@@ -2946,14 +3053,19 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
               startTime,
               clearCachedRequest: this.clearCache.bind(this),
               onImpression: this.#aiCodeCompletion?.registerUserImpression.bind(this.#aiCodeCompletion),
-              source: "completion"
+              source: "completion" /* COMPLETION */
             })
           });
         }
         if (fromCache) {
           Host6.userMetrics.actionTaken(Host6.UserMetrics.Action.AiCodeCompletionResponseServedFromCache);
         }
-        AiCodeCompletion.debugLog("Suggestion dispatched to the editor", suggestionText, "at cursor position", cursorPositionAtRequest);
+        AiCodeCompletion.debugLog(
+          "Suggestion dispatched to the editor",
+          suggestionText,
+          "at cursor position",
+          cursorPositionAtRequest
+        );
         this.#aiCodeCompletionCitations = citations;
         this.#aiCodeCompletionConfig?.onResponseReceived();
       }, remainingDelay);
@@ -3018,17 +3130,17 @@ var AiCodeCompletionProvider = class _AiCodeCompletionProvider {
 };
 function aiCodeCompletionTeaserExtension(teaser) {
   return CodeMirror3.ViewPlugin.fromClass(class {
-    view;
-    teaser;
-    #teaserDecoration = CodeMirror3.Decoration.none;
-    #teaserMode;
-    #teaserDisplayTimeout;
     constructor(view) {
       this.view = view;
       this.teaser = teaser;
       this.#teaserMode = view.state.field(aiCodeCompletionTeaserModeState);
       this.#setupDecoration();
     }
+    view;
+    teaser;
+    #teaserDecoration = CodeMirror3.Decoration.none;
+    #teaserMode;
+    #teaserDisplayTimeout;
     destroy() {
       window.clearTimeout(this.#teaserDisplayTimeout);
     }
@@ -3039,9 +3151,9 @@ function aiCodeCompletionTeaserExtension(teaser) {
         this.#setupDecoration();
         return;
       }
-      if (this.#teaserMode === AiCodeCompletionTeaserMode.ONLY_SHOW_ON_EMPTY && update.docChanged) {
+      if (this.#teaserMode === "onlyShowOnEmpty" /* ONLY_SHOW_ON_EMPTY */ && update.docChanged) {
         this.#updateTeaserDecorationForOnlyShowOnEmptyMode();
-      } else if (this.#teaserMode === AiCodeCompletionTeaserMode.ON) {
+      } else if (this.#teaserMode === "on" /* ON */) {
         if (update.docChanged) {
           this.#teaserDecoration = CodeMirror3.Decoration.none;
           window.clearTimeout(this.#teaserDisplayTimeout);
@@ -3056,13 +3168,13 @@ function aiCodeCompletionTeaserExtension(teaser) {
     }
     #setupDecoration() {
       switch (this.#teaserMode) {
-        case AiCodeCompletionTeaserMode.ON:
+        case "on" /* ON */:
           this.#updateTeaserDecorationForOnModeImmediately();
           return;
-        case AiCodeCompletionTeaserMode.ONLY_SHOW_ON_EMPTY:
+        case "onlyShowOnEmpty" /* ONLY_SHOW_ON_EMPTY */:
           this.#updateTeaserDecorationForOnlyShowOnEmptyMode();
           return;
-        case AiCodeCompletionTeaserMode.OFF:
+        case "off" /* OFF */:
           this.#teaserDecoration = CodeMirror3.Decoration.none;
           return;
       }
@@ -3120,7 +3232,7 @@ function aiCodeCompletionTeaserExtension(teaser) {
   });
 }
 
-// gen/front_end/ui/components/text_editor/AutocompleteHistory.js
+// ../../front_end/ui/components/text_editor/AutocompleteHistory.ts
 var AutocompleteHistory_exports = {};
 __export(AutocompleteHistory_exports, {
   AutocompleteHistory: () => AutocompleteHistory
@@ -3299,14 +3411,14 @@ var AutocompleteHistory = class _AutocompleteHistory {
   }
 };
 
-// gen/front_end/ui/components/text_editor/ExecutionPositionHighlighter.js
+// ../../front_end/ui/components/text_editor/ExecutionPositionHighlighter.ts
 var ExecutionPositionHighlighter_exports = {};
 __export(ExecutionPositionHighlighter_exports, {
   clearHighlightedPosition: () => clearHighlightedPosition,
   positionHighlighter: () => positionHighlighter,
   setHighlightedPosition: () => setHighlightedPosition
 });
-import * as CodeMirror4 from "./../../../third_party/codemirror.next/codemirror.next.js";
+import * as CodeMirror4 from "../../../third_party/codemirror.next/codemirror.next.js";
 var setHighlightedPosition = CodeMirror4.StateEffect.define();
 var clearHighlightedPosition = CodeMirror4.StateEffect.define();
 function positionHighlighter(executionLineClassName, executionTokenClassName) {
@@ -3376,9 +3488,10 @@ function positionHighlighter(executionLineClassName, executionTokenClassName) {
   ];
 }
 
-// gen/front_end/ui/components/text_editor/javascript.js
+// ../../front_end/ui/components/text_editor/javascript.ts
 var javascript_exports = {};
 __export(javascript_exports, {
+  QueryType: () => QueryType,
   argumentHints: () => argumentHints,
   argumentsList: () => argumentsList,
   closeArgumentsHintsTooltip: () => closeArgumentsHintsTooltip,
@@ -3388,15 +3501,15 @@ __export(javascript_exports, {
   isExpressionComplete: () => isExpressionComplete,
   javascriptCompletionSource: () => javascriptCompletionSource
 });
-import * as SDK from "./../../../core/sdk/sdk.js";
-import * as Bindings from "./../../../models/bindings/bindings.js";
-import * as JavaScriptMetaData from "./../../../models/javascript_metadata/javascript_metadata.js";
-import * as SourceMapScopes from "./../../../models/source_map_scopes/source_map_scopes.js";
-import * as CodeMirror6 from "./../../../third_party/codemirror.next/codemirror.next.js";
-import * as UI8 from "./../../legacy/legacy.js";
+import * as SDK from "../../../core/sdk/sdk.js";
+import * as Bindings from "../../../models/bindings/bindings.js";
+import * as JavaScriptMetaData from "../../../models/javascript_metadata/javascript_metadata.js";
+import * as SourceMapScopes from "../../../models/source_map_scopes/source_map_scopes.js";
+import * as CodeMirror6 from "../../../third_party/codemirror.next/codemirror.next.js";
+import * as UI8 from "../../legacy/legacy.js";
 
-// gen/front_end/ui/components/text_editor/cursor_tooltip.js
-import * as CodeMirror5 from "./../../../third_party/codemirror.next/codemirror.next.js";
+// ../../front_end/ui/components/text_editor/cursor_tooltip.ts
+import * as CodeMirror5 from "../../../third_party/codemirror.next/codemirror.next.js";
 var closeTooltip = CodeMirror5.StateEffect.define();
 function cursorTooltip(source) {
   const openTooltip = CodeMirror5.StateEffect.define();
@@ -3460,7 +3573,7 @@ function cursorTooltip(source) {
   return [state, plugin];
 }
 
-// gen/front_end/ui/components/text_editor/javascript.js
+// ../../front_end/ui/components/text_editor/javascript.ts
 function completion() {
   return CodeMirror6.javascript.javascriptLanguage.data.of({
     autocomplete: javascriptCompletionSource
@@ -3480,12 +3593,12 @@ async function completeInContext(textBefore, query, force = false) {
   })) : [];
 }
 var CompletionSet = class _CompletionSet {
-  completions;
-  seen;
   constructor(completions = [], seen = /* @__PURE__ */ new Set()) {
     this.completions = completions;
     this.seen = seen;
   }
+  completions;
+  seen;
   add(completion2) {
     if (!this.seen.has(completion2.label)) {
       this.seen.add(completion2.label);
@@ -3579,6 +3692,13 @@ var dontCompleteIn = /* @__PURE__ */ new Set([
   "PropertyDefinition",
   "TypeName"
 ]);
+var QueryType = /* @__PURE__ */ ((QueryType2) => {
+  QueryType2[QueryType2["EXPRESSION"] = 0] = "EXPRESSION";
+  QueryType2[QueryType2["PROPERTY_NAME"] = 1] = "PROPERTY_NAME";
+  QueryType2[QueryType2["PROPERTY_EXPRESSION"] = 2] = "PROPERTY_EXPRESSION";
+  QueryType2[QueryType2["POTENTIALLY_RETRIEVING_FROM_MAP"] = 3] = "POTENTIALLY_RETRIEVING_FROM_MAP";
+  return QueryType2;
+})(QueryType || {});
 function getQueryType(tree, pos, doc) {
   let node = tree.resolveInner(pos, -1);
   const parent = node.parent;
@@ -3586,15 +3706,15 @@ function getQueryType(tree, pos, doc) {
     return null;
   }
   if (node.name === "PropertyName" || node.name === "PrivatePropertyName") {
-    return parent?.name !== "MemberExpression" ? null : { type: 1, from: node.from, relatedNode: parent };
+    return parent?.name !== "MemberExpression" ? null : { type: 1 /* PROPERTY_NAME */, from: node.from, relatedNode: parent };
   }
   if (node.name === "VariableName" || // Treat alphabetic keywords as variables
   !node.firstChild && node.to - node.from < 20 && !/[^a-z]/.test(doc.sliceString(node.from, node.to))) {
-    return { type: 0, from: node.from };
+    return { type: 0 /* EXPRESSION */, from: node.from };
   }
   if (node.name === "String") {
     const parent2 = node.parent;
-    return parent2?.name === "MemberExpression" && parent2.childBefore(node.from)?.name === "[" ? { type: 2, from: node.from, relatedNode: parent2 } : null;
+    return parent2?.name === "MemberExpression" && parent2.childBefore(node.from)?.name === "[" ? { type: 2 /* PROPERTY_EXPRESSION */, from: node.from, relatedNode: parent2 } : null;
   }
   node = node.enterUnfinishedNodesBefore(pos);
   if (node.to === pos && node.parent?.name === "MemberExpression") {
@@ -3603,10 +3723,10 @@ function getQueryType(tree, pos, doc) {
   if (node.name === "MemberExpression") {
     const before = node.childBefore(Math.min(pos, node.to));
     if (before?.name === "[") {
-      return { type: 2, relatedNode: node };
+      return { type: 2 /* PROPERTY_EXPRESSION */, relatedNode: node };
     }
     if (before?.name === "." || before?.name === "?.") {
-      return { type: 1, relatedNode: node };
+      return { type: 1 /* PROPERTY_NAME */, relatedNode: node };
     }
   }
   if (node.name === "(") {
@@ -3616,19 +3736,16 @@ function getQueryType(tree, pos, doc) {
         const propertyExpression = callReceiver?.lastChild;
         if (propertyExpression && doc.sliceString(propertyExpression.from, propertyExpression.to) === "get") {
           const potentiallyMapObject = callReceiver?.firstChild;
-          return { type: 3, relatedNode: potentiallyMapObject || void 0 };
+          return { type: 3 /* POTENTIALLY_RETRIEVING_FROM_MAP */, relatedNode: potentiallyMapObject || void 0 };
         }
       }
     }
   }
-  return {
-    type: 0
-    /* QueryType.EXPRESSION */
-  };
+  return { type: 0 /* EXPRESSION */ };
 }
 async function javascriptCompletionSource(cx) {
   const query = getQueryType(CodeMirror6.syntaxTree(cx.state), cx.pos, cx.state.doc);
-  if (!query || query.from === void 0 && !cx.explicit && query.type === 0) {
+  if (!query || query.from === void 0 && !cx.explicit && query.type === 0 /* EXPRESSION */) {
     return null;
   }
   const script = getExecutionContext()?.debuggerModel.selectedCallFrame()?.script;
@@ -3637,7 +3754,7 @@ async function javascriptCompletionSource(cx) {
   }
   let result;
   let quote = void 0;
-  if (query.type === 0) {
+  if (query.type === 0 /* EXPRESSION */) {
     const [scope, global] = await Promise.all([
       completeExpressionInScope(),
       completeExpressionGlobal()
@@ -3650,16 +3767,20 @@ async function javascriptCompletionSource(cx) {
     } else {
       result = global;
     }
-  } else if (query.type === 1 || query.type === 2) {
+  } else if (query.type === 1 /* PROPERTY_NAME */ || query.type === 2 /* PROPERTY_EXPRESSION */) {
     const objectExpr = query.relatedNode.getChild("Expression");
-    if (query.type === 2) {
+    if (query.type === 2 /* PROPERTY_EXPRESSION */) {
       quote = query.from === void 0 ? "'" : cx.state.sliceDoc(query.from, query.from + 1);
     }
     if (!objectExpr) {
       return null;
     }
-    result = await completeProperties(cx.state.sliceDoc(objectExpr.from, objectExpr.to), quote, cx.state.sliceDoc(cx.pos, cx.pos + 1) === "]");
-  } else if (query.type === 3) {
+    result = await completeProperties(
+      cx.state.sliceDoc(objectExpr.from, objectExpr.to),
+      quote,
+      cx.state.sliceDoc(cx.pos, cx.pos + 1) === "]"
+    );
+  } else if (query.type === 3 /* POTENTIALLY_RETRIEVING_FROM_MAP */) {
     const potentialMapObject = query.relatedNode;
     if (!potentialMapObject) {
       return null;
@@ -3681,17 +3802,21 @@ function getExecutionContext() {
   return UI8.Context.Context.instance().flavor(SDK.RuntimeModel.ExecutionContext);
 }
 async function evaluateExpression(context, expression, group) {
-  const result = await context.evaluateWithSelectedFrameFallback({
-    expression,
-    objectGroup: group,
-    includeCommandLineAPI: true,
-    silent: true,
-    returnByValue: false,
-    generatePreview: false,
-    throwOnSideEffect: true,
-    timeout: 500,
-    replMode: true
-  }, false, false);
+  const result = await context.evaluateWithSelectedFrameFallback(
+    {
+      expression,
+      objectGroup: group,
+      includeCommandLineAPI: true,
+      silent: true,
+      returnByValue: false,
+      generatePreview: false,
+      throwOnSideEffect: true,
+      timeout: 500,
+      replMode: true
+    },
+    false,
+    false
+  );
   if ("error" in result || result.exceptionDetails || !result.object) {
     return null;
   }
@@ -3710,10 +3835,22 @@ var PropertyCache = class _PropertyCache {
   #cache = /* @__PURE__ */ new Map();
   constructor() {
     const clear = () => this.#cache.clear();
-    SDK.TargetManager.TargetManager.instance().addModelListener(SDK.ConsoleModel.ConsoleModel, SDK.ConsoleModel.Events.CommandEvaluated, clear);
+    SDK.TargetManager.TargetManager.instance().addModelListener(
+      SDK.ConsoleModel.ConsoleModel,
+      SDK.ConsoleModel.Events.CommandEvaluated,
+      clear
+    );
     UI8.Context.Context.instance().addFlavorChangeListener(SDK.RuntimeModel.ExecutionContext, clear);
-    SDK.TargetManager.TargetManager.instance().addModelListener(SDK.DebuggerModel.DebuggerModel, SDK.DebuggerModel.Events.DebuggerResumed, clear);
-    SDK.TargetManager.TargetManager.instance().addModelListener(SDK.DebuggerModel.DebuggerModel, SDK.DebuggerModel.Events.DebuggerPaused, clear);
+    SDK.TargetManager.TargetManager.instance().addModelListener(
+      SDK.DebuggerModel.DebuggerModel,
+      SDK.DebuggerModel.Events.DebuggerResumed,
+      clear
+    );
+    SDK.TargetManager.TargetManager.instance().addModelListener(
+      SDK.DebuggerModel.DebuggerModel,
+      SDK.DebuggerModel.Events.DebuggerPaused,
+      clear
+    );
   }
   get(expression) {
     return this.#cache.get(expression);
@@ -3825,7 +3962,9 @@ async function completeExpressionInScope() {
     return result;
   }
   const debuggerWorkspaceBinding = Bindings.DebuggerWorkspaceBinding.DebuggerWorkspaceBinding.instance();
-  const scopes = await Promise.all(selectedFrame.scopeChain().map((scope) => SourceMapScopes.NamesResolver.resolveScopeInObject(scope, debuggerWorkspaceBinding).getAllProperties(false, false)));
+  const scopes = await Promise.all(selectedFrame.scopeChain().map(
+    (scope) => SourceMapScopes.NamesResolver.resolveScopeInObject(scope, debuggerWorkspaceBinding).getAllProperties(false, false)
+  ));
   for (const scope of scopes) {
     for (const property of scope.properties || []) {
       result.add({
@@ -4137,7 +4276,7 @@ function tooltipBuilder(signatures, currentIndex) {
   return { dom: tooltip };
 }
 
-// gen/front_end/ui/components/text_editor/position.js
+// ../../front_end/ui/components/text_editor/position.ts
 var position_exports = {};
 __export(position_exports, {
   toLineColumn: () => toLineColumn,
@@ -4153,16 +4292,16 @@ function toLineColumn(doc, offset) {
   return { lineNumber: line.number - 1, columnNumber: offset - line.from };
 }
 
-// gen/front_end/ui/components/text_editor/TextEditor.js
+// ../../front_end/ui/components/text_editor/TextEditor.ts
 var TextEditor_exports = {};
 __export(TextEditor_exports, {
   TextEditor: () => TextEditor
 });
-import * as Common6 from "./../../../core/common/common.js";
-import * as CodeMirror7 from "./../../../third_party/codemirror.next/codemirror.next.js";
-import * as UI9 from "./../../legacy/legacy.js";
-import * as ThemeSupport from "./../../legacy/theme_support/theme_support.js";
-import * as CodeHighlighter3 from "./../code_highlighter/code_highlighter.js";
+import * as Common6 from "../../../core/common/common.js";
+import * as CodeMirror7 from "../../../third_party/codemirror.next/codemirror.next.js";
+import * as UI9 from "../../legacy/legacy.js";
+import * as ThemeSupport from "../../legacy/theme_support/theme_support.js";
+import * as CodeHighlighter3 from "../code_highlighter/code_highlighter.js";
 var TextEditor = class extends HTMLElement {
   #shadow = this.attachShadow({ mode: "open" });
   #activeEditor = void 0;
@@ -4182,6 +4321,18 @@ var TextEditor = class extends HTMLElement {
     }
   };
   #devtoolsResizeObserver = new ResizeObserver(this.#resizeListener);
+  static get observedAttributes() {
+    return ["data-file-path"];
+  }
+  attributeChangedCallback(name, _oldValue, newValue) {
+    if (name === "data-file-path" && this.#activeEditor) {
+      if (newValue !== null) {
+        this.#activeEditor.dom.setAttribute("data-file-path", newValue);
+      } else {
+        this.#activeEditor.dom.removeAttribute("data-file-path");
+      }
+    }
+  }
   constructor(pendingState) {
     super();
     this.#pendingState = pendingState;
@@ -4201,6 +4352,10 @@ var TextEditor = class extends HTMLElement {
       },
       scrollTo: this.#lastScrollSnapshot
     });
+    const filePath = this.getAttribute("data-file-path");
+    if (filePath) {
+      this.#activeEditor.dom.setAttribute("data-file-path", filePath);
+    }
     this.#activeEditor.scrollDOM.addEventListener("scroll", () => {
       if (!this.#activeEditor) {
         return;
@@ -4286,7 +4441,7 @@ var TextEditor = class extends HTMLElement {
           this.#activeEditor.dispatch({ effects: change });
         }
       };
-      const setting = Common6.Settings.Settings.instance().moduleSetting(dynamicSetting2.settingName);
+      const setting = typeof dynamicSetting2.setting === "string" ? Common6.Settings.Settings.instance().moduleSetting(dynamicSetting2.setting) : Common6.Settings.Settings.instance().resolve(dynamicSetting2.setting);
       setting.addChangeListener(handler);
       this.#activeSettingListeners.push([setting, handler]);
     }
@@ -4384,12 +4539,18 @@ var CODE_MIRROR_USER_EVENT_TO_INPUT_EVENT_TYPE = /* @__PURE__ */ new Map([
   ["redo", "historyRedo"]
 ]);
 
-// gen/front_end/ui/components/text_editor/TextEditorHistory.js
+// ../../front_end/ui/components/text_editor/TextEditorHistory.ts
 var TextEditorHistory_exports = {};
 __export(TextEditorHistory_exports, {
+  Direction: () => Direction,
   TextEditorHistory: () => TextEditorHistory
 });
-import * as CodeMirror8 from "./../../../third_party/codemirror.next/codemirror.next.js";
+import * as CodeMirror8 from "../../../third_party/codemirror.next/codemirror.next.js";
+var Direction = /* @__PURE__ */ ((Direction2) => {
+  Direction2[Direction2["FORWARD"] = 1] = "FORWARD";
+  Direction2[Direction2["BACKWARD"] = -1] = "BACKWARD";
+  return Direction2;
+})(Direction || {});
 var TextEditorHistory = class {
   #editor;
   #history;
@@ -4403,7 +4564,7 @@ var TextEditorHistory = class {
    */
   moveHistory(dir, force = false) {
     const { editor } = this.#editor, { main } = editor.state.selection;
-    const isBackward = dir === -1;
+    const isBackward = dir === -1 /* BACKWARD */;
     if (!force) {
       if (!main.empty) {
         return false;

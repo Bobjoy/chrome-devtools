@@ -111,7 +111,7 @@ var codeHighlighter_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./codeHighlighter.css")} */`;
 
-// gen/front_end/ui/components/code_highlighter/CodeHighlighter.js
+// ../../front_end/ui/components/code_highlighter/CodeHighlighter.ts
 var CodeHighlighter_exports = {};
 __export(CodeHighlighter_exports, {
   CodeHighlighter: () => CodeHighlighter,
@@ -120,7 +120,7 @@ __export(CodeHighlighter_exports, {
   highlightStyle: () => highlightStyle,
   languageFromMIME: () => languageFromMIME
 });
-import * as CodeMirror from "./../../../third_party/codemirror.next/codemirror.next.js";
+import * as CodeMirror from "../../../third_party/codemirror.next/codemirror.next.js";
 var t = CodeMirror.tags;
 var highlightStyle = CodeMirror.HighlightStyle.define([
   { tag: t.variableName, class: "token-variable" },
@@ -258,12 +258,12 @@ async function languageFromMIME(mimeType) {
   }
 }
 var CodeHighlighter = class {
-  code;
-  tree;
   constructor(code, tree) {
     this.code = code;
     this.tree = tree;
   }
+  code;
+  tree;
   highlight(token) {
     this.highlightRange(0, this.code.length, token);
   }

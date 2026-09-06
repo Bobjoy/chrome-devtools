@@ -4,7 +4,7 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/menus/Menu.js
+// ../../front_end/ui/components/menus/Menu.ts
 var Menu_exports = {};
 __export(Menu_exports, {
   Menu: () => Menu,
@@ -13,12 +13,12 @@ __export(Menu_exports, {
   MenuItem: () => MenuItem,
   MenuItemSelectedEvent: () => MenuItemSelectedEvent
 });
-import * as Platform from "./../../../core/platform/platform.js";
-import * as ComponentHelpers from "./../helpers/helpers.js";
-import * as RenderCoordinator from "./../render_coordinator/render_coordinator.js";
-import * as Lit from "./../../lit/lit.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
-import * as Dialogs from "./../dialogs/dialogs.js";
+import * as Platform from "../../../core/platform/platform.js";
+import * as ComponentHelpers from "../helpers/helpers.js";
+import * as RenderCoordinator from "../render_coordinator/render_coordinator.js";
+import * as Lit from "../../lit/lit.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
+import * as Dialogs from "../dialogs/dialogs.js";
 
 // gen/front_end/ui/components/menus/menu.css.js
 var menu_css_default = `/*
@@ -77,8 +77,8 @@ var menuGroup_css_default = `/*
  */
 
 .menu-group-label {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--sys-typescale-body4-size);
+  line-height: var(--sys-typescale-body4-line-height);
   position: relative;
   color: var(--sys-color-token-subtle);
   display: block;
@@ -95,8 +95,8 @@ var menuItem_css_default = `/*
 
 .menu-item {
   padding: var(--sys-size-3) 0 var(--sys-size-3) var(--sys-size-9);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--sys-typescale-body4-size);
+  line-height: var(--sys-typescale-body4-line-height);
   position: relative;
   display: block;
   color: var(--sys-color-on-surface);
@@ -159,7 +159,7 @@ var menuItem_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./menuItem.css")} */`;
 
-// gen/front_end/ui/components/menus/Menu.js
+// ../../front_end/ui/components/menus/Menu.ts
 var { html, Directives: { ref } } = Lit;
 var selectedItemCheckmark = new URL("../../../Images/checkmark.svg", import.meta.url).toString();
 var Menu = class extends HTMLElement {
@@ -169,10 +169,10 @@ var Menu = class extends HTMLElement {
   #props = {
     origin: null,
     open: false,
-    position: "auto",
+    position: Dialogs.Dialog.DialogVerticalPosition.AUTO,
     showDivider: false,
     showSelectedItem: true,
-    horizontalAlignment: "auto",
+    horizontalAlignment: Dialogs.Dialog.DialogHorizontalAlignment.AUTO,
     getConnectorCustomXPosition: null
   };
   get origin() {
@@ -293,13 +293,13 @@ var Menu = class extends HTMLElement {
     evt.stopImmediatePropagation();
     let item = evt.target;
     const path = evt.composedPath();
-    const shouldFocusFirstItem = key === "ArrowDown" || key === "ArrowRight";
+    const shouldFocusFirstItem = key === Platform.KeyboardUtilities.ArrowKey.DOWN || key === Platform.KeyboardUtilities.ArrowKey.RIGHT;
     if (!this.#itemIsFocused && shouldFocusFirstItem) {
       this.#focusFirstItem();
       this.#itemIsFocused = true;
       return;
     }
-    if (!this.#itemIsFocused && key === "ArrowUp") {
+    if (!this.#itemIsFocused && key === Platform.KeyboardUtilities.ArrowKey.UP) {
       this.#focusLastItem();
       this.#itemIsFocused = true;
       return;
@@ -335,12 +335,12 @@ var Menu = class extends HTMLElement {
   }
   #handleArrowKeyNavigation(key, currentItem) {
     let nextSibling = currentItem;
-    if (key === "ArrowDown") {
+    if (key === Platform.KeyboardUtilities.ArrowKey.DOWN) {
       nextSibling = currentItem.nextElementSibling;
       if (nextSibling === null && currentItem.parentElement instanceof MenuGroup) {
         nextSibling = this.#firstItemInNextGroup(currentItem);
       }
-    } else if (key === "ArrowUp") {
+    } else if (key === Platform.KeyboardUtilities.ArrowKey.UP) {
       nextSibling = currentItem.previousElementSibling;
       if (nextSibling === null && currentItem.parentElement instanceof MenuGroup) {
         nextSibling = this.#lastItemInPreviousGroup(currentItem);
@@ -547,12 +547,12 @@ customElements.define("devtools-menu", Menu);
 customElements.define("devtools-menu-item", MenuItem);
 customElements.define("devtools-menu-group", MenuGroup);
 var MenuItemSelectedEvent = class _MenuItemSelectedEvent extends Event {
-  itemValue;
-  static eventName = "menuitemselected";
   constructor(itemValue) {
     super(_MenuItemSelectedEvent.eventName, { bubbles: true, composed: true });
     this.itemValue = itemValue;
   }
+  itemValue;
+  static eventName = "menuitemselected";
 };
 var MenuCloseRequest = class _MenuCloseRequest extends Event {
   static eventName = "menucloserequest";
@@ -561,7 +561,7 @@ var MenuCloseRequest = class _MenuCloseRequest extends Event {
   }
 };
 
-// gen/front_end/ui/components/menus/SelectMenu.js
+// ../../front_end/ui/components/menus/SelectMenu.ts
 var SelectMenu_exports = {};
 __export(SelectMenu_exports, {
   SelectMenu: () => SelectMenu,
@@ -571,12 +571,12 @@ __export(SelectMenu_exports, {
   SelectMenuItemSelectedEvent: () => SelectMenuItemSelectedEvent,
   SelectMenuSideButtonClickEvent: () => SelectMenuSideButtonClickEvent
 });
-import * as Platform2 from "./../../../core/platform/platform.js";
-import * as ComponentHelpers2 from "./../helpers/helpers.js";
-import * as RenderCoordinator2 from "./../render_coordinator/render_coordinator.js";
-import * as Lit2 from "./../../lit/lit.js";
-import * as VisualLogging2 from "./../../visual_logging/visual_logging.js";
-import * as Dialogs2 from "./../dialogs/dialogs.js";
+import * as Platform2 from "../../../core/platform/platform.js";
+import * as ComponentHelpers2 from "../helpers/helpers.js";
+import * as RenderCoordinator2 from "../render_coordinator/render_coordinator.js";
+import * as Lit2 from "../../lit/lit.js";
+import * as VisualLogging2 from "../../visual_logging/visual_logging.js";
+import * as Dialogs2 from "../dialogs/dialogs.js";
 
 // gen/front_end/ui/components/menus/selectMenu.css.js
 var selectMenu_css_default = `/*
@@ -586,7 +586,7 @@ var selectMenu_css_default = `/*
  */
 
 :host {
-  border: 1px solid var(--sys-color-neutral-outline);
+  border: var(--sys-size-1) solid var(--sys-color-neutral-outline);
   border-radius: var(--sys-shape-corner-extra-small);
   width: fit-content;
   display: flex;
@@ -610,7 +610,7 @@ button {
 }
 
 #side-button {
-  border: 1px solid var(--sys-color-neutral-outline);
+  border: var(--sys-size-1) solid var(--sys-color-neutral-outline);
   border-radius: 3px 0 0 3px;
   border-right: none;
   height: 100%;
@@ -655,7 +655,7 @@ var selectMenuButton_css_default = `/*
 
 .show {
   display: block;
-  font-size: 12px;
+  font-size: var(--sys-typescale-body4-size);
   color: var(--sys-color-on-surface);
   height: 100%;
   width: 100%;
@@ -679,7 +679,7 @@ var selectMenuButton_css_default = `/*
 
   &:focus-visible {
     outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
-    outline-offset: -1px;
+    outline-offset: calc(-1 * var(--sys-size-1));
   }
 }
 
@@ -714,9 +714,9 @@ var selectMenuButton_css_default = `/*
   mask-image: var(--deploy-menu-arrow);
   -webkit-mask-position-y: center;
   margin-left: 5px;
-  width: 14px;
+  width: var(--sys-size-7);
   flex-shrink: 0;
-  height: 14px;
+  height: var(--sys-size-7);
   display: inline-block;
   mask-repeat: no-repeat;
   background-color: var(--sys-color-on-surface-subtle);
@@ -748,7 +748,7 @@ button[disabled] {
 
 /*# sourceURL=${import.meta.resolve("./selectMenuButton.css")} */`;
 
-// gen/front_end/ui/components/menus/SelectMenu.js
+// ../../front_end/ui/components/menus/SelectMenu.ts
 var { html: html2 } = Lit2;
 var deployMenuArrow = new URL("../../../Images/triangle-down.svg", import.meta.url).toString();
 var SelectMenu = class extends HTMLElement {
@@ -757,8 +757,8 @@ var SelectMenu = class extends HTMLElement {
   #open = false;
   #props = {
     buttonTitle: "",
-    position: "bottom",
-    horizontalAlignment: "auto",
+    position: Dialogs2.Dialog.DialogVerticalPosition.BOTTOM,
+    horizontalAlignment: Dialogs2.Dialog.DialogHorizontalAlignment.AUTO,
     showArrow: false,
     sideButton: false,
     showDivider: false,
@@ -898,7 +898,8 @@ var SelectMenu = class extends HTMLElement {
     if (!ComponentHelpers2.ScheduledRender.isScheduledRender(this)) {
       throw new Error("SelectMenu render was not scheduled");
     }
-    Lit2.render(html2`
+    Lit2.render(
+      html2`
         <style>${selectMenu_css_default}</style>
         <devtools-menu
             @menucloserequest=${this.#onMenuClose}
@@ -911,7 +912,10 @@ var SelectMenu = class extends HTMLElement {
             .getConnectorCustomXPosition=${null}>
           <slot></slot>
         </devtools-menu>
-        ${this.#renderButton()}`, this.#shadow, { host: this });
+        ${this.#renderButton()}`,
+      this.#shadow,
+      { host: this }
+    );
   }
 };
 var SelectMenuButton = class extends HTMLElement {
@@ -921,12 +925,12 @@ var SelectMenuButton = class extends HTMLElement {
     this.style.setProperty("--deploy-menu-arrow", `url(${deployMenuArrow})`);
     void RenderCoordinator2.write(() => {
       switch (this.arrowDirection) {
-        case "auto":
-        case "top": {
+        case Dialogs2.Dialog.DialogVerticalPosition.AUTO:
+        case Dialogs2.Dialog.DialogVerticalPosition.TOP: {
           this.style.setProperty("--arrow-angle", "180deg");
           break;
         }
-        case "bottom": {
+        case Dialogs2.Dialog.DialogVerticalPosition.BOTTOM: {
           this.style.setProperty("--arrow-angle", "0deg");
           break;
         }
@@ -937,7 +941,7 @@ var SelectMenuButton = class extends HTMLElement {
   }
   #props = {
     showArrow: false,
-    arrowDirection: "bottom",
+    arrowDirection: Dialogs2.Dialog.DialogVerticalPosition.BOTTOM,
     disabled: false,
     singleArrow: false,
     jslogContext: ""
@@ -990,8 +994,8 @@ var SelectMenuButton = class extends HTMLElement {
   }
   #handleButtonKeyDown(evt) {
     const key = evt.key;
-    const shouldShowDialogBelow = this.arrowDirection === "bottom" && key === "ArrowDown";
-    const shouldShowDialogAbove = this.arrowDirection === "top" && key === "ArrowUp";
+    const shouldShowDialogBelow = this.arrowDirection === Dialogs2.Dialog.DialogVerticalPosition.BOTTOM && key === Platform2.KeyboardUtilities.ArrowKey.DOWN;
+    const shouldShowDialogAbove = this.arrowDirection === Dialogs2.Dialog.DialogVerticalPosition.TOP && key === Platform2.KeyboardUtilities.ArrowKey.UP;
     const isEnter = key === Platform2.KeyboardUtilities.ENTER_KEY;
     const isSpace = evt.code === "Space";
     if (shouldShowDialogBelow || shouldShowDialogAbove || isEnter || isSpace) {
@@ -1015,7 +1019,8 @@ var SelectMenuButton = class extends HTMLElement {
         </span>
         ${arrow}
       </span>`;
-    Lit2.render(html2`
+    Lit2.render(
+      html2`
         <style>${selectMenuButton_css_default}</style>
         <button
             aria-haspopup="true" aria-expanded="false" class="show"
@@ -1023,18 +1028,21 @@ var SelectMenuButton = class extends HTMLElement {
             ?disabled=${this.disabled}
             jslog=${VisualLogging2.dropDown(this.jslogContext)}>
           ${buttonTitle}
-        </button>`, this.#shadow, { host: this });
+        </button>`,
+      this.#shadow,
+      { host: this }
+    );
   }
 };
 customElements.define("devtools-select-menu", SelectMenu);
 customElements.define("devtools-select-menu-button", SelectMenuButton);
 var SelectMenuItemSelectedEvent = class _SelectMenuItemSelectedEvent extends Event {
-  itemValue;
-  static eventName = "selectmenuselected";
   constructor(itemValue) {
     super(_SelectMenuItemSelectedEvent.eventName, { bubbles: true, composed: true });
     this.itemValue = itemValue;
   }
+  itemValue;
+  static eventName = "selectmenuselected";
 };
 var SelectMenuSideButtonClickEvent = class _SelectMenuSideButtonClickEvent extends Event {
   static eventName = "selectmenusidebuttonclick";

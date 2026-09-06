@@ -1,13 +1,14 @@
 {
-  "checkJs": true,
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "checkJs": true,
-    "composite": true,
-    "declaration": true,
+    "composite": false,
+    "declaration": false,
+    "disableSourceOfProjectReferenceRedirect": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": false,
     "inlineSources": true,
     "lib": [
       "dom",
@@ -19,21 +20,24 @@
       "ESNext.Array"
     ],
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "outDir": ".",
+    "preserveConstEnums": true,
     "rootDir": "../../../../../../../../front_end/ui/legacy/components/inline_editor",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
-    "tsBuildInfoFile": "inline_editor-tsconfig.json.tsbuildinfo",
-    "typeRoots": [],
-    "types": [],
+    "typeRoots": [
+
+    ],
+    "types": [
+
+    ],
     "useUnknownInCatchVariables": false
   },
   "files": [
@@ -51,45 +55,47 @@
     "../../../../../../../../front_end/ui/legacy/components/inline_editor/ColorSwatch.ts",
     "../../../../../../../../front_end/ui/legacy/components/inline_editor/InlineEditorUtils.ts",
     "../../../../../../../../front_end/ui/legacy/components/inline_editor/LinkSwatch.ts",
+    "../../../../../../../../front_end/ui/legacy/components/inline_editor/PositionAreaEditor.ts",
     "../../../../../../../../front_end/ui/legacy/components/inline_editor/SwatchPopoverHelper.ts",
     "../../../../../../../../front_end/ui/legacy/components/inline_editor/Swatches.ts",
     "../../../../../../../../front_end/legacy/legacy-defs.d.ts",
     "../../../../../../../../front_end/global_typings/global_defs.d.ts",
-    "../../../../../../../../node_modules/@types/filesystem/index.d.ts"
+    "../../../../../../../../node_modules/@types/filesystem/index.d.ts",
+    "../../../../../../../../node_modules/@types/filewriter/index.d.ts"
   ],
   "references": [
     {
-      "path": "../../../../core/common/bundle-tsconfig.json"
+      "path": "../../../../core/common/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../core/i18n/bundle-tsconfig.json"
+      "path": "../../../../core/i18n/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../core/platform/bundle-tsconfig.json"
+      "path": "../../../../core/platform/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../models/geometry/bundle-tsconfig.json"
+      "path": "../../../../models/geometry/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../third_party/codemirror.next/bundle-tsconfig.json"
+      "path": "../../../../third_party/codemirror.next/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../components/buttons/bundle-tsconfig.json"
+      "path": "../../../components/buttons/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../bundle-tsconfig.json"
+      "path": "../../bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../lit/bundle-tsconfig.json"
+      "path": "../../../lit/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../visual_logging/bundle-tsconfig.json"
+      "path": "../../../visual_logging/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../kit/bundle-tsconfig.json"
+      "path": "../../../kit/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../color_picker/bundle-tsconfig.json"
+      "path": "../color_picker/bundle-tsconfig.ref.json"
     }
   ]
 }

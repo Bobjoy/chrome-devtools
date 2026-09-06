@@ -45,6 +45,15 @@ const UIStrings = {
 const str_ = i18n.i18n.registerUIStrings('panels/console/ConsoleSidebar.ts', UIStrings);
 const i18nString = i18n.i18n.getLocalizedString.bind(undefined, str_);
 const { render, html, nothing } = Lit;
+export var GroupName;
+(function (GroupName) {
+    GroupName["CONSOLE_API"] = "user message";
+    GroupName["ALL"] = "message";
+    GroupName["ERROR"] = "error";
+    GroupName["WARNING"] = "warning";
+    GroupName["INFO"] = "info";
+    GroupName["VERBOSE"] = "verbose";
+})(GroupName || (GroupName = {}));
 const GROUP_ICONS = {
     ["message" /* GroupName.ALL */]: { icon: 'list', label: UIStrings.dMessages },
     ["user message" /* GroupName.CONSOLE_API */]: { icon: 'profile', label: UIStrings.dUserMessages },
@@ -136,7 +145,8 @@ const CONSOLE_API_PARSED_FILTERS = [{
         negative: false,
         regex: undefined,
     }];
-export class ConsoleSidebar extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+const ConsoleSidebarBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class ConsoleSidebar extends ConsoleSidebarBase {
     #view;
     #groups = [
         new ConsoleFilterGroup("message" /* GroupName.ALL */, [], ConsoleFilter.allLevelsFilterValue()),
@@ -184,4 +194,8 @@ export class ConsoleSidebar extends Common.ObjectWrapper.eventMixin(UI.Widget.VB
         return this.#selectedFilter?.shouldBeVisible(viewMessage) ?? true;
     }
 }
+export var Events;
+(function (Events) {
+    Events["FILTER_SELECTED"] = "FilterSelected";
+})(Events || (Events = {}));
 //# sourceMappingURL=ConsoleSidebar.js.map

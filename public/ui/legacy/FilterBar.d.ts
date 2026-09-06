@@ -1,21 +1,12 @@
 import './Toolbar.js';
 import * as Common from '../../core/common/common.js';
-import * as Platform from '../../core/platform/platform.js';
 import filterStyles from './filter.css.js';
 import type { Suggestions } from './SuggestBox.js';
 import { type ToolbarButton } from './Toolbar.js';
 import { HBox } from './Widget.js';
 export { filterStyles };
-declare const FilterBar_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<FilterBarEventTypes>;
-    addEventListener<T extends FilterBarEvents.CHANGED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<FilterBarEventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<FilterBarEventTypes, T>;
-    once<T extends FilterBarEvents.CHANGED>(eventType: T): Promise<FilterBarEventTypes[T]>;
-    removeEventListener<T extends FilterBarEvents.CHANGED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<FilterBarEventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: FilterBarEvents.CHANGED): boolean;
-    dispatchEventToListeners<T extends FilterBarEvents.CHANGED>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<FilterBarEventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof HBox;
-export declare class FilterBar extends FilterBar_base {
+declare const FilterBarBase: Common.ObjectWrapper.EventMixin<FilterBarEventTypes, typeof HBox>;
+export declare class FilterBar extends FilterBarBase {
     #private;
     private enabled;
     private readonly stateSetting;

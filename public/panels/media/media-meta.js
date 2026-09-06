@@ -1,6 +1,6 @@
-// gen/front_end/panels/media/media-meta.prebundle.js
-import * as i18n from "./../../core/i18n/i18n.js";
-import * as UI from "./../../ui/legacy/legacy.js";
+// ../../front_end/panels/media/media-meta.ts
+import * as i18n from "../../core/i18n/i18n.js";
+import * as UI from "../../ui/legacy/legacy.js";
 var UIStrings = {
   /**
    * @description Text that appears on a button for the media resource type filter.
@@ -25,11 +25,11 @@ async function loadMediaModule() {
   return loadedMediaModule;
 }
 UI.ViewManager.registerViewExtension({
-  location: "panel",
+  location: UI.ViewManager.ViewLocationValues.PANEL,
   id: "medias",
   title: i18nLazyString(UIStrings.media),
   commandPrompt: i18nLazyString(UIStrings.showMedia),
-  persistence: "closeable",
+  persistence: UI.ViewManager.ViewPersistence.CLOSEABLE,
   order: 100,
   async loadView() {
     const Media = await loadMediaModule();

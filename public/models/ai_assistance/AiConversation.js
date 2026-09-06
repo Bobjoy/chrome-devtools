@@ -1,7 +1,6 @@
 // Copyright 2024 The Chromium Authors
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-import * as Common from '../../core/common/common.js';
 import * as Host from '../../core/host/host.js';
 import * as Platform from '../../core/platform/platform.js';
 import * as Root from '../../core/root/root.js';
@@ -15,6 +14,7 @@ import { StorageAgent } from './agents/StorageAgent.js';
 import { StylingAgent } from './agents/StylingAgent.js';
 import { AiAgent2 } from './AiAgent2.js';
 import { AiHistoryStorage } from './AiHistoryStorage.js';
+import { isContextSelectionEnabled } from './AiUtils.js';
 import { AccessibilityContext } from './contexts/AccessibilityContext.js';
 import { DOMNodeContext } from './contexts/DOMNodeContext.js';
 import { FileContext } from './contexts/FileContext.js';
@@ -26,14 +26,13 @@ export const NOT_FOUND_IMAGE_DATA = '';
 export const CONTEXT_TITLE = 'Analyzing data';
 const MAX_TITLE_LENGTH = 80;
 /**
- * List of page navigations that are allowed during an AI agent run.
- * These are page navigations triggered by agents themselves:
- * - `about://` : Navigated to before initiating a trace recording to ensure a clean state.
- * - `chrome://terms`: Navigated to by Lighthouse during its Back-Forward Cache
- *    audit.
+ * Page URL prefixes permitted during an AI agent run.
+ * Agents trigger these navigations internally:
+ * - `about:blank`: Used before recording a performance trace to ensure a clean state.
+ * - `chrome://terms`: Used by Lighthouse during Back-Forward Cache audits.
  */
 export const ALLOWED_PAGE_NAVIGATIONS = [
-    Platform.DevToolsPath.urlString `about://`,
+    Platform.DevToolsPath.urlString `about:blank`,
     Platform.DevToolsPath.urlString `chrome://terms`,
 ];
 export function generateContextDetailsMarkdown(details) {
@@ -126,13 +125,13 @@ export class AiConversation {
     setContext(updateContext) {
         if (!updateContext) {
             this.#contexts = [];
-            if (isAiAssistanceContextSelectionAgentEnabled()) {
+            if (isContextSelectionEnabled()) {
                 this.#updateAgent("none" /* ConversationType.NONE */);
             }
             return;
         }
         this.#contexts = [updateContext];
-        if (isAiAssistanceContextSelectionAgentEnabled()) {
+        if (isContextSelectionEnabled()) {
             if (updateContext instanceof FileContext) {
                 this.#updateAgent("drjones-file" /* ConversationType.FILE */);
             }
@@ -294,9 +293,20 @@ export class AiConversation {
         if (this.#type === type) {
             return;
         }
-        const isTransitioningFromStorage = this.#type === "storage" /* ConversationType.STORAGE */ && type !== "storage" /* ConversationType.STORAGE */;
-        const history = isTransitioningFromStorage ? [] : this.#filterHistoryForNewAgent();
+        const previousType = this.#type;
         this.#type = type;
+        // In AI Architecture V2, DevTools uses a single unified agent (AiAgent2) that
+        // dynamically loads skills on demand. Reusing the existing agent instance across
+        // context changes preserves its loaded activeSkills and declared tools so the model
+        // does not need to re-learn skills it already acquired earlier in the conversation.
+        if (Root.Runtime.hostConfig.devToolsAiV2Architecture?.enabled && this.#agent instanceof AiAgent2) {
+            return;
+        }
+        // In legacy V1 architecture, agents are recreated when switching conversation types.
+        // Discard conversation history when transitioning away from Storage to prevent
+        // sensitive data (e.g. cookies or storage items) from leaking into subsequent agent queries.
+        const isTransitioningFromStorage = previousType === "storage" /* ConversationType.STORAGE */ && type !== "storage" /* ConversationType.STORAGE */;
+        const history = isTransitioningFromStorage ? [] : this.#filterHistoryForNewAgent();
         const options = {
             aidaClient: this.#aidaClient,
             serverSideLoggingAllowed: isAiAssistanceServerSideLoggingAllowed(),
@@ -335,14 +345,15 @@ export class AiConversation {
     }
     async *run(initialQuery, options = {}) {
         this.#navigationOccurredDuringRun = false;
-        const originAtRunStart = getPrimaryPageOrigin(this.#targetManager);
+        const originAtRunStart = getPrimaryPageSecurityOrigin(this.#targetManager);
         const listener = () => {
-            // If an unexpected navigation to a different origin occurred
-            // during processing the user's request, we don't want to allow
-            // the agent to run any function calls and retrieve data from the new origin.
-            // Performance agent and accessibility agent navigate to 'about://' or 'chrome://terms'
-            const newOrigin = getPrimaryPageOrigin(this.#targetManager);
-            if (originAtRunStart !== newOrigin && newOrigin && !ALLOWED_PAGE_NAVIGATIONS.includes(newOrigin)) {
+            // Prevent the agent from executing tools or reading data from an untrusted origin
+            // if the page navigates unexpectedly during execution.
+            const newInspectedURL = this.#targetManager.primaryPageTarget()?.inspectedURL();
+            const newOrigin = newInspectedURL ? SDK.SecurityOrigin.SecurityOrigin.create(newInspectedURL) : undefined;
+            const isSameOrigin = Boolean(originAtRunStart && newOrigin && originAtRunStart.isSameOriginWith(newOrigin));
+            const isAllowedNavigation = Boolean(newInspectedURL && ALLOWED_PAGE_NAVIGATIONS.some(allowed => newInspectedURL.startsWith(allowed)));
+            if (!isSameOrigin && !isAllowedNavigation) {
                 this.#navigationOccurredDuringRun = true;
             }
         };
@@ -421,20 +432,24 @@ export class AiConversation {
         return !this.#contexts.every(context => context.isOriginAllowed(this.#origin));
     }
     get origin() {
-        return this.#origin;
+        return this.#origin instanceof SDK.SecurityOrigin.SecurityOrigin ? this.#origin.siteId() : this.#origin;
     }
     get type() {
         return this.#type;
     }
+    /**
+     * Returns the permitted origin for agent tool execution, or blocks execution
+     * if an unapproved cross-origin navigation occurred during the current run.
+     */
     allowedOrigin = () => {
         if (this.#navigationOccurredDuringRun) {
             return { blocked: true };
         }
         if (this.#origin) {
-            return { origin: this.#origin };
+            return { origin: this.origin };
         }
-        this.#origin = getPrimaryPageOrigin(this.#targetManager);
-        return { origin: this.#origin };
+        this.#origin = getPrimaryPageSecurityOrigin(this.#targetManager);
+        return { origin: this.origin };
     };
 }
 /**
@@ -446,12 +461,15 @@ export class AiConversation {
 function isAiAssistanceServerSideLoggingAllowed() {
     return !Root.Runtime.hostConfig.aidaAvailability?.disallowLogging;
 }
-function isAiAssistanceContextSelectionAgentEnabled() {
-    return Boolean(Root.Runtime.hostConfig.devToolsAiAssistanceContextSelectionAgent?.enabled);
-}
-function getPrimaryPageOrigin(targetManager) {
+/**
+ * Returns the security origin of the primary page target.
+ *
+ * @param targetManager Target manager used to locate the primary page target.
+ * @returns The parsed SecurityOrigin, or undefined if no target or inspected URL exists.
+ */
+function getPrimaryPageSecurityOrigin(targetManager) {
     const target = targetManager.primaryPageTarget();
     const inspectedURL = target?.inspectedURL();
-    return inspectedURL ? new Common.ParsedURL.ParsedURL(inspectedURL).securityOrigin() : undefined;
+    return inspectedURL ? SDK.SecurityOrigin.SecurityOrigin.create(inspectedURL) : undefined;
 }
 //# sourceMappingURL=AiConversation.js.map

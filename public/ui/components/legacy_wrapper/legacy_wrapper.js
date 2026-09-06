@@ -4,13 +4,13 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/legacy_wrapper/LegacyWrapper.js
+// ../../front_end/ui/components/legacy_wrapper/LegacyWrapper.ts
 var LegacyWrapper_exports = {};
 __export(LegacyWrapper_exports, {
   WrappableComponent: () => WrappableComponent,
   legacyWrapper: () => legacyWrapper
 });
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
 var WrappableComponent = class extends HTMLElement {
   wrapper = null;
   async render() {
@@ -51,6 +51,7 @@ function legacyWrapper(base, component, jsLogContext) {
     getComponent() {
       return this.#component;
     }
+    // clang-format off
   }();
 }
 export {

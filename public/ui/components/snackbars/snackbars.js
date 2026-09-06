@@ -4,17 +4,17 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/snackbars/Snackbar.js
+// ../../front_end/ui/components/snackbars/Snackbar.ts
 var Snackbar_exports = {};
 __export(Snackbar_exports, {
   DEFAULT_AUTO_DISMISS_MS: () => DEFAULT_AUTO_DISMISS_MS,
   Snackbar: () => Snackbar
 });
-import * as i18n from "./../../../core/i18n/i18n.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
-import * as UI from "./../../legacy/legacy.js";
-import * as Lit from "./../../lit/lit.js";
-import * as Buttons from "./../buttons/buttons.js";
+import * as i18n from "../../../core/i18n/i18n.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
+import * as UI from "../../legacy/legacy.js";
+import * as Lit from "../../lit/lit.js";
+import * as Buttons from "../buttons/buttons.js";
 
 // gen/front_end/ui/components/snackbars/snackbar.css.js
 var snackbar_css_default = `/*
@@ -96,7 +96,7 @@ var snackbar_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./snackbar.css")} */`;
 
-// gen/front_end/ui/components/snackbars/Snackbar.js
+// ../../front_end/ui/components/snackbars/Snackbar.ts
 var { html } = Lit;
 var UIStrings = {
   /**
@@ -251,7 +251,7 @@ var Snackbar = class _Snackbar extends HTMLElement {
         class="snackbar-button"
         @click=${this.#onActionButtonClickHandler}
         jslog=${VisualLogging.action("snackbar.action").track({ click: true })}
-        .variant=${"text"}
+        .variant=${Buttons.Button.Variant.TEXT}
         .title=${this.actionButtonTitle ?? ""}
         .inverseColorTheme=${true}
     >${this.actionButtonLabel}</devtools-button>` : Lit.nothing;
@@ -261,7 +261,7 @@ var Snackbar = class _Snackbar extends HTMLElement {
         jslog=${VisualLogging.action("snackbar.dismiss").track({ click: true })}
         aria-label=${i18nString(UIStrings.dismiss)}
         .iconName=${"cross"}
-        .variant=${"icon"}
+        .variant=${Buttons.Button.Variant.ICON}
         .title=${i18nString(UIStrings.dismiss)}
         .inverseColorTheme=${true}
     ></devtools-button>` : Lit.nothing;

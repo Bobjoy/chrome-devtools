@@ -4,14 +4,14 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/srgb_overlay/SrgbOverlay.js
+// ../../front_end/ui/components/srgb_overlay/SrgbOverlay.ts
 var SrgbOverlay_exports = {};
 __export(SrgbOverlay_exports, {
   SrgbOverlay: () => SrgbOverlay
 });
-import * as Common from "./../../../core/common/common.js";
-import * as RenderCoordinator from "./../render_coordinator/render_coordinator.js";
-import { html, render } from "./../../lit/lit.js";
+import * as Common from "../../../core/common/common.js";
+import * as RenderCoordinator from "../render_coordinator/render_coordinator.js";
+import { html, render } from "../../lit/lit.js";
 
 // gen/front_end/ui/components/srgb_overlay/srgbOverlay.css.js
 var srgbOverlay_css_default = `/*
@@ -44,7 +44,7 @@ var srgbOverlay_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./srgbOverlay.css")} */`;
 
-// gen/front_end/ui/components/srgb_overlay/SrgbOverlay.js
+// ../../front_end/ui/components/srgb_overlay/SrgbOverlay.ts
 var SRGB_LABEL_HEIGHT = 10;
 var SRGB_LABEL_BOTTOM = 3;
 var SRGB_TEXT_UPPER_POINT_FROM_BOTTOM = SRGB_LABEL_HEIGHT + SRGB_LABEL_BOTTOM;
@@ -107,13 +107,17 @@ var SrgbOverlay = class extends HTMLElement {
       if (!closestPoint) {
         return;
       }
-      render(html`
+      render(
+        html`
           <style>${srgbOverlay_css_default}</style>
           <span class="label" style="right: ${width - closestPoint.x}px">sRGB</span>
           <svg>
             <polyline points=${points.map((point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`).join(" ")} class="gamut-line" />
           </svg>
-        `, this.#shadow, { host: this });
+        `,
+        this.#shadow,
+        { host: this }
+      );
     });
   }
 };

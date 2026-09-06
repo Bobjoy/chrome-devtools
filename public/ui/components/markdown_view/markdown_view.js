@@ -4,20 +4,20 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/markdown_view/CodeBlock.js
+// ../../front_end/ui/components/markdown_view/CodeBlock.ts
 var CodeBlock_exports = {};
 __export(CodeBlock_exports, {
   CodeBlock: () => CodeBlock,
   languageFromToken: () => languageFromToken
 });
-import "./../../kit/kit.js";
-import * as i18n from "./../../../core/i18n/i18n.js";
-import * as CodeMirror from "./../../../third_party/codemirror.next/codemirror.next.js";
-import * as Buttons from "./../buttons/buttons.js";
-import * as TextEditor from "./../text_editor/text_editor.js";
-import * as UI from "./../../legacy/legacy.js";
-import * as Lit from "./../../lit/lit.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
+import "../../kit/kit.js";
+import * as i18n from "../../../core/i18n/i18n.js";
+import * as CodeMirror from "../../../third_party/codemirror.next/codemirror.next.js";
+import * as Buttons from "../buttons/buttons.js";
+import * as TextEditor from "../text_editor/text_editor.js";
+import * as UI from "../../legacy/legacy.js";
+import * as Lit from "../../lit/lit.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
 
 // gen/front_end/ui/components/markdown_view/codeBlock.css.js
 var codeBlock_css_default = `/*
@@ -101,8 +101,8 @@ var codeBlock_css_default = `/*
     cursor: pointer;
     outline-offset: var(--sys-size-2);
     border: none;
-    padding-bottom: 2px;
-    font-size: 11px;
+    padding-bottom: var(--sys-size-2);
+    font-size: var(--sys-typescale-body5-size);
     font-family: var(--default-font-family);
   }
 }
@@ -152,7 +152,7 @@ var codeBlock_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./codeBlock.css")} */`;
 
-// gen/front_end/ui/components/markdown_view/CodeBlock.js
+// ../../front_end/ui/components/markdown_view/CodeBlock.ts
 var { html: html2 } = Lit;
 var UIStrings = {
   /**
@@ -336,8 +336,8 @@ var CodeBlock = class extends HTMLElement {
       <div class="copy-button-container">
         <devtools-button
           .data=${{
-      variant: "icon",
-      size: "SMALL",
+      variant: Buttons.Button.Variant.ICON,
+      size: Buttons.Button.Size.SMALL,
       jslogContext: "copy",
       iconName: "copy",
       title: i18nString(UIStrings.copy)
@@ -369,7 +369,8 @@ var CodeBlock = class extends HTMLElement {
     }
     const linesCount = this.#editorState.doc.lines;
     const isTruncated = linesCount > this.#displayLimit;
-    Lit.render(html2`<div class=${Lit.Directives.classMap({ codeblock: true, "no-toolbar": !this.#displayToolbar })} jslog=${VisualLogging.section("code")}>
+    Lit.render(
+      html2`<div class=${Lit.Directives.classMap({ codeblock: true, "no-toolbar": !this.#displayToolbar })} jslog=${VisualLogging.section("code")}>
       <style>${codeBlock_css_default}</style>
         <div class="editor-wrapper">
         ${this.#displayToolbar ? html2`
@@ -389,21 +390,24 @@ var CodeBlock = class extends HTMLElement {
         ${isTruncated ? html2`
           <div class="show-all-container">
             <devtools-button
-              .variant=${"outlined"}
-              .size=${"SMALL"}
+              .variant=${Buttons.Button.Variant.OUTLINED}
+              .size=${Buttons.Button.Size.SMALL}
               .jslogContext=${"show-all"}
               .title=${i18nString(UIStrings.showAllLines, { PH1: linesCount - this.#displayLimit })}
               @click=${() => {
-      this.displayLimit = Number.MAX_VALUE;
-    }}
+        this.displayLimit = Number.MAX_VALUE;
+      }}
             >${i18nString(UIStrings.showAllLines, { PH1: linesCount - this.#displayLimit })}</devtools-button>
           </div>
         ` : Lit.nothing}
       </div>
       ${this.#displayNotice ? this.#renderNotice() : Lit.nothing}
-    </div>`, this.#shadow, {
-      host: this
-    });
+    </div>`,
+      this.#shadow,
+      {
+        host: this
+      }
+    );
     const editor = this.#shadow?.querySelector("devtools-text-editor")?.editor;
     if (!editor) {
       return;
@@ -411,7 +415,12 @@ var CodeBlock = class extends HTMLElement {
     const language = await languageFromToken(this.#codeLang);
     let truncationExtension = [];
     if (isTruncated) {
-      truncationExtension = CodeMirror.EditorView.decorations.of(CodeMirror.Decoration.set(CodeMirror.Decoration.replace({}).range(this.#editorState.doc.line(this.#displayLimit).to, this.#editorState.doc.length)));
+      truncationExtension = CodeMirror.EditorView.decorations.of(CodeMirror.Decoration.set(
+        CodeMirror.Decoration.replace({}).range(
+          this.#editorState.doc.line(this.#displayLimit).to,
+          this.#editorState.doc.length
+        )
+      ));
     }
     editor.dispatch({
       effects: [
@@ -423,13 +432,13 @@ var CodeBlock = class extends HTMLElement {
 };
 customElements.define("devtools-code-block", CodeBlock);
 
-// gen/front_end/ui/components/markdown_view/MarkdownImage.js
+// ../../front_end/ui/components/markdown_view/MarkdownImage.ts
 var MarkdownImage_exports = {};
 __export(MarkdownImage_exports, {
   MarkdownImage: () => MarkdownImage
 });
-import "./../../kit/kit.js";
-import * as Lit2 from "./../../lit/lit.js";
+import "../../kit/kit.js";
+import * as Lit2 from "../../lit/lit.js";
 
 // gen/front_end/ui/components/markdown_view/markdownImage.css.js
 var markdownImage_css_default = `/*
@@ -444,7 +453,7 @@ var markdownImage_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./markdownImage.css")} */`;
 
-// gen/front_end/ui/components/markdown_view/MarkdownImagesMap.js
+// ../../front_end/ui/components/markdown_view/MarkdownImagesMap.ts
 var MarkdownImagesMap_exports = {};
 __export(MarkdownImagesMap_exports, {
   getMarkdownImage: () => getMarkdownImage,
@@ -459,7 +468,7 @@ var getMarkdownImage = (key) => {
   return image;
 };
 
-// gen/front_end/ui/components/markdown_view/MarkdownImage.js
+// ../../front_end/ui/components/markdown_view/MarkdownImage.ts
 var { html: html3, Directives: { ifDefined } } = Lit2;
 var MarkdownImage = class extends HTMLElement {
   #shadow = this.attachShadow({ mode: "open" });
@@ -496,15 +505,19 @@ var MarkdownImage = class extends HTMLElement {
     }
     const { isIcon } = this.#imageData;
     const imageComponent = isIcon ? this.#getIconComponent() : this.#getImageComponent();
-    Lit2.render(html3`
+    Lit2.render(
+      html3`
       <style>${markdownImage_css_default}</style>
       ${imageComponent}
-    `, this.#shadow, { host: this });
+    `,
+      this.#shadow,
+      { host: this }
+    );
   }
 };
 customElements.define("devtools-markdown-image", MarkdownImage);
 
-// gen/front_end/ui/components/markdown_view/MarkdownLinksMap.js
+// ../../front_end/ui/components/markdown_view/MarkdownLinksMap.ts
 var MarkdownLinksMap_exports = {};
 __export(MarkdownLinksMap_exports, {
   getMarkdownLink: () => getMarkdownLink,
@@ -606,16 +619,16 @@ var getMarkdownLink = (key) => {
   return link3;
 };
 
-// gen/front_end/ui/components/markdown_view/MarkdownView.js
+// ../../front_end/ui/components/markdown_view/MarkdownView.ts
 var MarkdownView_exports = {};
 __export(MarkdownView_exports, {
   MarkdownInsightRenderer: () => MarkdownInsightRenderer,
   MarkdownLitRenderer: () => MarkdownLitRenderer,
   MarkdownView: () => MarkdownView
 });
-import "./../../kit/kit.js";
-import * as Lit3 from "./../../lit/lit.js";
-import * as VisualLogging2 from "./../../visual_logging/visual_logging.js";
+import "../../kit/kit.js";
+import * as Lit3 from "../../lit/lit.js";
+import * as VisualLogging2 from "../../visual_logging/visual_logging.js";
 
 // gen/front_end/ui/components/markdown_view/markdownView.css.js
 var markdownView_css_default = `/*
@@ -640,7 +653,7 @@ var markdownView_css_default = `/*
 
 devtools-link {
   color: var(--sys-color-primary);
-  outline-offset: 2px;
+  outline-offset: var(--sys-size-2);
   text-decoration: underline;
 }
 
@@ -660,7 +673,7 @@ devtools-code-block.animating {
 
 .message {
   line-height: 18px;
-  font-size: 12px;
+  font-size: var(--sys-typescale-body4-size);
   color: var(--sys-color-on-surface);
   user-select: text;
 }
@@ -670,7 +683,7 @@ devtools-code-block.animating {
 }
 
 .message p:not(:first-child) {
-  margin-block-start: 2px;
+  margin-block-start: var(--sys-size-2);
 }
 
 .message p:not(:last-child) {
@@ -687,7 +700,7 @@ devtools-code-block.animating {
 }
 
 .message li {
-  margin-top: 8px;
+  margin-top: var(--sys-size-5);
   display: list-item;
   list-style-type: disc;
 }
@@ -718,14 +731,14 @@ devtools-code-block.animating {
 .message code {
   color: var(--sys-color-on-surface);
   font-family: var(--monospace-font-family);
-  font-size: 11px;
+  font-size: var(--sys-typescale-monospace-size);
   user-select: text;
   cursor: text;
   /* This is still using design tokens because \\'--code-background-color\\' is defined with them by default */
   /* stylelint-disable-next-line plugin/use_theme_colors */
   background-color: var(--code-background-color);
-  border-radius: 2px;
-  padding: 1px 3px;
+  border-radius: var(--sys-size-2);
+  padding: var(--sys-size-1) 3px;
 }
 
 devtools-code-block {
@@ -768,7 +781,7 @@ h1.insight, h2.insight, h3.insight, h4.insight, h5.insight, h6.insight {
 
 /*# sourceURL=${import.meta.resolve("./markdownView.css")} */`;
 
-// gen/front_end/ui/components/markdown_view/MarkdownView.js
+// ../../front_end/ui/components/markdown_view/MarkdownView.ts
 var html5 = Lit3.html;
 var render4 = Lit3.render;
 var MarkdownView = class extends HTMLElement {
@@ -949,7 +962,9 @@ var MarkdownLitRenderer = class {
         let currentInline = [];
         const flushInline = () => {
           if (currentInline.length > 0) {
-            renderedParts.push(html5`<span class="markdown-list-item-content">${currentInline.map((t) => this.renderToken(t))}</span>`);
+            renderedParts.push(
+              html5`<span class="markdown-list-item-content">${currentInline.map((t) => this.renderToken(t))}</span>`
+            );
             currentInline = [];
           }
         };

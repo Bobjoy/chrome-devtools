@@ -68,7 +68,8 @@ export class CSSLength {
         return this.amount + this.unit;
     }
 }
-export class CSSShadowEditor extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+const CSSShadowEditorBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class CSSShadowEditor extends CSSShadowEditorBase {
     typeField;
     outsetButton;
     insetButton;
@@ -434,4 +435,8 @@ export class CSSShadowEditor extends Common.ObjectWrapper.eventMixin(UI.Widget.V
         return this.constrainPoint(new Geometry.Point(x, y), this.innerCanvasSize);
     }
 }
+export var Events;
+(function (Events) {
+    Events["SHADOW_CHANGED"] = "ShadowChanged";
+})(Events || (Events = {}));
 //# sourceMappingURL=CSSShadowEditor.js.map

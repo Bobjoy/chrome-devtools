@@ -38,15 +38,14 @@ describe('ListStorageKeysTool', () => {
         sinon.stub(mockStorage, 'isLocalStorage').get(() => true);
         mockStorage.getItems.resolves([['key1', 'value1'], ['key2', 'value2']]);
         activeStorages = [mockStorage];
-        const setLoggingEnabledStub = sinon.stub();
+        const disableLoggingStub = sinon.stub();
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns('https://example.com'),
-            setLoggingEnabled: setLoggingEnabledStub,
+            disableLogging: disableLoggingStub,
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'localStorage', origins: ['https://example.com'] }, context);
-        sinon.assert.calledWith(setLoggingEnabledStub, false);
+        sinon.assert.calledOnce(disableLoggingStub);
         assertIsResult(response);
         assert.deepEqual(response.result.storageKeysByOrigin, {
             'https://example.com': {
@@ -67,9 +66,8 @@ describe('ListStorageKeysTool', () => {
         mockStorage.getItems.resolves([['sessionKey', 'sessionVal']]);
         activeStorages = [mockStorage];
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns('https://example.com'),
-            setLoggingEnabled: sinon.stub(),
+            disableLogging: sinon.stub(),
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'sessionStorage', origins: ['https://example.com'] }, context);
@@ -97,9 +95,8 @@ describe('ListStorageKeysTool', () => {
         mockStorage2.getItems.resolves([['key2', 'val2']]);
         activeStorages = [mockStorage1, mockStorage2];
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns('https://example.com'),
-            setLoggingEnabled: sinon.stub(),
+            disableLogging: sinon.stub(),
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'localStorage', origins: ['https://example.com'], storageKey: 'https://example.com^1' }, context);
@@ -118,9 +115,8 @@ describe('ListStorageKeysTool', () => {
     it('returns error when allowed origin is missing or opaque', async () => {
         setupPrimaryTarget('https://example.com');
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns(''),
-            setLoggingEnabled: sinon.stub(),
+            disableLogging: sinon.stub(),
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'localStorage', origins: ['https://example.com'] }, context);
@@ -130,9 +126,8 @@ describe('ListStorageKeysTool', () => {
     it('returns error when primary page target does not match allowed origin', async () => {
         setupPrimaryTarget('https://other-domain.com');
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns('https://example.com'),
-            setLoggingEnabled: sinon.stub(),
+            disableLogging: sinon.stub(),
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'localStorage', origins: ['https://example.com'] }, context);
@@ -147,9 +142,8 @@ describe('ListStorageKeysTool', () => {
         mockStorage.getItems.resolves([['key1', 'val1']]);
         activeStorages = [mockStorage];
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns('https://example.com'),
-            setLoggingEnabled: sinon.stub(),
+            disableLogging: sinon.stub(),
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'localStorage', origins: ['https://example.com', 'https://blocked-origin.com'] }, context);
@@ -183,9 +177,8 @@ describe('ListStorageKeysTool', () => {
         primaryStorage.getItems.resolves([['primaryKey', 'primaryVal']]);
         activeStorages = [primaryStorage];
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns('https://example.com'),
-            setLoggingEnabled: sinon.stub(),
+            disableLogging: sinon.stub(),
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'localStorage', origins: ['https://example.com'] }, context);
@@ -204,20 +197,25 @@ describe('ListStorageKeysTool', () => {
     it('returns error when all requested origins are disallowed', async () => {
         setupPrimaryTarget('https://example.com');
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns('https://example.com'),
-            setLoggingEnabled: sinon.stub(),
+            disableLogging: sinon.stub(),
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'localStorage', origins: ['https://blocked-domain.com'] }, context);
         assertIsError(response);
         assert.strictEqual(response.error, 'No valid origins found.');
     });
-    it('returns correct displayInfoFromArgs', () => {
+    it('returns correct displayInfoFromArgs for localStorage', () => {
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const info = tool.displayInfoFromArgs({ type: 'localStorage', origins: ['https://example.com'] });
-        assert.strictEqual(info.title, 'Reading storage keys');
+        assert.strictEqual(info.title, 'Reading local storage keys');
         assert.strictEqual(info.action, 'listStorageKeys(\'localStorage\', ["https://example.com"])');
+    });
+    it('returns correct displayInfoFromArgs for sessionStorage', () => {
+        const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
+        const info = tool.displayInfoFromArgs({ type: 'sessionStorage', origins: ['https://example.com'] });
+        assert.strictEqual(info.title, 'Reading session storage keys');
+        assert.strictEqual(info.action, 'listStorageKeys(\'sessionStorage\', ["https://example.com"])');
     });
     it('normalizes origins with trailing slashes', async () => {
         setupPrimaryTarget('https://example.com');
@@ -227,9 +225,8 @@ describe('ListStorageKeysTool', () => {
         mockStorage.getItems.resolves([['key1', 'value1']]);
         activeStorages = [mockStorage];
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns('https://example.com'),
-            setLoggingEnabled: sinon.stub(),
+            disableLogging: sinon.stub(),
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'localStorage', origins: ['https://example.com/'] }, context);
@@ -253,9 +250,8 @@ describe('ListStorageKeysTool', () => {
         mockStorage.getItems.resolves([['key1', 'value1']]);
         activeStorages = [mockStorage];
         const context = {
-            conversationContext: null,
             getEstablishedOrigin: sinon.stub().returns('https://example.com'),
-            setLoggingEnabled: sinon.stub(),
+            disableLogging: sinon.stub(),
         };
         const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
         const response = await tool.handler({ type: 'localStorage', origins: [] }, context);
@@ -266,6 +262,45 @@ describe('ListStorageKeysTool', () => {
                     {
                         storageKey: 'https://example.com/',
                         keys: ['key1'],
+                    },
+                ],
+            },
+        });
+    });
+    it('deduplicates identical storageKey partitions across subtargets', async () => {
+        const primaryTarget = universe.createTarget({ url: urlString `https://example.com/` });
+        primaryTarget.setInspectedURL(urlString `https://example.com/`);
+        sinon.stub(universe.targetManager, 'primaryPageTarget').returns(primaryTarget);
+        const subTarget = universe.createTarget({ url: urlString `https://example.com/sub.html`, parentTarget: primaryTarget });
+        subTarget.setInspectedURL(urlString `https://example.com/sub.html`);
+        const mockStorage1 = sinon.createStubInstance(SDK.DOMStorageModel.DOMStorage);
+        sinon.stub(mockStorage1, 'storageKey').get(() => 'https://example.com/');
+        sinon.stub(mockStorage1, 'isLocalStorage').get(() => true);
+        mockStorage1.getItems.resolves([['k1', 'v1']]);
+        const mockStorage2 = sinon.createStubInstance(SDK.DOMStorageModel.DOMStorage);
+        sinon.stub(mockStorage2, 'storageKey').get(() => 'https://example.com/');
+        sinon.stub(mockStorage2, 'isLocalStorage').get(() => true);
+        mockStorage2.getItems.resolves([['k1', 'v1']]);
+        const model1 = primaryTarget.model(SDK.DOMStorageModel.DOMStorageModel);
+        assert.exists(model1);
+        sinon.stub(model1, 'storages').callsFake(() => [mockStorage1]);
+        const model2 = subTarget.model(SDK.DOMStorageModel.DOMStorageModel);
+        assert.exists(model2);
+        sinon.stub(model2, 'storages').callsFake(() => [mockStorage2]);
+        const context = {
+            conversationContext: null,
+            getEstablishedOrigin: sinon.stub().returns('https://example.com'),
+            disableLogging: sinon.stub(),
+        };
+        const tool = new AiAssistance.ListStorageKeys.ListStorageKeysTool();
+        const response = await tool.handler({ type: 'localStorage', origins: ['https://example.com'] }, context);
+        assertIsResult(response);
+        assert.deepEqual(response.result.storageKeysByOrigin, {
+            'https://example.com': {
+                partitions: [
+                    {
+                        storageKey: 'https://example.com/',
+                        keys: ['k1'],
                     },
                 ],
             },

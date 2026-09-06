@@ -4,43 +4,31 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/legacy/components/color_picker/ColorFormatSpec.js
+// ../../front_end/ui/legacy/components/color_picker/ColorFormatSpec.ts
 var ColorFormatSpec_exports = {};
 __export(ColorFormatSpec_exports, {
   colorFormatSpec: () => colorFormatSpec
 });
-import * as Common from "./../../../../core/common/common.js";
-import * as Platform from "./../../../../core/platform/platform.js";
+import * as Common from "../../../../core/common/common.js";
+import * as Platform from "../../../../core/platform/platform.js";
 var roundAndStringify = (arr) => arr.map((el) => Platform.StringUtilities.stringifyWithPrecision(el, 2));
 var functionParamsText = (values) => {
   return `${values[0]} ${values[1]} ${values[2]} / ${values[3]}`;
 };
 var colorFormatSpec = {
-  [
-    "rgb"
-    /* Common.Color.Format.RGB */
-  ]: {
+  [Common.Color.Format.RGB]: {
     label: "RGBA",
     toValues: function(color) {
-      return roundAndStringify(color.as(
-        "rgba"
-        /* Common.Color.Format.RGBA */
-      ).canonicalRGBA());
+      return roundAndStringify(color.as(Common.Color.Format.RGBA).canonicalRGBA());
     },
     fromValues: function(values) {
       return Common.Color.parse(`rgb(${functionParamsText(values)})`);
     }
   },
-  [
-    "hsl"
-    /* Common.Color.Format.HSL */
-  ]: {
+  [Common.Color.Format.HSL]: {
     label: "HSLA",
     toValues: function(color) {
-      const canonicalHslParams = roundAndStringify(color.as(
-        "hsla"
-        /* Common.Color.Format.HSLA */
-      ).canonicalHSLA());
+      const canonicalHslParams = roundAndStringify(color.as(Common.Color.Format.HSLA).canonicalHSLA());
       canonicalHslParams[1] = canonicalHslParams[1] + "%";
       canonicalHslParams[2] = canonicalHslParams[2] + "%";
       return canonicalHslParams;
@@ -49,16 +37,10 @@ var colorFormatSpec = {
       return Common.Color.parse(`hsl(${functionParamsText(values)})`);
     }
   },
-  [
-    "hwb"
-    /* Common.Color.Format.HWB */
-  ]: {
+  [Common.Color.Format.HWB]: {
     label: "HWBA",
     toValues: function(color) {
-      const canonicalHwbParams = roundAndStringify(color.as(
-        "hwba"
-        /* Common.Color.Format.HWBA */
-      ).canonicalHWBA());
+      const canonicalHwbParams = roundAndStringify(color.as(Common.Color.Format.HWBA).canonicalHWBA());
       canonicalHwbParams[1] = canonicalHwbParams[1] + "%";
       canonicalHwbParams[2] = canonicalHwbParams[2] + "%";
       return canonicalHwbParams;
@@ -67,231 +49,283 @@ var colorFormatSpec = {
       return Common.Color.parse(`hwb(${functionParamsText(values)})`);
     }
   },
-  [
-    "lch"
-    /* Common.Color.Format.LCH */
-  ]: {
+  [Common.Color.Format.LCH]: {
     label: "lchA",
     toValues: function(color) {
-      const lchColor = color.as(
-        "lch"
-        /* Common.Color.Format.LCH */
-      );
+      const lchColor = color.as(Common.Color.Format.LCH);
       return roundAndStringify([lchColor.l, lchColor.c, lchColor.h, lchColor.alpha ?? 1]);
     },
     fromValues: function(values) {
       return Common.Color.parse(`lch(${functionParamsText(values)})`);
     }
   },
-  [
-    "oklch"
-    /* Common.Color.Format.OKLCH */
-  ]: {
+  [Common.Color.Format.OKLCH]: {
     label: "lchA",
     toValues: function(color) {
-      const lchColor = color.as(
-        "oklch"
-        /* Common.Color.Format.OKLCH */
-      );
+      const lchColor = color.as(Common.Color.Format.OKLCH);
       return roundAndStringify([lchColor.l, lchColor.c, lchColor.h, lchColor.alpha ?? 1]);
     },
     fromValues: function(values) {
       return Common.Color.parse(`oklch(${functionParamsText(values)})`);
     }
   },
-  [
-    "lab"
-    /* Common.Color.Format.LAB */
-  ]: {
+  [Common.Color.Format.LAB]: {
     label: "labA",
     toValues: function(color) {
-      const labColor = color.as(
-        "lab"
-        /* Common.Color.Format.LAB */
-      );
+      const labColor = color.as(Common.Color.Format.LAB);
       return roundAndStringify([labColor.l, labColor.a, labColor.b, labColor.alpha ?? 1]);
     },
     fromValues: function(values) {
       return Common.Color.parse(`lab(${functionParamsText(values)})`);
     }
   },
-  [
-    "oklab"
-    /* Common.Color.Format.OKLAB */
-  ]: {
+  [Common.Color.Format.OKLAB]: {
     label: "labA",
     toValues: function(color) {
-      const labColor = color.as(
-        "oklab"
-        /* Common.Color.Format.OKLAB */
-      );
+      const labColor = color.as(Common.Color.Format.OKLAB);
       return roundAndStringify([labColor.l, labColor.a, labColor.b, labColor.alpha ?? 1]);
     },
     fromValues: function(values) {
       return Common.Color.parse(`oklab(${functionParamsText(values)})`);
     }
   },
-  [
-    "srgb"
-    /* Common.Color.Format.SRGB */
-  ]: {
+  [Common.Color.Format.SRGB]: {
     label: "RGBA",
     toValues: function(color) {
-      const srgbColor = color.as(
-        "srgb"
-        /* Common.Color.Format.SRGB */
-      );
+      const srgbColor = color.as(Common.Color.Format.SRGB);
       return roundAndStringify([srgbColor.p0, srgbColor.p1, srgbColor.p2, srgbColor.alpha ?? 1]);
     },
     fromValues: function(values) {
-      return Common.Color.parse(`color(${"srgb"} ${functionParamsText(values)})`);
+      return Common.Color.parse(`color(${Common.Color.Format.SRGB} ${functionParamsText(values)})`);
     }
   },
-  [
-    "srgb-linear"
-    /* Common.Color.Format.SRGB_LINEAR */
-  ]: {
+  [Common.Color.Format.SRGB_LINEAR]: {
     label: "RGBA",
     toValues: function(color) {
-      const srgbLinearColor = color.as(
-        "srgb-linear"
-        /* Common.Color.Format.SRGB_LINEAR */
+      const srgbLinearColor = color.as(Common.Color.Format.SRGB_LINEAR);
+      return roundAndStringify(
+        [srgbLinearColor.p0, srgbLinearColor.p1, srgbLinearColor.p2, srgbLinearColor.alpha ?? 1]
       );
-      return roundAndStringify([srgbLinearColor.p0, srgbLinearColor.p1, srgbLinearColor.p2, srgbLinearColor.alpha ?? 1]);
     },
     fromValues: function(values) {
-      return Common.Color.parse(`color(${"srgb-linear"} ${functionParamsText(values)})`);
+      return Common.Color.parse(`color(${Common.Color.Format.SRGB_LINEAR} ${functionParamsText(values)})`);
     }
   },
-  [
-    "display-p3"
-    /* Common.Color.Format.DISPLAY_P3 */
-  ]: {
+  [Common.Color.Format.DISPLAY_P3]: {
     label: "RGBA",
     toValues(color) {
-      const displayP3Color = color.as(
-        "display-p3"
-        /* Common.Color.Format.DISPLAY_P3 */
-      );
+      const displayP3Color = color.as(Common.Color.Format.DISPLAY_P3);
       return roundAndStringify([displayP3Color.p0, displayP3Color.p1, displayP3Color.p2, 1]);
     },
     fromValues(values) {
-      return Common.Color.parse(`color(${"display-p3"} ${functionParamsText(values)})`);
+      return Common.Color.parse(`color(${Common.Color.Format.DISPLAY_P3} ${functionParamsText(values)})`);
     }
   },
-  [
-    "a98-rgb"
-    /* Common.Color.Format.A98_RGB */
-  ]: {
+  [Common.Color.Format.DISPLAY_P3_LINEAR]: {
     label: "RGBA",
     toValues: function(color) {
-      const a98Color = color.as(
-        "a98-rgb"
-        /* Common.Color.Format.A98_RGB */
-      );
+      const displayP3LinearColor = color.as(Common.Color.Format.DISPLAY_P3_LINEAR);
+      return roundAndStringify([
+        displayP3LinearColor.p0,
+        displayP3LinearColor.p1,
+        displayP3LinearColor.p2,
+        displayP3LinearColor.alpha ?? 1
+      ]);
+    },
+    fromValues: function(values) {
+      return Common.Color.parse(`color(${Common.Color.Format.DISPLAY_P3_LINEAR} ${functionParamsText(values)})`);
+    }
+  },
+  [Common.Color.Format.A98_RGB]: {
+    label: "RGBA",
+    toValues: function(color) {
+      const a98Color = color.as(Common.Color.Format.A98_RGB);
       return roundAndStringify([a98Color.p0, a98Color.p1, a98Color.p2, a98Color.alpha ?? 1]);
     },
     fromValues: function(values) {
-      return Common.Color.parse(`color(${"a98-rgb"} ${functionParamsText(values)})`);
+      return Common.Color.parse(`color(${Common.Color.Format.A98_RGB} ${functionParamsText(values)})`);
     }
   },
-  [
-    "prophoto-rgb"
-    /* Common.Color.Format.PROPHOTO_RGB */
-  ]: {
+  [Common.Color.Format.PROPHOTO_RGB]: {
     label: "RGBA",
     toValues: function(color) {
-      const proPhotoRGBColor = color.as(
-        "prophoto-rgb"
-        /* Common.Color.Format.PROPHOTO_RGB */
+      const proPhotoRGBColor = color.as(Common.Color.Format.PROPHOTO_RGB);
+      return roundAndStringify(
+        [proPhotoRGBColor.p0, proPhotoRGBColor.p1, proPhotoRGBColor.p2, proPhotoRGBColor.alpha ?? 1]
       );
-      return roundAndStringify([proPhotoRGBColor.p0, proPhotoRGBColor.p1, proPhotoRGBColor.p2, proPhotoRGBColor.alpha ?? 1]);
     },
     fromValues: function(values) {
-      return Common.Color.parse(`color(${"prophoto-rgb"} ${functionParamsText(values)})`);
+      return Common.Color.parse(`color(${Common.Color.Format.PROPHOTO_RGB} ${functionParamsText(values)})`);
     }
   },
-  [
-    "rec2020"
-    /* Common.Color.Format.REC_2020 */
-  ]: {
+  [Common.Color.Format.REC_2020]: {
     label: "RGBA",
     toValues: function(color) {
-      const rec2020Color = color.as(
-        "rec2020"
-        /* Common.Color.Format.REC_2020 */
+      const rec2020Color = color.as(Common.Color.Format.REC_2020);
+      return roundAndStringify(
+        [rec2020Color.p0, rec2020Color.p1, rec2020Color.p2, rec2020Color.alpha ?? 1]
       );
-      return roundAndStringify([rec2020Color.p0, rec2020Color.p1, rec2020Color.p2, rec2020Color.alpha ?? 1]);
     },
     fromValues: function(values) {
-      return Common.Color.parse(`color(${"rec2020"} ${functionParamsText(values)})`);
+      return Common.Color.parse(`color(${Common.Color.Format.REC_2020} ${functionParamsText(values)})`);
     }
   },
-  [
-    "xyz"
-    /* Common.Color.Format.XYZ */
-  ]: {
+  [Common.Color.Format.XYZ]: {
     label: "xyzA",
     toValues: function(color) {
-      const xyzColor = color.as(
-        "xyz"
-        /* Common.Color.Format.XYZ */
-      );
+      const xyzColor = color.as(Common.Color.Format.XYZ);
       return roundAndStringify([xyzColor.p0, xyzColor.p1, xyzColor.p2, xyzColor.alpha ?? 1]);
     },
     fromValues: function(values) {
-      return Common.Color.parse(`color(${"xyz"} ${functionParamsText(values)})`);
+      return Common.Color.parse(`color(${Common.Color.Format.XYZ} ${functionParamsText(values)})`);
     }
   },
-  [
-    "xyz-d50"
-    /* Common.Color.Format.XYZ_D50 */
-  ]: {
+  [Common.Color.Format.XYZ_D50]: {
     label: "xyzA",
     toValues: function(color) {
-      const xyzColor = color.as(
-        "xyz-d50"
-        /* Common.Color.Format.XYZ_D50 */
-      );
+      const xyzColor = color.as(Common.Color.Format.XYZ_D50);
       return roundAndStringify([xyzColor.p0, xyzColor.p1, xyzColor.p2, xyzColor.alpha ?? 1]);
     },
     fromValues: function(values) {
-      return Common.Color.parse(`color(${"xyz-d50"} ${functionParamsText(values)})`);
+      return Common.Color.parse(`color(${Common.Color.Format.XYZ_D50} ${functionParamsText(values)})`);
     }
   },
-  [
-    "xyz-d65"
-    /* Common.Color.Format.XYZ_D65 */
-  ]: {
+  [Common.Color.Format.XYZ_D65]: {
     label: "xyzA",
     toValues: function(color) {
-      const xyzColor = color.as(
-        "xyz-d65"
-        /* Common.Color.Format.XYZ_D65 */
-      );
+      const xyzColor = color.as(Common.Color.Format.XYZ_D65);
       return roundAndStringify([xyzColor.p0, xyzColor.p1, xyzColor.p2, xyzColor.alpha ?? 1]);
     },
     fromValues: function(values) {
-      return Common.Color.parse(`color(${"xyz-d65"} ${functionParamsText(values)})`);
+      return Common.Color.parse(`color(${Common.Color.Format.XYZ_D65} ${functionParamsText(values)})`);
     }
   }
 };
 
-// gen/front_end/ui/legacy/components/color_picker/ContrastDetails.js
+// ../../front_end/ui/legacy/components/color_picker/ContrastDetails.ts
 var ContrastDetails_exports = {};
 __export(ContrastDetails_exports, {
   ContrastDetails: () => ContrastDetails,
+  Events: () => Events2,
   Swatch: () => Swatch
 });
-import "./../../legacy.js";
-import * as Common2 from "./../../../../core/common/common.js";
-import * as Host from "./../../../../core/host/host.js";
-import * as i18n from "./../../../../core/i18n/i18n.js";
-import * as Platform2 from "./../../../../core/platform/platform.js";
-import * as SDK from "./../../../../core/sdk/sdk.js";
-import { createIcon, Icon } from "./../../../kit/kit.js";
-import * as UIHelpers from "./../../../helpers/helpers.js";
-import * as UI from "./../../legacy.js";
+import "../../legacy.js";
+import * as Common3 from "../../../../core/common/common.js";
+import * as Host from "../../../../core/host/host.js";
+import * as i18n from "../../../../core/i18n/i18n.js";
+import * as Platform2 from "../../../../core/platform/platform.js";
+import * as SDK from "../../../../core/sdk/sdk.js";
+import { createIcon, Icon } from "../../../kit/kit.js";
+import * as UIHelpers from "../../../helpers/helpers.js";
+import * as UI from "../../legacy.js";
+
+// ../../front_end/ui/legacy/components/color_picker/ContrastInfo.ts
+var ContrastInfo_exports = {};
+__export(ContrastInfo_exports, {
+  ContrastInfo: () => ContrastInfo,
+  Events: () => Events
+});
+import * as Common2 from "../../../../core/common/common.js";
+var ContrastInfo = class extends Common2.ObjectWrapper.ObjectWrapper {
+  #isNull;
+  #contrastRatio;
+  #contrastRatioAPCA;
+  contrastRatioThresholds;
+  #contrastRatioAPCAThreshold;
+  fgColor;
+  #bgColor;
+  #colorFormat;
+  constructor(contrastInfo) {
+    super();
+    this.#isNull = true;
+    this.#contrastRatio = null;
+    this.#contrastRatioAPCA = null;
+    this.contrastRatioThresholds = null;
+    this.#contrastRatioAPCAThreshold = 0;
+    this.fgColor = null;
+    this.#bgColor = null;
+    if (!contrastInfo) {
+      return;
+    }
+    if (!contrastInfo.computedFontSize || !contrastInfo.computedFontWeight) {
+      return;
+    }
+    this.#isNull = false;
+    this.contrastRatioThresholds = Common2.ColorUtils.getContrastThreshold(contrastInfo.computedFontSize, contrastInfo.computedFontWeight);
+    this.#contrastRatioAPCAThreshold = Common2.ColorUtils.getAPCAThreshold(contrastInfo.computedFontSize, contrastInfo.computedFontWeight);
+    if (contrastInfo.backgroundColors?.length !== 1) {
+      return;
+    }
+    const bgColorText = contrastInfo.backgroundColors[0];
+    const bgColor = Common2.Color.parse(bgColorText)?.asLegacyColor();
+    if (bgColor) {
+      this.#setBgColor(bgColor);
+    }
+  }
+  isNull() {
+    return this.#isNull;
+  }
+  setColor(fgColor, colorFormat) {
+    this.fgColor = fgColor;
+    this.#colorFormat = colorFormat;
+    this.updateContrastRatio();
+    this.dispatchEventToListeners("ContrastInfoUpdated" /* CONTRAST_INFO_UPDATED */);
+  }
+  colorFormat() {
+    return this.#colorFormat;
+  }
+  color() {
+    return this.fgColor;
+  }
+  contrastRatio() {
+    return this.#contrastRatio;
+  }
+  contrastRatioAPCA() {
+    return this.#contrastRatioAPCA;
+  }
+  contrastRatioAPCAThreshold() {
+    return this.#contrastRatioAPCAThreshold;
+  }
+  setBgColor(bgColor) {
+    this.#setBgColor(bgColor);
+    this.dispatchEventToListeners("ContrastInfoUpdated" /* CONTRAST_INFO_UPDATED */);
+  }
+  #setBgColor(bgColor) {
+    this.#bgColor = bgColor;
+    if (!this.fgColor) {
+      return;
+    }
+    const fgRGBA = this.fgColor.rgba();
+    if (bgColor.hasAlpha()) {
+      const blendedRGBA = Common2.ColorUtils.blendColors(bgColor.rgba(), fgRGBA);
+      this.#bgColor = new Common2.Color.Legacy(blendedRGBA, Common2.Color.Format.RGBA);
+    }
+    this.#contrastRatio = Common2.ColorUtils.contrastRatio(fgRGBA, this.#bgColor.rgba());
+    this.#contrastRatioAPCA = Common2.ColorUtils.contrastRatioAPCA(this.fgColor.rgba(), this.#bgColor.rgba());
+  }
+  bgColor() {
+    return this.#bgColor;
+  }
+  updateContrastRatio() {
+    if (!this.#bgColor || !this.fgColor) {
+      return;
+    }
+    this.#contrastRatio = Common2.ColorUtils.contrastRatio(this.fgColor.rgba(), this.#bgColor.rgba());
+    this.#contrastRatioAPCA = Common2.ColorUtils.contrastRatioAPCA(this.fgColor.rgba(), this.#bgColor.rgba());
+  }
+  contrastRatioThreshold(level) {
+    if (!this.contrastRatioThresholds) {
+      return null;
+    }
+    return this.contrastRatioThresholds[level];
+  }
+};
+var Events = /* @__PURE__ */ ((Events4) => {
+  Events4["CONTRAST_INFO_UPDATED"] = "ContrastInfoUpdated";
+  return Events4;
+})(Events || {});
+
+// ../../front_end/ui/legacy/components/color_picker/ContrastDetails.ts
 var UIStrings = {
   /**
    * @description Text displayed when no contrast information is available in the color picker.
@@ -342,7 +376,7 @@ var UIStrings = {
 };
 var str_ = i18n.i18n.registerUIStrings("ui/legacy/components/color_picker/ContrastDetails.ts", UIStrings);
 var i18nString = i18n.i18n.getLocalizedString.bind(void 0, str_);
-var ContrastDetails = class _ContrastDetails extends Common2.ObjectWrapper.ObjectWrapper {
+var ContrastDetails = class _ContrastDetails extends Common3.ObjectWrapper.ObjectWrapper {
   contrastInfo;
   #element;
   toggleMainColorPicker;
@@ -399,7 +433,7 @@ var ContrastDetails = class _ContrastDetails extends Common2.ObjectWrapper.Objec
     }));
     const expandToolbar = contrastValueRowContents.createChild("devtools-toolbar", "expand");
     this.expandButton = new UI.Toolbar.ToolbarButton(i18nString(UIStrings.showMore), "chevron-down");
-    this.expandButton.addEventListener("Click", this.expandButtonClicked.bind(this));
+    this.expandButton.addEventListener(UI.Toolbar.ToolbarButton.Events.CLICK, this.expandButtonClicked.bind(this));
     UI.ARIAUtils.setExpanded(this.expandButton.element, false);
     expandToolbar.appendToolbarItem(this.expandButton);
     this.expandedDetails = this.#element.createChild("div", "expanded-details");
@@ -415,12 +449,19 @@ var ContrastDetails = class _ContrastDetails extends Common2.ObjectWrapper.Objec
     this.chooseBgColor.textContent = i18nString(UIStrings.pickBackgroundColor);
     const bgColorContainer = this.expandedDetails.createChild("div", "background-color");
     const pickerToolbar = bgColorContainer.createChild("devtools-toolbar", "spectrum-eye-dropper");
-    this.bgColorPickerButton = new UI.Toolbar.ToolbarToggle(i18nString(UIStrings.toggleBackgroundColorPicker), "color-picker", "color-picker-filled");
-    this.bgColorPickerButton.addEventListener("Click", this.#toggleBackgroundColorPicker.bind(this, void 0, true));
+    this.bgColorPickerButton = new UI.Toolbar.ToolbarToggle(
+      i18nString(UIStrings.toggleBackgroundColorPicker),
+      "color-picker",
+      "color-picker-filled"
+    );
+    this.bgColorPickerButton.addEventListener(
+      UI.Toolbar.ToolbarButton.Events.CLICK,
+      this.#toggleBackgroundColorPicker.bind(this, void 0, true)
+    );
     pickerToolbar.appendToolbarItem(this.bgColorPickerButton);
     this.bgColorPickedBound = this.bgColorPicked.bind(this);
     this.bgColorSwatch = new Swatch(bgColorContainer);
-    this.contrastInfo.addEventListener("ContrastInfoUpdated", this.update.bind(this));
+    this.contrastInfo.addEventListener("ContrastInfoUpdated" /* CONTRAST_INFO_UPDATED */, this.update.bind(this));
   }
   showNoContrastInfoAvailableMessage() {
     this.noContrastInfoAvailable.classList.remove("hidden");
@@ -439,13 +480,13 @@ var ContrastDetails = class _ContrastDetails extends Common2.ObjectWrapper.Objec
       if (requiredContrast2 === null) {
         return;
       }
-      return Common2.Color.findFgColorForContrastAPCA(fgColor, bgColor, requiredContrast2 + 1);
+      return Common3.Color.findFgColorForContrastAPCA(fgColor, bgColor, requiredContrast2 + 1);
     }
     const requiredContrast = this.contrastInfo.contrastRatioThreshold(threshold);
     if (!requiredContrast) {
       return;
     }
-    return Common2.Color.findFgColorForContrast(fgColor, bgColor, requiredContrast + 0.1);
+    return Common3.Color.findFgColorForContrast(fgColor, bgColor, requiredContrast + 0.1);
   }
   onSuggestColor(threshold) {
     const color = this.computeSuggestedColor(threshold);
@@ -472,7 +513,7 @@ var ContrastDetails = class _ContrastDetails extends Common2.ObjectWrapper.Objec
     }
     this.setVisible(true);
     this.hideNoContrastInfoAvailableMessage();
-    const isAPCAEnabled = Common2.Settings.Settings.instance().resolve(SDK.SDKSettings.apcaSettingDescriptor).get();
+    const isAPCAEnabled = Common3.Settings.Settings.instance().resolve(SDK.SDKSettings.apcaSettingDescriptor).get();
     const fgColor = this.contrastInfo.color();
     const bgColor = this.contrastInfo.bgColor();
     if (isAPCAEnabled) {
@@ -639,24 +680,36 @@ var ContrastDetails = class _ContrastDetails extends Common2.ObjectWrapper.Objec
       enabled = this.bgColorPickerButton.isToggled();
     }
     if (shouldTriggerEvent) {
-      this.dispatchEventToListeners("BackgroundColorPickerWillBeToggled", enabled);
+      this.dispatchEventToListeners("BackgroundColorPickerWillBeToggled" /* BACKGROUND_COLOR_PICKER_WILL_BE_TOGGLED */, enabled);
     }
     Host.InspectorFrontendHost.InspectorFrontendHostInstance.setEyeDropperActive(enabled);
     if (enabled) {
-      Host.InspectorFrontendHost.InspectorFrontendHostInstance.events.addEventListener(Host.InspectorFrontendHostAPI.Events.EyeDropperPickedColor, this.bgColorPickedBound);
+      Host.InspectorFrontendHost.InspectorFrontendHostInstance.events.addEventListener(
+        Host.InspectorFrontendHostAPI.Events.EyeDropperPickedColor,
+        this.bgColorPickedBound
+      );
     } else {
-      Host.InspectorFrontendHost.InspectorFrontendHostInstance.events.removeEventListener(Host.InspectorFrontendHostAPI.Events.EyeDropperPickedColor, this.bgColorPickedBound);
+      Host.InspectorFrontendHost.InspectorFrontendHostInstance.events.removeEventListener(
+        Host.InspectorFrontendHostAPI.Events.EyeDropperPickedColor,
+        this.bgColorPickedBound
+      );
     }
   }
-  bgColorPicked({ data: rgbColor }) {
+  bgColorPicked({
+    data: rgbColor
+  }) {
     const rgba = [rgbColor.r, rgbColor.g, rgbColor.b, (rgbColor.a / 2.55 | 0) / 100];
-    const color = Common2.Color.Legacy.fromRGBA(rgba);
+    const color = Common3.Color.Legacy.fromRGBA(rgba);
     this.contrastInfo.setBgColor(color);
     this.#toggleBackgroundColorPicker(false);
     this.bgColorPickerButton.toggled(false);
     Host.InspectorFrontendHost.InspectorFrontendHostInstance.bringToFront();
   }
 };
+var Events2 = /* @__PURE__ */ ((Events4) => {
+  Events4["BACKGROUND_COLOR_PICKER_WILL_BE_TOGGLED"] = "BackgroundColorPickerWillBeToggled";
+  return Events4;
+})(Events2 || {});
 var Swatch = class {
   swatchElement;
   swatchInnerElement;
@@ -668,18 +721,9 @@ var Swatch = class {
     this.textPreview.textContent = "Aa";
   }
   setColors(fgColor, bgColor) {
-    this.textPreview.style.color = fgColor.asString(
-      "rgba"
-      /* Common.Color.Format.RGBA */
-    );
-    this.swatchInnerElement.style.backgroundColor = bgColor.asString(
-      "rgba"
-      /* Common.Color.Format.RGBA */
-    );
-    this.swatchElement.classList.toggle("swatch-inner-white", bgColor.as(
-      "hsl"
-      /* Common.Color.Format.HSL */
-    ).l > 0.9);
+    this.textPreview.style.color = fgColor.asString(Common3.Color.Format.RGBA);
+    this.swatchInnerElement.style.backgroundColor = bgColor.asString(Common3.Color.Format.RGBA);
+    this.swatchElement.classList.toggle("swatch-inner-white", bgColor.as(Common3.Color.Format.HSL).l > 0.9);
   }
 };
 function createIconCheckmark() {
@@ -698,126 +742,15 @@ function createIconNo() {
   return icon;
 }
 
-// gen/front_end/ui/legacy/components/color_picker/ContrastInfo.js
-var ContrastInfo_exports = {};
-__export(ContrastInfo_exports, {
-  ContrastInfo: () => ContrastInfo
-});
-import * as Common3 from "./../../../../core/common/common.js";
-var ContrastInfo = class extends Common3.ObjectWrapper.ObjectWrapper {
-  #isNull;
-  #contrastRatio;
-  #contrastRatioAPCA;
-  contrastRatioThresholds;
-  #contrastRatioAPCAThreshold;
-  fgColor;
-  #bgColor;
-  #colorFormat;
-  constructor(contrastInfo) {
-    super();
-    this.#isNull = true;
-    this.#contrastRatio = null;
-    this.#contrastRatioAPCA = null;
-    this.contrastRatioThresholds = null;
-    this.#contrastRatioAPCAThreshold = 0;
-    this.fgColor = null;
-    this.#bgColor = null;
-    if (!contrastInfo) {
-      return;
-    }
-    if (!contrastInfo.computedFontSize || !contrastInfo.computedFontWeight) {
-      return;
-    }
-    this.#isNull = false;
-    this.contrastRatioThresholds = Common3.ColorUtils.getContrastThreshold(contrastInfo.computedFontSize, contrastInfo.computedFontWeight);
-    this.#contrastRatioAPCAThreshold = Common3.ColorUtils.getAPCAThreshold(contrastInfo.computedFontSize, contrastInfo.computedFontWeight);
-    if (contrastInfo.backgroundColors?.length !== 1) {
-      return;
-    }
-    const bgColorText = contrastInfo.backgroundColors[0];
-    const bgColor = Common3.Color.parse(bgColorText)?.asLegacyColor();
-    if (bgColor) {
-      this.#setBgColor(bgColor);
-    }
-  }
-  isNull() {
-    return this.#isNull;
-  }
-  setColor(fgColor, colorFormat) {
-    this.fgColor = fgColor;
-    this.#colorFormat = colorFormat;
-    this.updateContrastRatio();
-    this.dispatchEventToListeners(
-      "ContrastInfoUpdated"
-      /* Events.CONTRAST_INFO_UPDATED */
-    );
-  }
-  colorFormat() {
-    return this.#colorFormat;
-  }
-  color() {
-    return this.fgColor;
-  }
-  contrastRatio() {
-    return this.#contrastRatio;
-  }
-  contrastRatioAPCA() {
-    return this.#contrastRatioAPCA;
-  }
-  contrastRatioAPCAThreshold() {
-    return this.#contrastRatioAPCAThreshold;
-  }
-  setBgColor(bgColor) {
-    this.#setBgColor(bgColor);
-    this.dispatchEventToListeners(
-      "ContrastInfoUpdated"
-      /* Events.CONTRAST_INFO_UPDATED */
-    );
-  }
-  #setBgColor(bgColor) {
-    this.#bgColor = bgColor;
-    if (!this.fgColor) {
-      return;
-    }
-    const fgRGBA = this.fgColor.rgba();
-    if (bgColor.hasAlpha()) {
-      const blendedRGBA = Common3.ColorUtils.blendColors(bgColor.rgba(), fgRGBA);
-      this.#bgColor = new Common3.Color.Legacy(
-        blendedRGBA,
-        "rgba"
-        /* Common.Color.Format.RGBA */
-      );
-    }
-    this.#contrastRatio = Common3.ColorUtils.contrastRatio(fgRGBA, this.#bgColor.rgba());
-    this.#contrastRatioAPCA = Common3.ColorUtils.contrastRatioAPCA(this.fgColor.rgba(), this.#bgColor.rgba());
-  }
-  bgColor() {
-    return this.#bgColor;
-  }
-  updateContrastRatio() {
-    if (!this.#bgColor || !this.fgColor) {
-      return;
-    }
-    this.#contrastRatio = Common3.ColorUtils.contrastRatio(this.fgColor.rgba(), this.#bgColor.rgba());
-    this.#contrastRatioAPCA = Common3.ColorUtils.contrastRatioAPCA(this.fgColor.rgba(), this.#bgColor.rgba());
-  }
-  contrastRatioThreshold(level) {
-    if (!this.contrastRatioThresholds) {
-      return null;
-    }
-    return this.contrastRatioThresholds[level];
-  }
-};
-
-// gen/front_end/ui/legacy/components/color_picker/ContrastOverlay.js
+// ../../front_end/ui/legacy/components/color_picker/ContrastOverlay.ts
 var ContrastOverlay_exports = {};
 __export(ContrastOverlay_exports, {
   ContrastOverlay: () => ContrastOverlay,
   ContrastRatioLineBuilder: () => ContrastRatioLineBuilder
 });
-import * as Common4 from "./../../../../core/common/common.js";
-import * as SDK2 from "./../../../../core/sdk/sdk.js";
-import * as UI2 from "./../../legacy.js";
+import * as Common4 from "../../../../core/common/common.js";
+import * as SDK2 from "../../../../core/sdk/sdk.js";
+import * as UI2 from "../../legacy.js";
 var ContrastOverlay = class {
   contrastInfo;
   visible;
@@ -834,17 +767,26 @@ var ContrastOverlay = class {
     this.contrastRatioSVG = UI2.UIUtils.createSVGChild(colorElement, "svg", "spectrum-contrast-container fill");
     this.contrastRatioLines = /* @__PURE__ */ new Map();
     if (Common4.Settings.Settings.instance().resolve(SDK2.SDKSettings.apcaSettingDescriptor).get()) {
-      this.contrastRatioLines.set("APCA", UI2.UIUtils.createSVGChild(this.contrastRatioSVG, "path", "spectrum-contrast-line"));
+      this.contrastRatioLines.set(
+        "APCA",
+        UI2.UIUtils.createSVGChild(this.contrastRatioSVG, "path", "spectrum-contrast-line")
+      );
     } else {
-      this.contrastRatioLines.set("aa", UI2.UIUtils.createSVGChild(this.contrastRatioSVG, "path", "spectrum-contrast-line"));
-      this.contrastRatioLines.set("aaa", UI2.UIUtils.createSVGChild(this.contrastRatioSVG, "path", "spectrum-contrast-line"));
+      this.contrastRatioLines.set(
+        "aa",
+        UI2.UIUtils.createSVGChild(this.contrastRatioSVG, "path", "spectrum-contrast-line")
+      );
+      this.contrastRatioLines.set(
+        "aaa",
+        UI2.UIUtils.createSVGChild(this.contrastRatioSVG, "path", "spectrum-contrast-line")
+      );
     }
     this.width = 0;
     this.height = 0;
     this.contrastRatioLineBuilder = new ContrastRatioLineBuilder(this.contrastInfo);
     this.contrastRatioLinesThrottler = new Common4.Throttler.Throttler(0);
     this.drawContrastRatioLinesBound = this.drawContrastRatioLines.bind(this);
-    this.contrastInfo.addEventListener("ContrastInfoUpdated", this.update.bind(this));
+    this.contrastInfo.addEventListener("ContrastInfoUpdated" /* CONTRAST_INFO_UPDATED */, this.update.bind(this));
   }
   update() {
     if (!this.visible || this.contrastInfo.isNull()) {
@@ -901,10 +843,7 @@ var ContrastRatioLineBuilder = class {
       return null;
     }
     const fgRGBA = color.rgba();
-    const fgHSVA = color.as(
-      "hsl"
-      /* Common.Color.Format.HSL */
-    ).hsva();
+    const fgHSVA = color.as(Common4.Color.Format.HSL).hsva();
     const bgRGBA = bgColor.rgba();
     const bgLuminance = Common4.ColorUtils.luminance(bgRGBA);
     let blendedRGBA = Common4.ColorUtils.blendColors(fgRGBA, bgRGBA);
@@ -921,11 +860,15 @@ var ContrastRatioLineBuilder = class {
     const candidateRGBA = Common4.Color.hsva2rgba(candidateHSVA);
     blendedRGBA = Common4.ColorUtils.blendColors(candidateRGBA, bgRGBA);
     let candidateLuminance = (candidateHSVA2) => {
-      return Common4.ColorUtils.luminance(Common4.ColorUtils.blendColors(Common4.Color.Legacy.fromHSVA(candidateHSVA2).rgba(), bgRGBA));
+      return Common4.ColorUtils.luminance(
+        Common4.ColorUtils.blendColors(Common4.Color.Legacy.fromHSVA(candidateHSVA2).rgba(), bgRGBA)
+      );
     };
     if (Common4.Settings.Settings.instance().resolve(SDK2.SDKSettings.apcaSettingDescriptor).get()) {
       candidateLuminance = (candidateHSVA2) => {
-        return Common4.ColorUtils.luminanceAPCA(Common4.ColorUtils.blendColors(Common4.Color.Legacy.fromHSVA(candidateHSVA2).rgba(), bgRGBA));
+        return Common4.ColorUtils.luminanceAPCA(
+          Common4.ColorUtils.blendColors(Common4.Color.Legacy.fromHSVA(candidateHSVA2).rgba(), bgRGBA)
+        );
       };
     }
     let s;
@@ -958,14 +901,14 @@ var ContrastRatioLineBuilder = class {
   }
 };
 
-// gen/front_end/ui/legacy/components/color_picker/FormatPickerContextMenu.js
+// ../../front_end/ui/legacy/components/color_picker/FormatPickerContextMenu.ts
 var FormatPickerContextMenu_exports = {};
 __export(FormatPickerContextMenu_exports, {
   FormatPickerContextMenu: () => FormatPickerContextMenu
 });
-import * as Common5 from "./../../../../core/common/common.js";
-import * as i18n3 from "./../../../../core/i18n/i18n.js";
-import * as UI3 from "./../../legacy.js";
+import * as Common5 from "../../../../core/common/common.js";
+import * as i18n3 from "../../../../core/i18n/i18n.js";
+import * as UI3 from "../../legacy.js";
 var UIStrings2 = {
   /**
    * @description Warning item in the color format picker context menu indicating that converting to a narrower gamut will cause color shifts.
@@ -980,29 +923,33 @@ var FormatPickerContextMenu = class {
     this.#color = color;
   }
   async show(e, onSelect) {
-    const { resolve, promise: showPromise } = Promise.withResolvers();
+    const {
+      resolve,
+      promise: showPromise
+    } = Promise.withResolvers();
     const legacyFormats = [
-      "hex",
-      "hexa",
-      "rgb",
-      "rgba",
-      "hsl",
-      "hwb"
+      Common5.Color.Format.HEX,
+      Common5.Color.Format.HEXA,
+      Common5.Color.Format.RGB,
+      Common5.Color.Format.RGBA,
+      Common5.Color.Format.HSL,
+      Common5.Color.Format.HWB
     ];
     const modernFormats = [
-      "lch",
-      "oklch",
-      "lab",
-      "oklab",
-      "srgb",
-      "srgb-linear",
-      "display-p3",
-      "a98-rgb",
-      "prophoto-rgb",
-      "rec2020",
-      "xyz",
-      "xyz-d50",
-      "xyz-d65"
+      Common5.Color.Format.LCH,
+      Common5.Color.Format.OKLCH,
+      Common5.Color.Format.LAB,
+      Common5.Color.Format.OKLAB,
+      Common5.Color.Format.SRGB,
+      Common5.Color.Format.SRGB_LINEAR,
+      Common5.Color.Format.DISPLAY_P3,
+      Common5.Color.Format.DISPLAY_P3_LINEAR,
+      Common5.Color.Format.A98_RGB,
+      Common5.Color.Format.PROPHOTO_RGB,
+      Common5.Color.Format.REC_2020,
+      Common5.Color.Format.XYZ,
+      Common5.Color.Format.XYZ_D50,
+      Common5.Color.Format.XYZ_D65
     ];
     const menu = new UI3.ContextMenu.ContextMenu(e, { onSoftMenuClosed: () => resolve() });
     const disclamerSection = menu.section("disclaimer");
@@ -1018,10 +965,7 @@ var FormatPickerContextMenu = class {
       }
     }
     if (!(this.#color instanceof Common5.Color.ShortHex)) {
-      const shortHex = this.#color.as(
-        (this.#color.alpha ?? 1) === 1 ? "hex" : "hexa"
-        /* Common.Color.Format.HEXA */
-      ).shortHex();
+      const shortHex = this.#color.as((this.#color.alpha ?? 1) === 1 ? Common5.Color.Format.HEX : Common5.Color.Format.HEXA).shortHex();
       if (shortHex) {
         hasGamutClipped ||= shortHex.isGamutClipped();
         this.addColorToSection(shortHex, legacySection, onSelect);
@@ -1060,26 +1004,27 @@ var FormatPickerContextMenu = class {
   }
 };
 
-// gen/front_end/ui/legacy/components/color_picker/Spectrum.js
+// ../../front_end/ui/legacy/components/color_picker/Spectrum.ts
 var Spectrum_exports = {};
 __export(Spectrum_exports, {
   ChangeSource: () => ChangeSource,
+  Events: () => Events3,
   MaterialPalette: () => MaterialPalette,
   PaletteGenerator: () => PaletteGenerator,
   Spectrum: () => Spectrum,
   Swatch: () => Swatch2
 });
-import "./../../legacy.js";
-import * as Common6 from "./../../../../core/common/common.js";
-import * as Host2 from "./../../../../core/host/host.js";
-import * as i18n5 from "./../../../../core/i18n/i18n.js";
-import * as Platform3 from "./../../../../core/platform/platform.js";
-import * as SDK3 from "./../../../../core/sdk/sdk.js";
-import * as TextUtils from "./../../../../core/text_utils/text_utils.js";
-import * as SrgbOverlay from "./../../../components/srgb_overlay/srgb_overlay.js";
-import { createIcon as createIcon2, Icon as Icon2 } from "./../../../kit/kit.js";
-import * as VisualLogging from "./../../../visual_logging/visual_logging.js";
-import * as UI4 from "./../../legacy.js";
+import "../../legacy.js";
+import * as Common6 from "../../../../core/common/common.js";
+import * as Host2 from "../../../../core/host/host.js";
+import * as i18n5 from "../../../../core/i18n/i18n.js";
+import * as Platform3 from "../../../../core/platform/platform.js";
+import * as SDK3 from "../../../../core/sdk/sdk.js";
+import * as TextUtils from "../../../../core/text_utils/text_utils.js";
+import * as SrgbOverlay from "../../../components/srgb_overlay/srgb_overlay.js";
+import { createIcon as createIcon2, Icon as Icon2 } from "../../../kit/kit.js";
+import * as VisualLogging from "../../../visual_logging/visual_logging.js";
+import * as UI4 from "../../legacy.js";
 
 // gen/front_end/ui/legacy/components/color_picker/spectrum.css.js
 var spectrum_css_default = `/*
@@ -1107,7 +1052,7 @@ var spectrum_css_default = `/*
   position: relative;
   width: 232px;
   height: 127px;
-  border-radius: 2px 2px 0 0;
+  border-radius: var(--sys-size-2) var(--sys-size-2) 0 0;
   overflow: hidden;
   flex: none;
   touch-action: none;
@@ -1119,10 +1064,10 @@ var spectrum_css_default = `/*
 }
 
 .spectrum-dragger {
-  border-radius: 12px;
-  height: 12px;
-  width: 12px;
-  border: 1px solid var(--sys-color-surface);
+  border-radius: var(--sys-shape-corner-medium-small);
+  height: var(--sys-size-6);
+  width: var(--sys-size-6);
+  border: var(--sys-size-1) solid var(--sys-color-surface);
   cursor: move;
   z-index: 1;
   position: absolute;
@@ -1134,7 +1079,7 @@ var spectrum_css_default = `/*
 
 .spectrum-slider {
   position: absolute;
-  top: -1px;
+  top: calc(-1 * var(--sys-size-1));
   cursor: ew-resize;
   width: 13px;
   height: 13px;
@@ -1144,7 +1089,7 @@ var spectrum_css_default = `/*
 }
 
 .spectrum-color:focus .spectrum-dragger {
-  border: 1px solid var(--sys-color-state-focus-ring);
+  border: var(--sys-size-1) solid var(--sys-color-state-focus-ring);
 }
 
 .spectrum-tools {
@@ -1155,7 +1100,7 @@ var spectrum_css_default = `/*
 }
 
 .spectrum-hue {
-  top: 16px;
+  top: var(--sys-size-8);
   /* stylelint-disable-next-line plugin/use_theme_colors */
   background: linear-gradient(to left in hsl longer hue, #f00 0 100%);
 }
@@ -1175,7 +1120,7 @@ var spectrum_css_default = `/*
 
 .spectrum-alpha-background {
   height: 100%;
-  border-radius: 2px;
+  border-radius: var(--sys-size-2);
 }
 
 .spectrum-hue,
@@ -1184,16 +1129,16 @@ var spectrum_css_default = `/*
   left: 86px;
   width: 130px;
   height: 11px;
-  border-radius: 2px;
+  border-radius: var(--sys-size-2);
   touch-action: none;
 }
 
 .spectrum-hue:focus-visible .spectrum-slider,
 .spectrum-alpha:focus-visible .spectrum-slider {
-  border: 1px solid var(--sys-color-state-focus-ring);
-  width: 14px;
-  height: 14px;
-  border-radius: 14px;
+  border: var(--sys-size-1) solid var(--sys-color-state-focus-ring);
+  width: var(--sys-size-7);
+  height: var(--sys-size-7);
+  border-radius: var(--sys-size-7);
 }
 
 .spectrum-sat,
@@ -1214,9 +1159,9 @@ var spectrum_css_default = `/*
   width: 100%;
   height: 83px;
   top: 0;
-  font-size: 13px;
+  font-size: var(--sys-typescale-body3-size);
   color: var(--sys-color-on-surface);
-  border-top: 1px solid var(--sys-color-divider);
+  border-top: var(--sys-size-1) solid var(--sys-color-divider);
   line-height: initial;
   overflow: hidden;
   flex: none;
@@ -1229,8 +1174,8 @@ var spectrum_css_default = `/*
 
 .spectrum-contrast-details devtools-toolbar.expand {
   position: absolute;
-  right: 6px;
-  top: 6px;
+  right: var(--sys-size-4);
+  top: var(--sys-size-4);
   margin: 0;
 }
 
@@ -1244,7 +1189,7 @@ var spectrum_css_default = `/*
 
 .spectrum-contrast-details .expanded-details {
   display: flex;
-  margin: 12px 12px 0 4px;
+  margin: var(--sys-size-6) var(--sys-size-6) 0 var(--sys-size-3);
 }
 
 .spectrum-contrast-details.collapsed .expanded-details {
@@ -1273,13 +1218,13 @@ var spectrum_css_default = `/*
 
 .contrast-fix-button {
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--sys-typescale-body3-size);
   padding: 0;
   margin: 0 0 0 10px;
   background: 0;
-  width: 12px;
-  height: 12px;
-  border: 1px solid var(--sys-color-neutral-outline);
+  width: var(--sys-size-6);
+  height: var(--sys-size-6);
+  border: var(--sys-size-1) solid var(--sys-color-neutral-outline);
   display: inline-block;
   position: relative;
 }
@@ -1294,12 +1239,12 @@ var spectrum_css_default = `/*
   left: 5.5px;
   top: 3.5px;
   background-color: var(--sys-color-cdt-base-container);
-  border-radius: 50%;
+  border-radius: var(--sys-shape-corner-full);
 }
 
 .contrast-fix-button:hover,
 .contrast-fix-button:focus {
-  border: 1px solid var(--sys-color-state-focus-ring);
+  border: var(--sys-size-1) solid var(--sys-color-state-focus-ring);
   transform: scale(1.2);
 }
 
@@ -1314,20 +1259,20 @@ var spectrum_css_default = `/*
 .spectrum-contrast-details .background-color {
   position: absolute;
   flex: none;
-  right: 12px;
+  right: var(--sys-size-6);
 }
 
 .spectrum-eye-dropper {
-  width: 32px;
-  height: 24px;
+  width: var(--sys-size-13);
+  height: var(--sys-size-11);
   position: relative;
-  left: 8px;
+  left: var(--sys-size-5);
   top: 17px;
   cursor: pointer;
 }
 
 .spectrum-contrast-details .spectrum-eye-dropper {
-  top: 2px;
+  top: var(--sys-size-2);
   right: 34px;
   position: absolute;
   left: auto;
@@ -1384,14 +1329,14 @@ devtools-icon.check-double {
 }
 
 .swatch {
-  width: 32px;
-  height: 32px;
+  width: var(--sys-size-13);
+  height: var(--sys-size-13);
   margin: 0;
   position: absolute;
   top: 15px;
-  left: 44px;
+  left: var(--sys-size-15);
   background-image: var(--image-file-checker);
-  border-radius: 16px;
+  border-radius: var(--sys-shape-corner-medium);
 }
 
 .swatch-inner,
@@ -1400,17 +1345,17 @@ devtools-icon.check-double {
   width: 100%;
   height: 100%;
   display: inline-block;
-  border-radius: 16px;
+  border-radius: var(--sys-shape-corner-medium);
 }
 
 .swatch-inner-white {
-  border: 1px solid var(--sys-color-neutral-outline);
+  border: var(--sys-size-1) solid var(--sys-color-neutral-outline);
 }
 
 .swatch-overlay {
   cursor: pointer;
   opacity: 0%;
-  padding: 4px;
+  padding: var(--sys-size-3);
 }
 
 .swatch-overlay:hover,
@@ -1425,35 +1370,35 @@ devtools-icon.check-double {
 
 devtools-icon.copy-color-icon {
   color: var(--sys-color-cdt-base-container);
-  margin-top: 2px;
-  margin-left: 2px;
+  margin-top: var(--sys-size-2);
+  margin-left: var(--sys-size-2);
 }
 
 .spectrum-text {
   position: absolute;
   top: 60px;
-  left: 16px;
+  left: var(--sys-size-8);
 }
 
 .spectrum-text-value {
   display: inline-block;
-  width: 40px;
+  width: var(--sys-size-14);
   overflow: hidden;
   text-align: center;
-  margin-right: 6px;
-  line-height: 20px;
+  margin-right: var(--sys-size-4);
+  line-height: var(--sys-size-9);
   padding: 0;
   color: var(--sys-color-on-surface);
-  border: 1px solid var(--sys-color-neutral-outline);
+  border: var(--sys-size-1) solid var(--sys-color-neutral-outline);
   white-space: nowrap;
 }
 
 .spectrum-text-label {
   letter-spacing: 39.5px;
-  margin-top: 8px;
+  margin-top: var(--sys-size-5);
   display: block;
   color: var(--sys-color-state-disabled);
-  margin-left: 16px;
+  margin-left: var(--sys-size-8);
   width: 174px;
 }
 
@@ -1468,10 +1413,10 @@ devtools-icon.copy-color-icon {
 }
 
 .spectrum-switcher {
-  border-radius: 2px;
-  height: 20px;
-  width: 20px;
-  padding: 2px;
+  border-radius: var(--sys-size-2);
+  height: var(--sys-size-9);
+  width: var(--sys-size-9);
+  padding: var(--sys-size-2);
   border: none;
   background: none;
   margin: 0;
@@ -1492,10 +1437,10 @@ devtools-icon.copy-color-icon {
 }
 
 .spectrum-palette-container {
-  border-top: 1px solid var(--sys-color-divider);
+  border-top: var(--sys-size-1) solid var(--sys-color-divider);
   position: relative;
   width: 100%;
-  padding: 6px 24px 6px 6px;
+  padding: var(--sys-size-4) var(--sys-size-11) var(--sys-size-4) var(--sys-size-4);
   display: flex;
   flex-wrap: wrap;
 }
@@ -1507,15 +1452,15 @@ devtools-icon.copy-color-icon {
 }
 
 .spectrum-palette-color {
-  width: 12px;
-  height: 12px;
-  flex: 0 0 12px;
-  border-radius: 2px;
-  margin: 6px;
+  width: var(--sys-size-6);
+  height: var(--sys-size-6);
+  flex: 0 0 var(--sys-size-6);
+  border-radius: var(--sys-size-2);
+  margin: var(--sys-size-4);
   cursor: pointer;
   position: relative;
-  border: 1px solid var(--sys-color-divider);
-  background-position: -1px !important; /* stylelint-disable-line declaration-no-important */
+  border: var(--sys-size-1) solid var(--sys-color-divider);
+  background-position: calc(-1 * var(--sys-size-1)) !important; /* stylelint-disable-line declaration-no-important */
   z-index: 14;
 }
 
@@ -1526,7 +1471,7 @@ devtools-icon.copy-color-icon {
   top: -5px;
   left: 3px;
   border: 0;
-  border-radius: 1px;
+  border-radius: var(--sys-size-1);
   width: 11px;
   height: 11px;
 }
@@ -1544,20 +1489,20 @@ devtools-icon.copy-color-icon {
   > .spectrum-palette-color-shadow:first-child {
   opacity: 60%;
   top: -3px;
-  left: 1px;
+  left: var(--sys-size-1);
 }
 
 .palette-color-shades {
   position: absolute;
   background-color: var(--sys-color-cdt-base-container);
   height: 228px;
-  width: 28px;
+  width: var(--sys-size-12);
   box-shadow: var(--drop-shadow);
   z-index: 14;
-  border-radius: 2px;
+  border-radius: var(--sys-size-2);
   transform-origin: 0 228px;
-  margin-top: 16px;
-  margin-left: -8px;
+  margin-top: var(--sys-size-8);
+  margin-left: calc(-1 * var(--sys-size-5));
 }
 
 .spectrum-palette > .spectrum-palette-color.spectrum-shades-shown {
@@ -1565,9 +1510,9 @@ devtools-icon.copy-color-icon {
 }
 
 .palette-color-shades > .spectrum-palette-color {
-  margin: 8px 0 0;
-  margin-left: 8px;
-  width: 12px;
+  margin: var(--sys-size-5) 0 0;
+  margin-left: var(--sys-size-5);
+  width: var(--sys-size-6);
 }
 
 .spectrum-palette > .spectrum-palette-color {
@@ -1577,7 +1522,7 @@ devtools-icon.copy-color-icon {
 }
 
 .palette-preview > .spectrum-palette-color {
-  margin-top: 1px;
+  margin-top: var(--sys-size-1);
 }
 
 .spectrum-palette > .spectrum-palette-color.empty-color {
@@ -1585,7 +1530,7 @@ devtools-icon.copy-color-icon {
 }
 
 .spectrum-palette-color:not(.has-material-shades):focus {
-  border: 1px solid var(--sys-color-state-focus-ring);
+  border: var(--sys-size-1) solid var(--sys-color-state-focus-ring);
   transform: scale(1.4);
 }
 
@@ -1597,7 +1542,7 @@ devtools-icon.copy-color-icon {
 
 .add-color-toolbar {
   margin-left: -3px;
-  margin-top: -1px;
+  margin-top: calc(-1 * var(--sys-size-1));
 }
 
 .spectrum-palette-switcher {
@@ -1616,7 +1561,7 @@ devtools-icon.copy-color-icon {
   background-color: var(--sys-color-cdt-base-container);
   z-index: 14;
   transition: transform 200ms cubic-bezier(0, 0, 0.2, 1), visibility 0s 200ms;
-  border-top: 1px solid var(--sys-color-divider);
+  border-top: var(--sys-size-1) solid var(--sys-color-divider);
   visibility: hidden;
 }
 
@@ -1628,23 +1573,23 @@ devtools-icon.copy-color-icon {
 
 .palette-panel > devtools-toolbar {
   position: absolute;
-  right: 6px;
-  top: 6px;
+  right: var(--sys-size-4);
+  top: var(--sys-size-4);
 }
 
 .palette-panel > div {
   flex: 0 0 38px;
-  border-bottom: 1px solid var(--sys-color-divider);
-  padding: 12px;
-  line-height: 14px;
+  border-bottom: var(--sys-size-1) solid var(--sys-color-divider);
+  padding: var(--sys-size-6);
+  line-height: var(--sys-size-7);
   color: var(--sys-color-on-surface);
 }
 
 .palette-panel > div.palette-title {
-  font-size: 14px;
-  line-height: 16px;
+  font-size: var(--sys-typescale-body2-size);
+  line-height: var(--sys-size-8);
   color: var(--sys-color-on-surface);
-  flex-basis: 40px;
+  flex-basis: var(--sys-size-14);
 }
 
 div.palette-preview {
@@ -1700,9 +1645,9 @@ div.palette-preview {
   width: 36px;
   display: flex;
   align-items: center;
-  padding-left: 4px;
-  bottom: 2px;
-  border-bottom-right-radius: 2px;
+  padding-left: var(--sys-size-3);
+  bottom: var(--sys-size-2);
+  border-bottom-right-radius: var(--sys-size-2);
 }
 
 @keyframes showDeleteToolbar {
@@ -1745,17 +1690,17 @@ div.palette-preview {
 
 .background-color .text-preview {
   color: var(--sys-color-inverse-surface);
-  font-size: 16px;
+  font-size: var(--sys-typescale-body1-size);
   position: relative;
-  padding-bottom: 2px;
+  padding-bottom: var(--sys-size-2);
 }
 
 .swatch.contrast devtools-icon {
-  margin: -2px;
+  margin: calc(-1 * var(--sys-size-2));
 }
 
 .no-contrast-info-available {
-  border-top: 1px solid var(--sys-color-divider);
+  border-top: var(--sys-size-1) solid var(--sys-color-divider);
   position: relative;
   width: 100%;
   padding: 10px;
@@ -1766,7 +1711,7 @@ div.palette-preview {
 
 @media (forced-colors: active) {
   :host {
-    border: 1px solid canvastext !important; /* stylelint-disable-line declaration-no-important */
+    border: var(--sys-size-1) solid canvastext !important; /* stylelint-disable-line declaration-no-important */
   }
 
   .spectrum-color {
@@ -1795,7 +1740,7 @@ div.palette-preview {
   .swatch-inner,
   .swatch-overlay,
   .swatch-inner-white {
-    border: 1px solid ButtonText;
+    border: var(--sys-size-1) solid ButtonText;
   }
 
   .swatch-overlay:hover,
@@ -1806,13 +1751,13 @@ div.palette-preview {
   .spectrum-slider {
     forced-color-adjust: none;
     background-color: ButtonText !important; /* stylelint-disable-line declaration-no-important */
-    box-shadow: 0 1px 4px 0 ButtonFace !important; /* stylelint-disable-line declaration-no-important */
+    box-shadow: 0 var(--sys-size-1) var(--sys-size-3) 0 ButtonFace !important; /* stylelint-disable-line declaration-no-important */
   }
 }
 
 /*# sourceURL=${import.meta.resolve("./spectrum.css")} */`;
 
-// gen/front_end/ui/legacy/components/color_picker/Spectrum.js
+// ../../front_end/ui/legacy/components/color_picker/Spectrum.ts
 var UIStrings3 = {
   /**
    * @description Tooltip and title for the eyedropper button in the color picker.
@@ -1893,66 +1838,70 @@ var i18nString3 = i18n5.i18n.getLocalizedString.bind(void 0, str_3);
 var colorElementToMutable = /* @__PURE__ */ new WeakMap();
 var colorElementToColor = /* @__PURE__ */ new WeakMap();
 var srgbGamutFormats = [
-  "srgb",
-  "rgb",
-  "hex",
-  "hsl",
-  "hwb"
+  Common6.Color.Format.SRGB,
+  Common6.Color.Format.RGB,
+  Common6.Color.Format.HEX,
+  Common6.Color.Format.HSL,
+  Common6.Color.Format.HWB
 ];
 var IS_NATIVE_EYE_DROPPER_AVAILABLE = "EyeDropper" in window;
 function doesFormatSupportDisplayP3(format) {
   return !srgbGamutFormats.includes(format);
 }
 function convertColorFormat(colorFormat) {
-  if (colorFormat === "rgba") {
-    return "rgb";
+  if (colorFormat === Common6.Color.Format.RGBA) {
+    return Common6.Color.Format.RGB;
   }
-  if (colorFormat === "hsla") {
-    return "hsl";
+  if (colorFormat === Common6.Color.Format.HSLA) {
+    return Common6.Color.Format.HSL;
   }
-  if (colorFormat === "hwba") {
-    return "hwb";
+  if (colorFormat === Common6.Color.Format.HWBA) {
+    return Common6.Color.Format.HWB;
   }
-  if (colorFormat === "hexa") {
-    return "hex";
+  if (colorFormat === Common6.Color.Format.HEXA) {
+    return Common6.Color.Format.HEX;
   }
   return colorFormat;
 }
 function getHsvFromColor(gamut, color) {
   switch (gamut) {
-    case "display-p3": {
-      const displayP3color = color.as(
-        "display-p3"
-        /* Common.Color.Format.DISPLAY_P3 */
-      );
+    case "display-p3" /* DISPLAY_P3 */: {
+      const displayP3color = color.as(Common6.Color.Format.DISPLAY_P3);
       return [
         ...Common6.Color.rgb2hsv([displayP3color.p0, displayP3color.p1, displayP3color.p2]),
         displayP3color.alpha || 1
       ];
     }
-    case "srgb": {
-      return color.as(
-        "hsl"
-        /* Common.Color.Format.HSL */
-      ).hsva();
+    case "srgb" /* SRGB */: {
+      return color.as(Common6.Color.Format.HSL).hsva();
     }
   }
 }
 function getColorFromHsva(gamut, hsva) {
   const color = Common6.Color.Legacy.fromHSVA(hsva);
   switch (gamut) {
-    case "display-p3": {
+    case "display-p3" /* DISPLAY_P3 */: {
       const rgba = Common6.Color.hsva2rgba(hsva);
-      return new Common6.Color.ColorFunction("display-p3", rgba[0], rgba[1], rgba[2], rgba[3], void 0);
+      return new Common6.Color.ColorFunction(
+        Common6.Color.Format.DISPLAY_P3,
+        rgba[0],
+        rgba[1],
+        rgba[2],
+        rgba[3],
+        void 0
+      );
     }
-    case "srgb": {
+    case "srgb" /* SRGB */: {
       return color;
     }
   }
 }
-var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
+var SpectrumBase = Common6.ObjectWrapper.eventMixin(
+  UI4.Widget.VBox
+);
+var Spectrum = class extends SpectrumBase {
   #color;
-  gamut = "srgb";
+  gamut = "srgb" /* SRGB */;
   colorElement;
   colorDragElement;
   dragX;
@@ -2001,7 +1950,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
   dragHotSpotX;
   dragHotSpotY;
   #colorName;
-  colorFormat = "rgb";
+  colorFormat = Common6.Color.Format.RGB;
   eyeDropperAbortController = null;
   isFormatPickerShown = false;
   // Used to represent how the current color
@@ -2015,7 +1964,10 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     super({ useShadowDom: true });
     this.registerRequiredCSS(spectrum_css_default);
     this.contentElement.tabIndex = 0;
-    this.contentElement.setAttribute("jslog", `${VisualLogging.dialog("colorPicker").parent("mapped").track({ keydown: "Enter|Escape" })}`);
+    this.contentElement.setAttribute(
+      "jslog",
+      `${VisualLogging.dialog("colorPicker").parent("mapped").track({ keydown: "Enter|Escape" })}`
+    );
     this.colorElement = this.contentElement.createChild("div", "spectrum-color");
     this.colorElement.tabIndex = 0;
     this.colorElement.setAttribute("jslog", `${VisualLogging.canvas("color").track({
@@ -2035,9 +1987,17 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     const toolbar = toolsContainer.createChild("devtools-toolbar", "spectrum-eye-dropper");
     const toggleEyeDropperShortcut = UI4.ShortcutRegistry.ShortcutRegistry.instance().shortcutsForAction("elements.toggle-eye-dropper");
     const definedShortcutKey = toggleEyeDropperShortcut[0]?.descriptors.flatMap((descriptor) => descriptor.name.split("\u200A+\u200A"))[0];
-    this.colorPickerButton = new UI4.Toolbar.ToolbarToggle(i18nString3(UIStrings3.toggleColorPicker, { PH1: definedShortcutKey || "" }), "color-picker", "color-picker-filled", "color-eye-dropper");
+    this.colorPickerButton = new UI4.Toolbar.ToolbarToggle(
+      i18nString3(UIStrings3.toggleColorPicker, { PH1: definedShortcutKey || "" }),
+      "color-picker",
+      "color-picker-filled",
+      "color-eye-dropper"
+    );
     this.colorPickerButton.setToggled(true);
-    this.colorPickerButton.addEventListener("Click", this.toggleColorPicker.bind(this, void 0));
+    this.colorPickerButton.addEventListener(
+      UI4.Toolbar.ToolbarButton.Events.CLICK,
+      this.toggleColorPicker.bind(this, void 0)
+    );
     toolbar.appendToolbarItem(this.colorPickerButton);
     this.colorPickerButton.element.setAttribute("jslog", `${VisualLogging.colorEyeDropper().track({ click: true })}`);
     this.swatch = new Swatch2(toolsContainer);
@@ -2069,7 +2029,10 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     this.textValues = [];
     for (let i = 0; i < 4; ++i) {
       const inputValue = UI4.UIUtils.createInput("spectrum-text-value");
-      inputValue.setAttribute("jslog", `${VisualLogging.value().track({ change: true, keydown: "ArrowUp|ArrowDown" }).context(i)}`);
+      inputValue.setAttribute(
+        "jslog",
+        `${VisualLogging.value().track({ change: true, keydown: "ArrowUp|ArrowDown" }).context(i)}`
+      );
       this.displayContainer.appendChild(inputValue);
       inputValue.maxLength = 4;
       this.textValues.push(inputValue);
@@ -2082,7 +2045,10 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     this.hexContainer = toolsContainer.createChild("div", "spectrum-text spectrum-text-hex source-code");
     UI4.ARIAUtils.markAsPoliteLiveRegion(this.hexContainer, true);
     this.hexValue = UI4.UIUtils.createInput("spectrum-text-value");
-    this.hexValue.setAttribute("jslog", `${VisualLogging.value("hex").track({ keydown: "ArrowUp|ArrowDown", change: true })}`);
+    this.hexValue.setAttribute(
+      "jslog",
+      `${VisualLogging.value("hex").track({ keydown: "ArrowUp|ArrowDown", change: true })}`
+    );
     this.hexContainer.appendChild(this.hexValue);
     this.hexValue.maxLength = 9;
     this.hexValue.addEventListener("keydown", this.inputChanged.bind(this), false);
@@ -2100,13 +2066,40 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     displaySwitcher.addEventListener("click", (ev) => {
       void this.showFormatPicker(ev);
     });
-    UI4.UIUtils.installDragHandle(this.hueElement, this.dragStart.bind(this, positionHue.bind(this)), positionHue.bind(this), null, "ew-resize", "crosshair");
-    UI4.UIUtils.installDragHandle(this.alphaElement, this.dragStart.bind(this, positionAlpha.bind(this)), positionAlpha.bind(this), null, "ew-resize", "crosshair");
-    UI4.UIUtils.installDragHandle(this.colorElement, this.dragStart.bind(this, positionColor.bind(this)), positionColor.bind(this), null, "move", "crosshair");
+    UI4.UIUtils.installDragHandle(
+      this.hueElement,
+      this.dragStart.bind(this, positionHue.bind(this)),
+      positionHue.bind(this),
+      null,
+      "ew-resize",
+      "crosshair"
+    );
+    UI4.UIUtils.installDragHandle(
+      this.alphaElement,
+      this.dragStart.bind(this, positionAlpha.bind(this)),
+      positionAlpha.bind(this),
+      null,
+      "ew-resize",
+      "crosshair"
+    );
+    UI4.UIUtils.installDragHandle(
+      this.colorElement,
+      this.dragStart.bind(this, positionColor.bind(this)),
+      positionColor.bind(this),
+      null,
+      "move",
+      "crosshair"
+    );
     if (contrastInfo) {
       this.contrastInfo = contrastInfo;
       this.contrastOverlay = new ContrastOverlay(this.contrastInfo, this.colorElement);
-      this.contrastDetails = new ContrastDetails(this.contrastInfo, this.contentElement, this.toggleColorPicker.bind(this), this.contrastPanelExpandedChanged.bind(this), this.colorSelected.bind(this));
+      this.contrastDetails = new ContrastDetails(
+        this.contrastInfo,
+        this.contentElement,
+        this.toggleColorPicker.bind(this),
+        this.contrastPanelExpandedChanged.bind(this),
+        this.colorSelected.bind(this)
+      );
       this.contrastDetailsBackgroundColorPickerToggledBound = this.contrastDetailsBackgroundColorPickerToggled.bind(this);
     }
     this.element.classList.add("flex-none");
@@ -2119,7 +2112,13 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     this.paletteContainer.addEventListener("contextmenu", this.showPaletteColorContextMenu.bind(this, -1));
     this.shadesContainer = this.contentElement.createChild("div", "palette-color-shades hidden");
     this.shadesContainer.setAttribute("jslog", `${VisualLogging.paletteColorShades()}`);
-    UI4.UIUtils.installDragHandle(this.paletteContainer, this.paletteDragStart.bind(this), this.paletteDrag.bind(this), this.paletteDragEnd.bind(this), "default");
+    UI4.UIUtils.installDragHandle(
+      this.paletteContainer,
+      this.paletteDragStart.bind(this),
+      this.paletteDrag.bind(this),
+      this.paletteDragEnd.bind(this),
+      "default"
+    );
     const paletteSwitcher = this.paletteSectionContainer.createChild("div", "spectrum-palette-switcher spectrum-switcher");
     paletteSwitcher.setAttribute("jslog", `${VisualLogging.dropDown("palette-switcher").track({ click: true })}`);
     appendSwitcherIcon(paletteSwitcher);
@@ -2139,7 +2138,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     this.addColorToolbar = document.createElement("devtools-toolbar");
     this.addColorToolbar.classList.add("add-color-toolbar");
     const addColorButton = new UI4.Toolbar.ToolbarButton(i18nString3(UIStrings3.addToPalette), "plus", void 0, "add-color");
-    addColorButton.addEventListener("Click", this.onAddColorMousedown.bind(this));
+    addColorButton.addEventListener(UI4.Toolbar.ToolbarButton.Events.CLICK, this.onAddColorMousedown.bind(this));
     addColorButton.element.addEventListener("keydown", this.onAddColorKeydown.bind(this));
     this.addColorToolbar.appendToolbarItem(addColorButton);
     this.colorPickedBound = this.colorPicked.bind(this);
@@ -2181,10 +2180,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
       hsva[0] = Platform3.NumberUtilities.clamp(newHue, 0, 1);
       this.#setColor(hsva, "", void 0, void 0, ChangeSource.Other);
       const color = getColorFromHsva(this.gamut, hsva);
-      const colorValues = color.as(
-        "hsl"
-        /* Common.Color.Format.HSL */
-      ).canonicalHSLA();
+      const colorValues = color.as(Common6.Color.Format.HSL).canonicalHSLA();
       UI4.ARIAUtils.setValueNow(this.hueElement, colorValues[0]);
     }
     function positionAlpha(event) {
@@ -2196,10 +2192,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
       hsva[3] = Platform3.NumberUtilities.clamp(newAlpha, 0, 1);
       this.#setColor(hsva, "", void 0, void 0, ChangeSource.Other);
       const color = getColorFromHsva(this.gamut, hsva);
-      const colorValues = color.as(
-        "hsl"
-        /* Common.Color.Format.HSL */
-      ).canonicalHSLA();
+      const colorValues = color.as(Common6.Color.Format.HSL).canonicalHSLA();
       UI4.ARIAUtils.setValueText(this.alphaElement, colorValues[3]);
     }
     function positionColor(event) {
@@ -2279,7 +2272,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     title.textContent = i18nString3(UIStrings3.colorPalettes);
     const toolbar = this.palettePanel.createChild("devtools-toolbar");
     this.closeButton = new UI4.Toolbar.ToolbarButton(i18nString3(UIStrings3.returnToColorPicker), "cross");
-    this.closeButton.addEventListener("Click", this.togglePalettePanel.bind(this, false));
+    this.closeButton.addEventListener(UI4.Toolbar.ToolbarButton.Events.CLICK, this.togglePalettePanel.bind(this, false));
     this.closeButton.element.addEventListener("keydown", this.onCloseBtnKeydown.bind(this));
     this.closeButton.element.setAttribute("jslog", `${VisualLogging.close().track({ click: true })}`);
     toolbar.appendToolbarItem(this.closeButton);
@@ -2368,7 +2361,10 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
         const tooltipText = i18nString3(UIStrings3.longclickOrLongpressSpaceToShow, { PH1: palette.colors[i] });
         UI4.Tooltip.Tooltip.install(colorElement, tooltipText);
         UI4.ARIAUtils.setLabel(colorElement, tooltipText);
-        new UI4.UIUtils.LongClickController(colorElement, this.showLightnessShades.bind(this, colorElement, palette.colors[i]));
+        new UI4.UIUtils.LongClickController(
+          colorElement,
+          this.showLightnessShades.bind(this, colorElement, palette.colors[i])
+        );
       }
       this.paletteContainer.appendChild(colorElement);
     }
@@ -2400,7 +2396,10 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     }
     this.shadesContainer.classList.remove("hidden");
     this.shadesContainer.removeChildren();
-    this.shadesContainer.animate([{ transform: "scaleY(0)", opacity: "0" }, { transform: "scaleY(1)", opacity: "1" }], { duration: 200, easing: "cubic-bezier(0.4, 0, 0.2, 1)" });
+    this.shadesContainer.animate(
+      [{ transform: "scaleY(0)", opacity: "0" }, { transform: "scaleY(1)", opacity: "1" }],
+      { duration: 200, easing: "cubic-bezier(0.4, 0, 0.2, 1)" }
+    );
     let shadesTop = this.paletteContainer.offsetTop + colorElement.offsetTop + (colorElement.parentElement ? colorElement.parentElement.offsetTop : 0);
     if (this.contrastDetails) {
       shadesTop += this.contrastDetails.element().offsetHeight;
@@ -2482,12 +2481,15 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
       const before = swatchOffsets.get(swatch);
       const after = swatch.getBoundingClientRect();
       if (before && (before.left !== after.left || before.top !== after.top)) {
-        swatch.animate([
-          {
-            transform: "translateX(" + (before.left - after.left) + "px) translateY(" + (before.top - after.top) + "px)"
-          },
-          { transform: "none" }
-        ], { duration: 100, easing: "cubic-bezier(0, 0, 0.2, 1)" });
+        swatch.animate(
+          [
+            {
+              transform: "translateX(" + (before.left - after.left) + "px) translateY(" + (before.top - after.top) + "px)"
+            },
+            { transform: "none" }
+          ],
+          { duration: 100, easing: "cubic-bezier(0, 0, 0.2, 1)" }
+        );
       }
     }
   }
@@ -2588,10 +2590,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
       }
     }
     this.element.style.height = paletteTop + paletteMargin + (paletteColorHeight + paletteMargin) * rowsNeeded + "px";
-    this.dispatchEventToListeners(
-      "SizeChanged"
-      /* Events.SIZE_CHANGED */
-    );
+    this.dispatchEventToListeners("SizeChanged" /* SIZE_CHANGED */);
   }
   onPaletteColorKeydown(palette, colorIndex, event) {
     if (event instanceof MouseEvent || Platform3.KeyboardUtilities.isEnterOrSpaceKey(event)) {
@@ -2599,7 +2598,13 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
       const colorName = palette.colorNames[colorIndex];
       const color = Common6.Color.parse(colorText);
       if (color) {
-        this.#setColor(color, colorText, colorName, palette.matchUserFormat ? this.colorFormat : color.format(), ChangeSource.Other);
+        this.#setColor(
+          color,
+          colorText,
+          colorName,
+          palette.matchUserFormat ? this.colorFormat : color.format(),
+          ChangeSource.Other
+        );
       }
       return;
     }
@@ -2668,10 +2673,22 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     }
     const contextMenu = new UI4.ContextMenu.ContextMenu(event);
     if (colorIndex !== -1) {
-      contextMenu.defaultSection().appendItem(i18nString3(UIStrings3.removeColor), this.deletePaletteColors.bind(this, colorIndex, false), { jslogContext: "remove-color" });
-      contextMenu.defaultSection().appendItem(i18nString3(UIStrings3.removeAllToTheRight), this.deletePaletteColors.bind(this, colorIndex, true), { jslogContext: "remove-all-to-the-right" });
+      contextMenu.defaultSection().appendItem(
+        i18nString3(UIStrings3.removeColor),
+        this.deletePaletteColors.bind(this, colorIndex, false),
+        { jslogContext: "remove-color" }
+      );
+      contextMenu.defaultSection().appendItem(
+        i18nString3(UIStrings3.removeAllToTheRight),
+        this.deletePaletteColors.bind(this, colorIndex, true),
+        { jslogContext: "remove-all-to-the-right" }
+      );
     }
-    contextMenu.defaultSection().appendItem(i18nString3(UIStrings3.clearPalette), this.deletePaletteColors.bind(this, -1, true), { jslogContext: "clear-palette" });
+    contextMenu.defaultSection().appendItem(
+      i18nString3(UIStrings3.clearPalette),
+      this.deletePaletteColors.bind(this, -1, true),
+      { jslogContext: "clear-palette" }
+    );
     void contextMenu.show();
   }
   deletePaletteColors(colorIndex, toRight) {
@@ -2686,10 +2703,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
   }
   setColor(color) {
     this.#setColor(color, "", void 0, color.format(), ChangeSource.Model);
-    const colorValues = color.as(
-      "hsl"
-      /* Common.Color.Format.HSL */
-    ).canonicalHSLA();
+    const colorValues = color.as(Common6.Color.Format.HSL).canonicalHSLA();
     UI4.ARIAUtils.setValueNow(this.hueElement, colorValues[0]);
     UI4.ARIAUtils.setValueText(this.alphaElement, colorValues[3]);
   }
@@ -2708,7 +2722,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     }
     if (colorFormat !== void 0) {
       this.colorFormat = convertColorFormat(colorFormat);
-      this.gamut = doesFormatSupportDisplayP3(this.colorFormat) ? "display-p3" : "srgb";
+      this.gamut = doesFormatSupportDisplayP3(this.colorFormat) ? "display-p3" /* DISPLAY_P3 */ : "srgb" /* SRGB */;
     }
     if (Array.isArray(colorOrHsv)) {
       this.#color = void 0;
@@ -2717,10 +2731,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
       this.#color = colorOrHsv;
       const oldHue = this.hsv ? this.hsv[0] : null;
       this.hsv = getHsvFromColor(this.gamut, colorOrHsv);
-      if (oldHue !== null && colorOrHsv.as(
-        "lch"
-        /* Common.Color.Format.LCH */
-      ).isHuePowerless()) {
+      if (oldHue !== null && colorOrHsv.as(Common6.Color.Format.LCH).isHuePowerless()) {
         this.hsv[0] = oldHue;
       }
     }
@@ -2734,7 +2745,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
       this.updateInput();
     }
     if (changeSource !== ChangeSource.Model) {
-      this.dispatchEventToListeners("ColorChanged", this.colorString());
+      this.dispatchEventToListeners("ColorChanged" /* COLOR_CHANGED */, this.colorString());
     }
   }
   colorName() {
@@ -2749,26 +2760,14 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     if (colorString) {
       return colorString;
     }
-    if (this.colorFormat === "hex") {
-      colorString = color.asString(
-        "hexa"
-        /* Common.Color.Format.HEXA */
-      );
-    } else if (this.colorFormat === "hsl") {
-      colorString = color.asString(
-        "hsla"
-        /* Common.Color.Format.HSLA */
-      );
-    } else if (this.colorFormat === "hwb") {
-      colorString = color.asString(
-        "hwba"
-        /* Common.Color.Format.HWBA */
-      );
+    if (this.colorFormat === Common6.Color.Format.HEX) {
+      colorString = color.asString(Common6.Color.Format.HEXA);
+    } else if (this.colorFormat === Common6.Color.Format.HSL) {
+      colorString = color.asString(Common6.Color.Format.HSLA);
+    } else if (this.colorFormat === Common6.Color.Format.HWB) {
+      colorString = color.asString(Common6.Color.Format.HWBA);
     } else {
-      colorString = color.asString(
-        "rgba"
-        /* Common.Color.Format.RGBA */
-      );
+      colorString = color.asString(Common6.Color.Format.RGBA);
     }
     console.assert(Boolean(colorString));
     return colorString || "";
@@ -2780,8 +2779,14 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     const alpha = this.hsv[3];
     this.dragX = s * this.dragWidth;
     this.dragY = this.dragHeight - v * this.dragHeight;
-    const dragX = Math.max(-this.colorDragElementHeight, Math.min(this.dragWidth - this.colorDragElementHeight, this.dragX - this.colorDragElementHeight));
-    const dragY = Math.max(-this.colorDragElementHeight, Math.min(this.dragHeight - this.colorDragElementHeight, this.dragY - this.colorDragElementHeight));
+    const dragX = Math.max(
+      -this.colorDragElementHeight,
+      Math.min(this.dragWidth - this.colorDragElementHeight, this.dragX - this.colorDragElementHeight)
+    );
+    const dragY = Math.max(
+      -this.colorDragElementHeight,
+      Math.min(this.dragHeight - this.colorDragElementHeight, this.dragY - this.colorDragElementHeight)
+    );
     this.colorDragElement.positionAt(dragX, dragY);
     const hueSlideX = (1 - h) * this.hueAlphaWidth - this.slideHelperWidth;
     this.hueSlider.style.left = hueSlideX + "px";
@@ -2789,13 +2794,10 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     this.alphaSlider.style.left = alphaSlideX + "px";
   }
   updateInput() {
-    if (this.colorFormat === "hex") {
+    if (this.colorFormat === Common6.Color.Format.HEX) {
       this.hexContainer.hidden = false;
       this.displayContainer.hidden = true;
-      this.hexValue.value = this.color.asString(
-        (this.color.alpha ?? 1) !== 1 ? "hexa" : "hex"
-        /* Common.Color.Format.HEX */
-      );
+      this.hexValue.value = this.color.asString((this.color.alpha ?? 1) !== 1 ? Common6.Color.Format.HEXA : Common6.Color.Format.HEX);
     } else {
       this.hexContainer.hidden = true;
       this.displayContainer.hidden = false;
@@ -2821,7 +2823,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     }
   }
   showSrgbOverlay() {
-    if (this.contrastDetails?.expanded() || this.gamut !== "display-p3") {
+    if (this.contrastDetails?.expanded() || this.gamut !== "display-p3" /* DISPLAY_P3 */) {
       return;
     }
     void this.srgbOverlay.render({
@@ -2834,7 +2836,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     }
   }
   updateSrgbOverlay() {
-    if (this.gamut === "display-p3") {
+    if (this.gamut === "display-p3" /* DISPLAY_P3 */) {
       this.showSrgbOverlay();
     } else {
       this.hideSrgbOverlay();
@@ -2847,15 +2849,12 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     }
     this.updateSrgbOverlay();
     this.swatch.setColor(this.color, this.colorString());
-    this.colorDragElement.style.backgroundColor = this.color.asString(
-      "lch"
-      /* Common.Color.Format.LCH */
-    );
+    this.colorDragElement.style.backgroundColor = this.color.asString(Common6.Color.Format.LCH);
     const noAlpha = Common6.Color.Legacy.fromHSVA(this.hsv.slice(0, 3).concat(1));
-    this.alphaElementBackground.style.backgroundImage = Platform3.StringUtilities.sprintf("linear-gradient(to right, rgba(0,0,0,0), %s)", noAlpha.asString(
-      "lch"
-      /* Common.Color.Format.LCH */
-    ));
+    this.alphaElementBackground.style.backgroundImage = Platform3.StringUtilities.sprintf(
+      "linear-gradient(to right, rgba(0,0,0,0), %s)",
+      noAlpha.asString(Common6.Color.Format.LCH)
+    );
     this.hueElement.classList.toggle("display-p3", doesFormatSupportDisplayP3(this.colorFormat));
   }
   async showFormatPicker(event) {
@@ -2884,14 +2883,14 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
   #getValueSteppingForInput(element) {
     const channel = this.color.channels[this.textValues.indexOf(element)];
     switch (channel) {
-      case "r":
-      case "g":
-      case "b":
+      case Common6.Color.ColorChannel.R:
+      case Common6.Color.ColorChannel.G:
+      case Common6.Color.ColorChannel.B:
         return this.color instanceof Common6.Color.ColorFunction ? { step: 0.01, range: { min: 0, max: 1 } } : { step: 1, range: { min: 0, max: 255 } };
-      case "alpha":
-      case "x":
-      case "y":
-      case "z":
+      case Common6.Color.ColorChannel.ALPHA:
+      case Common6.Color.ColorChannel.X:
+      case Common6.Color.ColorChannel.Y:
+      case Common6.Color.ColorChannel.Z:
         return { step: 0.01, range: { min: 0, max: 1 } };
       default:
         return void 0;
@@ -2899,7 +2898,12 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
   }
   inputChanged(event) {
     const inputElement = event.currentTarget;
-    const newValue = UI4.UIUtils.createReplacementString(inputElement.value, event, void 0, this.#getValueSteppingForInput(inputElement));
+    const newValue = UI4.UIUtils.createReplacementString(
+      inputElement.value,
+      event,
+      void 0,
+      this.#getValueSteppingForInput(inputElement)
+    );
     if (newValue) {
       inputElement.value = newValue;
       inputElement.selectionStart = 0;
@@ -2908,7 +2912,7 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     }
     let color = null;
     let colorFormat;
-    if (this.colorFormat === "hex") {
+    if (this.colorFormat === Common6.Color.Format.HEX) {
       color = Common6.Color.parse(this.hexValue.value);
     } else {
       const spec = colorFormatSpec[this.colorFormat];
@@ -2937,14 +2941,20 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
       this.colorPickerButton.setToggled(false);
     }
     if (this.contrastDetails && this.contrastDetailsBackgroundColorPickerToggledBound) {
-      this.contrastDetails.addEventListener("BackgroundColorPickerWillBeToggled", this.contrastDetailsBackgroundColorPickerToggledBound);
+      this.contrastDetails.addEventListener(
+        "BackgroundColorPickerWillBeToggled" /* BACKGROUND_COLOR_PICKER_WILL_BE_TOGGLED */,
+        this.contrastDetailsBackgroundColorPickerToggledBound
+      );
     }
   }
   willHide() {
     super.willHide();
     void this.toggleColorPicker(false);
     if (this.contrastDetails && this.contrastDetailsBackgroundColorPickerToggledBound) {
-      this.contrastDetails.removeEventListener("BackgroundColorPickerWillBeToggled", this.contrastDetailsBackgroundColorPickerToggledBound);
+      this.contrastDetails.removeEventListener(
+        "BackgroundColorPickerWillBeToggled" /* BACKGROUND_COLOR_PICKER_WILL_BE_TOGGLED */,
+        this.contrastDetailsBackgroundColorPickerToggledBound
+      );
     }
   }
   async toggleColorPicker(enabled) {
@@ -2957,9 +2967,15 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
     if (!IS_NATIVE_EYE_DROPPER_AVAILABLE) {
       Host2.InspectorFrontendHost.InspectorFrontendHostInstance.setEyeDropperActive(enabled);
       if (enabled) {
-        Host2.InspectorFrontendHost.InspectorFrontendHostInstance.events.addEventListener(Host2.InspectorFrontendHostAPI.Events.EyeDropperPickedColor, this.colorPickedBound);
+        Host2.InspectorFrontendHost.InspectorFrontendHostInstance.events.addEventListener(
+          Host2.InspectorFrontendHostAPI.Events.EyeDropperPickedColor,
+          this.colorPickedBound
+        );
       } else {
-        Host2.InspectorFrontendHost.InspectorFrontendHostInstance.events.removeEventListener(Host2.InspectorFrontendHostAPI.Events.EyeDropperPickedColor, this.colorPickedBound);
+        Host2.InspectorFrontendHost.InspectorFrontendHostInstance.events.removeEventListener(
+          Host2.InspectorFrontendHostAPI.Events.EyeDropperPickedColor,
+          this.colorPickedBound
+        );
       }
     } else if (IS_NATIVE_EYE_DROPPER_AVAILABLE && enabled) {
       const eyeDropper = new window.EyeDropper();
@@ -2979,7 +2995,9 @@ var Spectrum = class extends Common6.ObjectWrapper.eventMixin(UI4.Widget.VBox) {
       this.eyeDropperAbortController = null;
     }
   }
-  colorPicked({ data: rgbColor }) {
+  colorPicked({
+    data: rgbColor
+  }) {
     const rgba = [rgbColor.r, rgbColor.g, rgbColor.b, (rgbColor.a / 2.55 | 0) / 100];
     const color = Common6.Color.Legacy.fromRGBA(rgba);
     this.#setColor(color, "", void 0, void 0, ChangeSource.Other);
@@ -2991,6 +3009,11 @@ var ChangeSource = {
   Model: "Model",
   Other: "Other"
 };
+var Events3 = /* @__PURE__ */ ((Events4) => {
+  Events4["COLOR_CHANGED"] = "ColorChanged";
+  Events4["SIZE_CHANGED"] = "SizeChanged";
+  return Events4;
+})(Events3 || {});
 var COLOR_CHIP_SIZE = 24;
 var ITEMS_PER_PALETTE_ROW = 8;
 var GeneratedPaletteTitle = "Page colors";
@@ -3014,14 +3037,8 @@ var PaletteGenerator = class {
   }
   finish() {
     function hueComparator(a, b) {
-      const hsva = paletteColors.get(a).as(
-        "hsl"
-        /* Common.Color.Format.HSL */
-      ).hsva();
-      const hsvb = paletteColors.get(b).as(
-        "hsl"
-        /* Common.Color.Format.HSL */
-      ).hsva();
+      const hsva = paletteColors.get(a).as(Common6.Color.Format.HSL).hsva();
+      const hsvb = paletteColors.get(b).as(Common6.Color.Format.HSL).hsva();
       if (hsvb[1] < 0.12 && hsva[1] < 0.12) {
         return hsvb[2] * hsvb[3] - hsva[2] * hsva[3];
       }
@@ -3175,10 +3192,7 @@ var Swatch2 = class {
     UI4.ARIAUtils.setLabel(this.swatchOverlayElement, this.swatchCopyIcon.title);
   }
   setColor(color, colorString) {
-    const lchColor = color.as(
-      "lch"
-      /* Common.Color.Format.LCH */
-    );
+    const lchColor = color.as(Common6.Color.Format.LCH);
     this.swatchInnerElement.style.backgroundColor = lchColor.asString();
     this.swatchInnerElement.classList.toggle("swatch-inner-white", lchColor.l > 90);
     this.colorString = colorString || null;

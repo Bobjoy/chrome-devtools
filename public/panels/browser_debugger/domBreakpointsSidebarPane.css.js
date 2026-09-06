@@ -39,7 +39,7 @@ export default `/*
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding: 2px 0;
+    padding: var(--sys-size-2) 0;
   }
 
   .breakpoint-entry:focus-visible {
@@ -61,11 +61,13 @@ export default `/*
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: var(--sys-size-9);
+    font-style: italic;
+    color: var(--sys-color-token-subtle);
   }
 }
 
-:host-context(.sources.panel) .empty-view-scroller {
+:host-context(.sources.panel) .empty-widget-container {
   display: none;
 }
 

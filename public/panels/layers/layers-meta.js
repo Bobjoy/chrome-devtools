@@ -1,6 +1,6 @@
-// gen/front_end/panels/layers/layers-meta.prebundle.js
-import * as i18n from "./../../core/i18n/i18n.js";
-import * as UI from "./../../ui/legacy/legacy.js";
+// ../../front_end/panels/layers/layers-meta.ts
+import * as i18n from "../../core/i18n/i18n.js";
+import * as UI from "../../ui/legacy/legacy.js";
 var UIStrings = {
   /**
    * @description Title of the Layers panel.
@@ -21,12 +21,12 @@ async function loadLayersModule() {
   return loadedLayersModule;
 }
 UI.ViewManager.registerViewExtension({
-  location: "panel",
+  location: UI.ViewManager.ViewLocationValues.PANEL,
   id: "layers",
   title: i18nLazyString(UIStrings.layers),
   commandPrompt: i18nLazyString(UIStrings.showLayers),
   order: 100,
-  persistence: "closeable",
+  persistence: UI.ViewManager.ViewPersistence.CLOSEABLE,
   async loadView() {
     const Layers = await loadLayersModule();
     return Layers.LayersPanel.LayersPanel.instance();

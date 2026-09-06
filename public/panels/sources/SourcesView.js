@@ -86,7 +86,8 @@ export const DEFAULT_VIEW = (input, output, target) => {
     </div>`, target);
     // clang-format on
 };
-export class SourcesView extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+const SourcesViewBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class SourcesView extends SourcesViewBase {
     #searchableView;
     editorContainer;
     #uiSourceCodes = new Set();
@@ -614,6 +615,11 @@ export class SourcesView extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox)
         this.requestUpdate();
     }
 }
+export var Events;
+(function (Events) {
+    Events["EDITOR_CLOSED"] = "EditorClosed";
+    Events["EDITOR_SELECTED"] = "EditorSelected";
+})(Events || (Events = {}));
 export class SwitchFileActionDelegate {
     static nextFile(currentUISourceCode) {
         function fileNamePrefix(name) {

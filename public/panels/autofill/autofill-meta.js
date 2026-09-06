@@ -1,6 +1,6 @@
-// gen/front_end/panels/autofill/autofill-meta.prebundle.js
-import * as i18n from "./../../core/i18n/i18n.js";
-import * as UI from "./../../ui/legacy/legacy.js";
+// ../../front_end/panels/autofill/autofill-meta.ts
+import * as i18n from "../../core/i18n/i18n.js";
+import * as UI from "../../ui/legacy/legacy.js";
 var UIStrings = {
   /**
    * @description Label for the Autofill panel.
@@ -21,12 +21,12 @@ async function loadAutofillModule() {
   return loadedAutofillModule;
 }
 UI.ViewManager.registerViewExtension({
-  location: "drawer-view",
+  location: UI.ViewManager.ViewLocationValues.DRAWER_VIEW,
   id: "autofill-view",
   title: i18nLazyString(UIStrings.autofill),
   commandPrompt: i18nLazyString(UIStrings.showAutofill),
   order: 100,
-  persistence: "closeable",
+  persistence: UI.ViewManager.ViewPersistence.CLOSEABLE,
   async loadView(universe) {
     const Autofill = await loadAutofillModule();
     const { autofillManager } = universe;

@@ -4,15 +4,25 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/lit/lit.prebundle.js
-import { AsyncDirective, Decorators, Directive as Directive2, Directives, LitElement, noChange, nothing as nothing2, StaticHtml as StaticHtml2, svg } from "./../../third_party/lit/lit.js";
+// ../../front_end/ui/lit/lit.ts
+import {
+  AsyncDirective,
+  Decorators,
+  Directive as Directive2,
+  Directives,
+  LitElement,
+  noChange,
+  nothing as nothing2,
+  StaticHtml as StaticHtml2,
+  svg
+} from "../../third_party/lit/lit.js";
 
-// gen/front_end/ui/lit/Directives.js
+// ../../front_end/ui/lit/Directives.ts
 var Directives_exports = {};
 __export(Directives_exports, {
   InterceptBindingDirective: () => InterceptBindingDirective
 });
-import * as Lit from "./../../third_party/lit/lit.js";
+import * as Lit from "../../third_party/lit/lit.js";
 var InterceptBindingDirective = class _InterceptBindingDirective extends Lit.Directive.Directive {
   static #interceptedBindings = /* @__PURE__ */ new WeakMap();
   static #attachedBindings = /* @__PURE__ */ new WeakMap();
@@ -70,15 +80,18 @@ var InterceptBindingDirective = class _InterceptBindingDirective extends Lit.Dir
     }
     const map = /* @__PURE__ */ new Map();
     for (const [name, listener] of Object.entries(listeners)) {
-      map.set(name, typeof listener === "function" ? listener : listener.handleEvent.bind(listener));
+      map.set(
+        name,
+        typeof listener === "function" ? listener : listener.handleEvent.bind(listener)
+      );
     }
     _InterceptBindingDirective.#interceptedBindings.set(element, map);
   }
 };
 
-// gen/front_end/ui/lit/i18n-template.js
-import * as i18n from "./../../core/i18n/i18n.js";
-import * as Lit2 from "./../../third_party/lit/lit.js";
+// ../../front_end/ui/lit/i18n-template.ts
+import * as i18n from "../../core/i18n/i18n.js";
+import * as Lit2 from "../../third_party/lit/lit.js";
 var { html } = Lit2.StaticHtml;
 function i18nTemplate(registeredStrings, stringId, placeholders) {
   const formatter = registeredStrings.getLocalizedStringSetFor(i18n.DevToolsLocale.DevToolsLocale.instance().locale).getMessageFormatterFor(stringId);
@@ -97,8 +110,8 @@ function i18nTemplate(registeredStrings, stringId, placeholders) {
   return result;
 }
 
-// gen/front_end/ui/lit/render.js
-import * as Lit3 from "./../../third_party/lit/lit.js";
+// ../../front_end/ui/lit/render.ts
+import * as Lit3 from "../../third_party/lit/lit.js";
 var renderOptions = /* @__PURE__ */ new WeakMap();
 var containerListeners = /* @__PURE__ */ new WeakMap();
 function render2(template, container, options) {
@@ -191,9 +204,9 @@ function render2(template, container, options) {
   return Lit3.render(template, container, options);
 }
 
-// gen/front_end/ui/lit/strip-whitespace.js
-import * as Platform from "./../../core/platform/platform.js";
-import * as Lit4 from "./../../third_party/lit/lit.js";
+// ../../front_end/ui/lit/strip-whitespace.ts
+import * as Platform from "../../core/platform/platform.js";
+import * as Lit4 from "../../third_party/lit/lit.js";
 var templates = /* @__PURE__ */ new WeakMap();
 function isLitDirective(value) {
   return Boolean(typeof value === "object" && value && "_$litDirective$" in value && "values" in value);

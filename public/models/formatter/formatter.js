@@ -4,13 +4,17 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/models/formatter/FormatterWorkerPool.js
+// ../../front_end/models/formatter/FormatterWorkerPool.ts
 var FormatterWorkerPool_exports = {};
 __export(FormatterWorkerPool_exports, {
+  DefinitionKind: () => DefinitionKind,
   FormatterWorkerPool: () => FormatterWorkerPool,
+  ScopeKind: () => ScopeKind,
   formatterWorkerPool: () => formatterWorkerPool
 });
-import * as Platform from "./../../core/platform/platform.js";
+import * as Platform from "../../core/platform/platform.js";
+import * as FormatterActions from "../../entrypoints/formatter_actions/formatter_actions.js";
+import { DefinitionKind, ScopeKind } from "../../entrypoints/formatter_actions/formatter_actions.js";
 var formatterWorkerPoolInstance;
 var FormatterWorkerPool = class _FormatterWorkerPool {
   taskQueue;
@@ -117,19 +121,19 @@ var FormatterWorkerPool = class _FormatterWorkerPool {
   }
   format(mimeType, content, indentString) {
     const parameters = { mimeType, content, indentString };
-    return this.runTask("format", parameters);
+    return this.runTask(FormatterActions.FormatterActions.FORMAT, parameters);
   }
   javaScriptSubstitute(expression, mapping) {
     if (mapping.size === 0) {
       return Promise.resolve(expression);
     }
-    return this.runTask("javaScriptSubstitute", { content: expression, mapping }).then((result) => result || "");
+    return this.runTask(FormatterActions.FormatterActions.JAVASCRIPT_SUBSTITUTE, { content: expression, mapping }).then((result) => result || "");
   }
   javaScriptScopeTree(expression, sourceType = "script") {
-    return this.runTask("javaScriptScopeTree", { content: expression, sourceType }).then((result) => result || null);
+    return this.runTask(FormatterActions.FormatterActions.JAVASCRIPT_SCOPE_TREE, { content: expression, sourceType }).then((result) => result || null);
   }
   parseCSS(content, callback) {
-    this.runChunkedTask("parseCSS", { content }, onDataChunk);
+    this.runChunkedTask(FormatterActions.FormatterActions.PARSE_CSS, { content }, onDataChunk);
     function onDataChunk(isLastChunk, data) {
       const rules = data || [];
       callback(isLastChunk, rules);
@@ -154,13 +158,13 @@ function formatterWorkerPool() {
   return FormatterWorkerPool.instance();
 }
 
-// gen/front_end/models/formatter/ScriptFormatter.js
+// ../../front_end/models/formatter/ScriptFormatter.ts
 var ScriptFormatter_exports = {};
 __export(ScriptFormatter_exports, {
   format: () => format,
   formatScriptContent: () => formatScriptContent
 });
-import * as Platform2 from "./../../core/platform/platform.js";
+import * as Platform2 from "../../core/platform/platform.js";
 function locationToPosition(lineEndings, lineNumber, columnNumber) {
   const position = lineNumber ? lineEndings[lineNumber - 1] + 1 : 0;
   return position + columnNumber;

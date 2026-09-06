@@ -4,61 +4,168 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/settings/InspectorMainSettings.js
+// ../../front_end/ui/settings/ConsoleSettings.ts
+var ConsoleSettings_exports = {};
+__export(ConsoleSettings_exports, {
+  consoleAutocompleteOnEnterSettingDescriptor: () => consoleAutocompleteOnEnterSettingDescriptor,
+  consoleEagerEvalSettingDescriptor: () => consoleEagerEvalSettingDescriptor,
+  consoleGroupSimilarSettingDescriptor: () => consoleGroupSimilarSettingDescriptor,
+  consoleHistoryAutocompleteSettingDescriptor: () => consoleHistoryAutocompleteSettingDescriptor,
+  consoleShowsCorsErrorsSettingDescriptor: () => consoleShowsCorsErrorsSettingDescriptor,
+  consoleTimestampsEnabledSettingDescriptor: () => consoleTimestampsEnabledSettingDescriptor,
+  consoleTraceExpandSettingDescriptor: () => consoleTraceExpandSettingDescriptor,
+  networkMessagesSettingDescriptor: () => networkMessagesSettingDescriptor,
+  selectedContextFilterEnabledSettingDescriptor: () => selectedContextFilterEnabledSettingDescriptor
+});
+import * as Common from "../../core/common/common.js";
+var networkMessagesSettingDescriptor = {
+  name: "network-messages",
+  type: Common.Settings.SettingType.BOOLEAN,
+  defaultValue: true,
+  storageType: Common.Settings.SettingStorageType.SYNCED
+};
+var selectedContextFilterEnabledSettingDescriptor = {
+  name: "selected-context-filter-enabled",
+  type: Common.Settings.SettingType.BOOLEAN,
+  defaultValue: false,
+  storageType: Common.Settings.SettingStorageType.SYNCED
+};
+var consoleTimestampsEnabledSettingDescriptor = {
+  name: "console-timestamps-enabled",
+  type: Common.Settings.SettingType.BOOLEAN,
+  defaultValue: false,
+  storageType: Common.Settings.SettingStorageType.SYNCED
+};
+var consoleHistoryAutocompleteSettingDescriptor = {
+  name: "console-history-autocomplete",
+  type: Common.Settings.SettingType.BOOLEAN,
+  defaultValue: true
+};
+var consoleAutocompleteOnEnterSettingDescriptor = {
+  name: "console-autocomplete-on-enter",
+  type: Common.Settings.SettingType.BOOLEAN,
+  defaultValue: false,
+  storageType: Common.Settings.SettingStorageType.SYNCED
+};
+var consoleGroupSimilarSettingDescriptor = {
+  name: "console-group-similar",
+  type: Common.Settings.SettingType.BOOLEAN,
+  defaultValue: true,
+  storageType: Common.Settings.SettingStorageType.SYNCED
+};
+var consoleShowsCorsErrorsSettingDescriptor = {
+  name: "console-shows-cors-errors",
+  type: Common.Settings.SettingType.BOOLEAN,
+  defaultValue: true
+};
+var consoleEagerEvalSettingDescriptor = {
+  name: "console-eager-eval",
+  type: Common.Settings.SettingType.BOOLEAN,
+  defaultValue: true,
+  storageType: Common.Settings.SettingStorageType.SYNCED
+};
+var consoleTraceExpandSettingDescriptor = {
+  name: "console-trace-expand",
+  type: Common.Settings.SettingType.BOOLEAN,
+  defaultValue: true,
+  storageType: Common.Settings.SettingStorageType.SYNCED
+};
+
+// ../../front_end/ui/settings/InspectorMainSettings.ts
 var InspectorMainSettings_exports = {};
 __export(InspectorMainSettings_exports, {
   adBlockingEnabledSettingDescriptor: () => adBlockingEnabledSettingDescriptor,
   autoAttachToCreatedPagesSettingDescriptor: () => autoAttachToCreatedPagesSettingDescriptor
 });
-import * as Common from "./../../core/common/common.js";
+import * as Common2 from "../../core/common/common.js";
 var adBlockingEnabledSettingDescriptor = {
   name: "network.ad-blocking-enabled",
-  type: "boolean",
+  type: Common2.Settings.SettingType.BOOLEAN,
   defaultValue: false,
-  storageType: "Session"
+  storageType: Common2.Settings.SettingStorageType.SESSION
 };
 var autoAttachToCreatedPagesSettingDescriptor = {
   name: "auto-attach-to-created-pages",
-  type: "boolean",
+  type: Common2.Settings.SettingType.BOOLEAN,
   defaultValue: false,
-  storageType: "Synced"
+  storageType: Common2.Settings.SettingStorageType.SYNCED
 };
 
-// gen/front_end/ui/settings/MainSettings.js
+// ../../front_end/ui/settings/MainSettings.ts
 var MainSettings_exports = {};
 __export(MainSettings_exports, {
+  activeKeybindSetSettingDescriptor: () => activeKeybindSetSettingDescriptor,
   chromeThemeColorsSettingDescriptor: () => chromeThemeColorsSettingDescriptor,
+  currentDockStateSettingDescriptor: () => currentDockStateSettingDescriptor,
   languageSettingDescriptor: () => languageSettingDescriptor,
+  searchAsYouTypeSettingDescriptor: () => searchAsYouTypeSettingDescriptor,
+  shortcutPanelSwitchSettingDescriptor: () => shortcutPanelSwitchSettingDescriptor,
   sidebarPositionSettingDescriptor: () => sidebarPositionSettingDescriptor,
-  uiThemeSettingDescriptor: () => uiThemeSettingDescriptor
+  syncPreferencesSettingDescriptor: () => syncPreferencesSettingDescriptor,
+  uiThemeSettingDescriptor: () => uiThemeSettingDescriptor,
+  userShortcutsSettingDescriptor: () => userShortcutsSettingDescriptor
 });
-import * as Common2 from "./../../core/common/common.js";
+import * as Common3 from "../../core/common/common.js";
 var uiThemeSettingDescriptor = {
   name: "ui-theme",
-  type: "enum",
+  type: Common3.Settings.SettingType.ENUM,
   defaultValue: "systemPreferred",
-  storageType: "Synced"
+  storageType: Common3.Settings.SettingStorageType.SYNCED
 };
 var chromeThemeColorsSettingDescriptor = {
   name: "chrome-theme-colors",
-  type: "boolean",
+  type: Common3.Settings.SettingType.BOOLEAN,
   defaultValue: true,
-  storageType: "Synced"
+  storageType: Common3.Settings.SettingStorageType.SYNCED
 };
 var sidebarPositionSettingDescriptor = {
   name: "sidebar-position",
-  type: "enum",
+  type: Common3.Settings.SettingType.ENUM,
   defaultValue: "auto",
-  storageType: "Synced"
+  storageType: Common3.Settings.SettingStorageType.SYNCED
 };
 var languageSettingDescriptor = {
   name: "language",
-  type: "enum",
+  type: Common3.Settings.SettingType.ENUM,
   defaultValue: "en-US",
-  storageType: "Synced"
+  storageType: Common3.Settings.SettingStorageType.SYNCED
+};
+var shortcutPanelSwitchSettingDescriptor = {
+  name: "shortcut-panel-switch",
+  type: Common3.Settings.SettingType.BOOLEAN,
+  defaultValue: false,
+  storageType: Common3.Settings.SettingStorageType.SYNCED
+};
+var currentDockStateSettingDescriptor = {
+  name: "currentDockState",
+  type: Common3.Settings.SettingType.ENUM,
+  defaultValue: "right"
+};
+var activeKeybindSetSettingDescriptor = {
+  name: "active-keybind-set",
+  type: Common3.Settings.SettingType.ENUM,
+  defaultValue: "devToolsDefault",
+  storageType: Common3.Settings.SettingStorageType.SYNCED
+};
+var syncPreferencesSettingDescriptor = {
+  name: "sync-preferences",
+  type: Common3.Settings.SettingType.BOOLEAN,
+  defaultValue: false
+};
+var userShortcutsSettingDescriptor = {
+  name: "user-shortcuts",
+  type: Common3.Settings.SettingType.ARRAY,
+  defaultValue: [],
+  storageType: Common3.Settings.SettingStorageType.SYNCED
+};
+var searchAsYouTypeSettingDescriptor = {
+  name: "search-as-you-type",
+  type: Common3.Settings.SettingType.BOOLEAN,
+  defaultValue: true,
+  storageType: Common3.Settings.SettingStorageType.LOCAL
 };
 
-// gen/front_end/ui/settings/SettingUIRegistration.js
+// ../../front_end/ui/settings/SettingUIRegistration.ts
 var SettingUIRegistration_exports = {};
 __export(SettingUIRegistration_exports, {
   SettingUI: () => SettingUI,
@@ -68,19 +175,19 @@ __export(SettingUIRegistration_exports, {
   resetSettings: () => resetSettings,
   resolve: () => resolve
 });
-import * as Common3 from "./../../core/common/common.js";
+import * as Common4 from "../../core/common/common.js";
 var registeredSettings = /* @__PURE__ */ new Map();
 function register(settingDescriptor, settingUIDescriptor) {
   const settingName = settingDescriptor.name;
   if (registeredSettings.has(settingName)) {
     throw new Error(`Duplicate setting name '${settingName}'`);
   }
-  Common3.SettingRegistration.registerCategoryOrder(settingUIDescriptor.category, settingUIDescriptor.order);
+  Common4.SettingRegistration.registerCategoryOrder(settingUIDescriptor.category, settingUIDescriptor.order);
   registeredSettings.set(settingName, { descriptor: settingDescriptor, uiDescriptor: settingUIDescriptor });
 }
 function getRegisteredSettings() {
   const combined = /* @__PURE__ */ new Map();
-  for (const legacy of Common3.SettingRegistration.getRegisteredSettings()) {
+  for (const legacy of Common4.SettingRegistration.getRegisteredSettings()) {
     combined.set(legacy.settingName, {
       descriptor: {
         name: legacy.settingName,
@@ -149,11 +256,12 @@ function resolve(settingDescriptor) {
 }
 function resetSettings() {
   for (const { uiDescriptor } of registeredSettings.values()) {
-    Common3.SettingRegistration.removeCategoryOrder(uiDescriptor.category, uiDescriptor.order);
+    Common4.SettingRegistration.removeCategoryOrder(uiDescriptor.category, uiDescriptor.order);
   }
   registeredSettings.clear();
 }
 export {
+  ConsoleSettings_exports as ConsoleSettings,
   InspectorMainSettings_exports as InspectorMainSettings,
   MainSettings_exports as MainSettings,
   SettingUIRegistration_exports as SettingUIRegistration

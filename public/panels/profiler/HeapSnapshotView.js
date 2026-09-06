@@ -1171,7 +1171,8 @@ export class StatisticsPerspective extends Perspective {
         return null;
     }
 }
-export class HeapSnapshotProfileType extends Common.ObjectWrapper.eventMixin(ProfileType) {
+const HeapSnapshotProfileTypeBase = Common.ObjectWrapper.eventMixin(ProfileType);
+export class HeapSnapshotProfileType extends HeapSnapshotProfileTypeBase {
     customContentInternal;
     constructor(id, title) {
         super(id || HeapSnapshotProfileType.TypeId, title || i18nString(UIStrings.heapSnapshot));
@@ -1276,7 +1277,12 @@ export class HeapSnapshotProfileType extends Common.ObjectWrapper.eventMixin(Pro
     // eslint-disable-next-line @typescript-eslint/naming-convention
     static SnapshotReceived = 'SnapshotReceived';
 }
-export class TrackingHeapSnapshotProfileType extends Common.ObjectWrapper.eventMixin(HeapSnapshotProfileType) {
+export var HeapSnapshotProfileTypeEvents;
+(function (HeapSnapshotProfileTypeEvents) {
+    HeapSnapshotProfileTypeEvents["SNAPSHOT_RECEIVED"] = "SnapshotReceived";
+})(HeapSnapshotProfileTypeEvents || (HeapSnapshotProfileTypeEvents = {}));
+const TrackingHeapSnapshotProfileTypeBase = Common.ObjectWrapper.eventMixin(HeapSnapshotProfileType);
+export class TrackingHeapSnapshotProfileType extends TrackingHeapSnapshotProfileTypeBase {
     recordAllocationStacksSettingInternal;
     customContentInternal;
     recording;
@@ -1444,6 +1450,12 @@ export class TrackingHeapSnapshotProfileType extends Common.ObjectWrapper.eventM
     // eslint-disable-next-line @typescript-eslint/naming-convention
     static TrackingStopped = 'TrackingStopped';
 }
+export var TrackingHeapSnapshotProfileTypeEvents;
+(function (TrackingHeapSnapshotProfileTypeEvents) {
+    TrackingHeapSnapshotProfileTypeEvents["HEAP_STATS_UPDATE"] = "HeapStatsUpdate";
+    TrackingHeapSnapshotProfileTypeEvents["TRACKING_STARTED"] = "TrackingStarted";
+    TrackingHeapSnapshotProfileTypeEvents["TRACKING_STOPPED"] = "TrackingStopped";
+})(TrackingHeapSnapshotProfileTypeEvents || (TrackingHeapSnapshotProfileTypeEvents = {}));
 export class HeapProfileHeader extends ProfileHeader {
     heapProfilerModelInternal;
     maxJSObjectId = -1;

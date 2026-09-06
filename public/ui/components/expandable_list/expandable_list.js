@@ -4,13 +4,13 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/expandable_list/ExpandableList.js
+// ../../front_end/ui/components/expandable_list/ExpandableList.ts
 var ExpandableList_exports = {};
 __export(ExpandableList_exports, {
   ExpandableList: () => ExpandableList
 });
-import * as Lit from "./../../lit/lit.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
+import * as Lit from "../../lit/lit.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
 
 // gen/front_end/ui/components/expandable_list/expandableList.css.js
 var expandableList_css_default = `/*
@@ -29,19 +29,19 @@ div {
 
 .arrow-icon-button {
   cursor: pointer;
-  padding: 1px 0;
+  padding: var(--sys-size-1) 0;
   border: none;
   background: none;
-  margin-right: 2px;
+  margin-right: var(--sys-size-2);
 }
 
 .arrow-icon {
   display: inline-block;
   mask-image: var(--image-file-triangle-right);
   background-color: var(--icon-default);
-  margin-top: 2px;
-  height: 14px;
-  width: 14px;
+  margin-top: var(--sys-size-2);
+  height: var(--sys-size-7);
+  width: var(--sys-size-7);
   transition: transform 200ms;
 }
 
@@ -51,7 +51,7 @@ div {
 
 .expandable-list-container {
   display: flex;
-  margin-top: 4px;
+  margin-top: var(--sys-size-3);
 }
 
 .expandable-list-items {
@@ -63,14 +63,14 @@ div {
   color: var(--sys-color-primary);
   text-decoration: underline;
   cursor: pointer;
-  outline-offset: 2px;
+  outline-offset: var(--sys-size-2);
   border: none;
   background: none;
   font-family: inherit;
-  font-size: var(--sys-size-6);
+  font-size: var(--sys-typescale-body4-size);
 
   &:focus-visible {
-    outline: 2px solid var(--sys-color-state-focus-ring);
+    outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
     outline-offset: 0;
     border-radius: var(--sys-shape-corner-extra-small);
   }
@@ -91,7 +91,7 @@ button.link {
 
 /*# sourceURL=${import.meta.resolve("./expandableList.css")} */`;
 
-// gen/front_end/ui/components/expandable_list/ExpandableList.js
+// ../../front_end/ui/components/expandable_list/ExpandableList.ts
 var { html, Directives: { ifDefined } } = Lit;
 var ExpandableList = class extends HTMLElement {
   #shadow = this.attachShadow({ mode: "open" });
@@ -111,7 +111,8 @@ var ExpandableList = class extends HTMLElement {
     if (this.#rows.length < 1) {
       return;
     }
-    Lit.render(html`
+    Lit.render(
+      html`
       <style>${expandableList_css_default}</style>
       <div class="expandable-list-container">
         <div>
@@ -128,7 +129,10 @@ var ExpandableList = class extends HTMLElement {
           `)}
         </div>
       </div>
-    `, this.#shadow, { host: this });
+    `,
+      this.#shadow,
+      { host: this }
+    );
   }
 };
 customElements.define("devtools-expandable-list", ExpandableList);

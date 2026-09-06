@@ -1,5 +1,4 @@
 import * as Common from '../../core/common/common.js';
-import * as Platform from '../../core/platform/platform.js';
 import type * as SDK from '../../core/sdk/sdk.js';
 import type * as Protocol from '../../generated/protocol.js';
 import * as UI from '../../ui/legacy/legacy.js';
@@ -16,17 +15,10 @@ export interface ViewInput {
 export interface ViewOutput {
     canvasElement?: HTMLCanvasElement;
 }
-export declare const DEFAULT_VIEW: (input: ViewInput, output: ViewOutput, target: HTMLElement) => void;
-declare const Layers3DView_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<EventTypes>;
-    addEventListener<T extends keyof EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<EventTypes, T>;
-    once<T extends keyof EventTypes>(eventType: T): Promise<EventTypes[T]>;
-    removeEventListener<T extends keyof EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: keyof EventTypes): boolean;
-    dispatchEventToListeners<T extends keyof EventTypes>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.VBox;
-export declare class Layers3DView extends Layers3DView_base implements LayerView {
+export type View = (input: ViewInput, output: ViewOutput, target: HTMLElement) => void;
+export declare const DEFAULT_VIEW: View;
+declare const Layers3DViewBase: Common.ObjectWrapper.EventMixin<EventTypes, typeof UI.Widget.VBox>;
+export declare class Layers3DView extends Layers3DViewBase implements LayerView {
     #private;
     private readonly layerViewHost;
     private transformController;
@@ -54,7 +46,7 @@ export declare class Layers3DView extends Layers3DView_base implements LayerView
     private showPaintsSetting?;
     private mouseDownX?;
     private mouseDownY?;
-    constructor(layerViewHost: LayerViewHost, view?: typeof DEFAULT_VIEW);
+    constructor(layerViewHost: LayerViewHost, view?: View);
     performUpdate(): void;
     setLayerTree(layerTree: SDK.LayerTreeBase.LayerTreeBase | null): void;
     showImageForLayer(layer: SDK.LayerTreeBase.Layer, imageURL?: string): void;

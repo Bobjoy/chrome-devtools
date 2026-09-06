@@ -11,7 +11,7 @@ import { DOMNodeContext } from '../contexts/DOMNodeContext.js';
  */
 export class GetElementAccessibilityDetailsTool {
     name = "getElementAccessibilityDetails" /* ToolName.GET_ELEMENT_ACCESSIBILITY_DETAILS */;
-    description = 'Get detailed accessibility information for an element on the inspected page by its backend node ID.';
+    description = 'Retrieves detailed accessibility properties (computed role, accessible name, name source, ARIA attributes, ignored state) and a DOM tree snapshot for an element by backend node ID.';
     parameters = {
         type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
         description: 'Arguments for getting element accessibility details.',
@@ -76,16 +76,26 @@ export class GetElementAccessibilityDetailsTool {
         if (!axNode) {
             return { error: 'Error: AX node details not found.' };
         }
-        const properties = {
+        const result = {
             role: axNode.role()?.value,
             name: axNode.name()?.value,
+            nameSource: axNode.name()?.sources?.[0]?.type,
             properties: axNode.properties()?.map(p => ({ name: p.name, value: p.value?.value })) ?? [],
+            ariaAttributes: resolved.attributes()
+                .filter(attr => attr.name.startsWith('aria-') || attr.name === 'role')
+                .reduce((acc, attr) => {
+                acc[attr.name] = attr.value;
+                return acc;
+            }, {}),
+            isIgnored: axNode.ignored(),
+            ignoredReasons: axNode.ignoredReasons()?.map(p => ({ name: p.name, value: p.value?.value })) ?? [],
+            backendNodeId: resolved.backendNodeId(),
         };
         // Take a snapshot of the resolved node's DOM structure. This is required
         // by the DOM_TREE UI widget to render the element's local tree in the AI response panel.
         const snapshot = await resolved.takeSnapshot();
         return {
-            result: JSON.stringify(properties, null, 2),
+            result: JSON.stringify(result, null, 2),
             widgets: [{
                     name: 'DOM_TREE',
                     data: {

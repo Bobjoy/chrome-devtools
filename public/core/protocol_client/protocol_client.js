@@ -4,13 +4,12 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/core/protocol_client/CDPConnection.js
+// ../../front_end/core/protocol_client/CDPConnection.ts
 var CDPConnection_exports = {};
 __export(CDPConnection_exports, {
   CDPErrorStatus: () => CDPErrorStatus
 });
-var CDPErrorStatus;
-(function(CDPErrorStatus2) {
+var CDPErrorStatus = /* @__PURE__ */ ((CDPErrorStatus2) => {
   CDPErrorStatus2[CDPErrorStatus2["PARSE_ERROR"] = -32700] = "PARSE_ERROR";
   CDPErrorStatus2[CDPErrorStatus2["INVALID_REQUEST"] = -32600] = "INVALID_REQUEST";
   CDPErrorStatus2[CDPErrorStatus2["METHOD_NOT_FOUND"] = -32601] = "METHOD_NOT_FOUND";
@@ -20,9 +19,10 @@ var CDPErrorStatus;
   CDPErrorStatus2[CDPErrorStatus2["SESSION_NOT_FOUND"] = -32001] = "SESSION_NOT_FOUND";
   CDPErrorStatus2[CDPErrorStatus2["DEVTOOLS_STUB_ERROR"] = -32015] = "DEVTOOLS_STUB_ERROR";
   CDPErrorStatus2[CDPErrorStatus2["DEVTOOLS_REHYDRATION_ERROR"] = -32016] = "DEVTOOLS_REHYDRATION_ERROR";
-})(CDPErrorStatus || (CDPErrorStatus = {}));
+  return CDPErrorStatus2;
+})(CDPErrorStatus || {});
 
-// gen/front_end/core/protocol_client/ConnectionTransport.js
+// ../../front_end/core/protocol_client/ConnectionTransport.ts
 var ConnectionTransport_exports = {};
 __export(ConnectionTransport_exports, {
   ConnectionTransport: () => ConnectionTransport
@@ -37,15 +37,16 @@ var ConnectionTransport = class {
   }
 };
 
-// gen/front_end/core/protocol_client/DevToolsCDPConnection.js
+// ../../front_end/core/protocol_client/DevToolsCDPConnection.ts
 var DevToolsCDPConnection_exports = {};
 __export(DevToolsCDPConnection_exports, {
   DevToolsCDPConnection: () => DevToolsCDPConnection
 });
 
-// gen/front_end/core/protocol_client/InspectorBackend.js
+// ../../front_end/core/protocol_client/InspectorBackend.ts
 var InspectorBackend_exports = {};
 __export(InspectorBackend_exports, {
+  AgentPrototype: () => AgentPrototype,
   InspectorBackend: () => InspectorBackend,
   SessionRouter: () => SessionRouter,
   TargetBase: () => TargetBase,
@@ -55,7 +56,7 @@ __export(InspectorBackend_exports, {
   test: () => test
 });
 
-// gen/front_end/generated/InspectorBackendCommands.js
+// ../../front_end/generated/InspectorBackendCommands.ts
 function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerEnum("Accessibility.AXValueType", { Boolean: "boolean", Tristate: "tristate", BooleanOrUndefined: "booleanOrUndefined", Idref: "idref", IdrefList: "idrefList", Integer: "integer", Node: "node", NodeList: "nodeList", Number: "number", String: "string", ComputedString: "computedString", Token: "token", TokenList: "tokenList", DomRelation: "domRelation", Role: "role", InternalRole: "internalRole", ValueUndefined: "valueUndefined" });
   inspectorBackend2.registerEnum("Accessibility.AXValueSourceType", { Attribute: "attribute", Implicit: "implicit", Style: "style", Contents: "contents", Placeholder: "placeholder", RelatedElement: "relatedElement" });
@@ -77,8 +78,10 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerType("Accessibility.AXValue", [{ "name": "type", "type": "string", "optional": false, "description": "The type of this value.", "typeRef": "Accessibility.AXValueType" }, { "name": "value", "type": "any", "optional": true, "description": "The computed value of this property.", "typeRef": null }, { "name": "relatedNodes", "type": "array", "optional": true, "description": "One or more related nodes, if applicable.", "typeRef": "Accessibility.AXRelatedNode" }, { "name": "sources", "type": "array", "optional": true, "description": "The sources which contributed to the computation of this property.", "typeRef": "Accessibility.AXValueSource" }]);
   inspectorBackend2.registerType("Accessibility.AXNode", [{ "name": "nodeId", "type": "string", "optional": false, "description": "Unique identifier for this node.", "typeRef": "Accessibility.AXNodeId" }, { "name": "ignored", "type": "boolean", "optional": false, "description": "Whether this node is ignored for accessibility", "typeRef": null }, { "name": "ignoredReasons", "type": "array", "optional": true, "description": "Collection of reasons why this node is hidden.", "typeRef": "Accessibility.AXProperty" }, { "name": "role", "type": "object", "optional": true, "description": "This `Node`'s role, whether explicit or implicit.", "typeRef": "Accessibility.AXValue" }, { "name": "chromeRole", "type": "object", "optional": true, "description": "This `Node`'s Chrome raw role.", "typeRef": "Accessibility.AXValue" }, { "name": "name", "type": "object", "optional": true, "description": "The accessible name for this `Node`.", "typeRef": "Accessibility.AXValue" }, { "name": "description", "type": "object", "optional": true, "description": "The accessible description for this `Node`.", "typeRef": "Accessibility.AXValue" }, { "name": "value", "type": "object", "optional": true, "description": "The value for this `Node`.", "typeRef": "Accessibility.AXValue" }, { "name": "properties", "type": "array", "optional": true, "description": "All other properties", "typeRef": "Accessibility.AXProperty" }, { "name": "parentId", "type": "string", "optional": true, "description": "ID for this node's parent.", "typeRef": "Accessibility.AXNodeId" }, { "name": "childIds", "type": "array", "optional": true, "description": "IDs for each of this node's child nodes.", "typeRef": "Accessibility.AXNodeId" }, { "name": "backendDOMNodeId", "type": "number", "optional": true, "description": "The backend ID for the associated DOM node, if any.", "typeRef": "DOM.BackendNodeId" }, { "name": "frameId", "type": "string", "optional": true, "description": "The frame ID for the frame associated with this nodes document.", "typeRef": "Page.FrameId" }]);
   inspectorBackend2.registerCommand("Ads.getAdMetrics", [], ["metrics"], "Retrieves ad metrics for the current page.");
+  inspectorBackend2.registerCommand("Ads.getAdScripts", [], ["newScripts"], "Retrieves ad scripts for the current page. To minimize payload size, this only returns the newly tracked ad scripts since the last call to getAdScripts (i.e., the delta).");
   inspectorBackend2.registerType("Ads.AdFrameData", [{ "name": "frameId", "type": "string", "optional": false, "description": "The DevTools frame token.", "typeRef": "Page.FrameId" }, { "name": "initialOrigin", "type": "string", "optional": true, "description": "The initial origin of the frame. To minimize the payload size, this is only sent once per frame.", "typeRef": null }, { "name": "networkBytes", "type": "number", "optional": false, "description": "The network bytes of the frame.", "typeRef": null }, { "name": "cpuTime", "type": "number", "optional": false, "description": "The CPU time of the frame, in milliseconds.", "typeRef": null }]);
   inspectorBackend2.registerType("Ads.AdMetrics", [{ "name": "viewportAdDensityByArea", "type": "number", "optional": false, "description": "The viewport ad density by area, represented as a percentage (an integer between 0 and 100).", "typeRef": null }, { "name": "averageViewportAdDensityByArea", "type": "number", "optional": false, "description": "The time-weighted average of the viewport ad density by area, measured across the duration of the page.", "typeRef": null }, { "name": "viewportAdCount", "type": "number", "optional": false, "description": "The number of ads currently visible within the viewport.", "typeRef": null }, { "name": "averageViewportAdCount", "type": "number", "optional": false, "description": "The time-weighted average of the viewport ad count, measured across the duration of the page.", "typeRef": null }, { "name": "totalAdCpuTime", "type": "number", "optional": false, "description": "The total ad CPU usage, in milliseconds.", "typeRef": null }, { "name": "totalAdNetworkBytes", "type": "number", "optional": false, "description": "The total ad network bytes.", "typeRef": null }, { "name": "updateAdFrames", "type": "array", "optional": false, "description": "The list of ad frames that have been updated since the last event.", "typeRef": "Ads.AdFrameData" }, { "name": "removeAdFrames", "type": "array", "optional": false, "description": "The list of ad frame IDs that have been removed since the last event.", "typeRef": "Page.FrameId" }]);
+  inspectorBackend2.registerType("Ads.AdScript", [{ "name": "scriptId", "type": "string", "optional": false, "description": "The script ID.", "typeRef": "Runtime.ScriptId" }, { "name": "provenance", "type": "object", "optional": false, "description": "The ad provenance.", "typeRef": "Network.AdProvenance" }]);
   inspectorBackend2.registerEnum("Animation.AnimationType", { CSSTransition: "CSSTransition", CSSAnimation: "CSSAnimation", WebAnimation: "WebAnimation" });
   inspectorBackend2.registerEvent("Animation.animationCanceled", ["id"]);
   inspectorBackend2.registerEvent("Animation.animationCreated", ["id"]);
@@ -237,6 +240,7 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerCommand("Browser.crashGpuProcess", [], [], "Crashes GPU process.");
   inspectorBackend2.registerCommand("Browser.getVersion", [], ["protocolVersion", "product", "revision", "userAgent", "jsVersion"], "Returns version information.");
   inspectorBackend2.registerCommand("Browser.getBrowserCommandLine", [], ["arguments"], "Returns the command line switches for the browser process if, and only if --enable-automation is on the commandline.");
+  inspectorBackend2.registerCommand("Browser.addMockCamera", [{ "name": "deviceId", "type": "string", "optional": false, "description": "Required non-empty identifier for the mock camera. This is mapped to an internal virtual-device identifier and is not the MediaDeviceInfo.deviceId exposed to the page.", "typeRef": null }], [], "Adds or updates a mock camera in the shared video capture device list for test automation. The mock camera is not scoped to a particular page or frame and is removed when the DevTools session that created it disconnects.");
   inspectorBackend2.registerCommand("Browser.getHistograms", [{ "name": "query", "type": "string", "optional": true, "description": "Requested substring in name. Only histograms which have query as a substring in their name are extracted. An empty or absent query returns all histograms.", "typeRef": null }, { "name": "delta", "type": "boolean", "optional": true, "description": "If true, retrieve delta since last delta call.", "typeRef": null }], ["histograms"], "Get Chrome histograms.");
   inspectorBackend2.registerCommand("Browser.getHistogram", [{ "name": "name", "type": "string", "optional": false, "description": "Requested histogram name.", "typeRef": null }, { "name": "delta", "type": "boolean", "optional": true, "description": "If true, retrieve delta since last delta call.", "typeRef": null }], ["histogram"], "Get a Chrome histogram by name.");
   inspectorBackend2.registerCommand("Browser.getWindowBounds", [{ "name": "windowId", "type": "number", "optional": false, "description": "Browser window id.", "typeRef": "Browser.WindowID" }], ["bounds"], "Get position and size of the browser window.");
@@ -904,7 +908,7 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerType("Network.ClientSecurityState", [{ "name": "initiatorIsSecureContext", "type": "boolean", "optional": false, "description": "", "typeRef": null }, { "name": "initiatorIPAddressSpace", "type": "string", "optional": false, "description": "", "typeRef": "Network.IPAddressSpace" }, { "name": "localNetworkAccessRequestPolicy", "type": "string", "optional": false, "description": "", "typeRef": "Network.LocalNetworkAccessRequestPolicy" }]);
   inspectorBackend2.registerType("Network.AdScriptIdentifier", [{ "name": "scriptId", "type": "string", "optional": false, "description": "The script's V8 identifier.", "typeRef": "Runtime.ScriptId" }, { "name": "debuggerId", "type": "string", "optional": false, "description": "V8's debugging ID for the v8::Context.", "typeRef": "Runtime.UniqueDebuggerId" }, { "name": "name", "type": "string", "optional": false, "description": "The script's url (or generated name based on id if inline script).", "typeRef": null }]);
   inspectorBackend2.registerType("Network.AdAncestry", [{ "name": "ancestryChain", "type": "array", "optional": false, "description": "A chain of `AdScriptIdentifier`s representing the ancestry of an ad script that led to the creation of a resource or element. The chain is ordered from the script itself (lowest level) up to its root ancestor that was flagged by a filter list.", "typeRef": "Network.AdScriptIdentifier" }, { "name": "rootScriptFilterlistRule", "type": "string", "optional": true, "description": "The filter list rule that caused the root (last) script in `ancestryChain` to be tagged as an ad.", "typeRef": null }]);
-  inspectorBackend2.registerType("Network.AdProvenance", [{ "name": "filterlistRule", "type": "string", "optional": true, "description": "The filterlist rule that matched, if any.", "typeRef": null }, { "name": "adScriptAncestry", "type": "object", "optional": true, "description": "The script ancestry that created the ad, if any.", "typeRef": "Network.AdAncestry" }]);
+  inspectorBackend2.registerType("Network.AdProvenance", [{ "name": "filterlistRule", "type": "string", "optional": true, "description": "The filterlist rule that matched, if any.", "typeRef": null }, { "name": "adScriptAncestry", "type": "object", "optional": true, "description": "The script ancestry that created the ad, if any. Note: depending on the context, this may represent the full ancestry up to the root script, or it may contain only one script representing the immediate ancestor.", "typeRef": "Network.AdAncestry" }]);
   inspectorBackend2.registerType("Network.CrossOriginOpenerPolicyStatus", [{ "name": "value", "type": "string", "optional": false, "description": "", "typeRef": "Network.CrossOriginOpenerPolicyValue" }, { "name": "reportOnlyValue", "type": "string", "optional": false, "description": "", "typeRef": "Network.CrossOriginOpenerPolicyValue" }, { "name": "reportingEndpoint", "type": "string", "optional": true, "description": "", "typeRef": null }, { "name": "reportOnlyReportingEndpoint", "type": "string", "optional": true, "description": "", "typeRef": null }]);
   inspectorBackend2.registerType("Network.CrossOriginEmbedderPolicyStatus", [{ "name": "value", "type": "string", "optional": false, "description": "", "typeRef": "Network.CrossOriginEmbedderPolicyValue" }, { "name": "reportOnlyValue", "type": "string", "optional": false, "description": "", "typeRef": "Network.CrossOriginEmbedderPolicyValue" }, { "name": "reportingEndpoint", "type": "string", "optional": true, "description": "", "typeRef": null }, { "name": "reportOnlyReportingEndpoint", "type": "string", "optional": true, "description": "", "typeRef": null }]);
   inspectorBackend2.registerType("Network.ContentSecurityPolicyStatus", [{ "name": "effectiveDirectives", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "isEnforced", "type": "boolean", "optional": false, "description": "", "typeRef": null }, { "name": "source", "type": "string", "optional": false, "description": "", "typeRef": "Network.ContentSecurityPolicySource" }]);
@@ -1000,7 +1004,7 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerEnum("Page.SecureContextType", { Secure: "Secure", SecureLocalhost: "SecureLocalhost", InsecureScheme: "InsecureScheme", InsecureAncestor: "InsecureAncestor" });
   inspectorBackend2.registerEnum("Page.CrossOriginIsolatedContextType", { Isolated: "Isolated", NotIsolated: "NotIsolated", NotIsolatedFeatureDisabled: "NotIsolatedFeatureDisabled" });
   inspectorBackend2.registerEnum("Page.GatedAPIFeatures", { SharedArrayBuffers: "SharedArrayBuffers", SharedArrayBuffersTransferAllowed: "SharedArrayBuffersTransferAllowed", PerformanceMeasureMemory: "PerformanceMeasureMemory", PerformanceProfile: "PerformanceProfile" });
-  inspectorBackend2.registerEnum("Page.PermissionsPolicyFeature", { Accelerometer: "accelerometer", AllScreensCapture: "all-screens-capture", AmbientLightSensor: "ambient-light-sensor", AriaNotify: "aria-notify", Autofill: "autofill", Autoplay: "autoplay", Bluetooth: "bluetooth", BrowsingTopics: "browsing-topics", Camera: "camera", CapturedSurfaceControl: "captured-surface-control", ChDpr: "ch-dpr", ChDeviceMemory: "ch-device-memory", ChDownlink: "ch-downlink", ChEct: "ch-ect", ChPrefersColorScheme: "ch-prefers-color-scheme", ChPrefersReducedMotion: "ch-prefers-reduced-motion", ChPrefersReducedTransparency: "ch-prefers-reduced-transparency", ChRtt: "ch-rtt", ChSaveData: "ch-save-data", ChUa: "ch-ua", ChUaArch: "ch-ua-arch", ChUaBitness: "ch-ua-bitness", ChUaHighEntropyValues: "ch-ua-high-entropy-values", ChUaPlatform: "ch-ua-platform", ChUaModel: "ch-ua-model", ChUaMobile: "ch-ua-mobile", ChUaFormFactors: "ch-ua-form-factors", ChUaFullVersion: "ch-ua-full-version", ChUaFullVersionList: "ch-ua-full-version-list", ChUaPlatformVersion: "ch-ua-platform-version", ChUaWow64: "ch-ua-wow64", ChViewportHeight: "ch-viewport-height", ChViewportWidth: "ch-viewport-width", ChWidth: "ch-width", ClipboardRead: "clipboard-read", ClipboardWrite: "clipboard-write", ComputePressure: "compute-pressure", ControlledFrame: "controlled-frame", CrossOriginIsolated: "cross-origin-isolated", DeferredFetch: "deferred-fetch", DeferredFetchMinimal: "deferred-fetch-minimal", DeviceAttributes: "device-attributes", DigitalCredentialsCreate: "digital-credentials-create", DigitalCredentialsGet: "digital-credentials-get", DirectSockets: "direct-sockets", DirectSocketsMulticast: "direct-sockets-multicast", DisplayCapture: "display-capture", DocumentDomain: "document-domain", EncryptedMedia: "encrypted-media", ExecutionWhileOutOfViewport: "execution-while-out-of-viewport", ExecutionWhileNotRendered: "execution-while-not-rendered", FocusWithoutUserActivation: "focus-without-user-activation", Fullscreen: "fullscreen", Frobulate: "frobulate", Gamepad: "gamepad", Geolocation: "geolocation", Gyroscope: "gyroscope", Hid: "hid", IdentityCredentialsGet: "identity-credentials-get", IdleDetection: "idle-detection", InterestCohort: "interest-cohort", KeyboardMap: "keyboard-map", LanguageDetector: "language-detector", LanguageModel: "language-model", LocalFonts: "local-fonts", LocalNetwork: "local-network", LocalNetworkAccess: "local-network-access", LoopbackNetwork: "loopback-network", Magnetometer: "magnetometer", ManualText: "manual-text", MediaPlaybackWhileNotVisible: "media-playback-while-not-visible", Microphone: "microphone", Midi: "midi", OnDeviceSpeechRecognition: "on-device-speech-recognition", OtpCredentials: "otp-credentials", Payment: "payment", PictureInPicture: "picture-in-picture", PrivateStateTokenIssuance: "private-state-token-issuance", PrivateStateTokenRedemption: "private-state-token-redemption", PublickeyCredentialsCreate: "publickey-credentials-create", PublickeyCredentialsGet: "publickey-credentials-get", Rewriter: "rewriter", ScreenWakeLock: "screen-wake-lock", Serial: "serial", SharedStorage: "shared-storage", SharedStorageSelectUrl: "shared-storage-select-url", SmartCard: "smart-card", SpeakerSelection: "speaker-selection", StorageAccess: "storage-access", SubApps: "sub-apps", Summarizer: "summarizer", SyncXhr: "sync-xhr", Tools: "tools", Translator: "translator", Unload: "unload", Usb: "usb", UsbUnrestricted: "usb-unrestricted", VerticalScroll: "vertical-scroll", WebAppInstallation: "web-app-installation", Webnn: "webnn", WebPrinting: "web-printing", WebShare: "web-share", WindowManagement: "window-management", Writer: "writer", XrSpatialTracking: "xr-spatial-tracking" });
+  inspectorBackend2.registerEnum("Page.PermissionsPolicyFeature", { Accelerometer: "accelerometer", AllScreensCapture: "all-screens-capture", AmbientLightSensor: "ambient-light-sensor", AriaNotify: "aria-notify", Autofill: "autofill", Autoplay: "autoplay", Bluetooth: "bluetooth", BrowsingTopics: "browsing-topics", Camera: "camera", CapturedSurfaceControl: "captured-surface-control", ChDpr: "ch-dpr", ChDeviceMemory: "ch-device-memory", ChDownlink: "ch-downlink", ChEct: "ch-ect", ChPrefersColorScheme: "ch-prefers-color-scheme", ChPrefersReducedMotion: "ch-prefers-reduced-motion", ChPrefersReducedTransparency: "ch-prefers-reduced-transparency", ChRtt: "ch-rtt", ChSaveData: "ch-save-data", ChUa: "ch-ua", ChUaArch: "ch-ua-arch", ChUaBitness: "ch-ua-bitness", ChUaHighEntropyValues: "ch-ua-high-entropy-values", ChUaPlatform: "ch-ua-platform", ChUaModel: "ch-ua-model", ChUaMobile: "ch-ua-mobile", ChUaFormFactors: "ch-ua-form-factors", ChUaFullVersion: "ch-ua-full-version", ChUaFullVersionList: "ch-ua-full-version-list", ChUaPlatformVersion: "ch-ua-platform-version", ChUaWow64: "ch-ua-wow64", ChViewportHeight: "ch-viewport-height", ChViewportWidth: "ch-viewport-width", ChWidth: "ch-width", ClipboardRead: "clipboard-read", ClipboardWrite: "clipboard-write", ComputePressure: "compute-pressure", ControlledFrame: "controlled-frame", CrossOriginIsolated: "cross-origin-isolated", DeferredFetch: "deferred-fetch", DeferredFetchMinimal: "deferred-fetch-minimal", DeviceAttributes: "device-attributes", DigitalCredentialsCreate: "digital-credentials-create", DigitalCredentialsGet: "digital-credentials-get", DirectSockets: "direct-sockets", DirectSocketsMulticast: "direct-sockets-multicast", DisplayCapture: "display-capture", DocumentDomain: "document-domain", EncryptedMedia: "encrypted-media", ExecutionWhileOutOfViewport: "execution-while-out-of-viewport", ExecutionWhileNotRendered: "execution-while-not-rendered", FocusWithoutUserActivation: "focus-without-user-activation", Fullscreen: "fullscreen", Frobulate: "frobulate", Gamepad: "gamepad", Geolocation: "geolocation", Gyroscope: "gyroscope", Haptics: "haptics", Hid: "hid", IdentityCredentialsGet: "identity-credentials-get", IdleDetection: "idle-detection", InterestCohort: "interest-cohort", KeyboardMap: "keyboard-map", LanguageDetector: "language-detector", LanguageModel: "language-model", LocalFonts: "local-fonts", LocalNetwork: "local-network", LocalNetworkAccess: "local-network-access", LoopbackNetwork: "loopback-network", Magnetometer: "magnetometer", ManualText: "manual-text", MediaPlaybackWhileNotVisible: "media-playback-while-not-visible", Microphone: "microphone", Midi: "midi", OnDeviceSpeechRecognition: "on-device-speech-recognition", OtpCredentials: "otp-credentials", Payment: "payment", PictureInPicture: "picture-in-picture", PrivateStateTokenIssuance: "private-state-token-issuance", PrivateStateTokenRedemption: "private-state-token-redemption", PublickeyCredentialsCreate: "publickey-credentials-create", PublickeyCredentialsGet: "publickey-credentials-get", Rewriter: "rewriter", ScreenWakeLock: "screen-wake-lock", Serial: "serial", SharedStorage: "shared-storage", SharedStorageSelectUrl: "shared-storage-select-url", SmartCard: "smart-card", SpeakerSelection: "speaker-selection", StorageAccess: "storage-access", SubApps: "sub-apps", Summarizer: "summarizer", SyncXhr: "sync-xhr", Tools: "tools", Translator: "translator", Unload: "unload", Usb: "usb", UsbUnrestricted: "usb-unrestricted", VerticalScroll: "vertical-scroll", WebAppInstallation: "web-app-installation", Webnn: "webnn", WebPrinting: "web-printing", WebShare: "web-share", WindowManagement: "window-management", Writer: "writer", XrSpatialTracking: "xr-spatial-tracking" });
   inspectorBackend2.registerEnum("Page.PermissionsPolicyBlockReason", { Header: "Header", IframeAttribute: "IframeAttribute", InFencedFrameTree: "InFencedFrameTree", InIsolatedApp: "InIsolatedApp" });
   inspectorBackend2.registerEnum("Page.OriginTrialTokenStatus", { Success: "Success", NotSupported: "NotSupported", Insecure: "Insecure", Expired: "Expired", WrongOrigin: "WrongOrigin", InvalidSignature: "InvalidSignature", Malformed: "Malformed", WrongVersion: "WrongVersion", FeatureDisabled: "FeatureDisabled", TokenDisabled: "TokenDisabled", FeatureDisabledForUser: "FeatureDisabledForUser", UnknownTrial: "UnknownTrial" });
   inspectorBackend2.registerEnum("Page.OriginTrialStatus", { Enabled: "Enabled", ValidTokenNotProvided: "ValidTokenNotProvided", OSNotSupported: "OSNotSupported", TrialNotAllowed: "TrialNotAllowed" });
@@ -1207,6 +1211,7 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerType("Security.InsecureContentStatus", [{ "name": "ranMixedContent", "type": "boolean", "optional": false, "description": "Always false.", "typeRef": null }, { "name": "displayedMixedContent", "type": "boolean", "optional": false, "description": "Always false.", "typeRef": null }, { "name": "containedMixedForm", "type": "boolean", "optional": false, "description": "Always false.", "typeRef": null }, { "name": "ranContentWithCertErrors", "type": "boolean", "optional": false, "description": "Always false.", "typeRef": null }, { "name": "displayedContentWithCertErrors", "type": "boolean", "optional": false, "description": "Always false.", "typeRef": null }, { "name": "ranInsecureContentStyle", "type": "string", "optional": false, "description": "Always set to unknown.", "typeRef": "Security.SecurityState" }, { "name": "displayedInsecureContentStyle", "type": "string", "optional": false, "description": "Always set to unknown.", "typeRef": "Security.SecurityState" }]);
   inspectorBackend2.registerEnum("ServiceWorker.ServiceWorkerVersionRunningStatus", { Stopped: "stopped", Starting: "starting", Running: "running", Stopping: "stopping" });
   inspectorBackend2.registerEnum("ServiceWorker.ServiceWorkerVersionStatus", { New: "new", Installing: "installing", Installed: "installed", Activating: "activating", Activated: "activated", Redundant: "redundant" });
+  inspectorBackend2.registerEnum("ServiceWorker.ServiceWorkerRouterSourceType", { Cache: "cache", FetchEvent: "fetchEvent", Network: "network", RaceNetworkAndFetchHandler: "raceNetworkAndFetchHandler", RaceNetworkAndCache: "raceNetworkAndCache", SourceDict: "sourceDict" });
   inspectorBackend2.registerEvent("ServiceWorker.workerErrorReported", ["errorMessage"]);
   inspectorBackend2.registerEvent("ServiceWorker.workerRegistrationUpdated", ["registrations"]);
   inspectorBackend2.registerEvent("ServiceWorker.workerVersionUpdated", ["versions"]);
@@ -1223,7 +1228,11 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerCommand("ServiceWorker.unregister", [{ "name": "scopeURL", "type": "string", "optional": false, "description": "", "typeRef": null }], [], "");
   inspectorBackend2.registerCommand("ServiceWorker.updateRegistration", [{ "name": "scopeURL", "type": "string", "optional": false, "description": "", "typeRef": null }], [], "");
   inspectorBackend2.registerType("ServiceWorker.ServiceWorkerRegistration", [{ "name": "registrationId", "type": "string", "optional": false, "description": "", "typeRef": "ServiceWorker.RegistrationID" }, { "name": "scopeURL", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "isDeleted", "type": "boolean", "optional": false, "description": "", "typeRef": null }]);
-  inspectorBackend2.registerType("ServiceWorker.ServiceWorkerVersion", [{ "name": "versionId", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "registrationId", "type": "string", "optional": false, "description": "", "typeRef": "ServiceWorker.RegistrationID" }, { "name": "scriptURL", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "runningStatus", "type": "string", "optional": false, "description": "", "typeRef": "ServiceWorker.ServiceWorkerVersionRunningStatus" }, { "name": "status", "type": "string", "optional": false, "description": "", "typeRef": "ServiceWorker.ServiceWorkerVersionStatus" }, { "name": "scriptLastModified", "type": "number", "optional": true, "description": "The Last-Modified header value of the main script.", "typeRef": null }, { "name": "scriptResponseTime", "type": "number", "optional": true, "description": "The time at which the response headers of the main script were received from the server. For cached script it is the last time the cache entry was validated.", "typeRef": null }, { "name": "controlledClients", "type": "array", "optional": true, "description": "", "typeRef": "Target.TargetID" }, { "name": "targetId", "type": "string", "optional": true, "description": "", "typeRef": "Target.TargetID" }, { "name": "routerRules", "type": "string", "optional": true, "description": "", "typeRef": null }]);
+  inspectorBackend2.registerType("ServiceWorker.ServiceWorkerRouterCondition", [{ "name": "urlPattern", "type": "string", "optional": true, "description": "Plain text, or JSON serialization of URLPatternInit or URLPattern", "typeRef": null }, { "name": "requestMethod", "type": "string", "optional": true, "description": "", "typeRef": null }, { "name": "requestMode", "type": "string", "optional": true, "description": "", "typeRef": null }, { "name": "requestDestination", "type": "string", "optional": true, "description": "", "typeRef": null }, { "name": "runningStatus", "type": "string", "optional": true, "description": "", "typeRef": "ServiceWorker.ServiceWorkerVersionRunningStatus" }]);
+  inspectorBackend2.registerType("ServiceWorker.ServiceWorkerRouterSourceDict", [{ "name": "cacheName", "type": "string", "optional": false, "description": "", "typeRef": null }]);
+  inspectorBackend2.registerType("ServiceWorker.ServiceWorkerRouterSource", [{ "name": "type", "type": "string", "optional": false, "description": "", "typeRef": "ServiceWorker.ServiceWorkerRouterSourceType" }, { "name": "sourceDict", "type": "object", "optional": true, "description": 'Non-empty iff `type` equals \\"sourceDict\\".', "typeRef": "ServiceWorker.ServiceWorkerRouterSourceDict" }]);
+  inspectorBackend2.registerType("ServiceWorker.ServiceWorkerRouterRule", [{ "name": "condition", "type": "object", "optional": false, "description": "", "typeRef": "ServiceWorker.ServiceWorkerRouterCondition" }, { "name": "source", "type": "object", "optional": false, "description": "", "typeRef": "ServiceWorker.ServiceWorkerRouterSource" }, { "name": "id", "type": "number", "optional": false, "description": "Rule ID assigned by the browser. Unique within each ServiceWorkerVersion.", "typeRef": null }]);
+  inspectorBackend2.registerType("ServiceWorker.ServiceWorkerVersion", [{ "name": "versionId", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "registrationId", "type": "string", "optional": false, "description": "", "typeRef": "ServiceWorker.RegistrationID" }, { "name": "scriptURL", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "runningStatus", "type": "string", "optional": false, "description": "", "typeRef": "ServiceWorker.ServiceWorkerVersionRunningStatus" }, { "name": "status", "type": "string", "optional": false, "description": "", "typeRef": "ServiceWorker.ServiceWorkerVersionStatus" }, { "name": "scriptLastModified", "type": "number", "optional": true, "description": "The Last-Modified header value of the main script.", "typeRef": null }, { "name": "scriptResponseTime", "type": "number", "optional": true, "description": "The time at which the response headers of the main script were received from the server. For cached script it is the last time the cache entry was validated.", "typeRef": null }, { "name": "controlledClients", "type": "array", "optional": true, "description": "", "typeRef": "Target.TargetID" }, { "name": "targetId", "type": "string", "optional": true, "description": "", "typeRef": "Target.TargetID" }, { "name": "routerRules", "type": "string", "optional": true, "description": "Migration to `typedRouterRules` is in progress. The browser sends either `routerRules` or `typedRouterRules`. TODO(crbug.com/540469610): Remove `routerRules` after the migration.", "typeRef": null }, { "name": "typedRouterRules", "type": "array", "optional": true, "description": "", "typeRef": "ServiceWorker.ServiceWorkerRouterRule" }]);
   inspectorBackend2.registerType("ServiceWorker.ServiceWorkerErrorMessage", [{ "name": "errorMessage", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "registrationId", "type": "string", "optional": false, "description": "", "typeRef": "ServiceWorker.RegistrationID" }, { "name": "versionId", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "sourceURL", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "lineNumber", "type": "number", "optional": false, "description": "", "typeRef": null }, { "name": "columnNumber", "type": "number", "optional": false, "description": "", "typeRef": null }]);
   inspectorBackend2.registerEnum("SmartCardEmulation.ResultCode", { Success: "success", RemovedCard: "removed-card", ResetCard: "reset-card", UnpoweredCard: "unpowered-card", UnresponsiveCard: "unresponsive-card", UnsupportedCard: "unsupported-card", ReaderUnavailable: "reader-unavailable", SharingViolation: "sharing-violation", NotTransacted: "not-transacted", NoSmartcard: "no-smartcard", ProtoMismatch: "proto-mismatch", SystemCancelled: "system-cancelled", NotReady: "not-ready", Cancelled: "cancelled", InsufficientBuffer: "insufficient-buffer", InvalidHandle: "invalid-handle", InvalidParameter: "invalid-parameter", InvalidValue: "invalid-value", NoMemory: "no-memory", Timeout: "timeout", UnknownReader: "unknown-reader", UnsupportedFeature: "unsupported-feature", NoReadersAvailable: "no-readers-available", ServiceStopped: "service-stopped", NoService: "no-service", CommError: "comm-error", InternalError: "internal-error", ServerTooBusy: "server-too-busy", Unexpected: "unexpected", Shutdown: "shutdown", UnknownCard: "unknown-card", Unknown: "unknown" });
   inspectorBackend2.registerEnum("SmartCardEmulation.ShareMode", { Shared: "shared", Exclusive: "exclusive", Direct: "direct" });
@@ -1260,16 +1269,12 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerType("SmartCardEmulation.ProtocolSet", [{ "name": "t0", "type": "boolean", "optional": true, "description": "", "typeRef": null }, { "name": "t1", "type": "boolean", "optional": true, "description": "", "typeRef": null }, { "name": "raw", "type": "boolean", "optional": true, "description": "", "typeRef": null }]);
   inspectorBackend2.registerType("SmartCardEmulation.ReaderStateIn", [{ "name": "reader", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "currentState", "type": "object", "optional": false, "description": "", "typeRef": "SmartCardEmulation.ReaderStateFlags" }, { "name": "currentInsertionCount", "type": "number", "optional": false, "description": "", "typeRef": null }]);
   inspectorBackend2.registerType("SmartCardEmulation.ReaderStateOut", [{ "name": "reader", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "eventState", "type": "object", "optional": false, "description": "", "typeRef": "SmartCardEmulation.ReaderStateFlags" }, { "name": "eventCount", "type": "number", "optional": false, "description": "", "typeRef": null }, { "name": "atr", "type": "string", "optional": false, "description": "", "typeRef": null }]);
-  inspectorBackend2.registerEnum("Storage.StorageType", { Cookies: "cookies", File_systems: "file_systems", Indexeddb: "indexeddb", Local_storage: "local_storage", Shader_cache: "shader_cache", Websql: "websql", Service_workers: "service_workers", Cache_storage: "cache_storage", Shared_storage: "shared_storage", Storage_buckets: "storage_buckets", All: "all", Other: "other" });
-  inspectorBackend2.registerEnum("Storage.SharedStorageAccessScope", { Window: "window", SharedStorageWorklet: "sharedStorageWorklet", Header: "header" });
-  inspectorBackend2.registerEnum("Storage.SharedStorageAccessMethod", { AddModule: "addModule", CreateWorklet: "createWorklet", SelectURL: "selectURL", Run: "run", BatchUpdate: "batchUpdate", Set: "set", Append: "append", Delete: "delete", Clear: "clear", Get: "get", Keys: "keys", Values: "values", Entries: "entries", Length: "length", RemainingBudget: "remainingBudget" });
+  inspectorBackend2.registerEnum("Storage.StorageType", { Cookies: "cookies", File_systems: "file_systems", Indexeddb: "indexeddb", Local_storage: "local_storage", Shader_cache: "shader_cache", Websql: "websql", Service_workers: "service_workers", Cache_storage: "cache_storage", Storage_buckets: "storage_buckets", All: "all", Other: "other" });
   inspectorBackend2.registerEnum("Storage.StorageBucketsDurability", { Relaxed: "relaxed", Strict: "strict" });
   inspectorBackend2.registerEvent("Storage.cacheStorageContentUpdated", ["origin", "storageKey", "bucketId", "cacheName"]);
   inspectorBackend2.registerEvent("Storage.cacheStorageListUpdated", ["origin", "storageKey", "bucketId"]);
   inspectorBackend2.registerEvent("Storage.indexedDBContentUpdated", ["origin", "storageKey", "bucketId", "databaseName", "objectStoreName"]);
   inspectorBackend2.registerEvent("Storage.indexedDBListUpdated", ["origin", "storageKey", "bucketId"]);
-  inspectorBackend2.registerEvent("Storage.sharedStorageAccessed", ["accessTime", "scope", "method", "mainFrameId", "ownerOrigin", "ownerSite", "params"]);
-  inspectorBackend2.registerEvent("Storage.sharedStorageWorkletOperationExecutionFinished", ["finishedTime", "executionTime", "method", "operationId", "workletTargetId", "mainFrameId", "ownerOrigin"]);
   inspectorBackend2.registerEvent("Storage.storageBucketCreatedOrUpdated", ["bucketInfo"]);
   inspectorBackend2.registerEvent("Storage.storageBucketDeleted", ["bucketId"]);
   inspectorBackend2.registerCommand("Storage.getStorageKeyForFrame", [{ "name": "frameId", "type": "string", "optional": false, "description": "", "typeRef": "Page.FrameId" }], ["storageKey"], "Returns a storage key given a frame id. Deprecated. Please use Storage.getStorageKey instead.");
@@ -1291,25 +1296,12 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerCommand("Storage.untrackIndexedDBForStorageKey", [{ "name": "storageKey", "type": "string", "optional": false, "description": "Storage key.", "typeRef": null }], [], "Unregisters storage key from receiving notifications for IndexedDB.");
   inspectorBackend2.registerCommand("Storage.getTrustTokens", [], ["tokens"], "Returns the number of stored Trust Tokens per issuer for the current browsing context.");
   inspectorBackend2.registerCommand("Storage.clearTrustTokens", [{ "name": "issuerOrigin", "type": "string", "optional": false, "description": "", "typeRef": null }], ["didDeleteTokens"], "Removes all Trust Tokens issued by the provided issuerOrigin. Leaves other stored data, including the issuer's Redemption Records, intact.");
-  inspectorBackend2.registerCommand("Storage.getSharedStorageMetadata", [{ "name": "ownerOrigin", "type": "string", "optional": false, "description": "", "typeRef": null }], ["metadata"], "Gets metadata for an origin's shared storage.");
-  inspectorBackend2.registerCommand("Storage.getSharedStorageEntries", [{ "name": "ownerOrigin", "type": "string", "optional": false, "description": "", "typeRef": null }], ["entries"], "Gets the entries in an given origin's shared storage.");
-  inspectorBackend2.registerCommand("Storage.setSharedStorageEntry", [{ "name": "ownerOrigin", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "key", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "value", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "ignoreIfPresent", "type": "boolean", "optional": true, "description": "If `ignoreIfPresent` is included and true, then only sets the entry if `key` doesn't already exist.", "typeRef": null }], [], "Sets entry with `key` and `value` for a given origin's shared storage.");
-  inspectorBackend2.registerCommand("Storage.deleteSharedStorageEntry", [{ "name": "ownerOrigin", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "key", "type": "string", "optional": false, "description": "", "typeRef": null }], [], "Deletes entry for `key` (if it exists) for a given origin's shared storage.");
-  inspectorBackend2.registerCommand("Storage.clearSharedStorageEntries", [{ "name": "ownerOrigin", "type": "string", "optional": false, "description": "", "typeRef": null }], [], "Clears all entries for a given origin's shared storage.");
-  inspectorBackend2.registerCommand("Storage.resetSharedStorageBudget", [{ "name": "ownerOrigin", "type": "string", "optional": false, "description": "", "typeRef": null }], [], "Resets the budget for `ownerOrigin` by clearing all budget withdrawals.");
-  inspectorBackend2.registerCommand("Storage.setSharedStorageTracking", [{ "name": "enable", "type": "boolean", "optional": false, "description": "", "typeRef": null }], [], "Enables/disables issuing of sharedStorageAccessed events.");
   inspectorBackend2.registerCommand("Storage.setStorageBucketTracking", [{ "name": "storageKey", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "enable", "type": "boolean", "optional": false, "description": "", "typeRef": null }], [], "Set tracking for a storage key's buckets.");
   inspectorBackend2.registerCommand("Storage.deleteStorageBucket", [{ "name": "bucket", "type": "object", "optional": false, "description": "", "typeRef": "Storage.StorageBucket" }], [], "Deletes the Storage Bucket with the given storage key and bucket name.");
   inspectorBackend2.registerCommand("Storage.runBounceTrackingMitigations", [], ["deletedSites"], "Deletes state for sites identified as potential bounce trackers, immediately.");
   inspectorBackend2.registerCommand("Storage.getRelatedWebsiteSets", [], ["sets"], "Returns the effective Related Website Sets in use by this profile for the browser session. The effective Related Website Sets will not change during a browser session.");
   inspectorBackend2.registerType("Storage.UsageForType", [{ "name": "storageType", "type": "string", "optional": false, "description": "Name of storage type.", "typeRef": "Storage.StorageType" }, { "name": "usage", "type": "number", "optional": false, "description": "Storage usage (bytes).", "typeRef": null }]);
   inspectorBackend2.registerType("Storage.TrustTokens", [{ "name": "issuerOrigin", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "count", "type": "number", "optional": false, "description": "", "typeRef": null }]);
-  inspectorBackend2.registerType("Storage.SharedStorageEntry", [{ "name": "key", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "value", "type": "string", "optional": false, "description": "", "typeRef": null }]);
-  inspectorBackend2.registerType("Storage.SharedStorageMetadata", [{ "name": "creationTime", "type": "number", "optional": false, "description": "Time when the origin's shared storage was last created.", "typeRef": "Network.TimeSinceEpoch" }, { "name": "length", "type": "number", "optional": false, "description": "Number of key-value pairs stored in origin's shared storage.", "typeRef": null }, { "name": "remainingBudget", "type": "number", "optional": false, "description": "Current amount of bits of entropy remaining in the navigation budget.", "typeRef": null }, { "name": "bytesUsed", "type": "number", "optional": false, "description": "Total number of bytes stored as key-value pairs in origin's shared storage.", "typeRef": null }]);
-  inspectorBackend2.registerType("Storage.SharedStoragePrivateAggregationConfig", [{ "name": "aggregationCoordinatorOrigin", "type": "string", "optional": true, "description": "The chosen aggregation service deployment.", "typeRef": null }, { "name": "contextId", "type": "string", "optional": true, "description": "The context ID provided.", "typeRef": null }, { "name": "filteringIdMaxBytes", "type": "number", "optional": false, "description": "Configures the maximum size allowed for filtering IDs.", "typeRef": null }, { "name": "maxContributions", "type": "number", "optional": true, "description": "The limit on the number of contributions in the final report.", "typeRef": null }]);
-  inspectorBackend2.registerType("Storage.SharedStorageReportingMetadata", [{ "name": "eventType", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "reportingUrl", "type": "string", "optional": false, "description": "", "typeRef": null }]);
-  inspectorBackend2.registerType("Storage.SharedStorageUrlWithMetadata", [{ "name": "url", "type": "string", "optional": false, "description": "Spec of candidate URL.", "typeRef": null }, { "name": "reportingMetadata", "type": "array", "optional": false, "description": "Any associated reporting metadata.", "typeRef": "Storage.SharedStorageReportingMetadata" }]);
-  inspectorBackend2.registerType("Storage.SharedStorageAccessParams", [{ "name": "scriptSourceUrl", "type": "string", "optional": true, "description": "Spec of the module script URL. Present only for SharedStorageAccessMethods: addModule and createWorklet.", "typeRef": null }, { "name": "dataOrigin", "type": "string", "optional": true, "description": `String denoting \\"context-origin\\", \\"script-origin\\", or a custom origin to be used as the worklet's data origin. Present only for SharedStorageAccessMethod: createWorklet.`, "typeRef": null }, { "name": "operationName", "type": "string", "optional": true, "description": "Name of the registered operation to be run. Present only for SharedStorageAccessMethods: run and selectURL.", "typeRef": null }, { "name": "operationId", "type": "string", "optional": true, "description": "ID of the operation call. Present only for SharedStorageAccessMethods: run and selectURL.", "typeRef": null }, { "name": "keepAlive", "type": "boolean", "optional": true, "description": "Whether or not to keep the worket alive for future run or selectURL calls. Present only for SharedStorageAccessMethods: run and selectURL.", "typeRef": null }, { "name": "privateAggregationConfig", "type": "object", "optional": true, "description": "Configures the private aggregation options. Present only for SharedStorageAccessMethods: run and selectURL.", "typeRef": "Storage.SharedStoragePrivateAggregationConfig" }, { "name": "serializedData", "type": "string", "optional": true, "description": "The operation's serialized data in bytes (converted to a string). Present only for SharedStorageAccessMethods: run and selectURL. TODO(crbug.com/401011862): Consider updating this parameter to binary.", "typeRef": null }, { "name": "urlsWithMetadata", "type": "array", "optional": true, "description": "Array of candidate URLs' specs, along with any associated metadata. Present only for SharedStorageAccessMethod: selectURL.", "typeRef": "Storage.SharedStorageUrlWithMetadata" }, { "name": "urnUuid", "type": "string", "optional": true, "description": "Spec of the URN:UUID generated for a selectURL call. Present only for SharedStorageAccessMethod: selectURL.", "typeRef": null }, { "name": "key", "type": "string", "optional": true, "description": "Key for a specific entry in an origin's shared storage. Present only for SharedStorageAccessMethods: set, append, delete, and get.", "typeRef": null }, { "name": "value", "type": "string", "optional": true, "description": "Value for a specific entry in an origin's shared storage. Present only for SharedStorageAccessMethods: set and append.", "typeRef": null }, { "name": "ignoreIfPresent", "type": "boolean", "optional": true, "description": "Whether or not to set an entry for a key if that key is already present. Present only for SharedStorageAccessMethod: set.", "typeRef": null }, { "name": "workletOrdinal", "type": "number", "optional": true, "description": "A number denoting the (0-based) order of the worklet's creation relative to all other shared storage worklets created by documents using the current storage partition. Present only for SharedStorageAccessMethods: addModule, createWorklet.", "typeRef": null }, { "name": "workletTargetId", "type": "string", "optional": true, "description": "Hex representation of the DevTools token used as the TargetID for the associated shared storage worklet. Present only for SharedStorageAccessMethods: addModule, createWorklet, run, selectURL, and any other SharedStorageAccessMethod when the SharedStorageAccessScope is sharedStorageWorklet.", "typeRef": "Target.TargetID" }, { "name": "withLock", "type": "string", "optional": true, "description": "Name of the lock to be acquired, if present. Optionally present only for SharedStorageAccessMethods: batchUpdate, set, append, delete, and clear.", "typeRef": null }, { "name": "batchUpdateId", "type": "string", "optional": true, "description": "If the method has been called as part of a batchUpdate, then this number identifies the batch to which it belongs. Optionally present only for SharedStorageAccessMethods: batchUpdate (required), set, append, delete, and clear.", "typeRef": null }, { "name": "batchSize", "type": "number", "optional": true, "description": "Number of modifier methods sent in batch. Present only for SharedStorageAccessMethod: batchUpdate.", "typeRef": null }]);
   inspectorBackend2.registerType("Storage.StorageBucket", [{ "name": "storageKey", "type": "string", "optional": false, "description": "", "typeRef": "Storage.SerializedStorageKey" }, { "name": "name", "type": "string", "optional": true, "description": "If not specified, it is the default bucket of the storageKey.", "typeRef": null }]);
   inspectorBackend2.registerType("Storage.StorageBucketInfo", [{ "name": "bucket", "type": "object", "optional": false, "description": "", "typeRef": "Storage.StorageBucket" }, { "name": "id", "type": "string", "optional": false, "description": "", "typeRef": null }, { "name": "expiration", "type": "number", "optional": false, "description": "", "typeRef": "Network.TimeSinceEpoch" }, { "name": "quota", "type": "number", "optional": false, "description": "Storage quota (bytes).", "typeRef": null }, { "name": "persistent", "type": "boolean", "optional": false, "description": "", "typeRef": null }, { "name": "durability", "type": "string", "optional": false, "description": "", "typeRef": "Storage.StorageBucketsDurability" }]);
   inspectorBackend2.registerType("Storage.RelatedWebsiteSet", [{ "name": "primarySites", "type": "array", "optional": false, "description": "The primary site of this set, along with the ccTLDs if there is any.", "typeRef": "string" }, { "name": "associatedSites", "type": "array", "optional": false, "description": "The associated sites of this set, along with the ccTLDs if there is any.", "typeRef": "string" }, { "name": "serviceSites", "type": "array", "optional": false, "description": "The service sites of this set, along with the ccTLDs if there is any.", "typeRef": "string" }]);
@@ -1431,7 +1423,7 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerCommand("WebMCP.disable", [], [], "Disables the WebMCP domain.");
   inspectorBackend2.registerCommand("WebMCP.invokeTool", [{ "name": "frameId", "type": "string", "optional": false, "description": "Frame in which to invoke the tool.", "typeRef": "Page.FrameId" }, { "name": "toolName", "type": "string", "optional": false, "description": "Name of the tool to invoke.", "typeRef": null }, { "name": "input", "type": "object", "optional": false, "description": "Input parameters for the tool, matching the tool's inputSchema.", "typeRef": null }], ["invocationId"], "Invokes a registered tool.");
   inspectorBackend2.registerCommand("WebMCP.cancelInvocation", [{ "name": "invocationId", "type": "string", "optional": false, "description": "Invocation identifier to cancel.", "typeRef": null }], [], "Cancels a pending tool invocation.");
-  inspectorBackend2.registerType("WebMCP.Annotation", [{ "name": "readOnly", "type": "boolean", "optional": true, "description": "A hint indicating that the tool does not modify any state.", "typeRef": null }, { "name": "untrustedContent", "type": "boolean", "optional": true, "description": "A hint indicating that the tool output may contain untrusted content, ex: UGC, 3rd party data.", "typeRef": null }, { "name": "autosubmit", "type": "boolean", "optional": true, "description": "If the declarative tool was declared with the autosubmit attribute.", "typeRef": null }]);
+  inspectorBackend2.registerType("WebMCP.Annotation", [{ "name": "readOnly", "type": "boolean", "optional": true, "description": "A hint indicating that the tool does not modify any state.", "typeRef": null }, { "name": "untrustedContent", "type": "boolean", "optional": true, "description": "A hint indicating that the tool output may contain untrusted content, ex: UGC, 3rd party data.", "typeRef": null }, { "name": "consequential", "type": "boolean", "optional": true, "description": "A hint indicating that executing the tool will result in consequential actions, ex: booking a flight, transferring money.", "typeRef": null }, { "name": "autosubmit", "type": "boolean", "optional": true, "description": "If the declarative tool was declared with the autosubmit attribute.", "typeRef": null }]);
   inspectorBackend2.registerType("WebMCP.Tool", [{ "name": "name", "type": "string", "optional": false, "description": "Tool name.", "typeRef": null }, { "name": "description", "type": "string", "optional": false, "description": "Tool description.", "typeRef": null }, { "name": "inputSchema", "type": "object", "optional": true, "description": "Schema for the tool's input parameters.", "typeRef": null }, { "name": "annotations", "type": "object", "optional": true, "description": "Optional annotations for the tool.", "typeRef": "WebMCP.Annotation" }, { "name": "frameId", "type": "string", "optional": false, "description": "Frame identifier associated with the tool registration.", "typeRef": "Page.FrameId" }, { "name": "backendNodeId", "type": "number", "optional": true, "description": "Optional node ID for declarative tools.", "typeRef": "DOM.BackendNodeId" }, { "name": "stackTrace", "type": "object", "optional": true, "description": "The stack trace at the time of the registration.", "typeRef": "Runtime.StackTrace" }]);
   inspectorBackend2.registerType("WebMCP.RemovedTool", [{ "name": "name", "type": "string", "optional": false, "description": "Tool name.", "typeRef": null }, { "name": "frameId", "type": "string", "optional": false, "description": "Frame identifier associated with the tool registration.", "typeRef": "Page.FrameId" }]);
   inspectorBackend2.registerEnum("Debugger.ScopeType", { Global: "global", Local: "local", With: "with", Closure: "closure", Catch: "catch", Block: "block", Script: "script", Eval: "eval", Module: "module", WasmExpressionStack: "wasm-expression-stack" });
@@ -1589,7 +1581,7 @@ function registerCommands(inspectorBackend2) {
   inspectorBackend2.registerType("Schema.Domain", [{ "name": "name", "type": "string", "optional": false, "description": "Domain name.", "typeRef": null }, { "name": "version", "type": "string", "optional": false, "description": "Domain version.", "typeRef": null }]);
 }
 
-// gen/front_end/core/protocol_client/InspectorBackend.js
+// ../../front_end/core/protocol_client/InspectorBackend.ts
 var splitQualifiedName = (string) => {
   const [domain, eventName] = string.split(".");
   return [domain, eventName];
@@ -1662,11 +1654,6 @@ var test = {
    */
   dumpProtocol: null,
   /**
-   * Runs a function when no protocol activity is present.
-   * ProtocolClient.test.deprecatedRunAfterPendingDispatches(() => console.log('done'))
-   */
-  deprecatedRunAfterPendingDispatches: null,
-  /**
    * Sends a raw message over main connection.
    * ProtocolClient.test.sendRawMessage('Page.enable', {}, console.log)
    */
@@ -1682,7 +1669,12 @@ var test = {
   /**
    * Set to get notified about any messages received over protocol.
    */
-  onMessageReceived: null
+  onMessageReceived: null,
+  /**
+   * Runs a function when no protocol activity is present.
+   * ProtocolClient.test.deprecatedRunAfterPendingDispatches(() => console.log('done'))
+   */
+  deprecatedRunAfterPendingDispatches: null
 };
 var SessionRouter = class {
   #connection;
@@ -1752,7 +1744,10 @@ var TargetBase = class {
     const [domainName, method] = splitQualifiedName(eventMessage.method);
     const dispatcher = this.#dispatchers.get(domainName);
     if (!dispatcher) {
-      InspectorBackend.reportProtocolError(`Protocol Error: the message ${eventMessage.method} is for non-existing domain '${domainName}'`, eventMessage);
+      InspectorBackend.reportProtocolError(
+        `Protocol Error: the message ${eventMessage.method} is for non-existing domain '${domainName}'`,
+        eventMessage
+      );
       return;
     }
     dispatcher.dispatch(method, eventMessage);
@@ -2035,10 +2030,10 @@ var TargetBase = class {
   }
 };
 var IGNORED_ERRORS = /* @__PURE__ */ new Set([
-  CDPErrorStatus.DEVTOOLS_REHYDRATION_ERROR,
-  CDPErrorStatus.DEVTOOLS_STUB_ERROR,
-  CDPErrorStatus.SERVER_ERROR,
-  CDPErrorStatus.SESSION_NOT_FOUND
+  -32016 /* DEVTOOLS_REHYDRATION_ERROR */,
+  -32015 /* DEVTOOLS_STUB_ERROR */,
+  -32e3 /* SERVER_ERROR */,
+  -32001 /* SESSION_NOT_FOUND */
 ]);
 var AgentPrototype = class {
   description = "";
@@ -2060,7 +2055,9 @@ var AgentPrototype = class {
   invoke(method, request) {
     const connection = this.target.router()?.connection;
     if (!connection) {
-      return Promise.resolve({ result: null, getError: () => `Connection is closed, can't dispatch pending call to ${method}` });
+      return Promise.resolve(
+        { result: null, getError: () => `Connection is closed, can't dispatch pending call to ${method}` }
+      );
     }
     return connection.send(method, request, this.target.sessionId).then((response) => {
       if ("error" in response && response.error) {
@@ -2099,7 +2096,10 @@ var DispatcherManager = class {
       return;
     }
     if (!this.#eventArgs.has(messageObject.method)) {
-      InspectorBackend.reportProtocolWarning(`Protocol Warning: Attempted to dispatch an unspecified event '${messageObject.method}'`, messageObject);
+      InspectorBackend.reportProtocolWarning(
+        `Protocol Warning: Attempted to dispatch an unspecified event '${messageObject.method}'`,
+        messageObject
+      );
       return;
     }
     for (let index = 0; index < this.#dispatchers.length; ++index) {
@@ -2113,19 +2113,14 @@ var DispatcherManager = class {
 };
 var inspectorBackend = new InspectorBackend();
 
-// gen/front_end/core/protocol_client/DevToolsCDPConnection.js
-var LongPollingMethods = /* @__PURE__ */ new Set(["CSS.takeComputedStyleUpdates"]);
+// ../../front_end/core/protocol_client/DevToolsCDPConnection.ts
 var DevToolsCDPConnection = class {
   #transport;
   #lastMessageId = 1;
-  #pendingResponsesCount = 0;
-  #pendingLongPollingMessageIds = /* @__PURE__ */ new Set();
-  #pendingScripts = [];
   #callbacks = /* @__PURE__ */ new Map();
   #observers = /* @__PURE__ */ new Set();
   constructor(transport) {
     this.#transport = transport;
-    test.deprecatedRunAfterPendingDispatches = this.deprecatedRunAfterPendingDispatches.bind(this);
     test.sendRawMessage = this.sendRawMessageForTesting.bind(this);
     this.#transport.setOnMessage(this.onMessage.bind(this));
     this.#transport.setOnDisconnect((reason) => {
@@ -2158,10 +2153,6 @@ var DevToolsCDPConnection = class {
       const paramsObject = JSON.parse(JSON.stringify(params || {}));
       test.onMessageSent({ domain, method, params: paramsObject, id: messageId, sessionId });
     }
-    ++this.#pendingResponsesCount;
-    if (LongPollingMethods.has(method)) {
-      this.#pendingLongPollingMessageIds.add(messageId);
-    }
     return new Promise((resolve) => {
       this.#callbacks.set(messageId, { resolve, method, sessionId });
       this.#transport.sendRawMessage(JSON.stringify(messageObject));
@@ -2175,7 +2166,7 @@ var DevToolsCDPConnection = class {
       resolve({
         error: {
           message: `Session is unregistering, can't dispatch pending call to ${method}`,
-          code: CDPErrorStatus.SESSION_NOT_FOUND
+          code: -32001 /* SESSION_NOT_FOUND */
         }
       });
     }
@@ -2208,39 +2199,10 @@ var DevToolsCDPConnection = class {
         return;
       }
       callback.resolve(messageObject);
-      --this.#pendingResponsesCount;
-      this.#pendingLongPollingMessageIds.delete(messageObject.id);
-      if (this.#pendingScripts.length && !this.hasOutstandingNonLongPollingRequests()) {
-        this.deprecatedRunAfterPendingDispatches();
-      }
     } else if ("method" in messageObject) {
       this.#observers.forEach((observer) => observer.onEvent(messageObject));
     } else {
       InspectorBackend.reportProtocolError("Protocol Error: the message without method", messageObject);
-    }
-  }
-  hasOutstandingNonLongPollingRequests() {
-    return this.#pendingResponsesCount - this.#pendingLongPollingMessageIds.size > 0;
-  }
-  deprecatedRunAfterPendingDispatches(script) {
-    if (script) {
-      this.#pendingScripts.push(script);
-    }
-    setTimeout(() => {
-      if (!this.hasOutstandingNonLongPollingRequests()) {
-        this.executeAfterPendingDispatches();
-      } else {
-        this.deprecatedRunAfterPendingDispatches();
-      }
-    }, 0);
-  }
-  executeAfterPendingDispatches() {
-    if (!this.hasOutstandingNonLongPollingRequests()) {
-      const scripts = this.#pendingScripts;
-      this.#pendingScripts = [];
-      for (let id = 0; id < scripts.length; ++id) {
-        scripts[id]();
-      }
     }
   }
 };

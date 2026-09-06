@@ -1,13 +1,14 @@
 {
-  "checkJs": true,
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "checkJs": true,
-    "composite": true,
-    "declaration": true,
+    "composite": false,
+    "declaration": false,
+    "disableSourceOfProjectReferenceRedirect": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": false,
     "inlineSources": true,
     "lib": [
       "dom",
@@ -19,19 +20,18 @@
       "ESNext.Array"
     ],
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "outDir": ".",
+    "preserveConstEnums": true,
     "rootDir": "../../../../../../front_end/core/sdk",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "ES2023",
-    "tsBuildInfoFile": "unittests-tsconfig.json.tsbuildinfo",
     "typeRoots": [
       "../../../../../../node_modules/@types",
       "../../../../../../node_modules"
@@ -59,6 +59,7 @@
     "../../../../../../front_end/core/sdk/EmulationModel.test.ts",
     "../../../../../../front_end/core/sdk/EnhancedTracesParser.test.ts",
     "../../../../../../front_end/core/sdk/NetworkRequest.test.ts",
+    "../../../../../../front_end/core/sdk/NetworkRequestAccess.test.ts",
     "../../../../../../front_end/core/sdk/OverlayColorGenerator.test.ts",
     "../../../../../../front_end/core/sdk/OverlayModel.test.ts",
     "../../../../../../front_end/core/sdk/PreloadingModel.test.ts",
@@ -69,6 +70,7 @@
     "../../../../../../front_end/core/sdk/ScopeTreeCache.test.ts",
     "../../../../../../front_end/core/sdk/ScreenCaptureModel.test.ts",
     "../../../../../../front_end/core/sdk/Script.test.ts",
+    "../../../../../../front_end/core/sdk/SecurityOrigin.test.ts",
     "../../../../../../front_end/core/sdk/ServerTiming.test.ts",
     "../../../../../../front_end/core/sdk/ServiceWorkerCacheModel.test.ts",
     "../../../../../../front_end/core/sdk/ServiceWorkerManager.test.ts",
@@ -82,50 +84,48 @@
     "../../../../../../front_end/core/sdk/TraceObject.test.ts",
     "../../../../../../front_end/legacy/legacy-defs.d.ts",
     "../../../../../../front_end/global_typings/global_defs.d.ts",
-    "../../../../../../node_modules/@types/filesystem/index.d.ts"
+    "../../../../../../node_modules/@types/filesystem/index.d.ts",
+    "../../../../../../node_modules/@types/filewriter/index.d.ts"
   ],
   "references": [
     {
-      "path": "./bundle-tsconfig.json"
+      "path": "bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../entrypoints/formatter_worker/bundle-tsconfig.json"
+      "path": "../../entrypoints/formatter_worker/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../generated/generated-tsconfig.json"
+      "path": "../../generated/generated-tsconfig.ref.json"
     },
     {
-      "path": "../../generated/protocol-tsconfig.json"
+      "path": "../../models/formatter/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../models/formatter/bundle-tsconfig.json"
+      "path": "../../models/trace/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../models/trace/bundle-tsconfig.json"
+      "path": "../../testing/testing-tsconfig.ref.json"
     },
     {
-      "path": "../../testing/testing-tsconfig.json"
+      "path": "../../third_party/codemirror.next/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../third_party/codemirror.next/bundle-tsconfig.json"
+      "path": "../../third_party/source-map-scopes-codec/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../third_party/source-map-scopes-codec/bundle-tsconfig.json"
+      "path": "../common/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../common/bundle-tsconfig.json"
+      "path": "../platform/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../platform/bundle-tsconfig.json"
+      "path": "../protocol_client/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../protocol_client/bundle-tsconfig.json"
+      "path": "../root/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../root/bundle-tsconfig.json"
-    },
-    {
-      "path": "../text_utils/bundle-tsconfig.json"
+      "path": "../text_utils/bundle-tsconfig.ref.json"
     }
   ]
 }

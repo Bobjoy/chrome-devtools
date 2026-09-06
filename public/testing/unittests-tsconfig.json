@@ -1,13 +1,14 @@
 {
-  "checkJs": true,
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "checkJs": true,
-    "composite": true,
-    "declaration": true,
+    "composite": false,
+    "declaration": false,
+    "disableSourceOfProjectReferenceRedirect": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": false,
     "inlineSources": true,
     "lib": [
       "dom",
@@ -19,19 +20,18 @@
       "ESNext.Array"
     ],
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "outDir": ".",
+    "preserveConstEnums": true,
     "rootDir": "../../../../../front_end/testing",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "ES2023",
-    "tsBuildInfoFile": "unittests-tsconfig.json.tsbuildinfo",
     "typeRoots": [
       "../../../../../node_modules/@types",
       "../../../../../node_modules"
@@ -49,23 +49,24 @@
     "../../../../../front_end/testing/SourceMapEncoder.test.ts",
     "../../../../../front_end/legacy/legacy-defs.d.ts",
     "../../../../../front_end/global_typings/global_defs.d.ts",
-    "../../../../../node_modules/@types/filesystem/index.d.ts"
+    "../../../../../node_modules/@types/filesystem/index.d.ts",
+    "../../../../../node_modules/@types/filewriter/index.d.ts"
   ],
   "references": [
     {
-      "path": "./foundation_unittests-tsconfig.json"
+      "path": "foundation_unittests-tsconfig.ref.json"
     },
     {
-      "path": "./testing-tsconfig.json"
+      "path": "testing-tsconfig.ref.json"
     },
     {
-      "path": "../core/protocol_client/bundle-tsconfig.json"
+      "path": "../core/protocol_client/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../generated/generated-tsconfig.json"
+      "path": "../generated/generated-tsconfig.ref.json"
     },
     {
-      "path": "../ui/lit/bundle-tsconfig.json"
+      "path": "../ui/lit/bundle-tsconfig.ref.json"
     }
   ]
 }

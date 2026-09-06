@@ -508,7 +508,12 @@ export const DEFAULT_RULER_VIEW = (input, output, target) => {
         },
     });
 };
-export class Ruler extends Common.ObjectWrapper.eventMixin(UI.Widget.Widget) {
+export var RulerEvents;
+(function (RulerEvents) {
+    RulerEvents["MARKER_SELECTED"] = "MarkerSelected";
+})(RulerEvents || (RulerEvents = {}));
+const RulerBase = Common.ObjectWrapper.eventMixin(UI.Widget.Widget);
+export class Ruler extends RulerBase {
     #view;
     #horizontal = true;
     #scale = 1;

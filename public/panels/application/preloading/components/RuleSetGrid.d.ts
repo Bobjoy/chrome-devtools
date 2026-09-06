@@ -1,10 +1,11 @@
 import '../../../../ui/legacy/components/data_grid/data_grid.js';
 import '../../../../ui/kit/kit.js';
 import * as Common from '../../../../core/common/common.js';
+import * as i18n from '../../../../core/i18n/i18n.js';
 import type * as Platform from '../../../../core/platform/platform.js';
 import * as Protocol from '../../../../generated/protocol.js';
 import * as UI from '../../../../ui/legacy/legacy.js';
-export declare const i18nString: (id: string, values?: import("../../../../core/i18n/i18nTypes.js").Values | undefined) => Common.UIString.LocalizedString;
+export declare const i18nString: i18n.LocalizeString;
 export interface RuleSetGridData {
     rows: RuleSetGridRow[];
     pageURL: Platform.DevToolsPath.UrlString;
@@ -23,17 +24,9 @@ export interface ViewInput {
 }
 export type ViewOutput = unknown;
 export declare const DEFAULT_VIEW: View;
-declare const RuleSetGrid_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<EventTypes>;
-    addEventListener<T extends Events.SELECT>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<EventTypes, T>;
-    once<T extends Events.SELECT>(eventType: T): Promise<EventTypes[T]>;
-    removeEventListener<T extends Events.SELECT>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: Events.SELECT): boolean;
-    dispatchEventToListeners<T extends Events.SELECT>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.VBox;
 /** Grid component to show SpeculationRules rule sets. **/
-export declare class RuleSetGrid extends RuleSetGrid_base {
+declare const RuleSetGridBase: Common.ObjectWrapper.EventMixin<EventTypes, typeof UI.Widget.VBox>;
+export declare class RuleSetGrid extends RuleSetGridBase {
     #private;
     constructor(view?: View);
     get data(): RuleSetGridData | null;

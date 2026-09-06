@@ -4,10 +4,10 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/highlighting/HighlightElement.js
-import * as TextUtils2 from "./../../../core/text_utils/text_utils.js";
+// ../../front_end/ui/components/highlighting/HighlightElement.ts
+import * as TextUtils2 from "../../../core/text_utils/text_utils.js";
 
-// gen/front_end/ui/components/highlighting/HighlightManager.js
+// ../../front_end/ui/components/highlighting/HighlightManager.ts
 var HighlightManager_exports = {};
 __export(HighlightManager_exports, {
   CURRENT_HIGHLIGHT_REGISTRY: () => CURRENT_HIGHLIGHT_REGISTRY,
@@ -16,10 +16,6 @@ __export(HighlightManager_exports, {
   RangeWalker: () => RangeWalker
 });
 var RangeWalker = class {
-  root;
-  #offset = 0;
-  #treeWalker;
-  #eof;
   constructor(root) {
     this.root = root;
     const nodeFilter = {
@@ -33,6 +29,10 @@ var RangeWalker = class {
     this.#treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, nodeFilter);
     this.#eof = !this.#treeWalker.firstChild();
   }
+  root;
+  #offset = 0;
+  #treeWalker;
+  #eof;
   #next() {
     this.#offset += this.#treeWalker.currentNode.textContent?.length ?? 0;
     this.#eof = !this.#treeWalker.nextNode();
@@ -98,6 +98,10 @@ var HighlightManager = class _HighlightManager {
     return highlightManagerInstance;
   }
   static removeInstance() {
+    if (typeof CSS !== "undefined" && CSS.highlights) {
+      CSS.highlights.delete(HIGHLIGHT_REGISTRY);
+      CSS.highlights.delete(CURRENT_HIGHLIGHT_REGISTRY);
+    }
     highlightManagerInstance = null;
   }
   addHighlights(ranges) {
@@ -161,8 +165,8 @@ var HighlightManager = class _HighlightManager {
   }
 };
 
-// gen/front_end/ui/components/highlighting/MarkupHighlight.js
-import * as TextUtils from "./../../../core/text_utils/text_utils.js";
+// ../../front_end/ui/components/highlighting/MarkupHighlight.ts
+import * as TextUtils from "../../../core/text_utils/text_utils.js";
 var highlightedSearchResultClassName = "highlighted-search-result";
 var highlightedCurrentSearchResultClassName = "current-search-result";
 function highlightRangesWithStyleClass(element, resultRanges, styleClass, changes) {
@@ -279,7 +283,7 @@ function revertDomChanges(domChanges) {
   }
 }
 
-// gen/front_end/ui/components/highlighting/HighlightElement.js
+// ../../front_end/ui/components/highlighting/HighlightElement.ts
 var HighlightElement = class extends HTMLElement {
   static observedAttributes = ["ranges", "current-range", "type"];
   #ranges = [];

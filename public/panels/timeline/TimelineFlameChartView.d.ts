@@ -1,5 +1,4 @@
 import * as Common from '../../core/common/common.js';
-import * as Platform from '../../core/platform/platform.js';
 import * as Trace from '../../models/trace/trace.js';
 import * as PerfUI from '../../ui/legacy/components/perf_ui/perf_ui.js';
 import * as UI from '../../ui/legacy/legacy.js';
@@ -18,16 +17,8 @@ import type { TimelineMarkerStyle } from './TimelineUIUtils.js';
  * will render [Nav][FCP][DCL][LCP] everytime.
  */
 export declare const SORT_ORDER_PAGE_LOAD_MARKERS: Readonly<Record<string, number>>;
-declare const TimelineFlameChartView_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<EventTypes>;
-    addEventListener<T extends Events.ENTRY_LABEL_ANNOTATION_CLICKED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<EventTypes, T>;
-    once<T extends Events.ENTRY_LABEL_ANNOTATION_CLICKED>(eventType: T): Promise<EventTypes[T]>;
-    removeEventListener<T extends Events.ENTRY_LABEL_ANNOTATION_CLICKED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: Events.ENTRY_LABEL_ANNOTATION_CLICKED): boolean;
-    dispatchEventToListeners<T extends Events.ENTRY_LABEL_ANNOTATION_CLICKED>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.VBox;
-export declare class TimelineFlameChartView extends TimelineFlameChartView_base implements PerfUI.FlameChart.FlameChartDelegate, UI.SearchableView.Searchable {
+declare const TimelineFlameChartViewBase: Common.ObjectWrapper.EventMixin<EventTypes, typeof UI.Widget.VBox>;
+export declare class TimelineFlameChartView extends TimelineFlameChartViewBase implements PerfUI.FlameChart.FlameChartDelegate, UI.SearchableView.Searchable {
     #private;
     private readonly delegate;
     /**
@@ -44,7 +35,6 @@ export declare class TimelineFlameChartView extends TimelineFlameChartView_base 
     private readonly networkPane;
     private readonly splitResizer;
     private readonly chartSplitWidget;
-    private brickGame?;
     private readonly countersView;
     private readonly detailsSplitWidget;
     private readonly detailsView;
@@ -69,7 +59,6 @@ export declare class TimelineFlameChartView extends TimelineFlameChartView_base 
     addTimestampMarkerOverlay(timestamp: Trace.Types.Timing.Micro): void;
     removeTimestampMarkerOverlay(): Promise<void>;
     forceAnimationsForTest(): void;
-    runBrickBreakerGame(): void;
     getLinkSelectionAnnotation(): Trace.Types.File.EntriesLinkAnnotation | null;
     getMainDataProvider(): TimelineFlameChartDataProvider;
     getNetworkDataProvider(): TimelineFlameChartNetworkDataProvider;

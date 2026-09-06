@@ -365,6 +365,11 @@ export class TreeOutline extends Common.ObjectWrapper.ObjectWrapper {
     onStartedEditingTitle(_treeElement) {
     }
 }
+export var TreeVariant;
+(function (TreeVariant) {
+    TreeVariant["NAVIGATION_TREE"] = "NavigationTree";
+    TreeVariant["OTHER"] = "Other";
+})(TreeVariant || (TreeVariant = {}));
 export class TreeOutlineInShadow extends TreeOutline {
     element;
     shadowRoot;
@@ -1340,12 +1345,16 @@ export class TreeSearch extends Common.ObjectWrapper.ObjectWrapper {
         return this.#matches.length;
     }
 }
+(function (TreeSearch) {
+    let Events;
+    (function (Events) {
+        Events["SEARCH_CHANGED"] = "SearchChanged";
+    })(Events = TreeSearch.Events || (TreeSearch.Events = {}));
+})(TreeSearch || (TreeSearch = {}));
 class TreeViewTreeElement extends TreeElement {
-    static CLONED_ATTRIBUTES = SDK.DOMModel.ARIA_ATTRIBUTES.union(new Set(['jslog']));
+    static CLONED_ATTRIBUTES = SDK.DOMModel.ARIA_ATTRIBUTES.union(new Set(['jslog', 'draggable']));
     #clonedAttributes = new Set();
     #clonedClasses = new Set();
-    #userExpanded = false;
-    #isProcessingAttribute = false;
     #previousOpenAttributeValue;
     #refreshScheduled = false;
     static #elementToTreeElement = new WeakMap();
@@ -1356,41 +1365,17 @@ class TreeViewTreeElement extends TreeElement {
         TreeViewTreeElement.#elementToTreeElement.set(configElement, this);
         this.refresh();
     }
-    onexpand() {
-        if (!this.#isProcessingAttribute) {
-            this.#userExpanded = true;
-        }
-    }
-    oncollapse() {
-        if (!this.#isProcessingAttribute) {
-            this.#userExpanded = false;
-        }
-    }
     updateExpansionFromAttribute() {
-        this.#isProcessingAttribute = true;
-        try {
-            const openAttr = this.configElement.getAttribute('open');
-            if (openAttr === this.#previousOpenAttributeValue) {
-                return;
-            }
-            this.#previousOpenAttributeValue = openAttr;
-            if (openAttr === null) {
-                if (this.#userExpanded) {
-                    this.expand();
-                }
-                else {
-                    this.collapse();
-                }
-            }
-            else if (openAttr === 'false') {
-                this.collapse();
-            }
-            else {
-                this.expand();
-            }
+        const openAttr = this.configElement.getAttribute('open');
+        if (openAttr === this.#previousOpenAttributeValue) {
+            return;
         }
-        finally {
-            this.#isProcessingAttribute = false;
+        this.#previousOpenAttributeValue = openAttr;
+        if (openAttr !== null && openAttr !== 'false') {
+            this.expand();
+        }
+        else {
+            this.collapse();
         }
     }
     refreshSoon() {
