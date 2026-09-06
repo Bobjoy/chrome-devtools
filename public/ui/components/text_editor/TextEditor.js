@@ -28,6 +28,19 @@ export class TextEditor extends HTMLElement {
         }
     };
     #devtoolsResizeObserver = new ResizeObserver(this.#resizeListener);
+    static get observedAttributes() {
+        return ['data-file-path'];
+    }
+    attributeChangedCallback(name, _oldValue, newValue) {
+        if (name === 'data-file-path' && this.#activeEditor) {
+            if (newValue !== null) {
+                this.#activeEditor.dom.setAttribute('data-file-path', newValue);
+            }
+            else {
+                this.#activeEditor.dom.removeAttribute('data-file-path');
+            }
+        }
+    }
     constructor(pendingState) {
         super();
         this.#pendingState = pendingState;
@@ -47,6 +60,10 @@ export class TextEditor extends HTMLElement {
             },
             scrollTo: this.#lastScrollSnapshot,
         });
+        const filePath = this.getAttribute('data-file-path');
+        if (filePath) {
+            this.#activeEditor.dom.setAttribute('data-file-path', filePath);
+        }
         this.#activeEditor.scrollDOM.addEventListener('scroll', () => {
             if (!this.#activeEditor) {
                 return;
@@ -135,7 +152,9 @@ export class TextEditor extends HTMLElement {
                     this.#activeEditor.dispatch({ effects: change });
                 }
             };
-            const setting = Common.Settings.Settings.instance().moduleSetting(dynamicSetting.settingName);
+            const setting = typeof dynamicSetting.setting === 'string' ?
+                Common.Settings.Settings.instance().moduleSetting(dynamicSetting.setting) :
+                Common.Settings.Settings.instance().resolve(dynamicSetting.setting);
             setting.addChangeListener(handler);
             this.#activeSettingListeners.push([setting, handler]);
         }

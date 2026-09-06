@@ -4,13 +4,13 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/issues/components/ElementsPanelLink.js
+// ../../front_end/panels/issues/components/ElementsPanelLink.ts
 var ElementsPanelLink_exports = {};
 __export(ElementsPanelLink_exports, {
   ElementsPanelLink: () => ElementsPanelLink
 });
-import { html, render } from "./../../../ui/lit/lit.js";
-import * as VisualLogging from "./../../../ui/visual_logging/visual_logging.js";
+import { html, render } from "../../../ui/lit/lit.js";
+import * as VisualLogging from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/issues/components/elementsPanelLink.css.js
 var elementsPanelLink_css_default = `/*
@@ -21,15 +21,15 @@ var elementsPanelLink_css_default = `/*
 
 .element-reveal-icon {
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: var(--sys-size-9);
+  height: var(--sys-size-9);
   mask-image: var(--image-file-select-element);
   background-color: var(--icon-default);
 }
 
 /*# sourceURL=${import.meta.resolve("././elementsPanelLink.css")} */`;
 
-// gen/front_end/panels/issues/components/ElementsPanelLink.js
+// ../../front_end/panels/issues/components/ElementsPanelLink.ts
 var ElementsPanelLink = class extends HTMLElement {
   #shadow = this.attachShadow({ mode: "open" });
   #onElementRevealIconClick = () => {
@@ -61,16 +61,16 @@ var ElementsPanelLink = class extends HTMLElement {
 };
 customElements.define("devtools-elements-panel-link", ElementsPanelLink);
 
-// gen/front_end/panels/issues/components/HideIssuesMenu.js
+// ../../front_end/panels/issues/components/HideIssuesMenu.ts
 var HideIssuesMenu_exports = {};
 __export(HideIssuesMenu_exports, {
   HideIssuesMenu: () => HideIssuesMenu
 });
-import * as Common from "./../../../core/common/common.js";
-import * as i18n from "./../../../core/i18n/i18n.js";
-import * as Buttons from "./../../../ui/components/buttons/buttons.js";
-import * as UI from "./../../../ui/legacy/legacy.js";
-import { html as html2, render as render2 } from "./../../../ui/lit/lit.js";
+import * as Common from "../../../core/common/common.js";
+import * as i18n from "../../../core/i18n/i18n.js";
+import * as Buttons from "../../../ui/components/buttons/buttons.js";
+import * as UI from "../../../ui/legacy/legacy.js";
+import { html as html2, render as render2 } from "../../../ui/lit/lit.js";
 
 // gen/front_end/panels/issues/components/hideIssuesMenu.css.js
 var hideIssuesMenu_css_default = `/*
@@ -87,7 +87,7 @@ var hideIssuesMenu_css_default = `/*
   align-items: center;
   justify-content: center;
   padding: 0;
-  margin: 0 -2px 0 4px;
+  margin: 0 calc(-1 * var(--sys-size-2)) 0 var(--sys-size-3);
   overflow: hidden;
   border-radius: 0;
   border: none;
@@ -99,7 +99,7 @@ var hideIssuesMenu_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("././hideIssuesMenu.css")} */`;
 
-// gen/front_end/panels/issues/components/HideIssuesMenu.js
+// ../../front_end/panels/issues/components/HideIssuesMenu.ts
 var UIStrings = {
   /**
    * @description Tooltip in the Issues panel for the three dots (options) menu button to hide issues.
@@ -125,7 +125,11 @@ var HideIssuesMenu = class extends HTMLElement {
       x: buttonElement?.getBoundingClientRect().left,
       y: buttonElement?.getBoundingClientRect().bottom
     });
-    contextMenu.headerSection().appendItem(this.#menuItemLabel, () => this.#menuItemAction(), { jslogContext: "toggle-similar-issues" });
+    contextMenu.headerSection().appendItem(
+      this.#menuItemLabel,
+      () => this.#menuItemAction(),
+      { jslogContext: "toggle-similar-issues" }
+    );
     void contextMenu.show();
   }
   onKeydown(event) {
@@ -137,7 +141,7 @@ var HideIssuesMenu = class extends HTMLElement {
     render2(html2`
     <style>${hideIssuesMenu_css_default}</style>
     <devtools-button
-      .data=${{ variant: "icon", iconName: "dots-vertical", title: i18nString(UIStrings.tooltipTitle) }}
+      .data=${{ variant: Buttons.Button.Variant.ICON, iconName: "dots-vertical", title: i18nString(UIStrings.tooltipTitle) }}
       .jslogContext=${"hide-issues"}
       class="hide-issues-menu-btn"
       @click=${this.onMenuOpen}

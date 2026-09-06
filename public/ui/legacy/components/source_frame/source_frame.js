@@ -4,37 +4,26 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/legacy/components/source_frame/BinaryResourceViewFactory.js
+// ../../front_end/ui/legacy/components/source_frame/BinaryResourceViewFactory.ts
 var BinaryResourceViewFactory_exports = {};
 __export(BinaryResourceViewFactory_exports, {
   BinaryResourceViewFactory: () => BinaryResourceViewFactory
 });
-import * as TextUtils5 from "./../../../../core/text_utils/text_utils.js";
+import * as TextUtils5 from "../../../../core/text_utils/text_utils.js";
 
-// gen/front_end/ui/legacy/components/source_frame/ResourceSourceFrame.js
+// ../../front_end/ui/legacy/components/source_frame/ResourceSourceFrame.ts
 var ResourceSourceFrame_exports = {};
 __export(ResourceSourceFrame_exports, {
   ResourceSourceFrame: () => ResourceSourceFrame,
   SearchableContainer: () => SearchableContainer
 });
-import "./../../legacy.js";
-import * as Common2 from "./../../../../core/common/common.js";
-import * as i18n3 from "./../../../../core/i18n/i18n.js";
-import * as TextUtils3 from "./../../../../core/text_utils/text_utils.js";
-
-// gen/front_end/entrypoints/formatter_worker/FormatterActions.js
-var FORMATTABLE_MEDIA_TYPES = [
-  "application/javascript",
-  "application/json",
-  "application/manifest+json",
-  "text/css",
-  "text/html",
-  "text/javascript"
-];
-
-// gen/front_end/ui/legacy/components/source_frame/ResourceSourceFrame.js
-import { render } from "./../../../lit/lit.js";
-import * as UI2 from "./../../legacy.js";
+import "../../legacy.js";
+import * as Common2 from "../../../../core/common/common.js";
+import * as i18n3 from "../../../../core/i18n/i18n.js";
+import * as TextUtils3 from "../../../../core/text_utils/text_utils.js";
+import * as FormatterActions from "../../../../entrypoints/formatter_actions/formatter_actions.js";
+import { render } from "../../../lit/lit.js";
+import * as UI2 from "../../legacy.js";
 
 // gen/front_end/ui/legacy/components/source_frame/resourceSourceFrame.css.js
 var resourceSourceFrame_css_default = `/*
@@ -49,14 +38,15 @@ var resourceSourceFrame_css_default = `/*
 
 devtools-toolbar {
   background-color: var(--sys-color-cdt-base-container);
-  border-top: 1px solid var(--sys-color-divider);
+  border-top: var(--sys-size-1) solid var(--sys-color-divider);
 }
 
 /*# sourceURL=${import.meta.resolve("./resourceSourceFrame.css")} */`;
 
-// gen/front_end/ui/legacy/components/source_frame/SourceFrame.js
+// ../../front_end/ui/legacy/components/source_frame/SourceFrame.ts
 var SourceFrame_exports = {};
 __export(SourceFrame_exports, {
+  Events: () => Events,
   LINE_NUMBER_FORMATTER: () => LINE_NUMBER_FORMATTER,
   SourceFrameImpl: () => SourceFrameImpl,
   addNonBreakableLines: () => addNonBreakableLines,
@@ -64,77 +54,75 @@ __export(SourceFrame_exports, {
   isBreakableLine: () => isBreakableLine,
   removeSourceFrameInfobar: () => removeSourceFrameInfobar
 });
-import * as Common from "./../../../../core/common/common.js";
-import * as Host from "./../../../../core/host/host.js";
-import * as i18n from "./../../../../core/i18n/i18n.js";
-import * as Platform from "./../../../../core/platform/platform.js";
-import * as Root from "./../../../../core/root/root.js";
-import * as SDK from "./../../../../core/sdk/sdk.js";
-import * as TextUtils from "./../../../../core/text_utils/text_utils.js";
-import * as Formatter from "./../../../../models/formatter/formatter.js";
-import * as CodeMirror from "./../../../../third_party/codemirror.next/codemirror.next.js";
-import * as CodeHighlighter from "./../../../components/code_highlighter/code_highlighter.js";
-import * as Dialogs from "./../../../components/dialogs/dialogs.js";
-import * as TextEditor from "./../../../components/text_editor/text_editor.js";
-import * as VisualLogging from "./../../../visual_logging/visual_logging.js";
-import * as UI from "./../../legacy.js";
+import * as Common from "../../../../core/common/common.js";
+import * as Host from "../../../../core/host/host.js";
+import * as i18n from "../../../../core/i18n/i18n.js";
+import * as Platform from "../../../../core/platform/platform.js";
+import * as Root from "../../../../core/root/root.js";
+import * as SDK from "../../../../core/sdk/sdk.js";
+import * as TextUtils from "../../../../core/text_utils/text_utils.js";
+import * as Formatter from "../../../../models/formatter/formatter.js";
+import * as CodeMirror from "../../../../third_party/codemirror.next/codemirror.next.js";
+import * as CodeHighlighter from "../../../components/code_highlighter/code_highlighter.js";
+import * as Dialogs from "../../../components/dialogs/dialogs.js";
+import * as TextEditor from "../../../components/text_editor/text_editor.js";
+import * as VisualLogging from "../../../visual_logging/visual_logging.js";
+import * as UI from "../../legacy.js";
 var UIStrings = {
   /**
-   * @description Text for the source of something
+   * @description Title of the source frame view tab.
    */
   source: "Source",
   /**
-   * @description Text to pretty print a file
+   * @description Tooltip text for the pretty print button in the toolbar.
    */
   prettyPrint: "Pretty print",
   /**
-   * @description Text when something is loading
+   * @description Tooltip text for the progress indicator while content is loading in the source frame.
    */
   loading: "Loading\u2026",
   /**
-   * @description Text when a file is currently being pretty printed/formatted in the editor
+   * @description Placeholder text shown in the editor while formatting content.
    */
   formatting: "Formatting\u2026",
   /**
-   * @description Shown at the bottom of the Sources panel when the user has made multiple
-   * simultaneous text selections in the text editor.
+   * @description Status bar text in the source frame showing the number of active selection regions.
    * @example {2} PH1
    */
   dSelectionRegions: "{PH1} selection regions",
   /**
-   * @description Position indicator in Source Frame of the Sources panel. The placeholder is a
-   * hexadecimal number value, which is why it is prefixed with '0x'.
+   * @description Status bar text in the source frame showing the current bytecode offset position. The placeholder is a hexadecimal number value, which is why it is prefixed with '0x'.
    * @example {abc} PH1
    */
   bytecodePositionXs: "Bytecode position `0x`{PH1}",
   /**
-   * @description Text in Source Frame of the Sources panel
+   * @description Status bar text in the source frame showing the cursor line and column position.
    * @example {2} PH1
    * @example {2} PH2
    */
-  lineSColumnS: "Line {PH1}, Column {PH2}",
+  lineSColumnS: "Line {PH1}, column {PH2}",
   /**
-   * @description Text in Source Frame of the Sources panel
+   * @description Status bar text in the source frame showing the number of characters selected.
    * @example {2} PH1
    */
   dCharactersSelected: "{PH1} characters selected",
   /**
-   * @description Text in Source Frame of the Sources panel
+   * @description Status bar text in the source frame showing the number of lines and characters selected.
    * @example {2} PH1
    * @example {2} PH2
    */
   dLinesDCharactersSelected: "{PH1} lines, {PH2} characters selected",
   /**
-   * @description Headline of warning shown to users when pasting text/code into DevTools.
+   * @description Title of warning dialog shown to users when pasting code into DevTools.
    */
   doYouTrustThisCode: "Do you trust this code?",
   /**
-   * @description Warning shown to users when pasting text/code into DevTools. IMPORTANT: keep double quotes around PH1 and do not use single quotes.
+   * @description Warning message shown to users when pasting code into DevTools. IMPORTANT: keep double quotes around PH1 and do not use single quotes.
    * @example {allow pasting} PH1
    */
-  doNotPaste: 'Don\u2019t paste code you do not understand or have not reviewed yourself into DevTools. This could allow attackers to steal your identity or take control of your computer. Please type "{PH1}" below to allow pasting.',
+  doNotPaste: 'Don\u2019t paste code you don\u2019t understand or haven\u2019t reviewed yourself into DevTools. This could allow attackers to steal your identity or take control of your computer. Type "{PH1}" below to allow pasting.',
   /**
-   * @description Text a user needs to type in order to confirm that they are aware of the danger of pasting code into the DevTools console.
+   * @description Text the user needs to type to confirm they want to paste code into DevTools.
    */
   allowPasting: "allow pasting",
   /**
@@ -143,13 +131,17 @@ var UIStrings = {
    */
   typeAllowPasting: 'Type "{PH1}"',
   /**
-   * @description Error message shown when the user tries to open a file that contains non-readable data. "Editor" refers to
-   * a text editor.
+   * @description Error message shown in the text editor when binary data cannot be displayed.
    */
   binaryContentError: "Editor can\u2019t show binary data. Use the Response tab in the Network panel to inspect this resource."
 };
 var str_ = i18n.i18n.registerUIStrings("ui/legacy/components/source_frame/SourceFrame.ts", UIStrings);
 var i18nString = i18n.i18n.getLocalizedString.bind(void 0, str_);
+var Events = /* @__PURE__ */ ((Events2) => {
+  Events2["EDITOR_UPDATE"] = "EditorUpdate";
+  Events2["EDITOR_SCROLL"] = "EditorScroll";
+  return Events2;
+})(Events || {});
 var LINE_NUMBER_FORMATTER = CodeMirror.Facet.define({
   combine(value) {
     if (value.length === 0) {
@@ -158,38 +150,10 @@ var LINE_NUMBER_FORMATTER = CodeMirror.Facet.define({
     return value[0];
   }
 });
-var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.SimpleView) {
-  options;
-  lazyContent;
-  prettyInternal;
-  rawContent;
-  formattedMap;
-  prettyToggle;
-  shouldAutoPrettyPrint;
-  progressToolbarItem;
-  textEditorInternal;
-  // The 'clean' document, before editing
-  baseDoc;
-  prettyBaseDoc = null;
-  displayedSelection = null;
-  searchConfig;
-  delayedFindSearchMatches;
-  currentSearchResultIndex;
-  searchResults;
-  searchRegex;
-  loadError;
-  sourcePosition;
-  searchableView;
-  editable;
-  positionToReveal;
-  lineToScrollTo;
-  selectionToSet;
-  loadedInternal;
-  positionPercentageToReveal = null;
-  contentRequested;
-  wasmDisassemblyInternal;
-  contentSet;
-  selfXssWarningDisabledSetting;
+var SourceFrameImplBase = Common.ObjectWrapper.eventMixin(
+  UI.View.SimpleView
+);
+var SourceFrameImpl = class extends SourceFrameImplBase {
   constructor(lazyContent, options = {}, element) {
     super(...element ? [element] : [], {
       title: i18nString(UIStrings.source),
@@ -201,7 +165,7 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
     this.rawContent = null;
     this.formattedMap = null;
     this.prettyToggle = new UI.Toolbar.ToolbarToggle(i18nString(UIStrings.prettyPrint), "brackets", void 0, "pretty-print");
-    this.prettyToggle.addEventListener("Click", () => {
+    this.prettyToggle.addEventListener(UI.Toolbar.ToolbarButton.Events.CLICK, () => {
       void this.setPretty(this.prettyToggle.isToggled());
     });
     this.shouldAutoPrettyPrint = false;
@@ -235,11 +199,41 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
     this.selfXssWarningDisabledSetting = Common.Settings.Settings.instance().createSetting(
       "disable-self-xss-warning",
       false,
-      "Synced"
-      /* Common.Settings.SettingStorageType.SYNCED */
+      Common.Settings.SettingStorageType.SYNCED
     );
     Common.Settings.Settings.instance().moduleSetting("text-editor-indent").addChangeListener(this.#textEditorIndentChanged, this);
   }
+  options;
+  lazyContent;
+  prettyInternal;
+  rawContent;
+  formattedMap;
+  prettyToggle;
+  shouldAutoPrettyPrint;
+  progressToolbarItem;
+  textEditorInternal;
+  // The 'clean' document, before editing
+  baseDoc;
+  prettyBaseDoc = null;
+  displayedSelection = null;
+  searchConfig;
+  delayedFindSearchMatches;
+  currentSearchResultIndex;
+  searchResults;
+  searchRegex;
+  loadError;
+  sourcePosition;
+  searchableView;
+  editable;
+  positionToReveal;
+  lineToScrollTo;
+  selectionToSet;
+  loadedInternal;
+  positionPercentageToReveal = null;
+  contentRequested;
+  wasmDisassemblyInternal;
+  contentSet;
+  selfXssWarningDisabledSetting;
   disposeView() {
     Common.Settings.Settings.instance().moduleSetting("text-editor-indent").removeChangeListener(this.#textEditorIndentChanged, this);
   }
@@ -261,7 +255,7 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
   }
   editorConfiguration(doc) {
     return [
-      CodeMirror.EditorView.updateListener.of((update) => this.dispatchEventToListeners("EditorUpdate", update)),
+      CodeMirror.EditorView.updateListener.of((update) => this.dispatchEventToListeners("EditorUpdate" /* EDITOR_UPDATE */, update)),
       TextEditor.Config.baseConfiguration(doc),
       TextEditor.Config.closeBrackets.instance(),
       TextEditor.Config.autocompletion.instance(),
@@ -275,10 +269,7 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
         blur: () => this.onBlur(),
         paste: () => this.onPaste(),
         drop: (event) => event.preventDefault(),
-        scroll: () => this.dispatchEventToListeners(
-          "EditorScroll"
-          /* Events.EDITOR_SCROLL */
-        ),
+        scroll: () => this.dispatchEventToListeners("EditorScroll" /* EDITOR_SCROLL */),
         contextmenu: (event) => this.onContextMenu(event)
       }),
       CodeMirror.lineNumbers({
@@ -378,20 +369,30 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
     if (this.prettyInternal) {
       const content = this.rawContent instanceof CodeMirror.Text ? this.rawContent.sliceString(0) : this.rawContent || "";
       this.textEditor.state = this.placeholderEditorState(i18nString(UIStrings.formatting));
-      const formatInfo = await Formatter.ScriptFormatter.formatScriptContent(Common.Settings.Settings.instance(), this.contentType, content);
+      const formatInfo = await Formatter.ScriptFormatter.formatScriptContent(
+        Common.Settings.Settings.instance(),
+        this.contentType,
+        content
+      );
       this.formattedMap = formatInfo.formattedMapping;
       await this.setContent(formatInfo.formattedContent);
       this.prettyBaseDoc = textEditor.state.doc;
       const start = this.rawToPrettyLocation(startPos.lineNumber, startPos.columnNumber);
       const end = this.rawToPrettyLocation(endPos.lineNumber, endPos.columnNumber);
-      newSelection = textEditor.createSelection({ lineNumber: start[0], columnNumber: start[1] }, { lineNumber: end[0], columnNumber: end[1] });
+      newSelection = textEditor.createSelection(
+        { lineNumber: start[0], columnNumber: start[1] },
+        { lineNumber: end[0], columnNumber: end[1] }
+      );
     } else {
       this.formattedMap = null;
       await this.setContent(this.rawContent || "");
       this.baseDoc = textEditor.state.doc;
       const start = this.prettyToRawLocation(startPos.lineNumber, startPos.columnNumber);
       const end = this.prettyToRawLocation(endPos.lineNumber, endPos.columnNumber);
-      newSelection = textEditor.createSelection({ lineNumber: start[0], columnNumber: start[1] }, { lineNumber: end[0], columnNumber: end[1] });
+      newSelection = textEditor.createSelection(
+        { lineNumber: start[0], columnNumber: start[1] },
+        { lineNumber: end[0], columnNumber: end[1] }
+      );
     }
     if (wasLoaded) {
       textEditor.revealPosition(newSelection, false);
@@ -623,7 +624,10 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
     if (sel && this.loaded && this.isShowing()) {
       const { textEditor } = this;
       textEditor.dispatch({
-        selection: textEditor.createSelection({ lineNumber: sel.startLine, columnNumber: sel.startColumn }, { lineNumber: sel.endLine, columnNumber: sel.endColumn })
+        selection: textEditor.createSelection(
+          { lineNumber: sel.startLine, columnNumber: sel.startColumn },
+          { lineNumber: sel.endLine, columnNumber: sel.endColumn }
+        )
       });
       this.selectionToSet = null;
     }
@@ -784,7 +788,11 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
     this.jumpToSearchResult(this.searchResults.length - 1);
   }
   searchResultIndexForCurrentSelection() {
-    return Platform.ArrayUtilities.lowerBound(this.searchResults, this.textEditor.state.selection.main, (a, b) => a.to - b.to);
+    return Platform.ArrayUtilities.lowerBound(
+      this.searchResults,
+      this.textEditor.state.selection.main,
+      (a, b) => a.to - b.to
+    );
   }
   jumpToNextSearchResult() {
     const currentIndex = this.searchResultIndexForCurrentSelection();
@@ -829,7 +837,9 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
     const insert = this.searchRegex?.fromQuery ? range.insertPlaceholders(replacement) : replacement;
     const editor = this.textEditor;
     const changes = editor.state.changes({ from: range.from, to: range.to, insert });
-    editor.dispatch({ changes, selection: { anchor: changes.mapPos(editor.state.selection.main.to, 1) }, userEvent: "input.replace" });
+    editor.dispatch(
+      { changes, selection: { anchor: changes.mapPos(editor.state.selection.main.to, 1) }, userEvent: "input.replace" }
+    );
   }
   replaceAllWith(searchConfig, replacement) {
     this.resetCurrentSearchResultIndex();
@@ -839,7 +849,9 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
       return;
     }
     const isRegExp = regex.fromQuery;
-    const changes = ranges.map((match) => ({ from: match.from, to: match.to, insert: isRegExp ? match.insertPlaceholders(replacement) : replacement }));
+    const changes = ranges.map(
+      (match) => ({ from: match.from, to: match.to, insert: isRegExp ? match.insertPlaceholders(replacement) : replacement })
+    );
     this.textEditor.dispatch({ changes, scrollIntoView: true, userEvent: "input.replace.all" });
   }
   collectRegexMatches({ regex }) {
@@ -885,7 +897,10 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
         const lastBytecodeOffset = disassembly.lineNumberToBytecodeOffset(disassembly.lineNumbers - 1);
         const bytecodeOffsetDigits = lastBytecodeOffset.toString(16).length;
         const bytecodeOffset = disassembly.lineNumberToBytecodeOffset(location[0]);
-        this.sourcePosition.setText(i18nString(UIStrings.bytecodePositionXs, { PH1: bytecodeOffset.toString(16).padStart(bytecodeOffsetDigits, "0") }));
+        this.sourcePosition.setText(i18nString(
+          UIStrings.bytecodePositionXs,
+          { PH1: bytecodeOffset.toString(16).padStart(bytecodeOffsetDigits, "0") }
+        ));
       } else {
         this.sourcePosition.setText(i18nString(UIStrings.lineSColumnS, { PH1: location[0] + 1, PH2: location[1] + 1 }));
       }
@@ -894,7 +909,10 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
       if (startLine.number === endLine.number) {
         this.sourcePosition.setText(i18nString(UIStrings.dCharactersSelected, { PH1: main.to - main.from }));
       } else {
-        this.sourcePosition.setText(i18nString(UIStrings.dLinesDCharactersSelected, { PH1: endLine.number - startLine.number + 1, PH2: main.to - main.from }));
+        this.sourcePosition.setText(i18nString(
+          UIStrings.dLinesDCharactersSelected,
+          { PH1: endLine.number - startLine.number + 1, PH2: main.to - main.from }
+        ));
       }
     }
   }
@@ -926,14 +944,14 @@ var SourceFrameImpl = class extends Common.ObjectWrapper.eventMixin(UI.View.Simp
   }
 };
 var SearchMatch = class {
-  from;
-  to;
-  match;
   constructor(from, to, match) {
     this.from = from;
     this.to = to;
     this.match = match;
   }
+  from;
+  to;
+  match;
   insertPlaceholders(replacement) {
     return replacement.replace(/\$(\$|&|\d+|<[^>]+>)/g, (_, selector) => {
       if (selector === "$") {
@@ -955,17 +973,22 @@ var config = {
   lineNumbers: new CodeMirror.Compartment()
 };
 var ActiveSearch = class _ActiveSearch {
-  regexp;
-  currentRange;
   constructor(regexp, currentRange) {
     this.regexp = regexp;
     this.currentRange = currentRange;
   }
+  regexp;
+  currentRange;
   map(change) {
-    return change.empty || !this.currentRange ? this : new _ActiveSearch(this.regexp, { from: change.mapPos(this.currentRange.from), to: change.mapPos(this.currentRange.to) });
+    return change.empty || !this.currentRange ? this : new _ActiveSearch(
+      this.regexp,
+      { from: change.mapPos(this.currentRange.from), to: change.mapPos(this.currentRange.to) }
+    );
   }
   static eq(a, b) {
-    return Boolean(a === b || a && b && a.currentRange?.from === b.currentRange?.from && a.currentRange?.to === b.currentRange?.to && a.regexp.regex.source === b.regexp.regex.source && a.regexp.regex.flags === b.regexp.regex.flags);
+    return Boolean(
+      a === b || a && b && a.currentRange?.from === b.currentRange?.from && a.currentRange?.to === b.currentRange?.to && a.regexp.regex.source === b.regexp.regex.source && a.regexp.regex.flags === b.regexp.regex.flags
+    );
   }
 };
 var setActiveSearch = CodeMirror.StateEffect.define({ map: (value, mapping) => value?.map(mapping) });
@@ -974,7 +997,10 @@ var activeSearchState = CodeMirror.StateField.define({
     return null;
   },
   update(state, tr) {
-    return tr.effects.reduce((state2, effect) => effect.is(setActiveSearch) ? effect.value : state2, state?.map(tr.changes) ?? null);
+    return tr.effects.reduce(
+      (state2, effect) => effect.is(setActiveSearch) ? effect.value : state2,
+      state?.map(tr.changes) ?? null
+    );
   }
 });
 var searchMatchDeco = CodeMirror.Decoration.mark({ class: "cm-searchMatch" });
@@ -1096,13 +1122,16 @@ var sourceFrameInfobarState = CodeMirror.StateField.define({
     }
     return current;
   },
-  provide: (field) => CodeMirror.showPanel.computeN([field], (state) => state.field(field).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((bar) => () => ({ dom: bar.element })))
+  provide: (field) => CodeMirror.showPanel.computeN(
+    [field],
+    (state) => state.field(field).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((bar) => () => ({ dom: bar.element }))
+  )
 });
 
-// gen/front_end/ui/legacy/components/source_frame/ResourceSourceFrame.js
+// ../../front_end/ui/legacy/components/source_frame/ResourceSourceFrame.ts
 var UIStrings2 = {
   /**
-   * @description Text to find an item
+   * @description Placeholder text for the search input in the resource source frame.
    */
   find: "Find"
 };
@@ -1120,7 +1149,7 @@ var ResourceSourceFrame = class extends SourceFrameImpl {
     if (isStreamingProvider) {
       void resource.requestStreamingContent().then((streamingContent) => {
         if (!TextUtils3.StreamingContentData.isError(streamingContent)) {
-          streamingContent.addEventListener("ChunkAdded", () => {
+          streamingContent.addEventListener(TextUtils3.StreamingContentData.Events.CHUNK_ADDED, () => {
             void this.setContentDataOrError(Promise.resolve(streamingContent.content()));
           });
         }
@@ -1149,7 +1178,7 @@ var SearchableContainer = class extends UI2.Widget.VBox {
     const simpleContentType = Common2.ResourceType.ResourceType.simplifyContentType(contentType);
     const sourceFrame = new ResourceSourceFrame(resource, simpleContentType);
     this.sourceFrame = sourceFrame;
-    const canPrettyPrint = FORMATTABLE_MEDIA_TYPES.includes(simpleContentType);
+    const canPrettyPrint = FormatterActions.FORMATTABLE_MEDIA_TYPES.includes(simpleContentType);
     sourceFrame.setCanPrettyPrint(
       canPrettyPrint,
       true
@@ -1175,14 +1204,14 @@ var SearchableContainer = class extends UI2.Widget.VBox {
   }
 };
 
-// gen/front_end/ui/legacy/components/source_frame/StreamingContentHexView.js
+// ../../front_end/ui/legacy/components/source_frame/StreamingContentHexView.ts
 var StreamingContentHexView_exports = {};
 __export(StreamingContentHexView_exports, {
   StreamingContentHexView: () => StreamingContentHexView
 });
-import * as TextUtils4 from "./../../../../core/text_utils/text_utils.js";
-import * as LinearMemoryInspectorComponents from "./../../../../panels/linear_memory_inspector/components/components.js";
-import * as UI3 from "./../../legacy.js";
+import * as TextUtils4 from "../../../../core/text_utils/text_utils.js";
+import * as LinearMemoryInspectorComponents from "../../../../panels/linear_memory_inspector/components/components.js";
+import * as UI3 from "../../legacy.js";
 var MEMORY_TRANSFER_MIN_CHUNK_SIZE = 1e3;
 var LinearMemoryInspectorView = class extends UI3.Widget.VBox {
   #memory = new Uint8Array([0]);
@@ -1191,10 +1220,17 @@ var LinearMemoryInspectorView = class extends UI3.Widget.VBox {
   #inspector = new LinearMemoryInspectorComponents.LinearMemoryInspector.LinearMemoryInspector();
   constructor(element) {
     super(element);
-    this.#inspector.addEventListener("MemoryRequest", this.#memoryRequested, this);
-    this.#inspector.addEventListener("AddressChanged", (event) => {
-      this.#address = event.data;
-    });
+    this.#inspector.addEventListener(
+      LinearMemoryInspectorComponents.LinearMemoryInspector.Events.MEMORY_REQUEST,
+      this.#memoryRequested,
+      this
+    );
+    this.#inspector.addEventListener(
+      LinearMemoryInspectorComponents.LinearMemoryInspector.Events.ADDRESS_CHANGED,
+      (event) => {
+        this.#address = event.data;
+      }
+    );
     this.#inspector.show(this.contentElement);
   }
   wasShown() {
@@ -1256,11 +1292,19 @@ var StreamingContentHexView = class extends LinearMemoryInspectorView {
   wasShown() {
     super.wasShown();
     this.#updateMemoryFromContentData();
-    this.#streamingContentData.addEventListener("ChunkAdded", this.#updateMemoryFromContentData, this);
+    this.#streamingContentData.addEventListener(
+      TextUtils4.StreamingContentData.Events.CHUNK_ADDED,
+      this.#updateMemoryFromContentData,
+      this
+    );
   }
   willHide() {
     super.willHide();
-    this.#streamingContentData.removeEventListener("ChunkAdded", this.#updateMemoryFromContentData, this);
+    this.#streamingContentData.removeEventListener(
+      TextUtils4.StreamingContentData.Events.CHUNK_ADDED,
+      this.#updateMemoryFromContentData,
+      this
+    );
   }
   #updateMemoryFromContentData() {
     const binaryString = window.atob(this.#streamingContentData.content().base64);
@@ -1269,7 +1313,7 @@ var StreamingContentHexView = class extends LinearMemoryInspectorView {
   }
 };
 
-// gen/front_end/ui/legacy/components/source_frame/BinaryResourceViewFactory.js
+// ../../front_end/ui/legacy/components/source_frame/BinaryResourceViewFactory.ts
 var BinaryResourceViewFactory = class _BinaryResourceViewFactory {
   streamingContent;
   contentUrl;
@@ -1297,13 +1341,27 @@ var BinaryResourceViewFactory = class _BinaryResourceViewFactory {
     ).text;
   }
   createBase64View(element) {
-    return new StreamingResourceSourceFrame(this.streamingContent, () => this.base64(), this.contentUrl, this.resourceType, { lineNumbers: false, lineWrapping: true }, element);
+    return new StreamingResourceSourceFrame(
+      this.streamingContent,
+      () => this.base64(),
+      this.contentUrl,
+      this.resourceType,
+      { lineNumbers: false, lineWrapping: true },
+      element
+    );
   }
   createHexView(element) {
     return new StreamingContentHexView(this.streamingContent, element);
   }
   createUtf8View(element) {
-    return new StreamingResourceSourceFrame(this.streamingContent, () => this.utf8(), this.contentUrl, this.resourceType, { lineNumbers: true, lineWrapping: true }, element);
+    return new StreamingResourceSourceFrame(
+      this.streamingContent,
+      () => this.utf8(),
+      this.contentUrl,
+      this.resourceType,
+      { lineNumbers: true, lineWrapping: true },
+      element
+    );
   }
   static #uint8ArrayToHexString(uint8Array) {
     let output = "";
@@ -1324,34 +1382,47 @@ var StreamingResourceSourceFrame = class extends ResourceSourceFrame {
   #streamingContent;
   #getContent;
   constructor(streamingContent, getContent, contentUrl, resourceType, options, element) {
-    super(TextUtils5.StaticContentProvider.StaticContentProvider.fromString(contentUrl, resourceType, getContent()), resourceType.canonicalMimeType(), options, element);
+    super(
+      TextUtils5.StaticContentProvider.StaticContentProvider.fromString(contentUrl, resourceType, getContent()),
+      resourceType.canonicalMimeType(),
+      options,
+      element
+    );
     this.#streamingContent = streamingContent;
     this.#getContent = getContent;
   }
   wasShown() {
     super.wasShown();
-    this.#streamingContent.addEventListener("ChunkAdded", this.#onChunkAdded, this);
+    this.#streamingContent.addEventListener(
+      TextUtils5.StreamingContentData.Events.CHUNK_ADDED,
+      this.#onChunkAdded,
+      this
+    );
   }
   willHide() {
     super.willHide();
-    this.#streamingContent.removeEventListener("ChunkAdded", this.#onChunkAdded, this);
+    this.#streamingContent.removeEventListener(
+      TextUtils5.StreamingContentData.Events.CHUNK_ADDED,
+      this.#onChunkAdded,
+      this
+    );
   }
   #onChunkAdded() {
     void this.setContent(this.#getContent());
   }
 };
 
-// gen/front_end/ui/legacy/components/source_frame/FontView.js
+// ../../front_end/ui/legacy/components/source_frame/FontView.ts
 var FontView_exports = {};
 __export(FontView_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW,
   FontView: () => FontView
 });
-import * as i18n5 from "./../../../../core/i18n/i18n.js";
-import * as TextUtils6 from "./../../../../core/text_utils/text_utils.js";
-import { Directives, html, render as render2 } from "./../../../lit/lit.js";
-import * as VisualLogging2 from "./../../../visual_logging/visual_logging.js";
-import * as UI4 from "./../../legacy.js";
+import * as i18n5 from "../../../../core/i18n/i18n.js";
+import * as TextUtils6 from "../../../../core/text_utils/text_utils.js";
+import { Directives, html, render as render2 } from "../../../lit/lit.js";
+import * as VisualLogging2 from "../../../visual_logging/visual_logging.js";
+import * as UI4 from "../../legacy.js";
 
 // gen/front_end/ui/legacy/components/source_frame/fontView.css.js
 var fontView_css_default = `/*
@@ -1370,14 +1441,14 @@ var fontView_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./fontView.css")} */`;
 
-// gen/front_end/ui/legacy/components/source_frame/FontView.js
+// ../../front_end/ui/legacy/components/source_frame/FontView.ts
 var UIStrings3 = {
   /**
-   * @description Text that appears on a button for the font resource type filter.
+   * @description Title of the font view tab in the Sources panel.
    */
   font: "Font",
   /**
-   * @description Aria accessible name in Font View of the Sources panel
+   * @description Accessible name for the font preview in the font view of the Sources panel.
    * @example {https://example.com} PH1
    */
   previewOfFontFromS: "Preview of font from {PH1}"
@@ -1482,13 +1553,17 @@ var FontView = class extends UI4.View.SimpleView {
   }
   performUpdate() {
     const output = {};
-    this.#view({
-      url: this.url,
-      fontFaceRule: this.#fontFaceRule,
-      fontFamily: this.#fontFamily,
-      previewFontSize: this.#previewFontSize,
-      previewVisible: this.#previewVisible
-    }, output, this.contentElement);
+    this.#view(
+      {
+        url: this.url,
+        fontFaceRule: this.#fontFaceRule,
+        fontFamily: this.#fontFamily,
+        previewFontSize: this.#previewFontSize,
+        previewVisible: this.#previewVisible
+      },
+      output,
+      this.contentElement
+    );
     if (!output.measureDimensions) {
       return;
     }
@@ -1502,20 +1577,20 @@ var FontView = class extends UI4.View.SimpleView {
 };
 var fontId = 0;
 
-// gen/front_end/ui/legacy/components/source_frame/ImageView.js
+// ../../front_end/ui/legacy/components/source_frame/ImageView.ts
 var ImageView_exports = {};
 __export(ImageView_exports, {
   ImageView: () => ImageView
 });
-import * as Common3 from "./../../../../core/common/common.js";
-import * as Host2 from "./../../../../core/host/host.js";
-import * as i18n7 from "./../../../../core/i18n/i18n.js";
-import * as Platform2 from "./../../../../core/platform/platform.js";
-import * as TextUtils7 from "./../../../../core/text_utils/text_utils.js";
-import * as Workspace from "./../../../../models/workspace/workspace.js";
-import { createIcon } from "./../../../kit/kit.js";
-import * as VisualLogging3 from "./../../../visual_logging/visual_logging.js";
-import * as UI5 from "./../../legacy.js";
+import * as Common3 from "../../../../core/common/common.js";
+import * as Host2 from "../../../../core/host/host.js";
+import * as i18n7 from "../../../../core/i18n/i18n.js";
+import * as Platform2 from "../../../../core/platform/platform.js";
+import * as TextUtils7 from "../../../../core/text_utils/text_utils.js";
+import * as Workspace from "../../../../models/workspace/workspace.js";
+import { createIcon } from "../../../kit/kit.js";
+import * as VisualLogging3 from "../../../visual_logging/visual_logging.js";
+import * as UI5 from "../../legacy.js";
 
 // gen/front_end/ui/legacy/components/source_frame/imageView.css.js
 var imageView_css_default = `/*
@@ -1529,7 +1604,7 @@ var imageView_css_default = `/*
 }
 
 .image-view > .image {
-  padding: 20px 20px 10px;
+  padding: var(--sys-size-9) var(--sys-size-9) 10px;
   text-align: center;
 }
 
@@ -1557,49 +1632,49 @@ var imageView_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./imageView.css")} */`;
 
-// gen/front_end/ui/legacy/components/source_frame/ImageView.js
+// ../../front_end/ui/legacy/components/source_frame/ImageView.ts
 var UIStrings4 = {
   /**
-   * @description Text in Image View of the Sources panel
+   * @description Title of the image view tab in the Sources panel.
    */
   image: "Image",
   /**
-   * @description Text that appears when user drag and drop something (for example, a file) in Image View of the Sources panel
+   * @description Drop target message shown when dragging a file into the image view of the Sources panel.
    */
   dropImageFileHere: "Drop image file here",
   /**
-   * @description Text to indicate the source of an image
-   * @example {example.com} PH1
+   * @description Alt text for the image preview in the image view of the Sources panel.
+   * @example {https://example.com} PH1
    */
   imageFromS: "Image from {PH1}",
   /**
-   * @description Text in Image View of the Sources panel
-   * @example {2} PH1
-   * @example {2} PH2
+   * @description Dimensions label in the toolbar of the image view showing width and height in pixels.
+   * @example {200} PH1
+   * @example {100} PH2
    */
   dD: "{PH1} \xD7 {PH2}",
   /**
-   * @description A context menu item in the Image View of the Sources panel
+   * @description Context menu item in the image view of the Sources panel to copy the image URL.
    */
   copyImageUrl: "Copy image URL",
   /**
-   * @description A context menu item in the Image View of the Sources panel
+   * @description Context menu item in the image view of the Sources panel to copy the image as a data URI.
    */
   copyImageAsDataUri: "Copy image as data URI",
   /**
-   * @description A context menu item in the Image View of the Sources panel
+   * @description Context menu item in the image view of the Sources panel to open the image in a new tab.
    */
   openImageInNewTab: "Open image in new tab",
   /**
-   * @description A context menu item in the Image Preview
+   * @description Context menu item in the image view of the Sources panel to save the image.
    */
   saveImageAs: "Save image as\u2026",
   /**
-   * @description The default file name when downloading a file
+   * @description Default file name used when saving an image with a data URI.
    */
   download: "download",
   /**
-   * @description Text indicating an image is too large to display and offering to open it in a new tab
+   * @description Link text shown in the image view of the Sources panel when an image is too large to display.
    */
   thisImageIsTooBig: "This image is too big to display in DevTools. Click here to open it in a new tab."
 };
@@ -1632,8 +1707,17 @@ var ImageView = class extends UI5.View.SimpleView {
     this.contentProvider = contentProvider;
     this.uiSourceCode = contentProvider instanceof Workspace.UISourceCode.UISourceCode ? contentProvider : null;
     if (this.uiSourceCode) {
-      this.uiSourceCode.addEventListener(Workspace.UISourceCode.Events.WorkingCopyCommitted, this.workingCopyCommitted, this);
-      new UI5.DropTarget.DropTarget(this.element, [UI5.DropTarget.Type.ImageFile, UI5.DropTarget.Type.URI], i18nString4(UIStrings4.dropImageFileHere), this.handleDrop.bind(this));
+      this.uiSourceCode.addEventListener(
+        Workspace.UISourceCode.Events.WorkingCopyCommitted,
+        this.workingCopyCommitted,
+        this
+      );
+      new UI5.DropTarget.DropTarget(
+        this.element,
+        [UI5.DropTarget.Type.ImageFile, UI5.DropTarget.Type.URI],
+        i18nString4(UIStrings4.dropImageFileHere),
+        this.handleDrop.bind(this)
+      );
     }
     this.sizeLabel = new UI5.Toolbar.ToolbarText();
     this.dimensionsLabel = new UI5.Toolbar.ToolbarText();
@@ -1668,7 +1752,11 @@ var ImageView = class extends UI5.View.SimpleView {
   }
   disposeView() {
     if (this.uiSourceCode) {
-      this.uiSourceCode.removeEventListener(Workspace.UISourceCode.Events.WorkingCopyCommitted, this.workingCopyCommitted, this);
+      this.uiSourceCode.removeEventListener(
+        Workspace.UISourceCode.Events.WorkingCopyCommitted,
+        this.workingCopyCommitted,
+        this
+      );
     }
   }
   workingCopyCommitted() {
@@ -1694,8 +1782,14 @@ var ImageView = class extends UI5.View.SimpleView {
     const size = content.isTextContent ? content.text.length : Platform2.StringUtilities.base64ToSize(content.base64);
     this.sizeLabel.setText(i18n7.ByteUtilities.bytesToString(size));
     await loadPromise;
-    this.dimensionsLabel.setText(i18nString4(UIStrings4.dD, { PH1: this.imagePreviewElement.naturalWidth, PH2: this.imagePreviewElement.naturalHeight }));
-    this.aspectRatioLabel.setText(Platform2.NumberUtilities.aspectRatio(this.imagePreviewElement.naturalWidth, this.imagePreviewElement.naturalHeight));
+    this.dimensionsLabel.setText(i18nString4(
+      UIStrings4.dD,
+      { PH1: this.imagePreviewElement.naturalWidth, PH2: this.imagePreviewElement.naturalHeight }
+    ));
+    this.aspectRatioLabel.setText(Platform2.NumberUtilities.aspectRatio(
+      this.imagePreviewElement.naturalWidth,
+      this.imagePreviewElement.naturalHeight
+    ));
   }
   contextMenu(event) {
     const contextMenu = new UI5.ContextMenu.ContextMenu(event);
@@ -1706,9 +1800,13 @@ var ImageView = class extends UI5.View.SimpleView {
       });
     }
     if (parsedSrc.isDataURL()) {
-      contextMenu.clipboardSection().appendItem(i18nString4(UIStrings4.copyImageAsDataUri), this.copyImageAsDataURL.bind(this), {
-        jslogContext: "image-view.copy-image-as-data-url"
-      });
+      contextMenu.clipboardSection().appendItem(
+        i18nString4(UIStrings4.copyImageAsDataUri),
+        this.copyImageAsDataURL.bind(this),
+        {
+          jslogContext: "image-view.copy-image-as-data-url"
+        }
+      );
     }
     contextMenu.clipboardSection().appendItem(i18nString4(UIStrings4.openImageInNewTab), this.openInNewTab.bind(this), {
       jslogContext: "image-view.open-in-new-tab"
@@ -1792,19 +1890,19 @@ var ImageView = class extends UI5.View.SimpleView {
   }
 };
 
-// gen/front_end/ui/legacy/components/source_frame/JSONView.js
+// ../../front_end/ui/legacy/components/source_frame/JSONView.ts
 var JSONView_exports = {};
 __export(JSONView_exports, {
   JSONView: () => JSONView,
   ParsedJSON: () => ParsedJSON,
   SearchableJsonView: () => SearchableJsonView
 });
-import * as i18n9 from "./../../../../core/i18n/i18n.js";
-import * as SDK2 from "./../../../../core/sdk/sdk.js";
-import { html as html2, render as render3 } from "./../../../lit/lit.js";
-import * as VisualLogging4 from "./../../../visual_logging/visual_logging.js";
-import * as UI6 from "./../../legacy.js";
-import * as ObjectUI from "./../object_ui/object_ui.js";
+import * as i18n9 from "../../../../core/i18n/i18n.js";
+import * as SDK2 from "../../../../core/sdk/sdk.js";
+import { html as html2, render as render3 } from "../../../lit/lit.js";
+import * as VisualLogging4 from "../../../visual_logging/visual_logging.js";
+import * as UI6 from "../../legacy.js";
+import * as ObjectUI from "../object_ui/object_ui.js";
 
 // gen/front_end/ui/legacy/components/source_frame/jsonView.css.js
 var jsonView_css_default = `/*
@@ -1814,7 +1912,7 @@ var jsonView_css_default = `/*
  */
 
 .json-view {
-  padding: 2px 6px;
+  padding: var(--sys-size-2) var(--sys-size-4);
   overflow: auto;
 }
 
@@ -1824,10 +1922,10 @@ devtools-tree {
 
 /*# sourceURL=${import.meta.resolve("./jsonView.css")} */`;
 
-// gen/front_end/ui/legacy/components/source_frame/JSONView.js
+// ../../front_end/ui/legacy/components/source_frame/JSONView.ts
 var UIStrings5 = {
   /**
-   * @description Text to find an item
+   * @description Placeholder text for the search input in the json view.
    */
   find: "Find"
 };
@@ -1837,20 +1935,24 @@ var DEFAULT_VIEW2 = (input, _output, target) => {
   const obj = SDK2.RemoteObject.RemoteObject.fromLocalObject(input.parsedJSON.data);
   const titleText = input.parsedJSON.prefix + obj.description + input.parsedJSON.suffix;
   const title = html2`<span>${titleText}</span>`;
-  render3(html2`
+  render3(
+    html2`
     <style>${jsonView_css_default}</style>
     ${UI6.Widget.widget(ObjectUI.ObjectPropertiesSection.ObjectPropertiesSectionWidget, {
-    objectTree: input.objectTree,
-    title
-  })}
-  `, target, {
-    container: {
-      classes: ["json-view"],
-      attributes: {
-        jslog: VisualLogging4.section("json-view")
+      objectTree: input.objectTree,
+      title
+    })}
+  `,
+    target,
+    {
+      container: {
+        classes: ["json-view"],
+        attributes: {
+          jslog: VisualLogging4.section("json-view")
+        }
       }
     }
-  });
+  );
 };
 var JSONView = class _JSONView extends UI6.Widget.VBox {
   #parsedJSON;
@@ -1889,8 +1991,16 @@ var JSONView = class _JSONView extends UI6.Widget.VBox {
   }
   set parsedJSON(parsedJSON) {
     if (this.objectTree) {
-      this.objectTree.removeEventListener("children-changed", this.#onChildrenChanged, this);
-      this.objectTree.removeEventListener("expanded-changed", this.#onChildrenChanged, this);
+      this.objectTree.removeEventListener(
+        ObjectUI.ObjectPropertiesSection.ObjectTreeNodeBase.Events.CHILDREN_CHANGED,
+        this.#onChildrenChanged,
+        this
+      );
+      this.objectTree.removeEventListener(
+        ObjectUI.ObjectPropertiesSection.ObjectTreeNodeBase.Events.EXPANDED_CHANGED,
+        this.#onChildrenChanged,
+        this
+      );
     }
     this.#parsedJSON = parsedJSON;
     this.objectTree = null;
@@ -1958,14 +2068,22 @@ var JSONView = class _JSONView extends UI6.Widget.VBox {
     const obj = SDK2.RemoteObject.RemoteObject.fromLocalObject(this.#parsedJSON.data);
     this.objectTree = new ObjectUI.ObjectPropertiesSection.ObjectTree(obj, {
       readOnly: true,
-      propertiesMode: 1,
+      propertiesMode: ObjectUI.ObjectPropertiesSection.ObjectPropertiesMode.OWN_AND_INTERNAL_AND_INHERITED,
       search: this.search
     });
     if (!this.startCollapsed) {
       this.objectTree.expanded = true;
     }
-    this.objectTree.addEventListener("children-changed", this.#onChildrenChanged, this);
-    this.objectTree.addEventListener("expanded-changed", this.#onChildrenChanged, this);
+    this.objectTree.addEventListener(
+      ObjectUI.ObjectPropertiesSection.ObjectTreeNodeBase.Events.CHILDREN_CHANGED,
+      this.#onChildrenChanged,
+      this
+    );
+    this.objectTree.addEventListener(
+      ObjectUI.ObjectPropertiesSection.ObjectTreeNodeBase.Events.EXPANDED_CHANGED,
+      this.#onChildrenChanged,
+      this
+    );
   }
   #onChildrenChanged() {
     this.requestUpdate();
@@ -2063,17 +2181,17 @@ var SearchableJsonView = class extends UI6.SearchableView.SearchableView {
   }
 };
 
-// gen/front_end/ui/legacy/components/source_frame/PreviewFactory.js
+// ../../front_end/ui/legacy/components/source_frame/PreviewFactory.ts
 var PreviewFactory_exports = {};
 __export(PreviewFactory_exports, {
   PreviewFactory: () => PreviewFactory
 });
-import * as Common4 from "./../../../../core/common/common.js";
-import * as i18n13 from "./../../../../core/i18n/i18n.js";
-import * as TextUtils9 from "./../../../../core/text_utils/text_utils.js";
-import * as UI8 from "./../../legacy.js";
+import * as Common4 from "../../../../core/common/common.js";
+import * as i18n13 from "../../../../core/i18n/i18n.js";
+import * as TextUtils9 from "../../../../core/text_utils/text_utils.js";
+import * as UI8 from "../../legacy.js";
 
-// gen/front_end/ui/legacy/components/source_frame/XMLView.js
+// ../../front_end/ui/legacy/components/source_frame/XMLView.ts
 var XMLView_exports = {};
 __export(XMLView_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW3,
@@ -2081,12 +2199,12 @@ __export(XMLView_exports, {
   XMLTreeViewNode: () => XMLTreeViewNode,
   XMLView: () => XMLView
 });
-import "./../../../components/highlighting/highlighting.js";
-import * as i18n11 from "./../../../../core/i18n/i18n.js";
-import * as TextUtils8 from "./../../../../core/text_utils/text_utils.js";
-import * as Lit from "./../../../lit/lit.js";
-import * as VisualLogging5 from "./../../../visual_logging/visual_logging.js";
-import * as UI7 from "./../../legacy.js";
+import "../../../components/highlighting/highlighting.js";
+import * as i18n11 from "../../../../core/i18n/i18n.js";
+import * as TextUtils8 from "../../../../core/text_utils/text_utils.js";
+import * as Lit from "../../../lit/lit.js";
+import * as VisualLogging5 from "../../../visual_logging/visual_logging.js";
+import * as UI7 from "../../legacy.js";
 
 // gen/front_end/ui/legacy/components/source_frame/xmlTree.css.js
 var xmlTree_css_default = `/*
@@ -2100,7 +2218,7 @@ var xmlTree_css_default = `/*
   list-style: none;
   padding: 0;
   margin: 0;
-  padding-inline-start: 16px;
+  padding-inline-start: var(--sys-size-8);
 }
 
 ol.tree-outline {
@@ -2108,11 +2226,11 @@ ol.tree-outline {
 }
 
 .tree-outline li {
-  min-height: 12px;
+  min-height: var(--sys-size-6);
 }
 
 ::part(shadow-xml-view-close-tag) {
-  margin-left: -16px;
+  margin-left: calc(-1 * var(--sys-size-8));
 }
 
 ::part(shadow-xml-view-close-tag),::part(shadow-xml-view-tag) {
@@ -2162,10 +2280,10 @@ var xmlView_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./xmlView.css")} */`;
 
-// gen/front_end/ui/legacy/components/source_frame/XMLView.js
+// ../../front_end/ui/legacy/components/source_frame/XMLView.ts
 var UIStrings6 = {
   /**
-   * @description Text to find an item
+   * @description Placeholder text for the search input in the xml view.
    */
   find: "Find"
 };
@@ -2394,7 +2512,11 @@ var XMLView = class _XMLView extends UI7.Widget.Widget {
         node.expanded = expanded;
         this.requestUpdate();
       };
-      this.#view({ xml: this.#treeViewModel.root, onExpand, search: this.#search, jumpToNextSearchResult: this.#nextJump }, {}, this.contentElement);
+      this.#view(
+        { xml: this.#treeViewModel.root, onExpand, search: this.#search, jumpToNextSearchResult: this.#nextJump },
+        {},
+        this.contentElement
+      );
     }
   }
   static createSearchableView(parsedXML) {
@@ -2438,7 +2560,11 @@ var XMLView = class _XMLView extends UI7.Widget.Widget {
     if (!this.#search) {
       this.#search = new UI7.TreeOutline.TreeSearch();
     }
-    this.#search.search(this.#treeViewModel.root, jumpBackwards ?? false, (node, closeTag) => node.match(regex, closeTag).map((match, matchIndexInNode) => ({ node, matchIndexInNode, isPostOrderMatch: closeTag, match })).toArray());
+    this.#search.search(
+      this.#treeViewModel.root,
+      jumpBackwards ?? false,
+      (node, closeTag) => node.match(regex, closeTag).map((match, matchIndexInNode) => ({ node, matchIndexInNode, isPostOrderMatch: closeTag, match })).toArray()
+    );
     this.#nextJump = shouldJump ? this.#search.currentMatch() : void 0;
     this.#search.updateSearchableView(this.searchableView);
     this.requestUpdate();
@@ -2464,14 +2590,14 @@ var XMLView = class _XMLView extends UI7.Widget.Widget {
   }
 };
 
-// gen/front_end/ui/legacy/components/source_frame/PreviewFactory.js
+// ../../front_end/ui/legacy/components/source_frame/PreviewFactory.ts
 var UIStrings7 = {
   /**
-   * @description Text in Preview Factory of the Sources panel if the data to preview can't be shown due to an error
+   * @description Text shown in the empty widget when data fails to load in the preview factory of the Sources panel.
    */
   failedToLoadData: "Failed to load data",
   /**
-   * @description Text in Preview Factory of the Sources panel if there's no data to preview
+   * @description Text shown in the empty widget when there is no content to preview in the preview factory of the Sources panel.
    */
   nothingToPreview: "Nothing to preview"
 };

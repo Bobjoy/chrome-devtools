@@ -11,6 +11,7 @@ export declare const enum DataSaverOverride {
 export declare class EmulationModel extends SDKModel<EmulationModelEventTypes> implements ProtocolProxyApi.EmulationDispatcher {
     #private;
     constructor(target: Target);
+    dispose(): void;
     setTouchEmulationAllowed(touchEmulationAllowed: boolean): void;
     supportsDeviceEmulation(): boolean;
     resetPageScaleFactor(): Promise<void>;
@@ -35,6 +36,7 @@ export declare class EmulationModel extends SDKModel<EmulationModelEventTypes> i
     setDataSaverOverride(dataSaverOverride: DataSaverOverride): Promise<void>;
     setCPUThrottlingRate(rate: number): Promise<void>;
     setHardwareConcurrency(hardwareConcurrency: number): Promise<void>;
+    setCPUPerformanceOverride(performanceTier?: Protocol.Emulation.SetCPUPerformanceOverrideRequestPerformanceTier): Promise<void>;
     emulateTouch(enabled: boolean, mobile: boolean): Promise<void>;
     overrideEmulateTouch(enabled: boolean): Promise<void>;
     private updateTouch;

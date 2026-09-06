@@ -72,7 +72,8 @@ export const DEFAULT_VIEW = (input, _output, target) => {
     // clang-format on
     target);
 };
-export class StorageItemsToolbar extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+const StorageItemsToolbarBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class StorageItemsToolbar extends StorageItemsToolbarBase {
     filterRegex;
     #metadataView;
     #view;
@@ -154,4 +155,13 @@ export class StorageItemsToolbar extends Common.ObjectWrapper.eventMixin(UI.Widg
         this.requestUpdate();
     }
 }
+(function (StorageItemsToolbar) {
+    let Events;
+    (function (Events) {
+        Events["REFRESH"] = "Refresh";
+        Events["FILTER_CHANGED"] = "FilterChanged";
+        Events["DELETE_ALL"] = "DeleteAll";
+        Events["DELETE_SELECTED"] = "DeleteSelected";
+    })(Events = StorageItemsToolbar.Events || (StorageItemsToolbar.Events = {}));
+})(StorageItemsToolbar || (StorageItemsToolbar = {}));
 //# sourceMappingURL=StorageItemsToolbar.js.map

@@ -4,9 +4,10 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/tree_outline/TreeOutline.js
+// ../../front_end/ui/components/tree_outline/TreeOutline.ts
 var TreeOutline_exports = {};
 __export(TreeOutline_exports, {
+  FilterOption: () => FilterOption,
   ItemContextMenuEvent: () => ItemContextMenuEvent,
   ItemMouseOutEvent: () => ItemMouseOutEvent,
   ItemMouseOverEvent: () => ItemMouseOverEvent,
@@ -14,13 +15,13 @@ __export(TreeOutline_exports, {
   TreeOutline: () => TreeOutline,
   defaultRenderer: () => defaultRenderer
 });
-import * as Platform2 from "./../../../core/platform/platform.js";
-import * as UI from "./../../legacy/legacy.js";
-import * as Lit2 from "./../../lit/lit.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
-import * as Buttons from "./../buttons/buttons.js";
-import * as CodeHighlighter from "./../code_highlighter/code_highlighter.js";
-import * as RenderCoordinator from "./../render_coordinator/render_coordinator.js";
+import * as Platform2 from "../../../core/platform/platform.js";
+import * as UI from "../../legacy/legacy.js";
+import * as Lit2 from "../../lit/lit.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
+import * as Buttons from "../buttons/buttons.js";
+import * as CodeHighlighter from "../code_highlighter/code_highlighter.js";
+import * as RenderCoordinator from "../render_coordinator/render_coordinator.js";
 
 // gen/front_end/ui/components/tree_outline/treeOutline.css.js
 var treeOutline_css_default = `/*
@@ -160,7 +161,7 @@ ul[role="tree"]:focus-within [role="treeitem"].selected > .arrow-and-key-wrapper
 
 /*# sourceURL=${import.meta.resolve("./treeOutline.css")} */`;
 
-// gen/front_end/ui/components/tree_outline/TreeOutlineUtils.js
+// ../../front_end/ui/components/tree_outline/TreeOutlineUtils.ts
 var TreeOutlineUtils_exports = {};
 __export(TreeOutlineUtils_exports, {
   findNextNodeForTreeOutlineKeyboardNavigation: () => findNextNodeForTreeOutlineKeyboardNavigation,
@@ -169,8 +170,8 @@ __export(TreeOutlineUtils_exports, {
   isExpandableNode: () => isExpandableNode,
   trackDOMNodeToTreeNode: () => trackDOMNodeToTreeNode
 });
-import * as Platform from "./../../../core/platform/platform.js";
-import * as Lit from "./../../lit/lit.js";
+import * as Platform from "../../../core/platform/platform.js";
+import * as Lit from "../../lit/lit.js";
 function isExpandableNode(node) {
   return "children" in node;
 }
@@ -300,11 +301,16 @@ var getPathToTreeNodeRecursively = async (currentNode, nodeIdToFind, pathToNode)
   return null;
 };
 var findNextNodeForTreeOutlineKeyboardNavigation = (options) => {
-  const { currentDOMNode, currentTreeNode, direction, setNodeExpandedState } = options;
+  const {
+    currentDOMNode,
+    currentTreeNode,
+    direction,
+    setNodeExpandedState
+  } = options;
   if (!currentTreeNode) {
     return currentDOMNode;
   }
-  if (direction === "ArrowDown") {
+  if (direction === Platform.KeyboardUtilities.ArrowKey.DOWN) {
     if (domNodeIsExpanded(currentDOMNode)) {
       return getFirstChildOfExpandedTreeNode(currentDOMNode);
     }
@@ -316,7 +322,7 @@ var findNextNodeForTreeOutlineKeyboardNavigation = (options) => {
     if (parentSibling) {
       return parentSibling;
     }
-  } else if (direction === "ArrowRight") {
+  } else if (direction === Platform.KeyboardUtilities.ArrowKey.RIGHT) {
     if (domNodeIsLeafNode(currentDOMNode)) {
       return currentDOMNode;
     }
@@ -325,7 +331,7 @@ var findNextNodeForTreeOutlineKeyboardNavigation = (options) => {
     }
     setNodeExpandedState(currentTreeNode, true);
     return currentDOMNode;
-  } else if (direction === "ArrowUp") {
+  } else if (direction === Platform.KeyboardUtilities.ArrowKey.UP) {
     const currentNodePreviousSibling = getPreviousSiblingOfCurrentDOMNode(currentDOMNode);
     if (currentNodePreviousSibling) {
       if (domNodeIsExpanded(currentNodePreviousSibling)) {
@@ -337,7 +343,7 @@ var findNextNodeForTreeOutlineKeyboardNavigation = (options) => {
     if (parentNode && parentNode instanceof HTMLLIElement) {
       return parentNode;
     }
-  } else if (direction === "ArrowLeft") {
+  } else if (direction === Platform.KeyboardUtilities.ArrowKey.LEFT) {
     if (domNodeIsExpanded(currentDOMNode)) {
       setNodeExpandedState(currentTreeNode, false);
       return currentDOMNode;
@@ -350,7 +356,7 @@ var findNextNodeForTreeOutlineKeyboardNavigation = (options) => {
   return currentDOMNode;
 };
 
-// gen/front_end/ui/components/tree_outline/TreeOutline.js
+// ../../front_end/ui/components/tree_outline/TreeOutline.ts
 var { html, Directives: { ifDefined } } = Lit2;
 function defaultRenderer(node) {
   return html`${node.treeNodeData}`;
@@ -392,6 +398,11 @@ var ItemMouseOutEvent = class _ItemMouseOutEvent extends Event {
     this.data = { node };
   }
 };
+var FilterOption = /* @__PURE__ */ ((FilterOption2) => {
+  FilterOption2["SHOW"] = "SHOW";
+  FilterOption2["FLATTEN"] = "FLATTEN";
+  return FilterOption2;
+})(FilterOption || {});
 var TreeOutline = class extends HTMLElement {
   #shadow = this.attachShadow({ mode: "open" });
   #treeData = [];
@@ -408,7 +419,11 @@ var TreeOutline = class extends HTMLElement {
   #selectedTreeNode = null;
   #defaultRenderer = (node, _state) => {
     if (typeof node.treeNodeData !== "string") {
-      console.warn(`The default TreeOutline renderer simply stringifies its given value. You passed in ${JSON.stringify(node.treeNodeData, null, 2)}. Consider providing a different defaultRenderer that can handle nodes of this type.`);
+      console.warn(`The default TreeOutline renderer simply stringifies its given value. You passed in ${JSON.stringify(
+        node.treeNodeData,
+        null,
+        2
+      )}. Consider providing a different defaultRenderer that can handle nodes of this type.`);
     }
     return html`${String(node.treeNodeData)}`;
   };
@@ -542,9 +557,9 @@ var TreeOutline = class extends HTMLElement {
       const filtering = filter(child.treeNodeData);
       const toBeSelected = this.#isSelectedNode(child) || child.id === this.#nodeIdPendingFocus;
       const expanded = this.#nodeExpandedMap.get(child.id);
-      if (filtering === "SHOW" || toBeSelected || expanded) {
+      if (filtering === "SHOW" /* SHOW */ || toBeSelected || expanded) {
         filteredChildren.push(child);
-      } else if (filtering === "FLATTEN" && isExpandableNode(child)) {
+      } else if (filtering === "FLATTEN" /* FLATTEN */ && isExpandableNode(child)) {
         const grandChildren = await this.#flattenSubtree(child, filter);
         filteredChildren.push(...grandChildren);
       }

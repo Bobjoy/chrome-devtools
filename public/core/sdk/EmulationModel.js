@@ -4,7 +4,13 @@
 import { CSSModel } from './CSSModel.js';
 import { OverlayModel } from './OverlayModel.js';
 import { SDKModel } from './SDKModel.js';
-import { avifFormatDisabledSettingDescriptor, cpuPressureSettingDescriptor, emulateAutoDarkModeSettingDescriptor, emulatedCSSMediaFeatureColorGamutSettingDescriptor, emulatedCSSMediaFeatureForcedColorsSettingDescriptor, emulatedCSSMediaFeaturePrefersColorSchemeSettingDescriptor, emulatedCSSMediaFeaturePrefersContrastSettingDescriptor, emulatedCSSMediaFeaturePrefersReducedDataSettingDescriptor, emulatedCSSMediaFeaturePrefersReducedMotionSettingDescriptor, emulatedCSSMediaFeaturePrefersReducedTransparencySettingDescriptor, emulatedCSSMediaSettingDescriptor, emulatedOSTextScaleSettingDescriptor, emulatedVisionDeficiencySettingDescriptor, idleDetectionSettingDescriptor, javaScriptDisabledSettingDescriptor, jpegXlFormatDisabledSettingDescriptor, localFontsDisabledSettingDescriptor, touchSettingDescriptor, webpFormatDisabledSettingDescriptor, } from './SDKSettings.js';
+import { avifFormatDisabledSettingDescriptor, cpuPressureSettingDescriptor, dataSaverSettingDescriptor, emulateAutoDarkModeSettingDescriptor, emulatedCSSMediaFeatureColorGamutSettingDescriptor, emulatedCSSMediaFeatureForcedColorsSettingDescriptor, emulatedCSSMediaFeaturePrefersColorSchemeSettingDescriptor, emulatedCSSMediaFeaturePrefersContrastSettingDescriptor, emulatedCSSMediaFeaturePrefersReducedDataSettingDescriptor, emulatedCSSMediaFeaturePrefersReducedMotionSettingDescriptor, emulatedCSSMediaFeaturePrefersReducedTransparencySettingDescriptor, emulatedCSSMediaSettingDescriptor, emulatedOSTextScaleSettingDescriptor, emulatedVisionDeficiencySettingDescriptor, idleDetectionSettingDescriptor, javaScriptDisabledSettingDescriptor, jpegXlFormatDisabledSettingDescriptor, localFontsDisabledSettingDescriptor, touchSettingDescriptor, webpFormatDisabledSettingDescriptor, } from './SDKSettings.js';
+export var DataSaverOverride;
+(function (DataSaverOverride) {
+    DataSaverOverride["UNSET"] = "unset";
+    DataSaverOverride["ENABLED"] = "enabled";
+    DataSaverOverride["DISABLED"] = "disabled";
+})(DataSaverOverride || (DataSaverOverride = {}));
 export class EmulationModel extends SDKModel {
     #multitargetNetworkManager;
     #emulationAgent;
@@ -20,6 +26,8 @@ export class EmulationModel extends SDKModel {
     #touchConfiguration;
     #screenOrientationLocked;
     #lockedOrientation;
+    #dataSaverSetting;
+    #dataSaverChangeListener;
     constructor(target) {
         super(target);
         this.#multitargetNetworkManager = target.targetManager().getNetworkManager();
@@ -173,6 +181,14 @@ export class EmulationModel extends SDKModel {
         if (avifFormatDisabledSetting.get() || jpegXlFormatDisabledSetting.get() || webpFormatDisabledSetting.get()) {
             updateDisabledImageFormats();
         }
+        this.#dataSaverSetting = settings.resolve(dataSaverSettingDescriptor);
+        this.#dataSaverChangeListener = () => {
+            void this.setDataSaverOverride(this.#dataSaverSetting.get());
+        };
+        this.#dataSaverSetting.addChangeListener(this.#dataSaverChangeListener, this);
+        if (this.#dataSaverSetting.get() !== "unset" /* DataSaverOverride.UNSET */) {
+            void this.setDataSaverOverride(this.#dataSaverSetting.get());
+        }
         this.#cpuPressureEnabled = false;
         this.#touchEmulationAllowed = true;
         this.#touchEnabled = false;
@@ -183,6 +199,10 @@ export class EmulationModel extends SDKModel {
             configuration: "mobile" /* Protocol.Emulation.SetEmitTouchEventsForMouseRequestConfiguration.Mobile */,
         };
         target.registerEmulationDispatcher(this);
+    }
+    dispose() {
+        super.dispose();
+        this.#dataSaverSetting.removeChangeListener(this.#dataSaverChangeListener, this);
     }
     setTouchEmulationAllowed(touchEmulationAllowed) {
         this.#touchEmulationAllowed = touchEmulationAllowed;
@@ -330,6 +350,9 @@ export class EmulationModel extends SDKModel {
         }
         await this.#emulationAgent.invoke_setHardwareConcurrencyOverride({ hardwareConcurrency });
     }
+    async setCPUPerformanceOverride(performanceTier) {
+        await this.#emulationAgent.invoke_setCPUPerformanceOverride({ performanceTier });
+    }
     async emulateTouch(enabled, mobile) {
         this.#touchEnabled = enabled && this.#touchEmulationAllowed;
         this.#touchMobile = mobile && this.#touchEmulationAllowed;
@@ -418,6 +441,10 @@ export class EmulationModel extends SDKModel {
         return this.#lockedOrientation;
     }
 }
+export var EmulationModelEvents;
+(function (EmulationModelEvents) {
+    EmulationModelEvents["SCREEN_ORIENTATION_LOCK_CHANGED"] = "ScreenOrientationLockChanged";
+})(EmulationModelEvents || (EmulationModelEvents = {}));
 export class Location {
     static DEFAULT_ACCURACY = 150;
     latitude;

@@ -1,8 +1,8 @@
-// gen/front_end/entrypoints/lighthouse_worker/LighthouseWorkerService.js
-import * as ProtocolClient from "./../../core/protocol_client/protocol_client.js";
-import * as Root from "./../../core/root/root.js";
-import * as PuppeteerService from "./../../services/puppeteer/puppeteer.js";
-import * as ThirdPartyWeb from "./../../third_party/third-party-web/third-party-web.js";
+// ../../front_end/entrypoints/lighthouse_worker/LighthouseWorkerService.ts
+import * as ProtocolClient from "../../core/protocol_client/protocol_client.js";
+import * as Root from "../../core/root/root.js";
+import * as PuppeteerService from "../../services/puppeteer/puppeteer.js";
+import * as ThirdPartyWeb from "../../third_party/third-party-web/third-party-web.js";
 function disableLoggingForTest() {
   console.log = () => void 0;
 }
@@ -149,7 +149,7 @@ globalThis.global.document.documentElement.style = {
   WebkitAppearance: "WebkitAppearance"
 };
 
-// gen/front_end/entrypoints/lighthouse_worker/lighthouse_worker.prebundle.js
-import "./../../third_party/lighthouse/lighthouse-dt-bundle.js";
+// ../../front_end/entrypoints/lighthouse_worker/lighthouse_worker.ts
+import "../../third_party/lighthouse/lighthouse-dt-bundle.js";
 self.postMessage("workerReady");
 //# sourceMappingURL=lighthouse_worker.js.map

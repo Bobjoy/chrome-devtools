@@ -1,6 +1,5 @@
 import * as Common from '../../core/common/common.js';
 import * as Host from '../../core/host/host.js';
-import type * as Platform from '../../core/platform/platform.js';
 export declare const enum DisabledReason {
     GEO_RESTRICTED = "geo-restricted",
     POLICY_RESTRICTED = "policy-restricted",
@@ -11,6 +10,18 @@ export declare const consoleInsightsEnabledSettingDescriptor: Common.Settings.Co
 export declare const aiAssistanceEnabledSettingDescriptor: Common.Settings.ConditionalSettingDescriptor<boolean, DisabledReason[]>;
 export declare const aiAssistanceV2OptInChangeDialogSeenSettingDescriptor: Common.Settings.SettingDescriptor<boolean>;
 export declare function isGeminiBranding(): boolean;
+/**
+ * Returns true if context selection / dynamic context switching is enabled.
+ *
+ * In the legacy V1 architecture, this corresponds to the `ContextSelectionAgent`,
+ * which dynamically routes conversations and allows changing the active context.
+ * In the unified V2 architecture (`AiAgent2`), dynamic context selection is natively
+ * supported across the single agent instance.
+ *
+ * This bridge function checks either flag during the transition phase and can be
+ * removed in the future when V2 ships permanently and the V1 architecture is removed.
+ */
+export declare function isContextSelectionEnabled(): boolean;
 /**
  * Preconditions determined entirely on the DevTools frontend side (e.g. Incognito
  * mode or age restrictions) that prevent AI assistance features from running.
@@ -33,7 +44,6 @@ export type AccessPrecondition = Exclude<Host.AidaClient.AidaAccessPreconditions
  */
 export declare function getDisabledReasons(aidaAvailability: Host.AidaClient.AidaAccessPreconditions): AccessPrecondition[];
 export declare function getIconName(): string;
-export declare function isSameOrigin(url1: Platform.DevToolsPath.UrlString, url2: Platform.DevToolsPath.UrlString): boolean;
 export interface OneShotPromptRequest {
     aidaClient: Host.AidaClient.AidaClient;
     preamble: string;

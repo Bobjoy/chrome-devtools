@@ -73,16 +73,8 @@ export interface ViewInput {
 }
 export declare const DEFAULT_VIEW: (input: ViewInput, _output: Record<string, unknown>, target: HTMLElement) => void;
 export type View = typeof DEFAULT_VIEW;
-declare const LinearMemoryInspector_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<EventTypes>;
-    addEventListener<T extends keyof EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<EventTypes, T>;
-    once<T extends keyof EventTypes>(eventType: T): Promise<EventTypes[T]>;
-    removeEventListener<T extends keyof EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: keyof EventTypes): boolean;
-    dispatchEventToListeners<T extends keyof EventTypes>(eventType: import("../../../core/platform/TypescriptUtilities.js").NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.Widget;
-export declare class LinearMemoryInspector extends LinearMemoryInspector_base {
+declare const LinearMemoryInspectorBase: Common.ObjectWrapper.EventMixin<EventTypes, typeof UI.Widget.Widget>;
+export declare class LinearMemoryInspector extends LinearMemoryInspectorBase {
     #private;
     constructor(element?: HTMLElement, view?: View);
     set memory(value: Uint8Array<ArrayBuffer>);

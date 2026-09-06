@@ -101,7 +101,8 @@ export const DEFAULT_VIEW = (input, output, target) => {
   `, target);
     // clang-format on
 };
-export class LayerTreeOutline extends Common.ObjectWrapper.eventMixin(UI.Widget.Widget) {
+const LayerTreeOutlineBase = Common.ObjectWrapper.eventMixin(UI.Widget.Widget);
+export class LayerTreeOutline extends LayerTreeOutlineBase {
     layerViewHost;
     layerTree;
     layerSnapshotMap;
@@ -236,4 +237,8 @@ export class LayerTreeOutline extends Common.ObjectWrapper.eventMixin(UI.Widget.
         this.layerViewHost.showContextMenu(contextMenu, selection);
     }
 }
+export var Events;
+(function (Events) {
+    Events["PAINT_PROFILER_REQUESTED"] = "PaintProfilerRequested";
+})(Events || (Events = {}));
 //# sourceMappingURL=LayerTreeOutline.js.map

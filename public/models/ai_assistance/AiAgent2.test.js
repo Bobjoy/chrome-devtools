@@ -6,7 +6,11 @@ import sinon from 'sinon';
 import * as Host from '../../core/host/host.js';
 import * as SDK from '../../core/sdk/sdk.js';
 import { mockAidaClient } from '../../testing/AiAssistanceHelpers.js';
-import { createTarget, describeWithEnvironment } from '../../testing/EnvironmentHelpers.js';
+import { updateHostConfig } from '../../testing/EnvironmentHelpers.js';
+import { setupLocaleHooks } from '../../testing/LocaleHelpers.js';
+import { setupRuntimeHooks } from '../../testing/RuntimeHelpers.js';
+import { setupSettingsHooks } from '../../testing/SettingsHelpers.js';
+import { TestUniverse } from '../../testing/TestUniverse.js';
 import * as AiAssistance from './ai_assistance.js';
 import { SKILLS } from './skills/SkillRegistry.js';
 function assertIsFunctionResponse(part) {
@@ -27,7 +31,24 @@ function getFunctionDeclarations(aidaClient, callIndex) {
 function mockSkills(agent, skills) {
     agent.getSkills = () => skills;
 }
-describeWithEnvironment('AiAgent2', () => {
+describe('AiAgent2', () => {
+    setupLocaleHooks();
+    setupSettingsHooks();
+    setupRuntimeHooks();
+    let universe;
+    beforeEach(() => {
+        universe = new TestUniverse();
+        sinon.stub(SDK.TargetManager.TargetManager, 'instance').returns(universe.targetManager);
+    });
+    it('retrieves userTier from hostConfig', () => {
+        updateHostConfig({
+            devToolsAiV2Architecture: {
+                userTier: 'TESTERS',
+            },
+        });
+        const agent = new AiAssistance.AiAgent2.AiAgent2({ aidaClient: mockAidaClient() });
+        assert.strictEqual(agent.userTier, 'TESTERS');
+    });
     it('registers all expected skills', () => {
         assert.deepEqual(Object.keys(SKILLS).sort(), ['styling', 'network', 'accessibility', 'performance', 'storage', 'sources'].sort());
     });
@@ -93,6 +114,17 @@ describeWithEnvironment('AiAgent2', () => {
         sinon.assert.callCount(aidaClient.doConversation, 1);
         const callArgs = aidaClient.doConversation.getCall(0).args[0];
         assert.propertyVal(callArgs, 'client_feature', Host.AidaClient.ClientFeature.CHROME_DEVTOOLS_V2_AGENT);
+    });
+    it('parses and yields follow-up suggestions from model response', async () => {
+        const aidaClient = mockAidaClient([[{
+                    explanation: 'Root Cause: CSS error\n\nSuggestion: Fix layout\nSUGGESTIONS: ["Can you fix this?", "Explain why this happens"]',
+                }]]);
+        const agent = new AiAssistance.AiAgent2.AiAgent2({ aidaClient });
+        const responses = await Array.fromAsync(agent.run('question', { selected: null }));
+        const answerResponse = responses.find(r => r.type === "answer" /* AiAssistance.AiAgent.ResponseType.ANSWER */);
+        assert.isDefined(answerResponse);
+        assert.strictEqual(answerResponse.text, 'Root Cause: CSS error\n\nSuggestion: Fix layout');
+        assert.deepEqual(answerResponse.suggestions, ['Can you fix this?', 'Explain why this happens']);
     });
     it('handles learning skills correctly (UI step and AIDA response)', async () => {
         const aidaClient = mockAidaClient([
@@ -188,9 +220,8 @@ describeWithEnvironment('AiAgent2', () => {
         const responses = await Array.fromAsync(agent.run('question', { selected: null }));
         // Verify that handler was called
         sinon.assert.calledOnce(handlerStub);
-        const [args, context] = handlerStub.getCall(0).args;
+        const [args] = handlerStub.getCall(0).args;
         assert.deepEqual(args, { elements: [1], styleProperties: ['color'], explanation: 'testing' });
-        assert.isNull(context.conversationContext);
         // Verify AIDA response included tool output
         const hasTitle = responses.some(r => r.type === "title" /* AiAssistance.AiAgent.ResponseType.TITLE */ && r.title === 'Reading computed and source styles');
         assert.isTrue(hasTitle);
@@ -399,7 +430,7 @@ describeWithEnvironment('AiAgent2', () => {
         assert.isFalse(thirdLearnSkills?.description.includes('network'));
     });
     it('falls back to document body for getExecutionContextNode when context is not DOMNodeContext', async () => {
-        const target = createTarget();
+        const target = universe.createTarget();
         const domModel = target.model(SDK.DOMModel.DOMModel);
         assert.exists(domModel);
         const mockDocument = sinon.createStubInstance(SDK.DOMModel.DOMDocument);
@@ -429,7 +460,7 @@ describeWithEnvironment('AiAgent2', () => {
         assert.strictEqual(context.getExecutionContextNode(), mockBodyNode);
     });
     it('pushes body node to frontend during preRun when body is missing', async () => {
-        const target = createTarget();
+        const target = universe.createTarget();
         const domModel = target.model(SDK.DOMModel.DOMModel);
         assert.exists(domModel);
         const mockDocument = sinon.createStubInstance(SDK.DOMModel.DOMDocument);
@@ -442,7 +473,7 @@ describeWithEnvironment('AiAgent2', () => {
         sinon.assert.calledOnceWithExactly(pushStub, '1,HTML,1,BODY');
     });
     it('returns null for getExecutionContextNode when body is absent and does not return document', async () => {
-        const target = createTarget();
+        const target = universe.createTarget();
         const domModel = target.model(SDK.DOMModel.DOMModel);
         assert.exists(domModel);
         const mockDocument = sinon.createStubInstance(SDK.DOMModel.DOMDocument);
@@ -471,7 +502,7 @@ describeWithEnvironment('AiAgent2', () => {
         assert.isNull(context.getExecutionContextNode());
     });
     it('creates ExtensionScope using document body when context is not DOMNodeContext', async () => {
-        const target = createTarget();
+        const target = universe.createTarget();
         const domModel = target.model(SDK.DOMModel.DOMModel);
         assert.exists(domModel);
         const mockDocument = sinon.createStubInstance(SDK.DOMModel.DOMDocument);
@@ -502,7 +533,7 @@ describeWithEnvironment('AiAgent2', () => {
         const scope = context.createExtensionScope(new AiAssistance.ChangeManager.ChangeManager());
         assert.exists(scope);
     });
-    it('can learn storage skill and declare listStorageKeys and getStorageValues', async () => {
+    it('can learn storage skill and declare storage and cookie tools', async () => {
         const aidaClient = mockAidaClient([
             [{
                     explanation: '',
@@ -520,6 +551,9 @@ describeWithEnvironment('AiAgent2', () => {
         assert.include(declaredNames, 'listPageOrigins');
         assert.include(declaredNames, 'listStorageKeys');
         assert.include(declaredNames, 'getStorageValues');
+        assert.include(declaredNames, 'listCookies');
+        assert.include(declaredNames, 'getCookieValues');
+        assert.include(declaredNames, 'getStorageBreakdown');
     });
     it('disables server logging when calling storage tools in AiAgent2', async () => {
         const aidaClient = mockAidaClient([
@@ -539,7 +573,7 @@ describeWithEnvironment('AiAgent2', () => {
         const listStorageKeysTool = AiAssistance.ToolRegistry.ToolRegistry.get('listStorageKeys');
         assert.exists(listStorageKeysTool);
         const handlerStub = sinon.stub(listStorageKeysTool, 'handler').callsFake(async (_args, context) => {
-            context.setLoggingEnabled(false);
+            context.disableLogging();
             return { result: { storageKeysByOrigin: {} } };
         });
         await Array.fromAsync(agent.run('list keys', { selected: null }));
@@ -547,6 +581,181 @@ describeWithEnvironment('AiAgent2', () => {
         sinon.assert.callCount(aidaClient.doConversation, 3);
         const thirdCallArgs = aidaClient.doConversation.getCall(2).args[0];
         assert.isTrue(thirdCallArgs.metadata?.disable_user_content_logging);
+    });
+    it('handles getCookieValues approval flow in AiAgent2', async () => {
+        const aidaClient = mockAidaClient([
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'learnSkills', args: { skills: ['storage'] } }],
+                }],
+            [{
+                    explanation: 'Getting cookie values',
+                    functionCalls: [{
+                            name: 'getCookieValues',
+                            args: { cookieNames: ['session'], origins: ['https://example.com'] },
+                        }],
+                }],
+            [{
+                    explanation: 'Cookie values retrieved.',
+                }],
+        ]);
+        const sideEffectPromise = Promise.withResolvers();
+        const agent = new AiAssistance.AiAgent2.AiAgent2({
+            aidaClient,
+            confirmSideEffectForTest: sinon.stub().returns(sideEffectPromise),
+        });
+        const getCookieValuesTool = AiAssistance.ToolRegistry.ToolRegistry.get('getCookieValues');
+        assert.exists(getCookieValuesTool);
+        const handlerStub = sinon.stub(getCookieValuesTool, 'handler').callsFake(async (_args, context, options) => {
+            context.disableLogging();
+            if (options?.approved !== true) {
+                return {
+                    requiresApproval: true,
+                    description: 'The AI wants to access cookie session on https://example.com.',
+                };
+            }
+            return { result: { cookiesByOrigin: { 'https://example.com': { cookies: [] } } } };
+        });
+        sideEffectPromise.resolve(true);
+        const responses = await Array.fromAsync(agent.run('get cookie session', { selected: null }));
+        sinon.assert.calledTwice(handlerStub);
+        const actionResponses = responses.filter((r) => r.type === 'action');
+        assert.lengthOf(actionResponses, 3);
+        assert.strictEqual(actionResponses[0].code, 'learnSkills(\'storage\')');
+        assert.strictEqual(actionResponses[1].code, 'getCookieValues(["session"], ["https://example.com"])');
+        assert.isUndefined(actionResponses[1].output);
+        assert.strictEqual(actionResponses[2].code, 'getCookieValues(["session"], ["https://example.com"])');
+        assert.exists(actionResponses[2].output);
+    });
+    it('provides getLighthouseReport capability to GetLighthouseAuditsTool', async () => {
+        const mockReport = {
+            finalDisplayedUrl: 'https://example.com',
+            categories: {},
+            audits: {},
+        };
+        const aidaClient = mockAidaClient([
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'learnSkills', args: { skills: ['accessibility'] } }],
+                }],
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'getLighthouseAudits', args: { categoryId: 'accessibility' } }],
+                }],
+            [{
+                    explanation: 'Audits retrieved.',
+                }],
+        ]);
+        const agent = new AiAssistance.AiAgent2.AiAgent2({ aidaClient });
+        const accessibilityContext = new AiAssistance.AccessibilityContext.AccessibilityContext(mockReport);
+        const getLighthouseAuditsTool = AiAssistance.ToolRegistry.ToolRegistry.get('getLighthouseAudits');
+        assert.exists(getLighthouseAuditsTool);
+        const handlerStub = sinon.stub(getLighthouseAuditsTool, 'handler').resolves({ result: { audits: 'mock audits' } });
+        await Array.fromAsync(agent.run('query', { selected: accessibilityContext }));
+        sinon.assert.calledOnce(handlerStub);
+        const [, context] = handlerStub.getCall(0).args;
+        assert.strictEqual(context.getLighthouseReport(), mockReport);
+    });
+    it('provides runLighthouse capability to RunLighthouseTool', async () => {
+        const mockReport = {
+            finalDisplayedUrl: 'https://example.com',
+            categories: {},
+            audits: {},
+        };
+        const runLighthouseStub = sinon.stub().resolves(mockReport);
+        const aidaClient = mockAidaClient([
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'learnSkills', args: { skills: ['accessibility'] } }],
+                }],
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'runLighthouse', args: { explanation: 'run', category: 'accessibility' } }],
+                }],
+            [{
+                    explanation: 'Audits run.',
+                }],
+        ]);
+        const agent = new AiAssistance.AiAgent2.AiAgent2({ aidaClient, lighthouseRecording: runLighthouseStub });
+        const runLighthouseTool = AiAssistance.ToolRegistry.ToolRegistry.get('runLighthouse');
+        assert.exists(runLighthouseTool);
+        const handlerStub = sinon.stub(runLighthouseTool, 'handler').resolves({ result: { audits: 'mock audits' } });
+        await Array.fromAsync(agent.run('query', { selected: null }));
+        sinon.assert.calledOnce(handlerStub);
+        const [, context] = handlerStub.getCall(0).args;
+        const runResult = await context.runLighthouse();
+        assert.strictEqual(runResult, mockReport);
+        sinon.assert.calledOnce(runLighthouseStub);
+    });
+    it('returns null for getLighthouseReport when context is not AccessibilityContext', async () => {
+        const aidaClient = mockAidaClient([
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'learnSkills', args: { skills: ['accessibility'] } }],
+                }],
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'getLighthouseAudits', args: { categoryId: 'accessibility' } }],
+                }],
+            [{
+                    explanation: 'Done.',
+                }],
+        ]);
+        const agent = new AiAssistance.AiAgent2.AiAgent2({ aidaClient });
+        const getLighthouseAuditsTool = AiAssistance.ToolRegistry.ToolRegistry.get('getLighthouseAudits');
+        assert.exists(getLighthouseAuditsTool);
+        const handlerStub = sinon.stub(getLighthouseAuditsTool, 'handler').resolves({ result: { audits: 'mock audits' } });
+        await Array.fromAsync(agent.run('query', { selected: null }));
+        sinon.assert.calledOnce(handlerStub);
+        const [, context] = handlerStub.getCall(0).args;
+        assert.isNull(context.getLighthouseReport());
+    });
+    it('provides getPerformanceTraceContext capability to performance tools', async () => {
+        const traceContext = sinon.createStubInstance(AiAssistance.PerformanceTraceContext.PerformanceTraceContext);
+        const aidaClient = mockAidaClient([
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'learnSkills', args: { skills: ['performance'] } }],
+                }],
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'getDetailedCallTree', args: { eventKey: 'key-1' } }],
+                }],
+            [{
+                    explanation: 'Call tree retrieved.',
+                }],
+        ]);
+        const agent = new AiAssistance.AiAgent2.AiAgent2({ aidaClient });
+        const getDetailedCallTreeTool = AiAssistance.ToolRegistry.ToolRegistry.get('getDetailedCallTree');
+        assert.exists(getDetailedCallTreeTool);
+        const handlerStub = sinon.stub(getDetailedCallTreeTool, 'handler').resolves({ result: 'mock tree' });
+        await Array.fromAsync(agent.run('query', { selected: traceContext }));
+        sinon.assert.calledOnce(handlerStub);
+        const [, context] = handlerStub.getCall(0).args;
+        assert.strictEqual(context.getPerformanceTraceContext(), traceContext);
+    });
+    it('returns null for getPerformanceTraceContext when context is not PerformanceTraceContext', async () => {
+        const aidaClient = mockAidaClient([
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'learnSkills', args: { skills: ['performance'] } }],
+                }],
+            [{
+                    explanation: '',
+                    functionCalls: [{ name: 'getDetailedCallTree', args: { eventKey: 'key-1' } }],
+                }],
+            [{
+                    explanation: 'Done.',
+                }],
+        ]);
+        const agent = new AiAssistance.AiAgent2.AiAgent2({ aidaClient });
+        const getDetailedCallTreeTool = AiAssistance.ToolRegistry.ToolRegistry.get('getDetailedCallTree');
+        assert.exists(getDetailedCallTreeTool);
+        const handlerStub = sinon.stub(getDetailedCallTreeTool, 'handler').resolves({ result: 'mock tree' });
+        await Array.fromAsync(agent.run('query', { selected: null }));
+        sinon.assert.calledOnce(handlerStub);
+        const [, context] = handlerStub.getCall(0).args;
+        assert.isNull(context.getPerformanceTraceContext());
     });
 });
 //# sourceMappingURL=AiAgent2.test.js.map

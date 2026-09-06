@@ -9,7 +9,8 @@ import * as PerfUI from '../../ui/legacy/components/perf_ui/perf_ui.js';
 import * as UI from '../../ui/legacy/legacy.js';
 import * as ThemeSupport from '../../ui/legacy/theme_support/theme_support.js';
 import * as VisualLogging from '../../ui/visual_logging/visual_logging.js';
-export class HeapTimelineOverview extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+const HeapTimelineOverviewBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class HeapTimelineOverview extends HeapTimelineOverviewBase {
     overviewCalculator;
     overviewContainer;
     overviewGrid;
@@ -227,6 +228,10 @@ export class HeapTimelineOverview extends Common.ObjectWrapper.eventMixin(UI.Wid
         this.dispatchEventToListeners("IdsRangeChanged" /* Events.IDS_RANGE_CHANGED */, { minId, maxId, size });
     }
 }
+export var Events;
+(function (Events) {
+    Events["IDS_RANGE_CHANGED"] = "IdsRangeChanged";
+})(Events || (Events = {}));
 export class SmoothScale {
     lastUpdate;
     currentScale;

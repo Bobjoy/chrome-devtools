@@ -112,8 +112,12 @@ export class TestUniverse {
             () => new CrUXManager.CrUXManager(this.targetManager, this.settings),
         ],
         [
+            IssuesManager.DOMIssuesManager.DOMIssuesManager,
+            () => new IssuesManager.DOMIssuesManager.DOMIssuesManager(this.issuesManager, this.targetManager),
+        ],
+        [
             Emulation.DeviceModeModel.DeviceModeModel,
-            () => new Emulation.DeviceModeModel.DeviceModeModel(this.targetManager, this.settings, this.multitargetNetworkManager, this.fileManager),
+            () => new Emulation.DeviceModeModel.DeviceModeModel(this.targetManager, this.settings, this.multitargetNetworkManager),
         ],
         [
             Emulation.EmulatedDevices.EmulatedDevicesList,
@@ -340,6 +344,9 @@ export class TestUniverse {
     }
     get domDebuggerManager() {
         return this.get(SDK.DOMDebuggerModel.DOMDebuggerManager);
+    }
+    get domIssuesManager() {
+        return this.get(IssuesManager.DOMIssuesManager.DOMIssuesManager);
     }
     get domModelUndoStack() {
         return this.get(SDK.DOMModel.DOMModelUndoStack);

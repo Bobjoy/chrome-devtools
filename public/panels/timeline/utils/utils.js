@@ -4,15 +4,15 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/timeline/utils/EntryNodes.js
+// ../../front_end/panels/timeline/utils/EntryNodes.ts
 var EntryNodes_exports = {};
 __export(EntryNodes_exports, {
   domNodesForBackendIds: () => domNodesForBackendIds,
   nodeIdsForEvent: () => nodeIdsForEvent,
   relatedDOMNodesForEvent: () => relatedDOMNodesForEvent
 });
-import * as SDK from "./../../../core/sdk/sdk.js";
-import * as Trace from "./../../../models/trace/trace.js";
+import * as SDK from "../../../core/sdk/sdk.js";
+import * as Trace from "../../../models/trace/trace.js";
 var nodeIdsForEventCache = /* @__PURE__ */ new WeakMap();
 var domNodesForEventCache = /* @__PURE__ */ new WeakMap();
 function nodeIdsForEvent(parsedTrace, event) {
@@ -78,7 +78,7 @@ async function domNodesForBackendIds(frameId, nodeIds) {
   return await domModel.pushNodesByBackendIdsToFrontend(nodeIds) || /* @__PURE__ */ new Map();
 }
 
-// gen/front_end/panels/timeline/utils/Helpers.js
+// ../../front_end/panels/timeline/utils/Helpers.ts
 var Helpers_exports = {};
 __export(Helpers_exports, {
   RevealableBottomUpProfile: () => RevealableBottomUpProfile,
@@ -89,7 +89,7 @@ __export(Helpers_exports, {
   formatOriginWithEntity: () => formatOriginWithEntity,
   shortenUrl: () => shortenUrl
 });
-import * as Platform from "./../../../core/platform/platform.js";
+import * as Platform from "../../../core/platform/platform.js";
 var MAX_ORIGIN_LENGTH = 60;
 function createTrimmedUrlSearch(url) {
   const maxSearchValueLength = 8;
@@ -161,57 +161,57 @@ function formatOriginWithEntity(url, entity, parenthesizeEntity) {
   return originWithEntity;
 }
 var RevealableInsight = class {
-  insight;
   constructor(insight) {
     this.insight = insight;
   }
+  insight;
 };
 var RevealableCoreVitals = class {
-  insightSetKey;
   constructor(insightSetKey) {
     this.insightSetKey = insightSetKey;
   }
+  insightSetKey;
 };
 var RevealableTimeRange = class {
-  bounds;
   constructor(bounds) {
     this.bounds = bounds;
   }
+  bounds;
 };
 var RevealableBottomUpProfile = class {
-  bounds;
-  node;
   constructor(bounds, node) {
     this.bounds = bounds;
     this.node = node;
   }
+  bounds;
+  node;
 };
 
-// gen/front_end/panels/timeline/utils/IgnoreList.js
+// ../../front_end/panels/timeline/utils/IgnoreList.ts
 var IgnoreList_exports = {};
 __export(IgnoreList_exports, {
   getIgnoredReasonString: () => getIgnoredReasonString,
   isIgnoreListedEntry: () => isIgnoreListedEntry
 });
-import * as i18n from "./../../../core/i18n/i18n.js";
-import * as Trace2 from "./../../../models/trace/trace.js";
-import * as SourceMapsResolver from "./../../../models/trace_source_maps_resolver/trace_source_maps_resolver.js";
-import * as Workspace from "./../../../models/workspace/workspace.js";
+import * as i18n from "../../../core/i18n/i18n.js";
+import * as Trace2 from "../../../models/trace/trace.js";
+import * as SourceMapsResolver from "../../../models/trace_source_maps_resolver/trace_source_maps_resolver.js";
+import * as Workspace from "../../../models/workspace/workspace.js";
 var UIStrings = {
   /**
-   * @description Refers to when skipping content scripts is enabled and the current script is ignored because it's a content script.
+   * @description Reason why a script is ignored because it is a Chrome extension content script.
    */
   skipContentScripts: "Content script",
   /**
-   * @description Refers to when skipping known third party scripts is enabled and the current script is ignored because it's a known third party script.
+   * @description Reason why a script is ignored because it is marked with ignoreList in the source map.
    */
   skip3rdPartyScripts: "Marked with ignoreList in source map",
   /**
-   * @description Refers to when skipping anonymous scripts is enabled and the current script is ignored because is an anonymous script.
+   * @description Reason why a script is ignored because it is an anonymous script.
    */
   skipAnonymousScripts: "Anonymous script",
   /**
-   * @description Refers to when the current script is ignored because of an unknown rule.
+   * @description Reason why a script is ignored because of an unknown ignore rule.
    */
   unknown: "Unknown"
 };
@@ -262,7 +262,7 @@ function getIgnoredReasonString(entry) {
   return regex ? regex.source : i18nString(UIStrings.unknown);
 }
 
-// gen/front_end/panels/timeline/utils/ImageCache.js
+// ../../front_end/panels/timeline/utils/ImageCache.ts
 var ImageCache_exports = {};
 __export(ImageCache_exports, {
   cacheForTesting: () => cacheForTesting,
@@ -271,7 +271,7 @@ __export(ImageCache_exports, {
   loadImageForTesting: () => loadImageForTesting,
   preload: () => preload
 });
-import * as Trace3 from "./../../../models/trace/trace.js";
+import * as Trace3 from "../../../models/trace/trace.js";
 var imageCache = /* @__PURE__ */ new WeakMap();
 var emitter = new EventTarget();
 function getOrQueue(screenshot) {
@@ -310,16 +310,16 @@ function preload(screenshots) {
 var cacheForTesting = imageCache;
 var loadImageForTesting = loadImage;
 
-// gen/front_end/panels/timeline/utils/Treemap.js
+// ../../front_end/panels/timeline/utils/Treemap.ts
 var Treemap_exports = {};
 __export(Treemap_exports, {
   createTreemapData: () => createTreemapData,
   makeScriptNode: () => makeScriptNode,
   openTreemap: () => openTreemap
 });
-import * as Common from "./../../../core/common/common.js";
-import * as i18n3 from "./../../../core/i18n/i18n.js";
-import * as Trace4 from "./../../../models/trace/trace.js";
+import * as Common from "../../../core/common/common.js";
+import * as i18n3 from "../../../core/i18n/i18n.js";
+import * as Trace4 from "../../../models/trace/trace.js";
 async function toCompressedBase64(string) {
   const compAb = await Common.Gzip.compress(string);
   const strb64 = await Common.Base64.encode(compAb);
@@ -481,7 +481,9 @@ function createTreemapData(scripts, duplication) {
     }
   }
   for (const [frameId, node] of htmlNodesByFrameId) {
-    const script = scripts.scripts.find((s) => s.request?.args.data.resourceType === "Document" && s.request?.args.data.frame === frameId);
+    const script = scripts.scripts.find(
+      (s) => s.request?.args.data.resourceType === "Document" && s.request?.args.data.frame === frameId
+    );
     if (script?.request) {
       const { resourceSize, transferSize, headersTransferSize } = getNetworkRequestSizes(script.request);
       const inlineScriptsPct = node.resourceBytes / resourceSize;

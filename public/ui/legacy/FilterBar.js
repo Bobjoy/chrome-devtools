@@ -18,26 +18,27 @@ import { HBox } from './Widget.js';
 export { filterStyles };
 const UIStrings = {
     /**
-     * @description Text to filter result items
+     * @description Tooltip text for the filter toggle button in the filter bar.
      */
     filter: 'Filter',
     /**
-     * @description Text that appears when hover over the filter bar in the Network tool
+     * @description Placeholder text for the search input in the filter bar.
      */
     egSmalldUrlacomb: 'e.g. `/small[\d]+/ url:a.com/b`',
     /**
-     * @description Text that appears when hover over the All button in the Network tool
+     * @description Tooltip text for the filter buttons in the filter bar.
      * @example {Ctrl + } PH1
      */
     sclickToSelectMultipleTypes: '{PH1}Click to select multiple types',
     /**
-     * @description Text for everything
+     * @description Label for the option to show all types in a filter bar.
      */
     allStrings: 'All',
 };
 const str_ = i18n.i18n.registerUIStrings('ui/legacy/FilterBar.ts', UIStrings);
 const i18nString = i18n.i18n.getLocalizedString.bind(undefined, str_);
-export class FilterBar extends Common.ObjectWrapper.eventMixin(HBox) {
+const FilterBarBase = Common.ObjectWrapper.eventMixin(HBox);
+export class FilterBar extends FilterBarBase {
     enabled;
     stateSetting;
     #filterButton;
@@ -133,6 +134,14 @@ export class FilterBar extends Common.ObjectWrapper.eventMixin(HBox) {
         return this.alwaysShowFilters || (this.stateSetting.get() && this.enabled);
     }
 }
+export var FilterBarEvents;
+(function (FilterBarEvents) {
+    FilterBarEvents["CHANGED"] = "Changed";
+})(FilterBarEvents || (FilterBarEvents = {}));
+export var FilterUIEvents;
+(function (FilterUIEvents) {
+    FilterUIEvents["FILTER_CHANGED"] = "FilterChanged";
+})(FilterUIEvents || (FilterUIEvents = {}));
 export class TextFilterUI extends Common.ObjectWrapper.ObjectWrapper {
     filterElement;
     #filter;

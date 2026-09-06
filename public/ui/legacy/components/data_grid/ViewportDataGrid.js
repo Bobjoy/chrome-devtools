@@ -6,7 +6,8 @@ import * as Platform from '../../../../core/platform/platform.js';
 import * as RenderCoordinator from '../../../components/render_coordinator/render_coordinator.js';
 import { DataGridImpl, DataGridNode } from './DataGrid.js';
 let nextId = 0;
-export class ViewportDataGrid extends Common.ObjectWrapper.eventMixin(DataGridImpl) {
+const ViewportDataGridBase = Common.ObjectWrapper.eventMixin(DataGridImpl);
+export class ViewportDataGrid extends ViewportDataGridBase {
     onScrollBound;
     visibleNodes;
     /**
@@ -266,6 +267,10 @@ export class ViewportDataGrid extends Common.ObjectWrapper.eventMixin(DataGridIm
         return this.rootNode().flatChildren().filter(this.testNodeWithFilters.bind(this));
     }
 }
+export var Events;
+(function (Events) {
+    Events["VIEWPORT_CALCULATED"] = "ViewportCalculated";
+})(Events || (Events = {}));
 export class ViewportDataGridNode extends DataGridNode {
     stale;
     flatNodes;

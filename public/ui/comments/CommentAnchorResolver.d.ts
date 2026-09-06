@@ -12,6 +12,13 @@ export type CommentThread = CommentManager.CommentManager.CommentThread;
  */
 export declare function closestAcrossShadow(element: Element, selector: string): Element | null;
 /**
+ * Resolves the file path attribute for a CodeMirror editor element.
+ *
+ * @param element The editor element to check.
+ * @returns The file path string or undefined if not found.
+ */
+export declare function getEditorFilePath(element: Element): string | undefined;
+/**
  * Checks whether an element contains non-empty text content (after trimming whitespace),
  * including text from any nested shadow roots.
  *
@@ -37,7 +44,8 @@ export declare function isTabTitle(element: Element): boolean;
  * 3. Checks for domain IDs (`data-network-request-id` or `data-backend-node-id`) across shadow boundaries,
  *    returning the owning domain element.
  * 4. Escalates minor controls / sub-elements up to semantic containers (e.g., TableRow, TreeItem).
- * 5. Falls back to the nearest visual logging element if no semantic container is found.
+ * 5. Falls back to the nearest visual logging element if no semantic container is found,
+ *    excluding top-level containers and minor controls.
  *
  * @param element The source DOM element to resolve.
  * @returns The resolved semantic anchor Element, or null if unresolvable/empty/excluded.
@@ -119,6 +127,23 @@ export declare function deepQuerySelector(root: Document | Element, selector: st
  * @returns The rematched live Element, or null if no match is found.
  */
 export declare function rematchCommentAnchor(comment: CommentThread, root?: Document | Element, cachedJslogElements?: Element[]): Element | null;
+export interface VisibleRect {
+    left: number;
+    top: number;
+    right: number;
+    bottom: number;
+    width: number;
+    height: number;
+}
+/**
+ * Computes the visible viewport-relative bounding box of an element after clipping against
+ * all ancestor scroll/overflow containers and viewport boundaries across shadow DOM roots.
+ *
+ * @param element The source DOM element.
+ * @param targetRect Optional explicit bounding box (e.g. for sub-lines or custom targets).
+ * @returns The clipped viewport-relative rectangle or null if the element is completely clipped out of view or invisible.
+ */
+export declare function computeVisibleRect(element: Element, targetRect?: DOMRect): VisibleRect | null;
 /**
  * Checks whether an element is connected to the DOM, visible according to `checkVisibility()`,
  * and has non-zero bounding box dimensions.

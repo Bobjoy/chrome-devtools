@@ -4,14 +4,14 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/switch/SwitchImpl.js
+// ../../front_end/ui/components/switch/SwitchImpl.ts
 var SwitchImpl_exports = {};
 __export(SwitchImpl_exports, {
   Switch: () => Switch,
   SwitchChangeEvent: () => SwitchChangeEvent
 });
-import { html, nothing, render } from "./../../lit/lit.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
+import { html, nothing, render } from "../../lit/lit.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
 
 // gen/front_end/ui/components/switch/switch.css.js
 var switch_css_default = `/*
@@ -127,14 +127,14 @@ input:disabled:checked {
 
 /*# sourceURL=${import.meta.resolve("./switch.css")} */`;
 
-// gen/front_end/ui/components/switch/SwitchImpl.js
+// ../../front_end/ui/components/switch/SwitchImpl.ts
 var SwitchChangeEvent = class _SwitchChangeEvent extends Event {
-  checked;
-  static eventName = "switchchange";
   constructor(checked) {
     super(_SwitchChangeEvent.eventName);
     this.checked = checked;
   }
+  checked;
+  static eventName = "switchchange";
 };
 var Switch = class extends HTMLElement {
   #shadow = this.attachShadow({ mode: "open" });

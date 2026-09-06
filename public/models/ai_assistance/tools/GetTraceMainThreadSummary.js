@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 import * as Host from '../../../core/host/host.js';
 import * as i18n from '../../../core/i18n/i18n.js';
-import { PerformanceTraceContext, } from '../contexts/PerformanceTraceContext.js';
 import { MAX_FUNCTION_RESULT_BYTE_LENGTH, } from './Tool.js';
 const UIStringsNotTranslate = {
     mainThreadActivity: 'Main thread activity',
@@ -11,7 +10,7 @@ const UIStringsNotTranslate = {
 const lockedString = i18n.i18n.lockedString;
 export class GetTraceMainThreadSummaryTool {
     name = "getTraceMainThreadSummary" /* ToolName.GET_TRACE_MAIN_THREAD_SUMMARY */;
-    description = 'Returns a focused, detailed summary of the main thread for a predefined labeled period.';
+    description = 'Retrieves a focused, bottom-up summary of main thread activity for a predefined labeled period (e.g. \'nav-to-lcp\', \'lcp-ttfb\', \'lcp-render-delay\', \'trace-bounds\', or insight names).';
     parameters = {
         type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
         description: 'Arguments for looking up a main thread summary.',
@@ -19,7 +18,7 @@ export class GetTraceMainThreadSummaryTool {
         properties: {
             label: {
                 type: 1 /* Host.AidaClient.ParametersTypes.STRING */,
-                description: 'The label of the period to investigate (e.g., \'LCPBreakdown\', \'CLSCulprits\', \'nav-to-lcp\').',
+                description: 'The label of the period to investigate (e.g., \'LCPBreakdown\', \'CLSCulprits\', \'nav-to-lcp\', \'lcp-render-delay\', \'trace-bounds\').',
                 nullable: false,
             },
         },
@@ -32,16 +31,16 @@ export class GetTraceMainThreadSummaryTool {
         };
     }
     async handler(params, capabilities) {
-        const conversationContext = capabilities.conversationContext;
-        if (!conversationContext || !(conversationContext instanceof PerformanceTraceContext)) {
+        const performanceTraceContext = capabilities.getPerformanceTraceContext();
+        if (!performanceTraceContext) {
             return { error: 'Performance trace context is not available.' };
         }
-        const focus = conversationContext.getItem();
-        const bounds = conversationContext.getBoundsForLabel(params.label);
+        const focus = performanceTraceContext.getItem();
+        const bounds = performanceTraceContext.getBoundsForLabel(params.label);
         if (!bounds) {
             return { error: `Invalid label: ${params.label}` };
         }
-        const formatter = conversationContext.createFormatter();
+        const formatter = performanceTraceContext.createFormatter();
         const summary = await formatter.formatMainThreadTrackSummary(bounds);
         if (summary.length > MAX_FUNCTION_RESULT_BYTE_LENGTH) {
             return {

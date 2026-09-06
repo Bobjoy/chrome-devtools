@@ -4,7 +4,7 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/models/javascript_metadata/NativeFunctions.js
+// ../../front_end/models/javascript_metadata/NativeFunctions.ts
 var NativeFunctions_exports = {};
 __export(NativeFunctions_exports, {
   NativeFunctions: () => NativeFunctions
@@ -6660,7 +6660,7 @@ var NativeFunctions = [
   },
   {
     name: "WebSocket",
-    signatures: [["url", "?protocolsOrOptions"]]
+    signatures: [["url", "?protocols"]]
   },
   {
     name: "WebSocketError",
@@ -7004,7 +7004,7 @@ var NativeFunctions = [
   },
   {
     name: "install",
-    signatures: [["?install_url", "?manifest_id"], ["params"]],
+    signatures: [["?params"]],
     receivers: ["Navigator"]
   },
   {
@@ -7280,7 +7280,7 @@ var NativeFunctions = [
   },
   {
     name: "RTCDTMFToneChangeEvent",
-    signatures: [["type", "eventInitDict"]]
+    signatures: [["type", "?eventInitDict"]]
   },
   {
     name: "RTCEncodedAudioFrame",
@@ -7292,7 +7292,7 @@ var NativeFunctions = [
   },
   {
     name: "RTCEncodedVideoFrame",
-    signatures: [["originalFrame", "?options"]]
+    signatures: [["init"], ["originalFrame", "?options"]]
   },
   {
     name: "RTCError",
@@ -7905,6 +7905,10 @@ var NativeFunctions = [
   {
     name: "receiveFeatureReport",
     signatures: [["reportId"]]
+  },
+  {
+    name: "playHaptics",
+    signatures: [["effect", "?intensity"]]
   },
   {
     name: "addStroke",
@@ -8564,7 +8568,21 @@ var NativeFunctions = [
   },
   {
     name: "getElementTransform",
-    signatures: [["element", "draw_transform"]]
+    signatures: [["element", "draw_transform"]],
+    receivers: ["OffscreenCanvas"]
+  },
+  {
+    name: "getElementTransform",
+    signatures: [["element", "?draw_transform"]],
+    receivers: ["HTMLCanvasElement"]
+  },
+  {
+    name: "updateElementGeometry",
+    signatures: [["element", "?options"]]
+  },
+  {
+    name: "clearElementGeometry",
+    signatures: [["element"]]
   },
   {
     name: "NavigateEvent",
@@ -9127,10 +9145,6 @@ var NativeFunctions = [
     signatures: [["html", "?options"]]
   },
   {
-    name: "setCanvasTransform",
-    signatures: [["?matrix"]]
-  },
-  {
     name: "matchContainer",
     signatures: [["query"]]
   },
@@ -9648,12 +9662,12 @@ var NativeFunctions = [
   }
 ];
 
-// gen/front_end/models/javascript_metadata/JavaScriptMetadata.js
+// ../../front_end/models/javascript_metadata/JavaScriptMetadata.ts
 var JavaScriptMetadata_exports = {};
 __export(JavaScriptMetadata_exports, {
   JavaScriptMetadataImpl: () => JavaScriptMetadataImpl
 });
-import * as Root from "./../../core/root/root.js";
+import * as Root from "../../core/root/root.js";
 var JavaScriptMetadataImpl = class _JavaScriptMetadataImpl {
   uniqueFunctions;
   receiverMethods;

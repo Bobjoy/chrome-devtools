@@ -1,6 +1,6 @@
-// gen/front_end/models/trace/lantern/testing/MetricTestUtils.js
-import * as Trace from "./../../trace.js";
-import * as Lantern from "./../lantern.js";
+// ../../front_end/models/trace/lantern/testing/MetricTestUtils.ts
+import * as Trace from "../../trace.js";
+import * as Lantern from "../lantern.js";
 function toLanternTrace(traceEvents) {
   return {
     traceEvents
@@ -14,13 +14,14 @@ async function runTraceProcessor(_context, trace) {
   }
   return processor.data;
 }
-async function getComputationDataFromFixture(context, { trace, settings, url }) {
+async function getComputationDataFromFixture(context, { trace, settings, url, parsedTrace }) {
   settings = settings ?? {};
   if (!settings.throttlingMethod) {
     settings.throttlingMethod = "simulate";
   }
-  const data = await runTraceProcessor(context, trace);
-  const requests = Trace.LanternComputationData.createNetworkRequests(trace, data);
+  const data = parsedTrace ? parsedTrace.data : await runTraceProcessor(context, trace);
+  const lanternTrace = trace ?? toLanternTrace(parsedTrace.traceEvents);
+  const requests = Trace.LanternComputationData.createNetworkRequests(lanternTrace, data);
   const networkAnalysis = Lantern.Core.NetworkAnalyzer.analyze(requests);
   if (!networkAnalysis) {
     throw new Error("no networkAnalysis");
@@ -30,10 +31,13 @@ async function getComputationDataFromFixture(context, { trace, settings, url }) 
   if (!navigation) {
     throw new Error("no navigation found");
   }
+  const simulator = Lantern.Simulation.Simulator.createSimulator({ ...settings, networkAnalysis });
+  const graph = Trace.LanternComputationData.createGraph(requests, lanternTrace, data, url);
+  const processedNavigation = Trace.LanternComputationData.createProcessedNavigation(data, frameId, navigation);
   return {
-    simulator: Lantern.Simulation.Simulator.createSimulator({ ...settings, networkAnalysis }),
-    graph: Trace.LanternComputationData.createGraph(requests, trace, data, url),
-    processedNavigation: Trace.LanternComputationData.createProcessedNavigation(data, frameId, navigation)
+    simulator,
+    graph,
+    processedNavigation
   };
 }
 export {

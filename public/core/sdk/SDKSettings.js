@@ -141,6 +141,11 @@ export const cpuPressureSettingDescriptor = {
     type: "enum" /* Common.Settings.SettingType.ENUM */,
     defaultValue: 'none',
 };
+export const cpuPerformanceSettingDescriptor = {
+    name: 'emulation.cpu-performance',
+    type: "enum" /* Common.Settings.SettingType.ENUM */,
+    defaultValue: 'no-override',
+};
 export const touchSettingDescriptor = {
     name: 'emulation.touch',
     type: "enum" /* Common.Settings.SettingType.ENUM */,
@@ -179,6 +184,12 @@ export const emulatedCSSMediaFeaturePrefersReducedDataSettingDescriptor = {
     name: 'emulated-css-media-feature-prefers-reduced-data',
     type: "enum" /* Common.Settings.SettingType.ENUM */,
     defaultValue: '',
+    storageType: "Session" /* Common.Settings.SettingStorageType.SESSION */,
+};
+export const dataSaverSettingDescriptor = {
+    name: 'emulation.data-saver',
+    type: "enum" /* Common.Settings.SettingType.ENUM */,
+    defaultValue: "unset" /* DataSaverOverride.UNSET */,
     storageType: "Session" /* Common.Settings.SettingStorageType.SESSION */,
 };
 export const emulatedCSSMediaFeaturePrefersReducedTransparencySettingDescriptor = {

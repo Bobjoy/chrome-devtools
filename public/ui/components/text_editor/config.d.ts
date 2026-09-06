@@ -1,15 +1,17 @@
+import * as Common from '../../../core/common/common.js';
 import type * as Host from '../../../core/host/host.js';
 import * as CM from '../../../third_party/codemirror.next/codemirror.next.js';
-export declare const dynamicSetting: CM.Facet<DynamicSetting<unknown>, readonly DynamicSetting<unknown>[]>;
+export declare const dynamicSetting: CM.Facet<DynamicSetting<unknown>, ReadonlyArray<DynamicSetting<unknown>>>;
 export declare class DynamicSetting<T> {
-    readonly settingName: string;
     private readonly getExtension;
     compartment: CM.Compartment;
-    constructor(settingName: string, getExtension: (value: T) => CM.Extension);
+    readonly setting: string | Common.Settings.SettingDescriptor<T>;
+    constructor(setting: string | Common.Settings.SettingDescriptor<T>, getExtension: (value: T) => CM.Extension);
+    get settingName(): string;
     settingValue(): T;
     instance(): CM.Extension;
     sync(state: CM.EditorState, value: T): CM.StateEffect<unknown> | null;
-    static bool(name: string, enabled: CM.Extension, disabled?: CM.Extension): DynamicSetting<boolean>;
+    static bool(setting: string | Common.Settings.SettingDescriptor<boolean>, enabled: CM.Extension, disabled?: CM.Extension): DynamicSetting<boolean>;
     static none: ReadonlyArray<DynamicSetting<unknown>>;
 }
 export declare const tabMovesFocus: DynamicSetting<boolean>;
@@ -34,12 +36,13 @@ export declare function theme(): CM.Extension;
 export declare function baseConfiguration(text: string | CM.Text): CM.Extension;
 export declare const closeBrackets: DynamicSetting<boolean>;
 export declare function removeTooltipHost(): void;
-export declare const showCompletionHint: CM.ViewPlugin<{
+export declare class CompletionHintPlugin {
     decorations: CM.DecorationSet;
     currentHint: string | null;
     update(update: CM.ViewUpdate): void;
     topCompletion(state: CM.EditorState): string | null;
-}>;
+}
+export declare const showCompletionHint: CM.ViewPlugin<CompletionHintPlugin>;
 export declare function contentIncludingHint(view: CM.EditorView): string;
 export declare const setAiAutoCompleteSuggestion: CM.StateEffectType<ActiveSuggestion | null>;
 export declare const enum AiSuggestionSource {

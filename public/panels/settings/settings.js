@@ -4,7 +4,7 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/settings/SettingsScreen.js
+// ../../front_end/panels/settings/SettingsScreen.ts
 var SettingsScreen_exports = {};
 __export(SettingsScreen_exports, {
   ActionDelegate: () => ActionDelegate,
@@ -13,21 +13,21 @@ __export(SettingsScreen_exports, {
   Revealer: () => Revealer,
   SettingsScreen: () => SettingsScreen
 });
-import "./../../ui/kit/kit.js";
-import * as Common from "./../../core/common/common.js";
-import * as Host from "./../../core/host/host.js";
-import * as i18n from "./../../core/i18n/i18n.js";
-import * as Root from "./../../core/root/root.js";
-import * as Buttons from "./../../ui/components/buttons/buttons.js";
-import * as UIHelpers from "./../../ui/helpers/helpers.js";
-import { createIcon, Link } from "./../../ui/kit/kit.js";
-import * as SettingsUI from "./../../ui/legacy/components/settings_ui/settings_ui.js";
-import * as Components from "./../../ui/legacy/components/utils/utils.js";
-import * as UI from "./../../ui/legacy/legacy.js";
-import { html, render } from "./../../ui/lit/lit.js";
-import * as SettingUIRegistration from "./../../ui/settings/settings.js";
-import * as VisualLogging from "./../../ui/visual_logging/visual_logging.js";
-import { PanelUtils } from "./../utils/utils.js";
+import "../../ui/kit/kit.js";
+import * as Common from "../../core/common/common.js";
+import * as Host from "../../core/host/host.js";
+import * as i18n from "../../core/i18n/i18n.js";
+import * as Root from "../../core/root/root.js";
+import * as Buttons from "../../ui/components/buttons/buttons.js";
+import * as UIHelpers from "../../ui/helpers/helpers.js";
+import { createIcon, Link } from "../../ui/kit/kit.js";
+import * as SettingsUI from "../../ui/legacy/components/settings_ui/settings_ui.js";
+import * as Components from "../../ui/legacy/components/utils/utils.js";
+import * as UI from "../../ui/legacy/legacy.js";
+import { html, render } from "../../ui/lit/lit.js";
+import * as SettingUIRegistration from "../../ui/settings/settings.js";
+import * as VisualLogging from "../../ui/visual_logging/visual_logging.js";
+import { PanelUtils } from "../utils/utils.js";
 import * as PanelComponents from "./components/components.js";
 
 // gen/front_end/panels/settings/settingsScreen.css.js
@@ -44,8 +44,8 @@ var settingsScreen_css_default = `/*
 
 .settings-content {
   overflow: hidden auto;
-  margin: 8px 8px 8px 0;
-  padding: 0 4px;
+  margin: var(--sys-size-5) var(--sys-size-5) var(--sys-size-5) 0;
+  padding: 0 var(--sys-size-3);
   flex: auto;
 }
 
@@ -60,7 +60,7 @@ fieldset {
 }
 
 label {
-  padding-right: 8px;
+  padding-right: var(--sys-size-5);
 }
 
 .experiments-filter {
@@ -182,7 +182,7 @@ devtools-button.link-icon {
 .settings-experiment .feedback-link {
   color: var(--sys-color-primary);
   text-decoration-line: underline;
-  margin-left: 4px;
+  margin-left: var(--sys-size-3);
 }
 
 .tabbed-pane-content slot::slotted(.widget) {
@@ -226,12 +226,12 @@ devtools-button.link-icon {
 }
 
 .greendev-widgets input[type="radio"] {
-  margin: 6px;
+  margin: var(--sys-size-4);
 }
 
 /*# sourceURL=${import.meta.resolve("./settingsScreen.css")} */`;
 
-// gen/front_end/panels/settings/SettingsScreen.js
+// ../../front_end/panels/settings/SettingsScreen.ts
 var UIStrings = {
   /**
    * @description Name of the Settings view.
@@ -306,7 +306,10 @@ var SettingsScreen = class _SettingsScreen extends UI.Widget.VBox {
     const settingsTitleElement = UI.UIUtils.createShadowRootWithCoreStyles(settingsLabelElement, { cssFile: settingsScreen_css_default }).createChild("div", "settings-window-title");
     UI.ARIAUtils.markAsHeading(settingsTitleElement, 1);
     settingsTitleElement.textContent = i18nString(UIStrings.settings);
-    this.tabbedLocation = UI.ViewManager.ViewManager.instance().createTabbedLocation(() => _SettingsScreen.revealSettingsScreen(), "settings-view");
+    this.tabbedLocation = UI.ViewManager.ViewManager.instance().createTabbedLocation(
+      () => _SettingsScreen.revealSettingsScreen(),
+      "settings-view"
+    );
     const tabbedPane = this.tabbedLocation.tabbedPane();
     tabbedPane.registerRequiredCSS(settingsScreen_css_default);
     tabbedPane.headerElement().prepend(settingsLabelElement);
@@ -342,20 +345,11 @@ var SettingsScreen = class _SettingsScreen extends UI.Widget.VBox {
     dialog.addCloseButton();
     dialog.setOutsideClickCallback(() => {
     });
-    dialog.setPointerEventsBehavior(
-      "PierceGlassPane"
-      /* UI.GlassPane.PointerEventsBehavior.PIERCE_GLASS_PANE */
-    );
-    dialog.setOutsideTabIndexBehavior(
-      "PreserveMainViewTabIndex"
-      /* UI.Dialog.OutsideTabIndexBehavior.PRESERVE_MAIN_VIEW_TAB_INDEX */
-    );
+    dialog.setPointerEventsBehavior(UI.GlassPane.PointerEventsBehavior.PIERCE_GLASS_PANE);
+    dialog.setOutsideTabIndexBehavior(UI.Dialog.OutsideTabIndexBehavior.PRESERVE_MAIN_VIEW_TAB_INDEX);
     settingsScreen.show(dialog.contentElement);
     dialog.setEscapeKeyCallback(settingsScreen.onEscapeKeyPressed.bind(settingsScreen));
-    dialog.setMarginBehavior(
-      "NoMargin"
-      /* UI.GlassPane.MarginBehavior.NO_MARGIN */
-    );
+    dialog.setMarginBehavior(UI.GlassPane.MarginBehavior.NO_MARGIN);
     dialog.show();
     dialog.contentElement.focus();
     return settingsScreen;
@@ -422,39 +416,47 @@ var GenericSettingsTab = class _GenericSettingsTab extends UI.Widget.VBox {
     this.containerElement.classList.add("settings-multicolumn-card-container");
     this.syncSection.markAsRoot();
     const explicitSectionOrder = [
-      "",
-      "APPEARANCE",
-      "SOURCES",
-      "ELEMENTS",
-      "NETWORK",
-      "PERFORMANCE",
-      "MEMORY",
-      "CONSOLE",
-      "EXTENSIONS",
-      "PERSISTENCE",
-      "DEBUGGER",
-      "GLOBAL",
-      "ACCOUNT"
+      Common.Settings.SettingCategory.NONE,
+      Common.Settings.SettingCategory.APPEARANCE,
+      Common.Settings.SettingCategory.SOURCES,
+      Common.Settings.SettingCategory.ELEMENTS,
+      Common.Settings.SettingCategory.NETWORK,
+      Common.Settings.SettingCategory.PERFORMANCE,
+      Common.Settings.SettingCategory.MEMORY,
+      Common.Settings.SettingCategory.CONSOLE,
+      Common.Settings.SettingCategory.EXTENSIONS,
+      Common.Settings.SettingCategory.PERSISTENCE,
+      Common.Settings.SettingCategory.DEBUGGER,
+      Common.Settings.SettingCategory.GLOBAL,
+      Common.Settings.SettingCategory.ACCOUNT
     ];
-    const preRegisteredSettings = Array.from(SettingUIRegistration.SettingUIRegistration.getRegisteredSettings()).sort((firstSetting, secondSetting) => {
-      const firstOrder = firstSetting.uiDescriptor.order;
-      const secondOrder = secondSetting.uiDescriptor.order;
-      if (firstOrder !== void 0 && secondOrder !== void 0) {
-        return firstOrder - secondOrder;
+    const preRegisteredSettings = Array.from(SettingUIRegistration.SettingUIRegistration.getRegisteredSettings()).sort(
+      (firstSetting, secondSetting) => {
+        const firstOrder = firstSetting.uiDescriptor.order;
+        const secondOrder = secondSetting.uiDescriptor.order;
+        if (firstOrder !== void 0 && secondOrder !== void 0) {
+          return firstOrder - secondOrder;
+        }
+        if (firstOrder) {
+          return -1;
+        }
+        if (secondOrder) {
+          return 1;
+        }
+        return 0;
       }
-      if (firstOrder) {
-        return -1;
-      }
-      if (secondOrder) {
-        return 1;
-      }
-      return 0;
-    });
+    );
     for (const sectionCategory of explicitSectionOrder) {
-      const settingsForSection = preRegisteredSettings.filter((setting) => setting.uiDescriptor.category === sectionCategory && _GenericSettingsTab.isSettingVisible(setting));
+      const settingsForSection = preRegisteredSettings.filter(
+        (setting) => setting.uiDescriptor.category === sectionCategory && _GenericSettingsTab.isSettingVisible(setting)
+      );
       this.createSectionElement(sectionCategory, settingsForSection);
     }
-    const restoreAndReloadButton = UI.UIUtils.createTextButton(i18nString(UIStrings.restoreDefaultsAndReload), restoreAndReload, { jslogContext: "settings.restore-defaults-and-reload" });
+    const restoreAndReloadButton = UI.UIUtils.createTextButton(
+      i18nString(UIStrings.restoreDefaultsAndReload),
+      restoreAndReload,
+      { jslogContext: "settings.restore-defaults-and-reload" }
+    );
     this.containerElement.appendChild(restoreAndReloadButton);
     function restoreAndReload() {
       Common.Settings.Settings.instance().clearAll();
@@ -482,7 +484,9 @@ var GenericSettingsTab = class _GenericSettingsTab extends UI.Widget.VBox {
       window.clearTimeout(this.#updateSyncSectionTimerId);
       this.#updateSyncSectionTimerId = -1;
     }
-    this.#syncSectionUpdatePromise = new Promise((resolve) => Host.InspectorFrontendHost.InspectorFrontendHostInstance.getSyncInformation(resolve)).then((syncInfo) => {
+    this.#syncSectionUpdatePromise = new Promise(
+      (resolve) => Host.InspectorFrontendHost.InspectorFrontendHostInstance.getSyncInformation(resolve)
+    ).then((syncInfo) => {
       this.syncSection.syncInfo = syncInfo;
       if (!syncInfo.isSyncActive || !syncInfo.arePreferencesSynced) {
         this.#updateSyncSectionTimerId = window.setTimeout(this.updateSyncSection.bind(this), 500);
@@ -490,19 +494,19 @@ var GenericSettingsTab = class _GenericSettingsTab extends UI.Widget.VBox {
     });
   }
   createExtensionSection(settings) {
-    const sectionName = "EXTENSIONS";
+    const sectionName = Common.Settings.SettingCategory.EXTENSIONS;
     const settingUI = Components.Linkifier.LinkHandlerSettingUI.instance();
     const element = settingUI.settingElement();
     this.createStandardSectionElement(sectionName, settings, element);
   }
   createSectionElement(category, settings) {
-    if (category === "EXTENSIONS") {
+    if (category === Common.Settings.SettingCategory.EXTENSIONS) {
       this.createExtensionSection(settings);
-    } else if (category === "ACCOUNT" && settings.length > 0) {
-      const syncCard = createSettingsCard(Common.SettingRegistration.getLocalizedSettingsCategory(
-        "ACCOUNT"
-        /* Common.SettingRegistration.SettingCategory.ACCOUNT */
-      ), this.syncSection.element);
+    } else if (category === Common.Settings.SettingCategory.ACCOUNT && settings.length > 0) {
+      const syncCard = createSettingsCard(
+        Common.SettingRegistration.getLocalizedSettingsCategory(Common.SettingRegistration.SettingCategory.ACCOUNT),
+        this.syncSection.element
+      );
       this.containerElement.appendChild(syncCard);
     } else if (settings.length > 0) {
       this.createStandardSectionElement(category, settings);
@@ -550,11 +554,14 @@ var ExperimentsSettingsTab = class _ExperimentsSettingsTab extends UI.Widget.VBo
     this.containerElement.classList.add("settings-card-container");
     const filterSection = this.containerElement.createChild("div");
     filterSection.classList.add("experiments-filter");
-    render(html`
+    render(
+      html`
         <devtools-toolbar>
           <devtools-toolbar-input autofocus type="filter" placeholder=${i18nString(UIStrings.searchExperiments)} style="flex-grow:1" @change=${this.#onFilterChanged.bind(this)}></devtools-toolbar-input>
         </devtools-toolbar>
-    `, filterSection);
+    `,
+      filterSection
+    );
     this.renderExperiments("");
   }
   #onFilterChanged(e) {
@@ -606,9 +613,13 @@ var ExperimentsSettingsTab = class _ExperimentsSettingsTab extends UI.Widget.VBo
       experiment.setEnabled(checkbox.checked);
       Host.userMetrics.experimentChanged(experiment.name, experiment.isEnabled());
       if (experiment.requiresChromeRestart) {
-        UI.InspectorView.InspectorView.instance().displayChromeRestartRequiredWarning(i18nString(UIStrings.settingsChangedRestartChrome));
+        UI.InspectorView.InspectorView.instance().displayChromeRestartRequiredWarning(
+          i18nString(UIStrings.settingsChangedRestartChrome)
+        );
       } else {
-        UI.InspectorView.InspectorView.instance().displayReloadRequiredWarning(i18nString(UIStrings.settingsChangedReloadDevTools));
+        UI.InspectorView.InspectorView.instance().displayReloadRequiredWarning(
+          i18nString(UIStrings.settingsChangedReloadDevTools)
+        );
       }
     }
     checkbox.addEventListener("click", listener, false);
@@ -621,8 +632,8 @@ var ExperimentsSettingsTab = class _ExperimentsSettingsTab extends UI.Widget.VBo
       const linkButton = new Buttons.Button.Button();
       linkButton.data = {
         iconName: "help",
-        variant: "icon",
-        size: "SMALL",
+        variant: Buttons.Button.Variant.ICON,
+        size: Buttons.Button.Size.SMALL,
         jslogContext: `${experiment.name}-documentation`,
         title: i18nString(UIStrings.learnMore)
       };
@@ -700,7 +711,7 @@ var Revealer = class {
     for (const view of UI.ViewManager.ViewManager.instance().getRegisteredViewExtensions()) {
       const id = view.viewId();
       const location = view.location();
-      if (location !== "settings-view") {
+      if (location !== UI.ViewManager.ViewLocationValues.SETTINGS_VIEW) {
         continue;
       }
       const settings = view.settings();
@@ -717,26 +728,26 @@ var Revealer = class {
   }
 };
 
-// gen/front_end/panels/settings/AISettingsTab.js
+// ../../front_end/panels/settings/AISettingsTab.ts
 var AISettingsTab_exports = {};
 __export(AISettingsTab_exports, {
   AISettingsTab: () => AISettingsTab,
   AI_SETTINGS_TAB_DEFAULT_VIEW: () => AI_SETTINGS_TAB_DEFAULT_VIEW
 });
-import "./../../ui/kit/kit.js";
-import * as Common2 from "./../../core/common/common.js";
-import * as Host2 from "./../../core/host/host.js";
-import * as i18n3 from "./../../core/i18n/i18n.js";
-import * as Platform2 from "./../../core/platform/platform.js";
-import * as Root2 from "./../../core/root/root.js";
-import * as AiAssistanceModel from "./../../models/ai_assistance/ai_assistance.js";
-import * as Buttons2 from "./../../ui/components/buttons/buttons.js";
-import * as Input from "./../../ui/components/input/input.js";
-import * as Switch from "./../../ui/components/switch/switch.js";
-import * as uiI18n from "./../../ui/i18n/i18n.js";
-import * as UI2 from "./../../ui/legacy/legacy.js";
-import * as Lit from "./../../ui/lit/lit.js";
-import * as VisualLogging2 from "./../../ui/visual_logging/visual_logging.js";
+import "../../ui/kit/kit.js";
+import * as Common2 from "../../core/common/common.js";
+import * as Host2 from "../../core/host/host.js";
+import * as i18n3 from "../../core/i18n/i18n.js";
+import * as Platform2 from "../../core/platform/platform.js";
+import * as Root2 from "../../core/root/root.js";
+import * as AiAssistanceModel from "../../models/ai_assistance/ai_assistance.js";
+import * as Buttons2 from "../../ui/components/buttons/buttons.js";
+import * as Input from "../../ui/components/input/input.js";
+import * as Switch from "../../ui/components/switch/switch.js";
+import * as uiI18n from "../../ui/i18n/i18n.js";
+import * as UI2 from "../../ui/legacy/legacy.js";
+import * as Lit from "../../ui/lit/lit.js";
+import * as VisualLogging2 from "../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/settings/aiSettingsTab.css.js
 var aiSettingsTab_css_default = `/*
@@ -933,7 +944,7 @@ var aiSettingsTab_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./aiSettingsTab.css")} */`;
 
-// gen/front_end/panels/settings/AISettingsTab.js
+// ../../front_end/panels/settings/AISettingsTab.ts
 var { html: html2, nothing, render: render2, Directives: { ifDefined, classMap } } = Lit;
 var UIStrings2 = {
   /**
@@ -1155,8 +1166,10 @@ var AI_SETTINGS_TAB_DEFAULT_VIEW = (input, _output, target) => {
       <h2>${i18nString2(UIStrings2.boostYourProductivity)}</h2>
       <h3 class="disclaimer-list-header">${i18nString2(UIStrings2.thingsToConsider)}</h3>
       <div class="disclaimer-list">
-        ${input.sharedDisclaimerBulletPoints.map((item2) => html2`<div><devtools-icon .name=${item2.icon} class="medium"></devtools-icon>
-              </div><div>${item2.text}</div>`)}
+        ${input.sharedDisclaimerBulletPoints.map(
+    (item2) => html2`<div><devtools-icon .name=${item2.icon} class="medium"></devtools-icon>
+              </div><div>${item2.text}</div>`
+  )}
       </div>
     </div>
   `;
@@ -1193,9 +1206,9 @@ var AI_SETTINGS_TAB_DEFAULT_VIEW = (input, _output, target) => {
             .data=${{
       title: settingData.settingExpandState.isSettingExpanded ? i18nString2(UIStrings2.showLess) : i18nString2(UIStrings2.showMore),
       accessibleLabel: settingData.settingExpandState.isSettingExpanded ? i18nString2(UIStrings2.showLessOfSetting, { PH1: settingData.settingName }) : i18nString2(UIStrings2.showMoreOfSetting, { PH1: settingData.settingName }),
-      size: "SMALL",
+      size: Buttons2.Button.Size.SMALL,
       iconName: settingData.settingExpandState.isSettingExpanded ? "chevron-up" : "chevron-down",
-      variant: "icon",
+      variant: Buttons2.Button.Variant.ICON,
       jslogContext: settingData.settingExpandState.expandSettingJSLogContext
     }}
           ></devtools-button>
@@ -1256,15 +1269,23 @@ var AISettingsTab = class extends UI2.Widget.VBox {
   #aiAnnotationsSetting;
   #aiAssistanceSetting;
   #aiCodeCompletionSetting;
-  #aidaAvailability = "no-account-email";
+  #aidaAvailability = Host2.AidaClient.AidaAccessPreconditions.NO_ACCOUNT_EMAIL;
   #boundOnAidaAvailabilityChange;
   // Setting to parameters needed to display it in the UI.
   // To display a a setting, it needs to be added to this map.
   #settingToParams = /* @__PURE__ */ new Map();
   constructor(view) {
     super();
-    this.#consoleInsightsSetting = new AiAssistanceModel.AiSetting.AiSetting(AiAssistanceModel.AiUtils.consoleInsightsEnabledSettingDescriptor, Host2.AidaClient.HostConfigTracker.instance(), Common2.Settings.Settings.instance());
-    this.#aiAssistanceSetting = new AiAssistanceModel.AiSetting.AiSetting(AiAssistanceModel.AiUtils.aiAssistanceEnabledSettingDescriptor, Host2.AidaClient.HostConfigTracker.instance(), Common2.Settings.Settings.instance());
+    this.#consoleInsightsSetting = new AiAssistanceModel.AiSetting.AiSetting(
+      AiAssistanceModel.AiUtils.consoleInsightsEnabledSettingDescriptor,
+      Host2.AidaClient.HostConfigTracker.instance(),
+      Common2.Settings.Settings.instance()
+    );
+    this.#aiAssistanceSetting = new AiAssistanceModel.AiSetting.AiSetting(
+      AiAssistanceModel.AiUtils.aiAssistanceEnabledSettingDescriptor,
+      Host2.AidaClient.HostConfigTracker.instance(),
+      Common2.Settings.Settings.instance()
+    );
     if (Root2.Runtime.hostConfig.devToolsAiGeneratedTimelineLabels?.enabled) {
       this.#aiAnnotationsSetting = Common2.Settings.Settings.instance().createSetting("ai-annotations-enabled", false);
     }
@@ -1279,16 +1300,16 @@ var AISettingsTab = class extends UI2.Widget.VBox {
     const mappedReasons = [];
     for (const reason of reasons) {
       switch (reason) {
-        case "geo-restricted":
+        case AiAssistanceModel.AiUtils.DisabledReason.GEO_RESTRICTED:
           mappedReasons.push(i18nString2(UIStrings2.geoRestricted));
           break;
-        case "policy-restricted":
+        case AiAssistanceModel.AiUtils.DisabledReason.POLICY_RESTRICTED:
           mappedReasons.push(i18nString2(UIStrings2.policyRestricted));
           break;
-        case "wrong-locale":
+        case AiAssistanceModel.AiUtils.DisabledReason.WRONG_LOCALE:
           mappedReasons.push(i18nString2(UIStrings2.wrongLocale));
           break;
-        case "not-supported":
+        case AiAssistanceModel.AiUtils.DisabledReason.NOT_SUPPORTED:
           break;
       }
     }
@@ -1299,17 +1320,17 @@ var AISettingsTab = class extends UI2.Widget.VBox {
     const mappedReasons = [];
     for (const precondition of preconditions) {
       switch (precondition) {
-        case "is-off-the-record":
+        case AiAssistanceModel.AiUtils.FrontendAccessPrecondition.IS_OFF_THE_RECORD:
           mappedReasons.push(i18nString2(UIStrings2.notAvailableInIncognitoMode));
           break;
-        case "no-account-email":
-        case "sync-is-paused":
+        case Host2.AidaClient.AidaAccessPreconditions.NO_ACCOUNT_EMAIL:
+        case Host2.AidaClient.AidaAccessPreconditions.SYNC_IS_PAUSED:
           mappedReasons.push(i18nString2(UIStrings2.notLoggedIn));
           break;
-        case "no-internet":
+        case Host2.AidaClient.AidaAccessPreconditions.NO_INTERNET:
           mappedReasons.push(i18nString2(UIStrings2.offline));
           break;
-        case "age-restricted":
+        case AiAssistanceModel.AiUtils.FrontendAccessPrecondition.AGE_RESTRICTED:
           mappedReasons.push(i18nString2(UIStrings2.ageRestricted));
           break;
         default:
@@ -1334,7 +1355,10 @@ var AISettingsTab = class extends UI2.Widget.VBox {
   }
   wasShown() {
     super.wasShown();
-    Host2.AidaClient.HostConfigTracker.instance().addEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host2.AidaClient.HostConfigTracker.instance().addEventListener(
+      Host2.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
     const initialAvailability = Host2.AidaClient.HostConfigTracker.instance().aidaAvailability;
     if (initialAvailability !== void 0) {
       this.#updateAidaAvailability(initialAvailability);
@@ -1343,7 +1367,10 @@ var AISettingsTab = class extends UI2.Widget.VBox {
   }
   willHide() {
     super.willHide();
-    Host2.AidaClient.HostConfigTracker.instance().removeEventListener("aidaAvailabilityChanged", this.#boundOnAidaAvailabilityChange);
+    Host2.AidaClient.HostConfigTracker.instance().removeEventListener(
+      Host2.AidaClient.Events.AIDA_AVAILABILITY_CHANGED,
+      this.#boundOnAidaAvailabilityChange
+    );
   }
   // Define all parameter needed to render a setting
   #initSettings() {
@@ -1502,12 +1529,7 @@ var AISettingsTab = class extends UI2.Widget.VBox {
       if (oldSettingValue) {
         Common2.Settings.Settings.instance().createLocalSetting("console-insights-onboarding-finished", false).set(false);
       } else {
-        Common2.Settings.Settings.instance().createSetting(
-          "console-insights-skip-reminder",
-          true,
-          "Session"
-          /* Common.Settings.SettingStorageType.SESSION */
-        ).set(true);
+        Common2.Settings.Settings.instance().createSetting("console-insights-skip-reminder", true, Common2.Settings.SettingStorageType.SESSION).set(true);
       }
     } else if (settingName === "ai-assistance-enabled") {
       if (!setting.get()) {
@@ -1544,17 +1566,18 @@ var AISettingsTab = class extends UI2.Widget.VBox {
   }
 };
 
-// gen/front_end/panels/settings/EditFileSystemView.js
+// ../../front_end/panels/settings/EditFileSystemView.ts
 var EditFileSystemView_exports = {};
 __export(EditFileSystemView_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW,
-  EditFileSystemView: () => EditFileSystemView
+  EditFileSystemView: () => EditFileSystemView,
+  ExcludedFolderStatus: () => ExcludedFolderStatus
 });
-import "./../../ui/legacy/components/data_grid/data_grid.js";
-import * as i18n5 from "./../../core/i18n/i18n.js";
-import * as Platform3 from "./../../core/platform/platform.js";
-import * as UI3 from "./../../ui/legacy/legacy.js";
-import { Directives, html as html3, render as render3 } from "./../../ui/lit/lit.js";
+import "../../ui/legacy/components/data_grid/data_grid.js";
+import * as i18n5 from "../../core/i18n/i18n.js";
+import * as Platform3 from "../../core/platform/platform.js";
+import * as UI3 from "../../ui/legacy/legacy.js";
+import { Directives, html as html3, render as render3 } from "../../ui/lit/lit.js";
 
 // gen/front_end/panels/settings/editFileSystemView.css.js
 var editFileSystemView_css_default = `/*
@@ -1588,7 +1611,7 @@ var editFileSystemView_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./editFileSystemView.css")} */`;
 
-// gen/front_end/panels/settings/EditFileSystemView.js
+// ../../front_end/panels/settings/EditFileSystemView.ts
 var { styleMap } = Directives;
 var UIStrings3 = {
   /**
@@ -1610,13 +1633,19 @@ var UIStrings3 = {
 };
 var str_3 = i18n5.i18n.registerUIStrings("panels/settings/EditFileSystemView.ts", UIStrings3);
 var i18nString3 = i18n5.i18n.getLocalizedString.bind(void 0, str_3);
+var ExcludedFolderStatus = /* @__PURE__ */ ((ExcludedFolderStatus2) => {
+  ExcludedFolderStatus2[ExcludedFolderStatus2["VALID"] = 1] = "VALID";
+  ExcludedFolderStatus2[ExcludedFolderStatus2["ERROR_NOT_A_PATH"] = 2] = "ERROR_NOT_A_PATH";
+  ExcludedFolderStatus2[ExcludedFolderStatus2["ERROR_NOT_UNIQUE"] = 3] = "ERROR_NOT_UNIQUE";
+  return ExcludedFolderStatus2;
+})(ExcludedFolderStatus || {});
 function statusString(status) {
   switch (status) {
-    case 2:
+    case 2 /* ERROR_NOT_A_PATH */:
       return i18nString3(UIStrings3.enterAPath);
-    case 3:
+    case 3 /* ERROR_NOT_UNIQUE */:
       return i18nString3(UIStrings3.enterAUniquePath);
-    case 1:
+    case 1 /* VALID */:
       throw new Error("unreachable");
   }
 }
@@ -1642,17 +1671,14 @@ var DEFAULT_VIEW = (input, _output, target) => {
               <tr data-url=${path.path} data-index=${index}
                   @edit=${input.onEdit}
                   @delete=${input.onDelete}>
-                <td style=${styleMap({ backgroundColor: path.status !== 1 ? "var(--sys-color-error-container)" : void 0 })}>${path.path}</td>
+                <td style=${styleMap({ backgroundColor: path.status !== 1 /* VALID */ ? "var(--sys-color-error-container)" : void 0 })}>${path.path}</td>
               </tr>
             `)}
             <tr placeholder></tr>
             </tbody>
           </table>
         </devtools-data-grid>
-        ${input.excludedFolderPaths.filter(
-    ({ status }) => status !== 1
-    /* ExcludedFolderStatus.VALID */
-  ).map(({ status }) => html3`<span class="excluded-folder-error">${statusString(status)}</span>`)}
+        ${input.excludedFolderPaths.filter(({ status }) => status !== 1 /* VALID */).map(({ status }) => html3`<span class="excluded-folder-error">${statusString(status)}</span>`)}
     </div>`, target);
 };
 var EditFileSystemView = class _EditFileSystemView extends UI3.Widget.VBox {
@@ -1674,18 +1700,18 @@ var EditFileSystemView = class _EditFileSystemView extends UI3.Widget.VBox {
     this.requestUpdate();
   }
   #resyncExcludedFolderPaths() {
-    this.#excludedFolderPaths = this.#fileSystem?.excludedFolders().values().map((path) => ({
-      path,
-      status: 1
-      /* ExcludedFolderStatus.VALID */
-    })).toArray() ?? [];
+    this.#excludedFolderPaths = this.#fileSystem?.excludedFolders().values().map((path) => ({ path, status: 1 /* VALID */ })).toArray() ?? [];
   }
   performUpdate() {
     const input = {
       fileSystemPath: this.#fileSystem?.path() ?? Platform3.DevToolsPath.urlString``,
       excludedFolderPaths: this.#excludedFolderPaths,
       onCreate: (e) => this.#onCreate(e.detail.url),
-      onEdit: (e) => this.#onEdit(e.currentTarget.dataset.index ?? "-1", e.detail.valueBeforeEditing, e.detail.newText),
+      onEdit: (e) => this.#onEdit(
+        e.currentTarget.dataset.index ?? "-1",
+        e.detail.valueBeforeEditing,
+        e.detail.newText
+      ),
       onDelete: (e) => this.#onDelete(e.currentTarget.dataset.index ?? "-1")
     };
     this.#view(input, {}, this.contentElement);
@@ -1696,7 +1722,7 @@ var EditFileSystemView = class _EditFileSystemView extends UI3.Widget.VBox {
     }
     const pathWithStatus = this.#validateFolder(url);
     this.#excludedFolderPaths.push(pathWithStatus);
-    if (pathWithStatus.status === 1) {
+    if (pathWithStatus.status === 1 /* VALID */) {
       this.#fileSystem?.addExcludedFolder(pathWithStatus.path);
     }
     this.requestUpdate();
@@ -1709,10 +1735,10 @@ var EditFileSystemView = class _EditFileSystemView extends UI3.Widget.VBox {
     const pathWithStatus = this.#validateFolder(newText);
     const oldPathWithStatus = this.#excludedFolderPaths[index];
     this.#excludedFolderPaths[index] = pathWithStatus;
-    if (oldPathWithStatus.status === 1) {
+    if (oldPathWithStatus.status === 1 /* VALID */) {
       this.#fileSystem?.removeExcludedFolder(valueBeforeEditing);
     }
-    if (pathWithStatus.status === 1) {
+    if (pathWithStatus.status === 1 /* VALID */) {
       this.#fileSystem?.addExcludedFolder(pathWithStatus.path);
     }
     this.requestUpdate();
@@ -1729,24 +1755,12 @@ var EditFileSystemView = class _EditFileSystemView extends UI3.Widget.VBox {
   #validateFolder(rawInput) {
     const path = _EditFileSystemView.#normalizePrefix(rawInput.trim());
     if (!path) {
-      return {
-        path,
-        status: 2
-        /* ExcludedFolderStatus.ERROR_NOT_A_PATH */
-      };
+      return { path, status: 2 /* ERROR_NOT_A_PATH */ };
     }
     if (this.#excludedFolderPaths.findIndex(({ path: p }) => p === path) !== -1) {
-      return {
-        path,
-        status: 3
-        /* ExcludedFolderStatus.ERROR_NOT_UNIQUE */
-      };
+      return { path, status: 3 /* ERROR_NOT_UNIQUE */ };
     }
-    return {
-      path,
-      status: 1
-      /* ExcludedFolderStatus.VALID */
-    };
+    return { path, status: 1 /* VALID */ };
   }
   static #normalizePrefix(prefix) {
     if (!prefix) {
@@ -1756,20 +1770,20 @@ var EditFileSystemView = class _EditFileSystemView extends UI3.Widget.VBox {
   }
 };
 
-// gen/front_end/panels/settings/FrameworkIgnoreListSettingsTab.js
+// ../../front_end/panels/settings/FrameworkIgnoreListSettingsTab.ts
 var FrameworkIgnoreListSettingsTab_exports = {};
 __export(FrameworkIgnoreListSettingsTab_exports, {
   FrameworkIgnoreListSettingsTab: () => FrameworkIgnoreListSettingsTab
 });
-import "./../../ui/kit/kit.js";
-import * as Common3 from "./../../core/common/common.js";
-import * as i18n7 from "./../../core/i18n/i18n.js";
-import * as Workspace from "./../../models/workspace/workspace.js";
-import * as Buttons3 from "./../../ui/components/buttons/buttons.js";
-import * as UIHelpers2 from "./../../ui/helpers/helpers.js";
-import * as SettingsUI3 from "./../../ui/legacy/components/settings_ui/settings_ui.js";
-import * as UI4 from "./../../ui/legacy/legacy.js";
-import * as VisualLogging3 from "./../../ui/visual_logging/visual_logging.js";
+import "../../ui/kit/kit.js";
+import * as Common3 from "../../core/common/common.js";
+import * as i18n7 from "../../core/i18n/i18n.js";
+import * as Workspace from "../../models/workspace/workspace.js";
+import * as Buttons3 from "../../ui/components/buttons/buttons.js";
+import * as UIHelpers2 from "../../ui/helpers/helpers.js";
+import * as SettingsUI3 from "../../ui/legacy/components/settings_ui/settings_ui.js";
+import * as UI4 from "../../ui/legacy/legacy.js";
+import * as VisualLogging3 from "../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/settings/frameworkIgnoreListSettingsTab.css.js
 var frameworkIgnoreListSettingsTab_css_default = `/*
@@ -1841,7 +1855,7 @@ var frameworkIgnoreListSettingsTab_css_default = `/*
   flex: none;
   display: flex;
   flex-direction: row;
-  margin: 6px 5px;
+  margin: var(--sys-size-4) 5px;
   align-items: center;
 }
 
@@ -1867,12 +1881,12 @@ var frameworkIgnoreListSettingsTab_css_default = `/*
 }
 
 .devtools-link:has(devtools-icon) {
-  margin-left: 6px;
+  margin-left: var(--sys-size-4);
 }
 
 /*# sourceURL=${import.meta.resolve("./frameworkIgnoreListSettingsTab.css")} */`;
 
-// gen/front_end/panels/settings/FrameworkIgnoreListSettingsTab.js
+// ../../front_end/panels/settings/FrameworkIgnoreListSettingsTab.ts
 var UIStrings4 = {
   /**
    * @description Header text content in Framework Ignore List settings tab of the Settings for enabling or disabling ignore listing.
@@ -1963,27 +1977,49 @@ var FrameworkIgnoreListSettingsTab = class extends UI4.Widget.VBox {
     ignoreListingDescription.textContent = i18nString4(UIStrings4.ignoreListingDescription);
     const enabledSetting = Common3.Settings.Settings.instance().resolve(Workspace.IgnoreListManager.enableIgnoreListingSettingDescriptor);
     const enableIgnoreListing = this.contentElement.createChild("div", "enable-ignore-listing");
-    enableIgnoreListing.appendChild(SettingsUI3.SettingsUI.createSettingCheckbox(i18nString4(UIStrings4.ignoreListing), enabledSetting));
+    enableIgnoreListing.appendChild(
+      SettingsUI3.SettingsUI.createSettingCheckbox(i18nString4(UIStrings4.ignoreListing), enabledSetting)
+    );
     UI4.Tooltip.Tooltip.install(enableIgnoreListing, i18nString4(UIStrings4.enableIgnoreListingTooltip));
     const enableIgnoreListingCard = settingsContent.createChild("devtools-card");
     enableIgnoreListingCard.heading = i18nString4(UIStrings4.frameworkIgnoreList);
     enableIgnoreListingCard.append(ignoreListingDescription, enableIgnoreListing);
     const generalExclusionGroup = this.createSettingGroup();
     generalExclusionGroup.classList.add("general-exclusion-group");
-    const ignoreListContentScripts = generalExclusionGroup.createChild("div", "ignore-list-option").appendChild(SettingsUI3.SettingsUI.createSettingCheckbox(i18nString4(UIStrings4.ignoreListContentScripts), Common3.Settings.Settings.instance().resolve(Workspace.IgnoreListManager.skipContentScriptsSettingDescriptor)));
+    const ignoreListContentScripts = generalExclusionGroup.createChild("div", "ignore-list-option").appendChild(SettingsUI3.SettingsUI.createSettingCheckbox(
+      i18nString4(UIStrings4.ignoreListContentScripts),
+      Common3.Settings.Settings.instance().resolve(
+        Workspace.IgnoreListManager.skipContentScriptsSettingDescriptor
+      )
+    ));
     const automaticallyIgnoreListContainer = generalExclusionGroup.createChild("div", "ignore-list-option");
-    const automaticallyIgnoreList = automaticallyIgnoreListContainer.appendChild(SettingsUI3.SettingsUI.createSettingCheckbox(i18nString4(UIStrings4.automaticallyIgnoreListKnownThirdPartyScripts), Common3.Settings.Settings.instance().resolve(Workspace.IgnoreListManager.automaticallyIgnoreListKnownThirdPartyScriptsSettingDescriptor)));
+    const automaticallyIgnoreList = automaticallyIgnoreListContainer.appendChild(SettingsUI3.SettingsUI.createSettingCheckbox(
+      i18nString4(UIStrings4.automaticallyIgnoreListKnownThirdPartyScripts),
+      Common3.Settings.Settings.instance().resolve(
+        Workspace.IgnoreListManager.automaticallyIgnoreListKnownThirdPartyScriptsSettingDescriptor
+      )
+    ));
     const automaticallyIgnoreLinkButton = new Buttons3.Button.Button();
     automaticallyIgnoreLinkButton.data = {
       iconName: "help",
-      variant: "icon",
-      size: "SMALL",
+      variant: Buttons3.Button.Variant.ICON,
+      size: Buttons3.Button.Size.SMALL,
       jslogContext: "learn-more",
       title: i18nString4(UIStrings4.learnMore)
     };
-    automaticallyIgnoreLinkButton.addEventListener("click", () => UIHelpers2.openInNewTab("https://developer.chrome.com/docs/devtools/settings/ignore-list/#skip-third-party"));
+    automaticallyIgnoreLinkButton.addEventListener(
+      "click",
+      () => UIHelpers2.openInNewTab(
+        "https://developer.chrome.com/docs/devtools/settings/ignore-list/#skip-third-party"
+      )
+    );
     automaticallyIgnoreListContainer.appendChild(automaticallyIgnoreLinkButton);
-    const ignoreListAnonymousScripts = generalExclusionGroup.createChild("div", "ignore-list-option").appendChild(SettingsUI3.SettingsUI.createSettingCheckbox(i18nString4(UIStrings4.ignoreListAnonymousScripts), Common3.Settings.Settings.instance().resolve(Workspace.IgnoreListManager.skipAnonymousScriptsSettingDescriptor)));
+    const ignoreListAnonymousScripts = generalExclusionGroup.createChild("div", "ignore-list-option").appendChild(SettingsUI3.SettingsUI.createSettingCheckbox(
+      i18nString4(UIStrings4.ignoreListAnonymousScripts),
+      Common3.Settings.Settings.instance().resolve(
+        Workspace.IgnoreListManager.skipAnonymousScriptsSettingDescriptor
+      )
+    ));
     const generalExclusionGroupCard = settingsContent.createChild("devtools-card", "ignore-list-options");
     generalExclusionGroupCard.heading = i18nString4(UIStrings4.generalExclusionRules);
     generalExclusionGroupCard.append(generalExclusionGroup);
@@ -1999,10 +2035,16 @@ var FrameworkIgnoreListSettingsTab = class extends UI4.Widget.VBox {
     placeholder.classList.add("ignore-list-empty");
     this.list.setEmptyPlaceholder(placeholder);
     this.list.show(customExclusionGroup);
-    const addPatternButton = UI4.UIUtils.createTextButton(i18nString4(UIStrings4.addPattern), this.addButtonClicked.bind(this), { className: "add-button", jslogContext: "settings.add-ignore-list-pattern" });
+    const addPatternButton = UI4.UIUtils.createTextButton(
+      i18nString4(UIStrings4.addPattern),
+      this.addButtonClicked.bind(this),
+      { className: "add-button", jslogContext: "settings.add-ignore-list-pattern" }
+    );
     UI4.ARIAUtils.setLabel(addPatternButton, i18nString4(UIStrings4.addFilenamePattern));
     customExclusionGroup.appendChild(addPatternButton);
-    this.setting = Common3.Settings.Settings.instance().resolve(Workspace.IgnoreListManager.skipStackFramesPatternSettingDescriptor);
+    this.setting = Common3.Settings.Settings.instance().resolve(
+      Workspace.IgnoreListManager.skipStackFramesPatternSettingDescriptor
+    );
     this.setting.addChangeListener(this.settingUpdated, this);
     const enabledChanged = () => {
       const enabled = enabledSetting.get();
@@ -2114,21 +2156,22 @@ var FrameworkIgnoreListSettingsTab = class extends UI4.Widget.VBox {
   }
 };
 
-// gen/front_end/panels/settings/KeybindsSettingsTab.js
+// ../../front_end/panels/settings/KeybindsSettingsTab.ts
 var KeybindsSettingsTab_exports = {};
 __export(KeybindsSettingsTab_exports, {
   KeybindsSettingsTab: () => KeybindsSettingsTab,
   ShortcutListItem: () => ShortcutListItem
 });
-import * as Common4 from "./../../core/common/common.js";
-import * as Host3 from "./../../core/host/host.js";
-import * as i18n9 from "./../../core/i18n/i18n.js";
-import * as Platform5 from "./../../core/platform/platform.js";
-import * as Buttons4 from "./../../ui/components/buttons/buttons.js";
-import { createIcon as createIcon2, Link as Link2 } from "./../../ui/kit/kit.js";
-import * as SettingsUI5 from "./../../ui/legacy/components/settings_ui/settings_ui.js";
-import * as UI5 from "./../../ui/legacy/legacy.js";
-import * as VisualLogging4 from "./../../ui/visual_logging/visual_logging.js";
+import * as Common4 from "../../core/common/common.js";
+import * as Host3 from "../../core/host/host.js";
+import * as i18n9 from "../../core/i18n/i18n.js";
+import * as Platform5 from "../../core/platform/platform.js";
+import * as Buttons4 from "../../ui/components/buttons/buttons.js";
+import { createIcon as createIcon2, Link as Link2 } from "../../ui/kit/kit.js";
+import * as SettingsUI5 from "../../ui/legacy/components/settings_ui/settings_ui.js";
+import * as UI5 from "../../ui/legacy/legacy.js";
+import * as Settings5 from "../../ui/settings/settings.js";
+import * as VisualLogging4 from "../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/settings/keybindsSettingsTab.css.js
 var keybindsSettingsTab_css_default = `/*
@@ -2259,7 +2302,7 @@ button.text-button {
 }
 
 .keybinds-list-text input {
-  margin: 0 2px;
+  margin: 0 var(--sys-size-2);
 }
 
 .keybinds-set-select {
@@ -2288,7 +2331,7 @@ button.text-button {
   align-self: flex-start;
   min-height: 2em;
   line-height: 2em;
-  margin-bottom: 4px;
+  margin-bottom: var(--sys-size-3);
 }
 
 .keybinds-footer {
@@ -2353,7 +2396,7 @@ button.text-button {
 
 /*# sourceURL=${import.meta.resolve("./keybindsSettingsTab.css")} */`;
 
-// gen/front_end/panels/settings/KeybindsSettingsTab.js
+// ../../front_end/panels/settings/KeybindsSettingsTab.ts
 var UIStrings5 = {
   /**
    * @description Text for keyboard shortcuts.
@@ -2454,10 +2497,13 @@ var KeybindsSettingsTab = class extends UI5.Widget.VBox {
     this.registerRequiredCSS(keybindsSettingsTab_css_default, settingsScreen_css_default);
     const settingsContent = this.contentElement.createChild("div", "settings-card-container-wrapper").createChild("div");
     settingsContent.classList.add("settings-card-container");
-    const keybindsSetSetting = Common4.Settings.Settings.instance().moduleSetting("active-keybind-set");
-    const userShortcutsSetting = Common4.Settings.Settings.instance().moduleSetting("user-shortcuts");
+    const keybindsSetSetting = Common4.Settings.Settings.instance().resolve(Settings5.MainSettings.activeKeybindSetSettingDescriptor);
+    const userShortcutsSetting = Common4.Settings.Settings.instance().resolve(Settings5.MainSettings.userShortcutsSettingDescriptor);
     keybindsSetSetting.addChangeListener(this.update, this);
-    const keybindsSetSelect = SettingsUI5.SettingsUI.createControlForSetting(keybindsSetSetting, i18nString5(UIStrings5.matchShortcutsFromPreset));
+    const keybindsSetSelect = SettingsUI5.SettingsUI.createControlForSetting(
+      keybindsSetSetting,
+      i18nString5(UIStrings5.matchShortcutsFromPreset)
+    );
     const card = settingsContent.createChild("devtools-card");
     card.heading = i18nString5(UIStrings5.shortcuts);
     if (keybindsSetSelect) {
@@ -2471,7 +2517,12 @@ var KeybindsSettingsTab = class extends UI5.Widget.VBox {
     UI5.ARIAUtils.setLabel(this.list.element, i18nString5(UIStrings5.keyboardShortcutsList));
     const footer = document.createElement("div");
     footer.classList.add("keybinds-footer");
-    const docsLink = Link2.create("https://developer.chrome.com/docs/devtools/shortcuts/", i18nString5(UIStrings5.FullListOfDevtoolsKeyboard), void 0, "learn-more");
+    const docsLink = Link2.create(
+      "https://developer.chrome.com/docs/devtools/shortcuts/",
+      i18nString5(UIStrings5.FullListOfDevtoolsKeyboard),
+      void 0,
+      "learn-more"
+    );
     docsLink.classList.add("docs-link");
     footer.appendChild(docsLink);
     const restoreDefaultShortcutsButton = UI5.UIUtils.createTextButton(i18nString5(UIStrings5.RestoreDefaultShortcuts), () => {
@@ -2512,18 +2563,17 @@ var KeybindsSettingsTab = class extends UI5.Widget.VBox {
   }
   commitChanges(item2, editedShortcuts) {
     for (const [originalShortcut, newDescriptors] of editedShortcuts) {
-      if (originalShortcut.type !== "UnsetShortcut") {
+      if (originalShortcut.type !== UI5.KeyboardShortcut.Type.UNSET_SHORTCUT) {
         UI5.ShortcutRegistry.ShortcutRegistry.instance().removeShortcut(originalShortcut);
         if (!newDescriptors) {
           Host3.userMetrics.actionTaken(Host3.UserMetrics.Action.ShortcutRemoved);
         }
       }
       if (newDescriptors) {
-        UI5.ShortcutRegistry.ShortcutRegistry.instance().registerUserShortcut(originalShortcut.changeKeys(newDescriptors).changeType(
-          "UserShortcut"
-          /* UI.KeyboardShortcut.Type.USER_SHORTCUT */
-        ));
-        if (originalShortcut.type === "UnsetShortcut") {
+        UI5.ShortcutRegistry.ShortcutRegistry.instance().registerUserShortcut(
+          originalShortcut.changeKeys(newDescriptors).changeType(UI5.KeyboardShortcut.Type.USER_SHORTCUT)
+        );
+        if (originalShortcut.type === UI5.KeyboardShortcut.Type.UNSET_SHORTCUT) {
           Host3.userMetrics.actionTaken(Host3.UserMetrics.Action.UserShortcutAdded);
         } else {
           Host3.userMetrics.actionTaken(Host3.UserMetrics.Action.ShortcutModified);
@@ -2643,7 +2693,10 @@ var ShortcutListItem = class {
     this.settingsTab = settingsTab;
     this.item = item2;
     this.element = document.createElement("div");
-    this.element.setAttribute("jslog", `${VisualLogging4.item().context(item2.id()).track({ keydown: "Escape", resize: true })}`);
+    this.element.setAttribute(
+      "jslog",
+      `${VisualLogging4.item().context(item2.id()).track({ keydown: "Escape", resize: true })}`
+    );
     this.editedShortcuts = /* @__PURE__ */ new Map();
     this.shortcutInputs = /* @__PURE__ */ new Map();
     this.shortcuts = UI5.ShortcutRegistry.ShortcutRegistry.instance().shortcutsForAction(item2.id());
@@ -2687,23 +2740,41 @@ var ShortcutListItem = class {
   }
   setupEditor() {
     this.addShortcutLinkContainer = this.element.createChild("div", "keybinds-shortcut");
-    const addShortcutButton = UI5.UIUtils.createTextButton(i18nString5(UIStrings5.addAShortcut), this.addShortcut.bind(this), { jslogContext: "add-shortcut" });
+    const addShortcutButton = UI5.UIUtils.createTextButton(
+      i18nString5(UIStrings5.addAShortcut),
+      this.addShortcut.bind(this),
+      { jslogContext: "add-shortcut" }
+    );
     this.addShortcutLinkContainer.appendChild(addShortcutButton);
     if (!this.elementToFocus) {
       this.elementToFocus = addShortcutButton;
     }
     this.errorMessageElement = this.element.createChild("div", "keybinds-info keybinds-error hidden");
     UI5.ARIAUtils.markAsAlert(this.errorMessageElement);
-    this.element.appendChild(this.createIconButton(i18nString5(UIStrings5.ResetShortcutsForAction), "undo", "", "undo", this.resetShortcutsToDefaults.bind(this)));
-    this.confirmButton = this.createIconButton(i18nString5(UIStrings5.confirmChanges), "checkmark", "keybinds-confirm-button", "confirm", () => {
-      this.settingsTab.commitChanges(this.item, this.editedShortcuts);
-      UI5.ARIAUtils.LiveAnnouncer.alert(i18nString5(UIStrings5.shortcutChangesApplied, { PH1: this.item.title() }));
-    });
+    this.element.appendChild(this.createIconButton(
+      i18nString5(UIStrings5.ResetShortcutsForAction),
+      "undo",
+      "",
+      "undo",
+      this.resetShortcutsToDefaults.bind(this)
+    ));
+    this.confirmButton = this.createIconButton(
+      i18nString5(UIStrings5.confirmChanges),
+      "checkmark",
+      "keybinds-confirm-button",
+      "confirm",
+      () => {
+        this.settingsTab.commitChanges(this.item, this.editedShortcuts);
+        UI5.ARIAUtils.LiveAnnouncer.alert(i18nString5(UIStrings5.shortcutChangesApplied, { PH1: this.item.title() }));
+      }
+    );
     this.element.appendChild(this.confirmButton);
-    this.element.appendChild(this.createIconButton(i18nString5(UIStrings5.discardChanges), "cross", "keybinds-cancel-button", "cancel", () => {
-      this.settingsTab.stopEditing(this.item);
-      UI5.ARIAUtils.LiveAnnouncer.alert(i18nString5(UIStrings5.shortcutChangesDiscarded));
-    }));
+    this.element.appendChild(
+      this.createIconButton(i18nString5(UIStrings5.discardChanges), "cross", "keybinds-cancel-button", "cancel", () => {
+        this.settingsTab.stopEditing(this.item);
+        UI5.ARIAUtils.LiveAnnouncer.alert(i18nString5(UIStrings5.shortcutChangesDiscarded));
+      })
+    );
     this.element.addEventListener("keydown", (event) => {
       if (Platform5.KeyboardUtilities.isEscKey(event)) {
         this.settingsTab.stopEditing(this.item);
@@ -2712,12 +2783,7 @@ var ShortcutListItem = class {
     });
   }
   addShortcut() {
-    const shortcut = new UI5.KeyboardShortcut.KeyboardShortcut(
-      [],
-      this.item.id(),
-      "UnsetShortcut"
-      /* UI.KeyboardShortcut.Type.UNSET_SHORTCUT */
-    );
+    const shortcut = new UI5.KeyboardShortcut.KeyboardShortcut([], this.item.id(), UI5.KeyboardShortcut.Type.UNSET_SHORTCUT);
     this.shortcuts.push(shortcut);
     this.update();
     const shortcutInput = this.shortcutInputs.get(shortcut);
@@ -2730,7 +2796,7 @@ var ShortcutListItem = class {
       return;
     }
     let icon;
-    if (shortcut.type !== "UnsetShortcut" && !shortcut.isDefault()) {
+    if (shortcut.type !== UI5.KeyboardShortcut.Type.UNSET_SHORTCUT && !shortcut.isDefault()) {
       icon = createIcon2("keyboard-pen", "keybinds-modified");
       UI5.ARIAUtils.setLabel(icon, i18nString5(UIStrings5.shortcutModified));
       this.element.appendChild(icon);
@@ -2758,17 +2824,19 @@ var ShortcutListItem = class {
           this.secondKeyTimeout = null;
         }
       });
-      shortcutElement.appendChild(this.createIconButton(i18nString5(UIStrings5.removeShortcut), "bin", "keybinds-delete-button", "delete", () => {
-        const index2 = this.shortcuts.indexOf(shortcut);
-        if (!shortcut.isDefault()) {
-          this.shortcuts.splice(index2, 1);
-        }
-        this.editedShortcuts.set(shortcut, null);
-        this.update();
-        this.focus();
-        this.validateInputs();
-        UI5.ARIAUtils.LiveAnnouncer.alert(i18nString5(UIStrings5.shortcutRemoved, { PH1: this.item.title() }));
-      }));
+      shortcutElement.appendChild(
+        this.createIconButton(i18nString5(UIStrings5.removeShortcut), "bin", "keybinds-delete-button", "delete", () => {
+          const index2 = this.shortcuts.indexOf(shortcut);
+          if (!shortcut.isDefault()) {
+            this.shortcuts.splice(index2, 1);
+          }
+          this.editedShortcuts.set(shortcut, null);
+          this.update();
+          this.focus();
+          this.validateInputs();
+          UI5.ARIAUtils.LiveAnnouncer.alert(i18nString5(UIStrings5.shortcutRemoved, { PH1: this.item.title() }));
+        })
+      );
     } else {
       const separator = Host3.Platform.isMac() ? "\u2004" : "\u200A+\u200A";
       const keys = shortcut.descriptors.flatMap((descriptor) => descriptor.name.split(separator));
@@ -2781,11 +2849,17 @@ var ShortcutListItem = class {
     }
   }
   createEditButton() {
-    return this.createIconButton(i18nString5(UIStrings5.editShortcut), "edit", "keybinds-edit-button", "edit", () => this.settingsTab.startEditing(this.item));
+    return this.createIconButton(
+      i18nString5(UIStrings5.editShortcut),
+      "edit",
+      "keybinds-edit-button",
+      "edit",
+      () => this.settingsTab.startEditing(this.item)
+    );
   }
   createIconButton(label, iconName, className, jslogContext, listener) {
     const button = new Buttons4.Button.Button();
-    button.data = { variant: "icon", iconName, jslogContext, title: label };
+    button.data = { variant: Buttons4.Button.Variant.ICON, iconName, jslogContext, title: label };
     button.addEventListener("click", listener);
     UI5.ARIAUtils.setLabel(button, label);
     if (className) {
@@ -2843,10 +2917,10 @@ var ShortcutListItem = class {
   resetShortcutsToDefaults() {
     this.editedShortcuts.clear();
     for (const shortcut of this.shortcuts) {
-      if (shortcut.type === "UnsetShortcut") {
+      if (shortcut.type === UI5.KeyboardShortcut.Type.UNSET_SHORTCUT) {
         const index = this.shortcuts.indexOf(shortcut);
         this.shortcuts.splice(index, 1);
-      } else if (shortcut.type === "UserShortcut") {
+      } else if (shortcut.type === UI5.KeyboardShortcut.Type.USER_SHORTCUT) {
         this.editedShortcuts.set(shortcut, null);
       }
     }
@@ -2912,22 +2986,22 @@ var ShortcutListItem = class {
   }
 };
 
-// gen/front_end/panels/settings/WorkspaceSettingsTab.js
+// ../../front_end/panels/settings/WorkspaceSettingsTab.ts
 var WorkspaceSettingsTab_exports = {};
 __export(WorkspaceSettingsTab_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW2,
   WorkspaceSettingsTab: () => WorkspaceSettingsTab
 });
-import "./../../ui/legacy/legacy.js";
-import "./../../ui/components/buttons/buttons.js";
-import "./../../ui/kit/kit.js";
-import * as Common5 from "./../../core/common/common.js";
-import * as i18n11 from "./../../core/i18n/i18n.js";
-import * as Persistence from "./../../models/persistence/persistence.js";
-import * as Buttons5 from "./../../ui/components/buttons/buttons.js";
-import * as UI6 from "./../../ui/legacy/legacy.js";
-import { html as html4, render as render4 } from "./../../ui/lit/lit.js";
-import * as VisualLogging5 from "./../../ui/visual_logging/visual_logging.js";
+import "../../ui/legacy/legacy.js";
+import "../../ui/components/buttons/buttons.js";
+import "../../ui/kit/kit.js";
+import * as Common5 from "../../core/common/common.js";
+import * as i18n11 from "../../core/i18n/i18n.js";
+import * as Persistence from "../../models/persistence/persistence.js";
+import * as Buttons5 from "../../ui/components/buttons/buttons.js";
+import * as UI6 from "../../ui/legacy/legacy.js";
+import { html as html4, render as render4 } from "../../ui/lit/lit.js";
+import * as VisualLogging5 from "../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/settings/workspaceSettingsTab.css.js
 var workspaceSettingsTab_css_default = `/*
@@ -2978,7 +3052,7 @@ var workspaceSettingsTab_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./workspaceSettingsTab.css")} */`;
 
-// gen/front_end/panels/settings/WorkspaceSettingsTab.js
+// ../../front_end/panels/settings/WorkspaceSettingsTab.ts
 var UIStrings6 = {
   /**
    * @description Text of a DOM element in Workspace settings tab of the Workspace settings in Settings.
@@ -3005,7 +3079,8 @@ var str_6 = i18n11.i18n.registerUIStrings("panels/settings/WorkspaceSettingsTab.
 var i18nString6 = i18n11.i18n.getLocalizedString.bind(void 0, str_6);
 var { widget } = UI6.Widget;
 var DEFAULT_VIEW2 = (input, _output, target) => {
-  render4(html4`
+  render4(
+    html4`
     <style>${workspaceSettingsTab_css_default}</style>
     <div class="settings-card-container-wrapper" jslog=${VisualLogging5.pane("workspace")}>
       <div class="settings-card-container">
@@ -3028,7 +3103,7 @@ var DEFAULT_VIEW2 = (input, _output, target) => {
             </div>
             <devtools-button
               slot="heading-suffix"
-              .variant=${"outlined"}
+              .variant=${Buttons5.Button.Variant.OUTLINED}
               jslog=${VisualLogging5.action().track({ click: true }).context("settings.remove-file-system")}
               @click=${input.onRemoveClicked.bind(null, fileSystem.fileSystem)}>${i18nString6(UIStrings6.remove)}</devtools-button>
           </devtools-card>
@@ -3036,12 +3111,14 @@ var DEFAULT_VIEW2 = (input, _output, target) => {
         <div class="add-button-container">
           <devtools-button
             class="add-folder"
-            .variant=${"outlined"}
+            .variant=${Buttons5.Button.Variant.OUTLINED}
             jslog=${VisualLogging5.action().track({ click: true }).context("sources.add-folder-to-workspace")}
             @click=${input.onAddClicked}>${i18nString6(UIStrings6.addFolder)}</devtools-button>
         </div>
       </div>
-    </div>`, target);
+    </div>`,
+    target
+  );
 };
 var WorkspaceSettingsTab = class _WorkspaceSettingsTab extends UI6.Widget.VBox {
   #view;
@@ -3053,8 +3130,14 @@ var WorkspaceSettingsTab = class _WorkspaceSettingsTab extends UI6.Widget.VBox {
   wasShown() {
     super.wasShown();
     this.#eventListeners = [
-      Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager.instance().addEventListener(Persistence.IsolatedFileSystemManager.Events.FileSystemAdded, this.requestUpdate.bind(this)),
-      Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager.instance().addEventListener(Persistence.IsolatedFileSystemManager.Events.FileSystemRemoved, this.requestUpdate.bind(this))
+      Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager.instance().addEventListener(
+        Persistence.IsolatedFileSystemManager.Events.FileSystemAdded,
+        this.requestUpdate.bind(this)
+      ),
+      Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager.instance().addEventListener(
+        Persistence.IsolatedFileSystemManager.Events.FileSystemRemoved,
+        this.requestUpdate.bind(this)
+      )
     ];
     this.requestUpdate();
   }
@@ -3070,7 +3153,9 @@ var WorkspaceSettingsTab = class _WorkspaceSettingsTab extends UI6.Widget.VBox {
       onRemoveClicked: (fs) => Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager.instance().removeFileSystem(fs),
       fileSystems: Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager.instance().fileSystems().filter((fileSystem) => {
         const networkPersistenceProject = Persistence.NetworkPersistenceManager.NetworkPersistenceManager.instance().project();
-        return fileSystem instanceof Persistence.IsolatedFileSystem.IsolatedFileSystem && (!networkPersistenceProject || Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager.instance().fileSystem(networkPersistenceProject.fileSystemPath()) !== fileSystem);
+        return fileSystem instanceof Persistence.IsolatedFileSystem.IsolatedFileSystem && (!networkPersistenceProject || Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager.instance().fileSystem(
+          networkPersistenceProject.fileSystemPath()
+        ) !== fileSystem);
       }).map((fileSystem) => {
         const displayName = _WorkspaceSettingsTab.#getFilename(fileSystem);
         return {

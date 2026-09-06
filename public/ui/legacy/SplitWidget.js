@@ -12,7 +12,8 @@ import splitWidgetStyles from './splitWidget.css.js';
 import { ToolbarButton } from './Toolbar.js';
 import { registerWidgetConfig, Widget, widgetConfig, WidgetElement } from './Widget.js';
 import { ZoomManager } from './ZoomManager.js';
-export class SplitWidget extends Common.ObjectWrapper.eventMixin(Widget) {
+const SplitWidgetBase = Common.ObjectWrapper.eventMixin(Widget);
+export class SplitWidget extends SplitWidgetBase {
     #sidebarElement;
     #mainElement;
     #resizerElement;
@@ -809,6 +810,17 @@ export class SplitWidgetElement extends WidgetElement {
     }
 }
 customElements.define('devtools-split-view', SplitWidgetElement);
+export var ShowMode;
+(function (ShowMode) {
+    ShowMode["BOTH"] = "Both";
+    ShowMode["ONLY_MAIN"] = "OnlyMain";
+    ShowMode["ONLY_SIDEBAR"] = "OnlySidebar";
+})(ShowMode || (ShowMode = {}));
+export var Events;
+(function (Events) {
+    Events["SIDEBAR_SIZE_CHANGED"] = "SidebarSizeChanged";
+    Events["SHOW_MODE_CHANGED"] = "ShowModeChanged";
+})(Events || (Events = {}));
 const MinPadding = 20;
 const suppressUnused = function (_value) { };
 //# sourceMappingURL=SplitWidget.js.map

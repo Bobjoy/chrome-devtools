@@ -25,7 +25,7 @@ export default `/*
 .metrics-container {
   flex: 0 0 auto;
   margin: 0;
-  border: 1px solid var(--sys-color-divider);
+  border: var(--sys-size-1) solid var(--sys-color-divider);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--sys-size-1);
@@ -66,6 +66,7 @@ export default `/*
 
 .metrics-title,
 .ad-frames-title,
+.ad-scripts-title,
 .settings-title {
   color: var(--sys-color-on-surface);
   flex: 0 0 auto;
@@ -73,12 +74,14 @@ export default `/*
   margin-bottom: var(--sys-size-5);
 }
 
-.ad-frames-data-grid {
+.ad-frames-data-grid,
+.ad-scripts-data-grid {
   flex: auto;
 }
 
-.ad-frames-container {
-  border: 1px solid var(--sys-color-divider);
+.ad-frames-container,
+.ad-scripts-container {
+  border: var(--sys-size-1) solid var(--sys-color-divider);
   display: flex;
   flex: 1; /* Takes up remaining space */
   flex-direction: column;
@@ -90,7 +93,7 @@ export default `/*
 
 .divider {
   border: none;
-  border-top: 1px solid var(--sys-color-divider);
+  border-top: var(--sys-size-1) solid var(--sys-color-divider);
   margin: var(--sys-size-8) 0 var(--sys-size-6);
 }
 

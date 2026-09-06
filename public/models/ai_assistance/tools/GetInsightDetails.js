@@ -7,7 +7,6 @@ import * as SDK from '../../../core/sdk/sdk.js';
 import * as TextUtils from '../../../core/text_utils/text_utils.js';
 import * as Logs from '../../logs/logs.js';
 import * as Trace from '../../trace/trace.js';
-import { PerformanceTraceContext } from '../contexts/PerformanceTraceContext.js';
 import { PerformanceInsightFormatter } from '../data_formatters/PerformanceInsightFormatter.js';
 import { debugLog } from '../debug.js';
 import { MAX_FUNCTION_RESULT_BYTE_LENGTH, } from './Tool.js';
@@ -31,7 +30,7 @@ networkLog = Logs.NetworkLog.NetworkLog.instance()) {
 }
 export class GetInsightDetailsTool {
     name = "getInsightDetails" /* ToolName.GET_INSIGHT_DETAILS */;
-    description = 'Returns detailed information about a specific insight of an insight set. Use this before commenting on any specific issue to get more information.';
+    description = 'Retrieves detailed metrics, subpart timing breakdowns, related DOM elements, and diagnostic data for a performance insight (e.g., \'LCPBreakdown\', \'LCPDiscovery\', \'RenderBlocking\', \'CLSCulprits\', \'INPBreakdown\', \'ThirdParties\'). Use this before commenting on any specific performance issue.';
     parameters = {
         type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
         description: 'Arguments for getting insight details.',
@@ -111,18 +110,18 @@ export class GetInsightDetailsTool {
         }
     }
     async handler(params, capabilities) {
-        const conversationContext = capabilities.conversationContext;
-        if (!conversationContext || !(conversationContext instanceof PerformanceTraceContext)) {
+        const performanceTraceContext = capabilities.getPerformanceTraceContext();
+        if (!performanceTraceContext) {
             return { error: 'Performance trace context is not available.' };
         }
         if (!params.insightSetId || !params.insightName) {
             return { error: 'Missing required arguments: insightSetId and insightName must be provided.' };
         }
-        const focus = conversationContext.getItem();
+        const focus = performanceTraceContext.getItem();
         const parsedTrace = focus.parsedTrace;
         const insightSet = parsedTrace.insights?.get(params.insightSetId);
         if (!insightSet) {
-            const formatter = conversationContext.createFormatter();
+            const formatter = performanceTraceContext.createFormatter();
             const valid = ([...parsedTrace.insights?.values() ?? []])
                 .map(insightSet => `id: ${insightSet.id}, url: ${insightSet.url}, bounds: ${formatter.serializeBounds(insightSet.bounds)}`)
                 .join('; ');
@@ -148,7 +147,7 @@ export class GetInsightDetailsTool {
             };
         }
         const widgets = [];
-        const isImportedTrace = conversationContext.getOrigin().startsWith('imported-trace://');
+        const isImportedTrace = performanceTraceContext.getOrigin().startsWith('imported-trace://');
         if (!isImportedTrace) {
             const domTreeWidget = await this.#generateDOMTreeWidget(insight, insightSet, capabilities.getTarget());
             if (domTreeWidget) {

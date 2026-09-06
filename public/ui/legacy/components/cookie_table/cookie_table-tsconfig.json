@@ -1,13 +1,14 @@
 {
-  "checkJs": true,
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "checkJs": true,
-    "composite": true,
-    "declaration": true,
+    "composite": false,
+    "declaration": false,
+    "disableSourceOfProjectReferenceRedirect": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": false,
     "inlineSources": true,
     "lib": [
       "dom",
@@ -19,65 +20,69 @@
       "ESNext.Array"
     ],
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "outDir": ".",
+    "preserveConstEnums": true,
     "rootDir": "../../../../../../../../front_end/ui/legacy/components/cookie_table",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
-    "tsBuildInfoFile": "cookie_table-tsconfig.json.tsbuildinfo",
-    "typeRoots": [],
-    "types": [],
+    "typeRoots": [
+
+    ],
+    "types": [
+
+    ],
     "useUnknownInCatchVariables": false
   },
   "files": [
     "../../../../../../../../front_end/ui/legacy/components/cookie_table/CookiesTable.ts",
     "../../../../../../../../front_end/legacy/legacy-defs.d.ts",
     "../../../../../../../../front_end/global_typings/global_defs.d.ts",
-    "../../../../../../../../node_modules/@types/filesystem/index.d.ts"
+    "../../../../../../../../node_modules/@types/filesystem/index.d.ts",
+    "../../../../../../../../node_modules/@types/filewriter/index.d.ts"
   ],
   "references": [
     {
-      "path": "../../../../core/common/bundle-tsconfig.json"
+      "path": "../../../../core/common/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../core/i18n/bundle-tsconfig.json"
+      "path": "../../../../core/i18n/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../core/root/bundle-tsconfig.json"
+      "path": "../../../../core/root/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../core/sdk/bundle-tsconfig.json"
+      "path": "../../../../core/sdk/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../generated/generated-tsconfig.json"
+      "path": "../../../../generated/generated-tsconfig.ref.json"
     },
     {
-      "path": "../../../../models/issues_manager/bundle-tsconfig.json"
+      "path": "../../../../models/issues_manager/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../panels/network/forward/bundle-tsconfig.json"
+      "path": "../../../../panels/network/forward/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../bundle-tsconfig.json"
+      "path": "../../bundle-tsconfig.ref.json"
     },
     {
-      "path": "../data_grid/bundle-tsconfig.json"
+      "path": "../data_grid/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../components/buttons/bundle-tsconfig.json"
+      "path": "../../../components/buttons/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../kit/bundle-tsconfig.json"
+      "path": "../../../kit/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../lit/bundle-tsconfig.json"
+      "path": "../../../lit/bundle-tsconfig.ref.json"
     }
   ]
 }

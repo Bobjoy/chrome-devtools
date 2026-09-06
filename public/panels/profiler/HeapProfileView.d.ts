@@ -1,7 +1,6 @@
 import '../../ui/components/icon_button/icon_button.js';
 import '../../ui/legacy/components/data_grid/data_grid.js';
 import * as Common from '../../core/common/common.js';
-import * as Platform from '../../core/platform/platform.js';
 import * as SDK from '../../core/sdk/sdk.js';
 import type * as Protocol from '../../generated/protocol.js';
 import * as CPUProfile from '../../models/cpu_profile/cpu_profile.js';
@@ -120,16 +119,8 @@ export declare class HeapProfileView extends UI.View.SimpleView implements UI.Se
     resetClicked(): void;
     performUpdate(): void;
 }
-declare const SamplingHeapProfileTypeBase_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<SamplingHeapProfileType.EventTypes>;
-    addEventListener<T extends keyof SamplingHeapProfileType.EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<SamplingHeapProfileType.EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<SamplingHeapProfileType.EventTypes, T>;
-    once<T extends keyof SamplingHeapProfileType.EventTypes>(eventType: T): Promise<SamplingHeapProfileType.EventTypes[T]>;
-    removeEventListener<T extends keyof SamplingHeapProfileType.EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<SamplingHeapProfileType.EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: keyof SamplingHeapProfileType.EventTypes): boolean;
-    dispatchEventToListeners<T extends keyof SamplingHeapProfileType.EventTypes>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<SamplingHeapProfileType.EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof ProfileType;
-export declare class SamplingHeapProfileTypeBase extends SamplingHeapProfileTypeBase_base {
+declare const SamplingHeapProfileTypeBaseBase: Common.ObjectWrapper.EventMixin<SamplingHeapProfileType.EventTypes, typeof ProfileType>;
+export declare class SamplingHeapProfileTypeBase extends SamplingHeapProfileTypeBaseBase {
     recording: boolean;
     clearedDuringRecording: boolean;
     constructor(typeId: string, description: string);
