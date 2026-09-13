@@ -5,7 +5,7 @@ import { assert } from 'chai';
 import sinon from 'sinon';
 import * as SDK from '../../core/sdk/sdk.js';
 import * as Bindings from '../../models/bindings/bindings.js';
-import { renderElementIntoDOM } from '../../testing/DOMHelpers.js';
+import { renderElementIntoDOM, setTestUniverseForWidgets } from '../../testing/DOMHelpers.js';
 import { createTarget, describeWithEnvironment } from '../../testing/EnvironmentHelpers.js';
 import { TestUniverse } from '../../testing/TestUniverse.js';
 import * as Elements from './elements.js';
@@ -18,6 +18,7 @@ describeWithEnvironment('AdoptedStyleSheetTreeElement highlighting', () => {
     const sheetId = 'sheet-id';
     beforeEach(async () => {
         const universe = new TestUniverse();
+        setTestUniverseForWidgets(universe);
         sinon.stub(Bindings.DebuggerWorkspaceBinding.DebuggerWorkspaceBinding, 'instance')
             .returns(universe.debuggerWorkspaceBinding);
         sinon.stub(Bindings.CSSWorkspaceBinding.CSSWorkspaceBinding, 'instance').returns(universe.cssWorkspaceBinding);
@@ -49,6 +50,7 @@ describeWithEnvironment('AdoptedStyleSheetTreeElement highlighting', () => {
         treeOutline = new Elements.ElementsTreeOutline.ElementsTreeOutline();
         treeOutline.wireToDOMModel(domModel);
         const containerTreeElement = new Elements.ElementsTreeElement.ElementsTreeElement(containerNode);
+        treeOutline.appendChild(containerTreeElement);
         shadowRootTreeElement = new Elements.ElementsTreeElement.ElementsTreeElement(shadowRootNode);
         containerTreeElement.appendChild(shadowRootTreeElement);
         treeOutline.setVisible(true);
@@ -58,6 +60,16 @@ describeWithEnvironment('AdoptedStyleSheetTreeElement highlighting', () => {
     afterEach(() => {
         treeOutline.removeChildren();
         treeOutline.setVisible(false);
+    });
+    it('adds a .selection div for the highlight', async () => {
+        const adoptedSheet = shadowRootNode.adoptedStyleSheetsForNode[0];
+        const adoptedStyleSheetSetTreeElement = new Elements.AdoptedStyleSheetTreeElement.AdoptedStyleSheetSetTreeElement([adoptedSheet]);
+        shadowRootTreeElement.appendChild(adoptedStyleSheetSetTreeElement);
+        await shadowRootTreeElement.onpopulate();
+        shadowRootTreeElement.expand();
+        // Assert .selection div exists
+        const selectionDiv = adoptedStyleSheetSetTreeElement.listItemElement.querySelector('.selection');
+        assert.exists(selectionDiv, 'selection div must exist to show highlight');
     });
     it('edits an adopted style sheet', async () => {
         const adoptedSheet = shadowRootNode.adoptedStyleSheetsForNode[0];

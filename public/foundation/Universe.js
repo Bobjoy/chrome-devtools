@@ -27,6 +27,7 @@ export class Universe {
     //                            directly on the `Universe`.
     context;
     autofillManager;
+    cd4aBridge = null;
     supportsEmulation;
     initAutomaticFilesystem;
     fileSystemWorkspaceBinding;
@@ -58,14 +59,11 @@ export class Universe {
         context.set(SDK.FrameManager.FrameManager, frameManager);
         const multitargetNetworkManager = new SDK.NetworkManager.MultitargetNetworkManager(targetManager);
         context.set(SDK.NetworkManager.MultitargetNetworkManager, multitargetNetworkManager);
-        const workspace = new Workspace.Workspace.WorkspaceImpl();
-        context.set(Workspace.Workspace.WorkspaceImpl, workspace);
-        const fileManager = new Workspace.FileManager.FileManager();
-        context.set(Workspace.FileManager.FileManager, fileManager);
         this.supportsEmulation = options.supportsEmulation;
         let deviceModeModel = null;
         if (options.supportsEmulation) {
-            deviceModeModel = new Emulation.DeviceModeModel.DeviceModeModel(targetManager, settings, multitargetNetworkManager, fileManager);
+            deviceModeModel =
+                new Emulation.DeviceModeModel.DeviceModeModel(targetManager, settings, multitargetNetworkManager);
             context.set(Emulation.DeviceModeModel.DeviceModeModel, deviceModeModel);
         }
         const pageResourceLoader = new SDK.PageResourceLoader.PageResourceLoader(targetManager, settings, multitargetNetworkManager, null);
@@ -91,6 +89,10 @@ export class Universe {
         context.set(SDK.EventBreakpointsModel.EventBreakpointsManager, eventBreakpointsManager);
         const domModelUndoStack = new SDK.DOMModel.DOMModelUndoStack();
         context.set(SDK.DOMModel.DOMModelUndoStack, domModelUndoStack);
+        const workspace = new Workspace.Workspace.WorkspaceImpl();
+        context.set(Workspace.Workspace.WorkspaceImpl, workspace);
+        const fileManager = new Workspace.FileManager.FileManager();
+        context.set(Workspace.FileManager.FileManager, fileManager);
         if (automaticFileSystemManager) {
             const automaticFileSystemWorkspaceBinding = new Persistence.AutomaticFileSystemWorkspaceBinding.AutomaticFileSystemWorkspaceBinding(automaticFileSystemManager, isolatedFileSystemManager, workspace);
             context.set(Persistence.AutomaticFileSystemWorkspaceBinding.AutomaticFileSystemWorkspaceBinding, automaticFileSystemWorkspaceBinding);
@@ -123,6 +125,8 @@ export class Universe {
         context.set(Logs.LogManager.LogManager, logManager);
         const issuesManager = new IssuesManager.IssuesManager.IssuesManager(IssuesManager.Issue.getShowThirdPartyIssuesSetting(settings), IssuesManager.IssuesManager.getHideIssueByCodeSetting(settings), frameManager, targetManager, workspace, debuggerWorkspaceBinding, cssWorkspaceBinding);
         context.set(IssuesManager.IssuesManager.IssuesManager, issuesManager);
+        const domIssuesManager = new IssuesManager.DOMIssuesManager.DOMIssuesManager(issuesManager, targetManager);
+        context.set(IssuesManager.DOMIssuesManager.DOMIssuesManager, domIssuesManager);
         const javaScriptMetadata = new JavaScriptMetadata.JavaScriptMetadata.JavaScriptMetadataImpl();
         context.set(JavaScriptMetadata.JavaScriptMetadata.JavaScriptMetadataImpl, javaScriptMetadata);
         const liveMetrics = new LiveMetrics.LiveMetrics(targetManager, settings, deviceModeModel);
@@ -135,12 +139,17 @@ export class Universe {
         context.set(AiAssistance.BuiltInAi.BuiltInAi, builtInAi);
         const commentManager = new CommentManager.CommentManager.CommentManager();
         context.set(CommentManager.CommentManager.CommentManager, commentManager);
+        if (options.hostConfig.devToolsComments?.enabled ?? Root.Runtime.hostConfig.devToolsComments?.enabled) {
+            this.cd4aBridge = new CommentManager.CD4ABridge.CD4ABridge(commentManager, targetManager, networkLog);
+            context.set(CommentManager.CD4ABridge.CD4ABridge, this.cd4aBridge);
+        }
         this.autofillManager = new AutofillManager.AutofillManager.AutofillManager(targetManager, frameManager);
         context.set(AutofillManager.AutofillManager.AutofillManager, this.autofillManager);
     }
     // TODO(crbug.com/542394587): Should be `Symbol.dispose`
     dispose() {
         // TODO(crbug.com/542394587): Track these in a DisposableStack.
+        this.cd4aBridge?.dispose();
         this.context.get(Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager).dispose();
         if (this.initAutomaticFilesystem) {
             this.context.get(Persistence.AutomaticFileSystemManager.AutomaticFileSystemManager).dispose();
@@ -184,6 +193,9 @@ export class Universe {
     }
     get domDebuggerManager() {
         return this.context.get(SDK.DOMDebuggerModel.DOMDebuggerManager);
+    }
+    get domIssuesManager() {
+        return this.context.get(IssuesManager.DOMIssuesManager.DOMIssuesManager);
     }
     get domModelUndoStack() {
         return this.context.get(SDK.DOMModel.DOMModelUndoStack);

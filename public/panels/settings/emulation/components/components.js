@@ -4,7 +4,7 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/settings/emulation/components/UserAgentClientHintsForm.js
+// ../../front_end/panels/settings/emulation/components/UserAgentClientHintsForm.ts
 var UserAgentClientHintsForm_exports = {};
 __export(UserAgentClientHintsForm_exports, {
   ALL_PROTOCOL_FORM_FACTORS: () => ALL_PROTOCOL_FORM_FACTORS,
@@ -12,15 +12,15 @@ __export(UserAgentClientHintsForm_exports, {
   ClientHintsSubmitEvent: () => ClientHintsSubmitEvent,
   UserAgentClientHintsForm: () => UserAgentClientHintsForm
 });
-import "./../../../../ui/kit/kit.js";
-import "./../../../../ui/legacy/legacy.js";
-import * as i18n from "./../../../../core/i18n/i18n.js";
-import * as Platform from "./../../../../core/platform/platform.js";
-import * as Buttons from "./../../../../ui/components/buttons/buttons.js";
-import * as Input from "./../../../../ui/components/input/input.js";
-import * as Lit from "./../../../../ui/lit/lit.js";
-import * as VisualLogging from "./../../../../ui/visual_logging/visual_logging.js";
-import * as EmulationUtils from "./../utils/utils.js";
+import "../../../../ui/kit/kit.js";
+import "../../../../ui/legacy/legacy.js";
+import * as i18n from "../../../../core/i18n/i18n.js";
+import * as Platform from "../../../../core/platform/platform.js";
+import * as Buttons from "../../../../ui/components/buttons/buttons.js";
+import * as Input from "../../../../ui/components/input/input.js";
+import * as Lit from "../../../../ui/lit/lit.js";
+import * as VisualLogging from "../../../../ui/visual_logging/visual_logging.js";
+import * as EmulationUtils from "../utils/utils.js";
 
 // gen/front_end/panels/settings/emulation/components/userAgentClientHintsForm.css.js
 var userAgentClientHintsForm_css_default = `/*
@@ -62,7 +62,7 @@ var userAgentClientHintsForm_css_default = `/*
   display: grid;
   grid-template-columns: 1fr 1fr 1fr auto;
   align-items: center;
-  gap: 8px 10px;
+  gap: var(--sys-size-5) 10px;
   padding: 0 10px;
 }
 
@@ -73,20 +73,20 @@ var userAgentClientHintsForm_css_default = `/*
 .form-factors-checkbox-group {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 6px 10px;
+  gap: var(--sys-size-4) 10px;
 }
 
 .form-factor-checkbox-label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--sys-size-4);
   white-space: nowrap;
 }
 
 hr.section-separator {
   grid-column: 1 / 5; /* Ensures the separator spans all columns */
   border: none;
-  margin-top: 1px;
+  margin-top: var(--sys-size-1);
 }
 
 .half-row {
@@ -103,9 +103,9 @@ hr.section-separator {
 
 .input-field {
   color: var(--sys-color-on-surface);
-  padding: 3px 6px;
-  border-radius: 2px;
-  border: 1px solid var(--sys-color-neutral-outline);
+  padding: 3px var(--sys-size-4);
+  border-radius: var(--sys-size-2);
+  border: var(--sys-size-1) solid var(--sys-color-neutral-outline);
   background-color: var(--sys-color-cdt-base-container);
   font-size: inherit;
   height: 18px;
@@ -116,7 +116,7 @@ hr.section-separator {
 }
 
 .input-field:focus {
-  border: 1px solid var(--sys-color-state-focus-ring);
+  border: var(--sys-size-1) solid var(--sys-color-state-focus-ring);
   outline-style: none;
 }
 
@@ -124,7 +124,7 @@ hr.section-separator {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--sys-size-4);
 }
 
 .add-icon {
@@ -144,7 +144,7 @@ hr.section-separator {
 
 .info-icon {
   margin-left: 5px;
-  margin-right: 1px;
+  margin-right: var(--sys-size-1);
   height: var(--sys-size-8);
   width: var(--sys-size-8);
 }
@@ -154,12 +154,12 @@ hr.section-separator {
   color: var(--sys-color-primary);
   text-decoration: underline;
   cursor: pointer;
-  outline-offset: 2px;
+  outline-offset: var(--sys-size-2);
   font-weight: 400;
 }
 
 devtools-icon + .link {
-  margin-inline-start: 2px;
+  margin-inline-start: var(--sys-size-2);
 }
 
 .hide-container {
@@ -174,7 +174,7 @@ devtools-icon + .link {
 
 @media (forced-colors: active) {
   .input-field {
-    border: 1px solid;
+    border: var(--sys-size-1) solid;
   }
 
   .tree-title[aria-disabled="true"] {
@@ -184,7 +184,7 @@ devtools-icon + .link {
 
 /*# sourceURL=${import.meta.resolve("./userAgentClientHintsForm.css")} */`;
 
-// gen/front_end/panels/settings/emulation/components/UserAgentClientHintsForm.js
+// ../../front_end/panels/settings/emulation/components/UserAgentClientHintsForm.ts
 var { html } = Lit;
 var UIStrings = {
   /**
@@ -713,12 +713,14 @@ var UserAgentClientHintsForm = class extends HTMLElement {
     `;
   }
   #renderUseragent() {
-    const { brands = [
-      {
-        brand: "",
-        version: ""
-      }
-    ] } = this.#metaData;
+    const {
+      brands = [
+        {
+          brand: "",
+          version: ""
+        }
+      ]
+    } = this.#metaData;
     const brandElements = brands.map((brandRow, index) => {
       const { brand, version } = brandRow;
       const handleDeleteClick = () => {
@@ -800,12 +802,14 @@ var UserAgentClientHintsForm = class extends HTMLElement {
     `;
   }
   #renderFullVersionList() {
-    const { fullVersionList = [
-      {
-        brand: "",
-        version: ""
-      }
-    ] } = this.#metaData;
+    const {
+      fullVersionList = [
+        {
+          brand: "",
+          version: ""
+        }
+      ]
+    } = this.#metaData;
     const elements = fullVersionList.map((brandRow, index) => {
       const { brand, version } = brandRow;
       const handleDeleteClick = () => {
@@ -923,14 +927,24 @@ var UserAgentClientHintsForm = class extends HTMLElement {
     const { fullVersion, architecture } = this.#metaData;
     const useragentSection = this.#renderUseragent();
     const fullVersionListSection = this.#renderFullVersionList();
-    const fullBrowserInput = this.#renderInputWithLabel(i18nString(UIStrings.fullBrowserVersion), i18nString(UIStrings.fullBrowserVersionPlaceholder), fullVersion || "", "fullVersion");
+    const fullBrowserInput = this.#renderInputWithLabel(
+      i18nString(UIStrings.fullBrowserVersion),
+      i18nString(UIStrings.fullBrowserVersionPlaceholder),
+      fullVersion || "",
+      "fullVersion"
+    );
     const formFactorsSection = this.#renderFormFactorsSection();
     const platformSection = this.#renderPlatformSection();
-    const architectureInput = this.#renderInputWithLabel(i18nString(UIStrings.architecture), i18nString(UIStrings.architecturePlaceholder), architecture, "architecture");
+    const architectureInput = this.#renderInputWithLabel(
+      i18nString(UIStrings.architecture),
+      i18nString(UIStrings.architecturePlaceholder),
+      architecture,
+      "architecture"
+    );
     const deviceModelSection = this.#renderDeviceModelSection();
     const submitButton = this.#showSubmitButton ? html`
       <devtools-button
-        .variant=${"outlined"}
+        .variant=${Buttons.Button.Variant.OUTLINED}
         .type=${"submit"}
       >
         ${i18nString(UIStrings.update)}
@@ -995,8 +1009,14 @@ var UserAgentClientHintsForm = class extends HTMLElement {
     for (const [metaDataKey, metaDataValue] of Object.entries(this.#metaData)) {
       if (metaDataKey === "brands" || metaDataKey === "fullVersionList") {
         const isBrandValid = this.#metaData.brands?.every(({ brand, version }) => {
-          const brandNameResult = EmulationUtils.UserAgentMetadata.validateAsStructuredHeadersString(brand, i18nString(UIStrings.notRepresentable));
-          const brandVersionResult = EmulationUtils.UserAgentMetadata.validateAsStructuredHeadersString(version, i18nString(UIStrings.notRepresentable));
+          const brandNameResult = EmulationUtils.UserAgentMetadata.validateAsStructuredHeadersString(
+            brand,
+            i18nString(UIStrings.notRepresentable)
+          );
+          const brandVersionResult = EmulationUtils.UserAgentMetadata.validateAsStructuredHeadersString(
+            version,
+            i18nString(UIStrings.notRepresentable)
+          );
           return brandNameResult.valid && brandVersionResult.valid;
         });
         if (!isBrandValid) {
@@ -1012,14 +1032,20 @@ var UserAgentClientHintsForm = class extends HTMLElement {
                 errorMessage: i18nString(UIStrings.notRepresentable) + ` (Invalid form factor: ${ff})`
               };
             }
-            const ffError = EmulationUtils.UserAgentMetadata.validateAsStructuredHeadersString(ff, i18nString(UIStrings.notRepresentable));
+            const ffError = EmulationUtils.UserAgentMetadata.validateAsStructuredHeadersString(
+              ff,
+              i18nString(UIStrings.notRepresentable)
+            );
             if (!ffError.valid) {
               return ffError;
             }
           }
         }
       } else {
-        const metaDataError = EmulationUtils.UserAgentMetadata.validateAsStructuredHeadersString(metaDataValue, i18nString(UIStrings.notRepresentable));
+        const metaDataError = EmulationUtils.UserAgentMetadata.validateAsStructuredHeadersString(
+          metaDataValue,
+          i18nString(UIStrings.notRepresentable)
+        );
         if (!metaDataError.valid) {
           return metaDataError;
         }

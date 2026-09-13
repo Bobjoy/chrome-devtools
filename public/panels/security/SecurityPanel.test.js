@@ -3,11 +3,14 @@
 // found in the LICENSE file.
 import { assert } from 'chai';
 import sinon from 'sinon';
+import * as Common from '../../core/common/common.js';
 import * as Platform from '../../core/platform/platform.js';
 import * as SDK from '../../core/sdk/sdk.js';
-import { doubleRaf, renderElementIntoDOM } from '../../testing/DOMHelpers.js';
+import { querySelectorErrorOnMissing, renderElementIntoDOM } from '../../testing/DOMHelpers.js';
 import { createTarget, describeWithEnvironment } from '../../testing/EnvironmentHelpers.js';
+import { createNetworkRequest } from '../../testing/NetworkRequestHelpers.js';
 import { getMainFrame, navigate } from '../../testing/ResourceTreeHelpers.js';
+import * as NetworkForward from '../network/forward/forward.js';
 import * as Security from './security.js';
 const { urlString } = Platform.DevToolsPath;
 describe('createHighlightedUrl', () => {
@@ -29,7 +32,7 @@ describe('createHighlightedUrl', () => {
     });
 });
 describeWithEnvironment('SecurityOriginView', () => {
-    function createOriginState(sanList) {
+    function createOriginState(securityDetails = {}) {
         return {
             securityState: "secure" /* Protocol.Security.SecurityState.Secure */,
             securityDetails: {
@@ -38,25 +41,173 @@ describeWithEnvironment('SecurityOriginView', () => {
                 cipher: 'AES_128_GCM',
                 certificateId: 0,
                 subjectName: 'example.com',
-                sanList,
+                sanList: [],
                 issuer: 'Test CA',
                 validFrom: 0,
                 validTo: 1,
                 signedCertificateTimestampList: [],
                 certificateTransparencyCompliance: "unknown" /* Protocol.Network.CertificateTransparencyCompliance.Unknown */,
                 encryptedClientHello: false,
+                ...securityDetails,
             },
             loadedFromCache: false,
         };
     }
+    function getDetailsTableRows(section) {
+        return [...section.querySelectorAll('.details-table-row')].map(row => [...row.cells].map(cell => cell.textContent ?? ''));
+    }
+    describe('connection section', () => {
+        function getConnectionDetailsRows(securityDetails = {}) {
+            const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState(securityDetails));
+            const connectionSection = querySelectorErrorOnMissing(view.element, '.connection-section');
+            return getDetailsTableRows(connectionSection);
+        }
+        it('renders the heading', () => {
+            const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState());
+            const connectionSection = querySelectorErrorOnMissing(view.element, '.connection-section');
+            const heading = querySelectorErrorOnMissing(connectionSection, '.origin-view-section-title');
+            assert.strictEqual(heading.textContent, 'Connection');
+            assert.strictEqual(heading.getAttribute('role'), 'heading');
+            assert.strictEqual(heading.getAttribute('aria-level'), '2');
+        });
+        it('does not render without security details', () => {
+            const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, {
+                securityState: "secure" /* Protocol.Security.SecurityState.Secure */,
+                securityDetails: null,
+                loadedFromCache: false,
+            });
+            assert.notExists(view.element.querySelector('.connection-section'));
+        });
+        it('renders all connection details in order', () => {
+            assert.deepEqual(getConnectionDetailsRows({
+                protocol: 'TLS 1.3',
+                keyExchange: 'ECDHE_RSA',
+                keyExchangeGroup: 'X25519',
+                serverSignatureAlgorithm: 0x0804,
+                cipher: 'AES_128_GCM',
+                mac: 'HMAC-SHA256',
+                encryptedClientHello: true,
+            }), [
+                ['Protocol', 'TLS 1.3'],
+                ['Key exchange', 'ECDHE_RSA with X25519'],
+                ['Server signature', 'RSA-PSS with SHA-256'],
+                ['Cipher', 'AES_128_GCM with HMAC-SHA256'],
+                ['Encrypted ClientHello', 'enabled'],
+            ]);
+        });
+        it('renders the protocol', () => {
+            assert.deepInclude(getConnectionDetailsRows({ protocol: 'TLS 1.2' }), ['Protocol', 'TLS 1.2']);
+        });
+        describe('key exchange', () => {
+            it('renders the algorithm and group', () => {
+                assert.deepInclude(getConnectionDetailsRows({ keyExchange: 'ECDHE_RSA', keyExchangeGroup: 'X25519' }), ['Key exchange', 'ECDHE_RSA with X25519']);
+            });
+            it('renders only the algorithm', () => {
+                assert.deepInclude(getConnectionDetailsRows({ keyExchange: 'ECDHE_RSA', keyExchangeGroup: undefined }), ['Key exchange', 'ECDHE_RSA']);
+            });
+            it('renders only the group', () => {
+                assert.deepInclude(getConnectionDetailsRows({ keyExchange: '', keyExchangeGroup: 'X25519' }), ['Key exchange', 'X25519']);
+            });
+            it('does not render when both are unavailable', () => {
+                const rowNames = getConnectionDetailsRows({
+                    keyExchange: '',
+                    keyExchangeGroup: undefined,
+                }).map(([key]) => key);
+                assert.notInclude(rowNames, 'Key exchange');
+            });
+        });
+        describe('server signature', () => {
+            it('renders a known algorithm', () => {
+                assert.deepInclude(getConnectionDetailsRows({ serverSignatureAlgorithm: 0x0804 }), ['Server signature', 'RSA-PSS with SHA-256']);
+            });
+            it('renders an unknown algorithm', () => {
+                assert.deepInclude(getConnectionDetailsRows({ serverSignatureAlgorithm: 0xffff }), ['Server signature', 'unknown (65535)']);
+            });
+            it('does not render when unavailable', () => {
+                const rowNames = getConnectionDetailsRows({ serverSignatureAlgorithm: undefined }).map(([key]) => key);
+                assert.notInclude(rowNames, 'Server signature');
+            });
+        });
+        describe('cipher', () => {
+            it('renders with a MAC', () => {
+                assert.deepInclude(getConnectionDetailsRows({ cipher: 'AES_128_GCM', mac: 'HMAC-SHA256' }), ['Cipher', 'AES_128_GCM with HMAC-SHA256']);
+            });
+            it('renders without a MAC', () => {
+                assert.deepInclude(getConnectionDetailsRows({ cipher: 'AES_128_GCM', mac: undefined }), ['Cipher', 'AES_128_GCM']);
+            });
+        });
+        describe('Encrypted ClientHello', () => {
+            it('renders when enabled', () => {
+                assert.deepInclude(getConnectionDetailsRows({ encryptedClientHello: true }), ['Encrypted ClientHello', 'enabled']);
+            });
+            it('does not render when disabled', () => {
+                const rowNames = getConnectionDetailsRows({ encryptedClientHello: false }).map(([key]) => key);
+                assert.notInclude(rowNames, 'Encrypted ClientHello');
+            });
+        });
+    });
+    describe('title section', () => {
+        it('renders the title, origin, and Network panel button', () => {
+            const origin = urlString `https://foo.bar`;
+            const view = new Security.SecurityPanel.SecurityOriginView(origin, createOriginState());
+            assert.isTrue(view.element.classList.contains('security-origin-view'));
+            const titleSection = view.element.querySelector('.title-section');
+            assert.instanceOf(titleSection, HTMLElement);
+            const title = titleSection.querySelector('.title-section-header');
+            assert.instanceOf(title, HTMLElement);
+            assert.strictEqual(title.textContent, 'Origin');
+            assert.strictEqual(title.getAttribute('role'), 'heading');
+            assert.strictEqual(title.getAttribute('aria-level'), '1');
+            const originDisplay = titleSection.querySelector('.origin-display');
+            assert.instanceOf(originDisplay, HTMLElement);
+            assert.strictEqual(originDisplay.textContent, origin);
+            const networkButton = titleSection.querySelector('.view-network-button devtools-button');
+            assert.instanceOf(networkButton, HTMLElement);
+            assert.strictEqual(networkButton.textContent, 'View requests in Network panel');
+        });
+        it('updates the origin display when the security state changes', () => {
+            const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState());
+            const initialOriginDisplay = view.element.querySelector('.origin-display');
+            assert.instanceOf(initialOriginDisplay, HTMLElement);
+            const initialIcon = initialOriginDisplay.querySelector('devtools-icon');
+            assert.instanceOf(initialIcon, HTMLElement);
+            assert.strictEqual(initialIcon.getAttribute('name'), 'lock');
+            assert.isTrue(initialIcon.classList.contains('security-property-secure'));
+            assert.exists(initialOriginDisplay.querySelector('.url-scheme-secure'));
+            view.setSecurityState("insecure" /* Protocol.Security.SecurityState.Insecure */);
+            const updatedOriginDisplay = view.element.querySelector('.origin-display');
+            assert.instanceOf(updatedOriginDisplay, HTMLElement);
+            const updatedIcon = updatedOriginDisplay.querySelector('devtools-icon');
+            assert.instanceOf(updatedIcon, HTMLElement);
+            assert.strictEqual(updatedIcon.getAttribute('name'), 'warning');
+            assert.isTrue(updatedIcon.classList.contains('security-property-insecure'));
+            assert.isFalse(updatedIcon.classList.contains('security-property-secure'));
+            assert.exists(updatedOriginDisplay.querySelector('.url-scheme-insecure'));
+            assert.notExists(updatedOriginDisplay.querySelector('.url-scheme-secure'));
+        });
+        it('reveals requests in the Network panel', () => {
+            const revealStub = sinon.stub(Common.Revealer.RevealerRegistry.instance(), 'reveal').resolves();
+            const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState());
+            const networkButton = view.element.querySelector('.view-network-button devtools-button');
+            assert.instanceOf(networkButton, HTMLElement);
+            networkButton.click();
+            sinon.assert.calledOnce(revealStub);
+            const [requestFilter] = revealStub.firstCall.args;
+            assert.instanceOf(requestFilter, NetworkForward.UIFilter.UIRequestFilter);
+            assert.deepEqual(requestFilter.filters, [
+                { filterType: NetworkForward.UIFilter.FilterType.Domain, filterValue: 'foo.bar' },
+                { filterType: NetworkForward.UIFilter.FilterType.Scheme, filterValue: 'https' },
+            ]);
+        });
+    });
     it('renders an empty SAN', () => {
-        const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState([]));
+        const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState());
         const sanElement = view.element.querySelector('.san');
         assert.instanceOf(sanElement, HTMLElement);
         assert.strictEqual(sanElement.textContent, '(n/a)');
     });
     it('renders a SAN without truncation button', () => {
-        const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState(['a.test', 'b.test', 'c.test']));
+        const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState({ sanList: ['a.test', 'b.test', 'c.test'] }));
         renderElementIntoDOM(view);
         const sanElement = view.element.querySelector('.san');
         assert.instanceOf(sanElement, HTMLElement);
@@ -67,7 +218,7 @@ describeWithEnvironment('SecurityOriginView', () => {
         assert.notExists(truncationToggle);
     });
     it('renders a SAN with truncation button and updates on truncation toggle', () => {
-        const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState(['a.test', 'b.test', 'c.test', 'd.test']));
+        const view = new Security.SecurityPanel.SecurityOriginView(urlString `https://foo.bar`, createOriginState({ sanList: ['a.test', 'b.test', 'c.test', 'd.test'] }));
         renderElementIntoDOM(view);
         const sanElement = view.element.querySelector('.san');
         assert.instanceOf(sanElement, HTMLElement);
@@ -91,17 +242,15 @@ describeWithEnvironment('SecurityOriginView', () => {
 });
 describeWithEnvironment('SecurityPanelSidebarTree', () => {
     describe('updateOrigin', () => {
-        it('correctly updates the URL scheme highlighting', async () => {
+        it('correctly updates the URL scheme highlighting', () => {
             const origin = urlString `https://foo.bar`;
             const securityPanel = Security.SecurityPanel.SecurityPanel.instance({ forceNew: true });
             securityPanel.sidebar.addOrigin(origin, "unknown" /* Protocol.Security.SecurityState.Unknown */);
-            await doubleRaf();
-            assert.notExists(securityPanel.sidebar.contentElement.querySelector('devtools-tree').shadowRoot.querySelector('.highlighted-url > .url-scheme-secure'));
-            assert.exists(securityPanel.sidebar.contentElement.querySelector('devtools-tree').shadowRoot.querySelector('.highlighted-url > .url-scheme-unknown'));
+            assert.notExists(securityPanel.sidebar.sidebarTree.contentElement.querySelector('.highlighted-url > .url-scheme-secure'));
+            assert.exists(securityPanel.sidebar.sidebarTree.contentElement.querySelector('.highlighted-url > .url-scheme-unknown'));
             securityPanel.sidebar.updateOrigin(origin, "secure" /* Protocol.Security.SecurityState.Secure */);
-            await doubleRaf();
-            assert.exists(securityPanel.sidebar.contentElement.querySelector('devtools-tree').shadowRoot.querySelector('.highlighted-url > .url-scheme-secure'));
-            assert.notExists(securityPanel.sidebar.contentElement.querySelector('devtools-tree').shadowRoot.querySelector('.highlighted-url > .url-scheme-unknown'));
+            assert.exists(securityPanel.sidebar.sidebarTree.contentElement.querySelector('.highlighted-url > .url-scheme-secure'));
+            assert.notExists(securityPanel.sidebar.sidebarTree.contentElement.querySelector('.highlighted-url > .url-scheme-unknown'));
         });
     });
 });
@@ -169,11 +318,10 @@ describeWithEnvironment('SecurityPanel', () => {
         const securityModel = target.model(Security.SecurityModel.SecurityModel);
         assert.exists(securityModel);
         const securityPanel = Security.SecurityPanel.SecurityPanel.instance({ forceNew: true });
-        await doubleRaf();
         // Check that reload message is visible initially.
-        const reloadMessage = securityPanel.sidebar.contentElement.querySelector('devtools-tree').shadowRoot.querySelector('.security-main-view-reload-message');
+        const reloadMessage = securityPanel.sidebar.sidebarTree.shadowRoot.querySelector('.security-main-view-reload-message');
         assert.instanceOf(reloadMessage, HTMLLIElement);
-        assert.exists(securityPanel.sidebar.contentElement.querySelector('devtools-tree').shadowRoot.querySelector('.security-main-view-reload-message'));
+        assert.isFalse(reloadMessage.classList.contains('hidden'));
         // Check that reload message is hidden when there is data to display.
         const networkManager = securityModel.networkManager();
         const request = {
@@ -184,12 +332,10 @@ describeWithEnvironment('SecurityPanel', () => {
             cached: () => false,
         };
         networkManager.dispatchEventToListeners(SDK.NetworkManager.Events.RequestFinished, request);
-        await doubleRaf();
-        assert.notExists(securityPanel.sidebar.contentElement.querySelector('devtools-tree').shadowRoot.querySelector('.security-main-view-reload-message'));
+        assert.isTrue(reloadMessage.classList.contains('hidden'));
         // Check that reload message is hidden after clearing data.
         navigate(getMainFrame(target));
-        await doubleRaf();
-        assert.exists(securityPanel.sidebar.contentElement.querySelector('devtools-tree').shadowRoot.querySelector('.security-main-view-reload-message'));
+        assert.isFalse(reloadMessage.classList.contains('hidden'));
     });
     it('shows origins with blockable and optionally blockable resources in the sidebar', async () => {
         const securityPanel = Security.SecurityPanel.SecurityPanel.instance({ forceNew: true });
@@ -198,13 +344,23 @@ describeWithEnvironment('SecurityPanel', () => {
         const securityModel = target.model(Security.SecurityModel.SecurityModel);
         assert.exists(securityModel);
         securityModel.dispatchEventToListeners(Security.SecurityModel.Events.VisibleSecurityStateChanged, pageVisibleSecurityState);
-        const passive = SDK.NetworkRequest.NetworkRequest.create('0', urlString `http://foo.test`, urlString `https://foo.test`, '0', '0', null);
+        const passive = createNetworkRequest({
+            url: 'http://foo.test',
+            documentURL: 'https://foo.test',
+            frameId: '0',
+            loaderId: '0',
+        });
         passive.mixedContentType = "optionally-blockable" /* Protocol.Security.MixedContentType.OptionallyBlockable */;
         const networkManager = securityModel.networkManager();
         networkManager.dispatchEventToListeners(SDK.NetworkManager.Events.RequestFinished, passive);
         assert.isTrue(sidebarTreeClearSpy.calledOnceWith(urlString `http://foo.test`, "insecure" /* Protocol.Security.SecurityState.Insecure */));
         sidebarTreeClearSpy.resetHistory();
-        const active = SDK.NetworkRequest.NetworkRequest.create('0', urlString `http://bar.test`, urlString `https://bar.test`, '0', '0', null);
+        const active = createNetworkRequest({
+            url: 'http://bar.test',
+            documentURL: 'https://bar.test',
+            frameId: '0',
+            loaderId: '0',
+        });
         active.mixedContentType = "blockable" /* Protocol.Security.MixedContentType.Blockable */;
         networkManager.dispatchEventToListeners(SDK.NetworkManager.Events.RequestFinished, active);
         assert.isTrue(sidebarTreeClearSpy.calledOnceWith(urlString `http://bar.test`, "insecure" /* Protocol.Security.SecurityState.Insecure */));
@@ -216,15 +372,30 @@ describeWithEnvironment('SecurityPanel', () => {
         assert.exists(resourceTreeModel);
         const networkManager = target.model(SDK.NetworkManager.NetworkManager);
         assert.exists(networkManager);
-        const request1 = SDK.NetworkRequest.NetworkRequest.create('0', urlString `https://foo.test/`, urlString `https://foo.test`, '0', '0', null);
+        const request1 = createNetworkRequest({
+            url: 'https://foo.test/',
+            documentURL: 'https://foo.test',
+            frameId: '0',
+            loaderId: '0',
+        });
         request1.setSecurityState("secure" /* Protocol.Security.SecurityState.Secure */);
         networkManager.dispatchEventToListeners(SDK.NetworkManager.Events.RequestFinished, request1);
-        const request2 = SDK.NetworkRequest.NetworkRequest.create('0', urlString `https://bar.test/foo.jpg`, urlString `https://bar.test`, '0', '0', null);
+        const request2 = createNetworkRequest({
+            url: 'https://bar.test/foo.jpg',
+            documentURL: 'https://bar.test',
+            frameId: '0',
+            loaderId: '0',
+        });
         request2.setSecurityState("secure" /* Protocol.Security.SecurityState.Secure */);
         networkManager.dispatchEventToListeners(SDK.NetworkManager.Events.RequestFinished, request2);
         resourceTreeModel.dispatchEventToListeners(SDK.ResourceTreeModel.Events.InterstitialShown);
         // Simulate a request finishing after the interstitial is shown, to make sure that doesn't show up in the sidebar.
-        const request3 = SDK.NetworkRequest.NetworkRequest.create('0', urlString `https://bar.test/foo.jpg`, urlString `https://bar.test`, '0', '0', null);
+        const request3 = createNetworkRequest({
+            url: 'https://bar.test/foo.jpg',
+            documentURL: 'https://bar.test',
+            frameId: '0',
+            loaderId: '0',
+        });
         request3.setSecurityState("unknown" /* Protocol.Security.SecurityState.Unknown */);
         networkManager.dispatchEventToListeners(SDK.NetworkManager.Events.RequestFinished, request3);
         assert.isTrue(toggleSidebarSpy.calledOnceWith(true));

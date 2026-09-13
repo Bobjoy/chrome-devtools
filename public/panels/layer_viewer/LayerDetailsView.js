@@ -184,6 +184,7 @@ export const DEFAULT_VIEW = (input, _output, target) => {
     Lit.render(html `
     <div class="layer-details-container"
          data-backend-node-id=${domNode ? domNode.backendNodeId() : nothing}
+         data-target-id=${domNode ? domNode.domModel().target().id() : nothing}
          jslog=${VisualLogging.section('layer-details')}>
       <table>
         <tbody>
@@ -238,7 +239,8 @@ export const DEFAULT_VIEW = (input, _output, target) => {
     </div>`, target, { container: { attributes: { jslog: `${VisualLogging.pane('layers-details')}` } } });
     // clang-format on
 };
-export class LayerDetailsView extends Common.ObjectWrapper.eventMixin(UI.Widget.Widget) {
+const LayerDetailsViewBase = Common.ObjectWrapper.eventMixin(UI.Widget.Widget);
+export class LayerDetailsView extends LayerDetailsViewBase {
     layerViewHost;
     layerSnapshotMap;
     selection;
@@ -314,6 +316,10 @@ export class LayerDetailsView extends Common.ObjectWrapper.eventMixin(UI.Widget.
         }, undefined, this.contentElement);
     }
 }
+export var Events;
+(function (Events) {
+    Events["PAINT_PROFILER_REQUESTED"] = "PaintProfilerRequested";
+})(Events || (Events = {}));
 export const slowScrollRectNames = new Map([
     ["NonFastScrollable" /* SDK.LayerTreeBase.Layer.ScrollRectType.NON_FAST_SCROLLABLE */, i18nLazyString(UIStrings.nonFastScrollable)],
     ["TouchEventHandler" /* SDK.LayerTreeBase.Layer.ScrollRectType.TOUCH_EVENT_HANDLER */, i18nLazyString(UIStrings.touchEventHandler)],

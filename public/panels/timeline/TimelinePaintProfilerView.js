@@ -3,8 +3,8 @@
 // found in the LICENSE file.
 /* eslint-disable @devtools/no-imperative-dom-api */
 import * as SDK from '../../core/sdk/sdk.js';
-import * as Geometry from '../../models/geometry/geometry.js';
 import * as Trace from '../../models/trace/trace.js';
+import * as Geometry from '../../ui/geometry/geometry.js';
 import * as UI from '../../ui/legacy/legacy.js';
 import * as Lit from '../../ui/lit/lit.js';
 import * as LayerViewer from '../layer_viewer/layer_viewer.js';
@@ -169,7 +169,7 @@ export class TimelinePaintProfilerView extends UI.SplitWidget.SplitWidget {
         this.logTreeView.selectionWindow = this.paintProfilerView.selectionWindow();
     }
 }
-export const DEFAULT_VIEW = (input, output, target) => {
+export const DEFAULT_VIEW = (input, _output, target) => {
     const imageElementRef = createRef();
     // clang-format off
     render(html `

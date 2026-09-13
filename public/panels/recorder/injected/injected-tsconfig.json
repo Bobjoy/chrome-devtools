@@ -1,13 +1,14 @@
 {
-  "checkJs": true,
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "checkJs": true,
-    "composite": true,
-    "declaration": true,
+    "checkJs": false,
+    "composite": false,
+    "declaration": false,
+    "disableSourceOfProjectReferenceRedirect": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": false,
     "inlineSources": true,
     "lib": [
       "dom",
@@ -19,21 +20,28 @@
       "ESNext.Array"
     ],
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "outDir": ".",
+    "preserveConstEnums": true,
     "rootDir": "../../../../../../../front_end/panels/recorder/injected",
+    "rootDirs": [
+      "../../../../../../../",
+      "../../../../"
+    ],
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "esnext",
-    "tsBuildInfoFile": "injected-tsconfig.json.tsbuildinfo",
-    "typeRoots": [],
-    "types": [],
+    "target": "ES2023",
+    "typeRoots": [
+
+    ],
+    "types": [
+
+    ],
     "useUnknownInCatchVariables": false
   },
   "files": [
@@ -43,6 +51,7 @@
     "../../../../../../../front_end/panels/recorder/injected/SelectorComputer.ts",
     "../../../../../../../front_end/panels/recorder/injected/SelectorPicker.ts",
     "../../../../../../../front_end/panels/recorder/injected/Step.ts",
+    "../../../../../../../front_end/panels/recorder/injected/injected.ts",
     "../../../../../../../front_end/panels/recorder/injected/selectors/ARIASelector.ts",
     "../../../../../../../front_end/panels/recorder/injected/selectors/CSSSelector.ts",
     "../../../../../../../front_end/panels/recorder/injected/selectors/PierceSelector.ts",
@@ -52,17 +61,18 @@
     "../../../../../../../front_end/panels/recorder/injected/util.ts",
     "../../../../../../../front_end/legacy/legacy-defs.d.ts",
     "../../../../../../../front_end/global_typings/global_defs.d.ts",
-    "../../../../../../../node_modules/@types/filesystem/index.d.ts"
+    "../../../../../../../node_modules/@types/filesystem/index.d.ts",
+    "../../../../../../../node_modules/@types/filewriter/index.d.ts"
   ],
   "references": [
     {
-      "path": "../../../third_party/puppeteer/puppeteer-tsconfig.json"
+      "path": "../../../third_party/puppeteer/puppeteer-tsconfig.ref.json"
     },
     {
-      "path": "../../../third_party/puppeteer/bundle-tsconfig.json"
+      "path": "../../../third_party/puppeteer/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../third_party/puppeteer-replay/bundle-tsconfig.json"
+      "path": "../../../third_party/puppeteer-replay/bundle-tsconfig.ref.json"
     }
   ]
 }

@@ -5,7 +5,7 @@
 import * as Common from '../../../../core/common/common.js';
 import * as i18n from '../../../../core/i18n/i18n.js';
 import * as Platform from '../../../../core/platform/platform.js';
-import * as Geometry from '../../../../models/geometry/geometry.js';
+import * as Geometry from '../../../geometry/geometry.js';
 import * as VisualLogging from '../../../visual_logging/visual_logging.js';
 import * as UI from '../../legacy.js';
 import cssShadowEditorStyles from './cssShadowEditor.css.js';
@@ -68,7 +68,8 @@ export class CSSLength {
         return this.amount + this.unit;
     }
 }
-export class CSSShadowEditor extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+const CSSShadowEditorBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class CSSShadowEditor extends CSSShadowEditorBase {
     typeField;
     outsetButton;
     insetButton;
@@ -434,4 +435,8 @@ export class CSSShadowEditor extends Common.ObjectWrapper.eventMixin(UI.Widget.V
         return this.constrainPoint(new Geometry.Point(x, y), this.innerCanvasSize);
     }
 }
+export var Events;
+(function (Events) {
+    Events["SHADOW_CHANGED"] = "ShadowChanged";
+})(Events || (Events = {}));
 //# sourceMappingURL=CSSShadowEditor.js.map

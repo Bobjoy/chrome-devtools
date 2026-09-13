@@ -596,9 +596,10 @@ export interface FirstPaint extends Mark {
     };
 }
 export type PageLoadEvent = AnyFirstContentfulPaint | MarkDOMContent | InteractiveTime | AnyLargestContentfulPaintCandidate | LayoutShift | FirstPaint | MarkLoad | NavigationStart | SoftNavigationStart;
-export declare const MarkerName: readonly [Name.MARK_DOM_CONTENT, Name.MARK_LOAD, Name.MARK_FIRST_PAINT, Name.MARK_FCP, Name.MARK_SOFT_FCP, Name.MARK_LCP_CANDIDATE, Name.MARK_LCP_CANDIDATE_FOR_SOFT_NAVIGATION, Name.NAVIGATION_START, Name.SOFT_NAVIGATION_START];
+export type MarkerEventName = Name.MARK_DOM_CONTENT | Name.MARK_LOAD | Name.MARK_FIRST_PAINT | Name.MARK_FCP | Name.MARK_SOFT_FCP | Name.MARK_LCP_CANDIDATE | Name.MARK_LCP_CANDIDATE_FOR_SOFT_NAVIGATION | Name.NAVIGATION_START | Name.SOFT_NAVIGATION_START;
+export declare const MarkerName: readonly MarkerEventName[];
 export interface MarkerEvent extends Event {
-    name: typeof MarkerName[number];
+    name: MarkerEventName;
 }
 export declare function isMarkerEvent(event: Event): event is MarkerEvent;
 export declare function eventIsPageLoadEvent(event: Event): event is PageLoadEvent;
@@ -1845,8 +1846,8 @@ export interface UpdateLayer extends Event {
     };
 }
 export declare function isUpdateLayer(event: Event): event is UpdateLayer;
-export interface DisplayItemListSnapshot extends Event {
-    name: Name.DISPLAY_ITEM_LIST_SNAPSHOT;
+export interface LegacyDisplayItemListSnapshot extends Event {
+    name: Name.LEGACY_DISPLAY_ITEM_LIST_SNAPSHOT;
     ph: Phase.OBJECT_SNAPSHOT;
     id2: {
         local?: string;
@@ -1860,6 +1861,18 @@ export interface DisplayItemListSnapshot extends Event {
         };
     };
 }
+export interface InstantDisplayItemListSnapshot extends Instant {
+    name: Name.DISPLAY_ITEM_LIST_SNAPSHOT;
+    args: Args & {
+        snapshot: {
+            skp64: string;
+            params?: {
+                layer_rect: [number, number, number, number];
+            };
+        };
+    };
+}
+export type DisplayItemListSnapshot = LegacyDisplayItemListSnapshot | InstantDisplayItemListSnapshot;
 export declare function isDisplayListItemListSnapshot(event: Event): event is DisplayItemListSnapshot;
 export interface LayerTreeHostImplSnapshot extends Event {
     name: Name.LAYER_TREE_HOST_IMPL_SNAPSHOT;
@@ -2324,7 +2337,8 @@ export declare const enum Name {
     LAZY_PIXEL_REF = "LazyPixelRef",
     LAYER_TREE_HOST_IMPL_SNAPSHOT = "cc::LayerTreeHostImpl",
     PICTURE_SNAPSHOT = "cc::Picture",
-    DISPLAY_ITEM_LIST_SNAPSHOT = "cc::DisplayItemList",
+    LEGACY_DISPLAY_ITEM_LIST_SNAPSHOT = "cc::DisplayItemList",
+    DISPLAY_ITEM_LIST_SNAPSHOT = "cc::DisplayItemList:snapshot",
     INPUT_LATENCY_MOUSE_MOVE = "InputLatency::MouseMove",
     INPUT_LATENCY_MOUSE_WHEEL = "InputLatency::MouseWheel",
     IMPL_SIDE_FLING = "InputHandlerProxy::HandleGestureFling::started",

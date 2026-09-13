@@ -1,13 +1,12 @@
-(function () {
-  'use strict';
-
+"use strict";
+(() => {
   var __defProp = Object.defineProperty;
   var __export = (target, all) => {
     for (var name in all)
       __defProp(target, name, { get: all[name], enumerable: true });
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/bfcache.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/bfcache.js
   var bfcacheRestoreTime = -1;
   var getBFCacheRestoreTime = () => bfcacheRestoreTime;
   var onBFCacheRestore = (cb) => {
@@ -19,7 +18,7 @@
     }, true);
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/bindReporter.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/bindReporter.js
   var getRating = (value, thresholds) => {
     if (value > thresholds[1]) {
       return "poor";
@@ -47,12 +46,12 @@
     };
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/doubleRAF.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/doubleRAF.js
   var doubleRAF = (cb) => {
-    requestAnimationFrame(() => requestAnimationFrame(cb));
+    requestAnimationFrame(() => requestAnimationFrame(() => cb()));
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/getNavigationEntry.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/getNavigationEntry.js
   var getNavigationEntry = () => {
     const navigationEntry = performance.getEntriesByType("navigation")[0];
     if (navigationEntry && navigationEntry.responseStart > 0 && navigationEntry.responseStart < performance.now()) {
@@ -60,12 +59,12 @@
     }
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/getActivationStart.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/getActivationStart.js
   var getActivationStart = () => {
     return getNavigationEntry()?.activationStart ?? 0;
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/getVisibilityWatcher.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/getVisibilityWatcher.js
   var firstHiddenTime = -1;
   var onHiddenFunctions = /* @__PURE__ */ new Set();
   var initHiddenTime = () => {
@@ -110,12 +109,12 @@
     };
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/generateUniqueID.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/generateUniqueID.js
   var generateUniqueID = () => {
     return `v6-${Date.now()}-${Math.floor(Math.random() * (9e12 - 1)) + 1e12}`;
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/initMetric.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/initMetric.js
   var initMetric = (name, value = -1, navigationType, navigationId = 0, navigationInteractionId, navigationURL, navigationStartTime) => {
     const hardNavEntry = getNavigationEntry();
     const hardNavId = hardNavEntry?.navigationId || 0;
@@ -150,7 +149,7 @@
     };
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/initUnique.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/initUnique.js
   var instanceMap = /* @__PURE__ */ new WeakMap();
   function initUnique(identityObj, ClassObj) {
     let classInstances = instanceMap.get(ClassObj);
@@ -164,7 +163,7 @@
     return classInstances.get(identityObj);
   }
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/LayoutShiftManager.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/LayoutShiftManager.js
   var LayoutShiftManager = class {
     _onAfterProcessingUnexpectedShift;
     _sessionValue = 0;
@@ -185,7 +184,7 @@
     }
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/observe.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/observe.js
   var observe = (types, callback, opts = {}) => {
     try {
       const supportedTypes = types.filter((t) => PerformanceObserver.supportedEntryTypes.includes(t));
@@ -213,12 +212,15 @@
     return;
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/softNavs.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/softNavs.js
   var checkSoftNavsEnabled = (opts) => {
-    return PerformanceObserver.supportedEntryTypes.includes("soft-navigation") && // Older implementations expose the value as an attribute rather than the
-    // method. We only support the newer method as that was what was launched
-    // to stable unflagged.
-    typeof globalThis.PerformanceSoftNavigation?.prototype?.getLargestInteractionContentfulPaint === "function" && opts && opts.reportSoftNavs;
+    return (
+      // Firefox has a preference to disable this, which some people use so add a guard
+      globalThis.PerformanceObserver?.supportedEntryTypes?.includes("soft-navigation") && // Older implementations expose the value as an attribute rather than the
+      // method. We only support the newer method as that was what was launched
+      // to stable unflagged.
+      typeof globalThis.PerformanceSoftNavigation?.prototype?.getLargestInteractionContentfulPaint === "function" && opts && opts.reportSoftNavs
+    );
   };
   var storeSoftNavEntry = (map, entry) => {
     map.set(entry.navigationId, entry);
@@ -230,7 +232,7 @@
     }
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/runOnce.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/runOnce.js
   var runOnce = (cb) => {
     let called = false;
     return () => {
@@ -241,12 +243,12 @@
     };
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/FCPEntryManager.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/FCPEntryManager.js
   var FCPEntryManager = class {
     _softNavigationEntryMap;
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/whenActivated.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/whenActivated.js
   var whenActivated = (callback) => {
     if (document.prerendering) {
       addEventListener("prerenderingchange", callback, true);
@@ -255,7 +257,7 @@
     }
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/onFCP.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/onFCP.js
   var FCPThresholds = [1800, 3e3];
   var onFCP = (onReport, opts = {}) => {
     const softNavsEnabled = checkSoftNavsEnabled(opts);
@@ -306,9 +308,9 @@
     });
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/onCLS.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/onCLS.js
   var CLSThresholds = [0.1, 0.25];
-  var onCLS$1 = (onReport, opts = {}) => {
+  var onCLS = (onReport, opts = {}) => {
     const visibilityWatcher = getVisibilityWatcher();
     onFCP(runOnce(() => {
       let metric = initMetric("CLS", 0);
@@ -360,7 +362,7 @@
     }));
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/polyfills/interactionCountPolyfill.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/polyfills/interactionCountPolyfill.js
   var interactionCountEstimate = 0;
   var minKnownInteractionId = Infinity;
   var maxKnownInteractionId = 0;
@@ -385,13 +387,18 @@
     });
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/InteractionManager.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/InteractionManager.js
   var MAX_INTERACTIONS_TO_CONSIDER = 10;
-  var prevInteractionCount = 0;
-  var getInteractionCountForNavigation = () => {
-    return getInteractionCount() - prevInteractionCount;
-  };
   var InteractionManager = class {
+    /**
+     * The interaction count at the start of the current navigation, so p98
+     * interaction latencies only consider interactions since then.
+     *
+     * This is per-instance rather than module state: `initUnique()` gives every
+     * `onINP()` call its own manager, and a shared counter would let whichever
+     * instance resets first hide the interactions from all the others.
+     */
+    _prevInteractionCount = 0;
     /**
      * A list of longest interactions on the page (by latency) sorted so the
      * longest one is first. The list is at most MAX_INTERACTIONS_TO_CONSIDER
@@ -405,8 +412,15 @@
     _longestInteractionMap = /* @__PURE__ */ new Map();
     _onBeforeProcessingEntry;
     _onAfterProcessingINPCandidate;
+    /**
+     * Returns the interaction count since the start of the current navigation
+     * (or the full page lifecycle if there were no soft navs / bfcache restores).
+     */
+    _getInteractionCountForNavigation() {
+      return getInteractionCount() - this._prevInteractionCount;
+    }
     _resetInteractions() {
-      prevInteractionCount = getInteractionCount();
+      this._prevInteractionCount = getInteractionCount();
       this._longestInteractionList.length = 0;
       this._longestInteractionMap.clear();
     }
@@ -415,7 +429,7 @@
      * interaction candidates and the interaction count for the current page.
      */
     _estimateP98LongestInteraction(navigationType) {
-      const interactionCountForNavigation = getInteractionCountForNavigation();
+      const interactionCountForNavigation = this._getInteractionCountForNavigation();
       const candidateInteractionIndex = Math.min(this._longestInteractionList.length - 1, Math.floor(interactionCountForNavigation / 50));
       if (interactionCountForNavigation && candidateInteractionIndex === -1 && (navigationType === "soft-navigation" || navigationType === "back-forward-cache")) {
         return {
@@ -434,7 +448,7 @@
      */
     _processEntry(entry) {
       this._onBeforeProcessingEntry?.(entry);
-      if (!(entry.interactionId || entry.entryType === "first-input"))
+      if (!entry.interactionId)
         return;
       const minLongestInteraction = this._longestInteractionList.at(-1);
       let interaction = this._longestInteractionMap.get(entry.interactionId);
@@ -468,7 +482,7 @@
     }
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/whenIdleOrHidden.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/whenIdleOrHidden.js
   var whenIdleOrHidden = (cb) => {
     const timeout = "requestIdleCallback" in globalThis ? 1e3 : 0;
     const rIC = globalThis.requestIdleCallback || setTimeout;
@@ -490,10 +504,10 @@
     }
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/onINP.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/onINP.js
   var INPThresholds = [200, 500];
   var DEFAULT_DURATION_THRESHOLD = 40;
-  var onINP$1 = (onReport, opts = {}) => {
+  var onINP = (onReport, opts = {}) => {
     if (!(globalThis.PerformanceEventTiming && "interactionId" in PerformanceEventTiming.prototype)) {
       return;
     }
@@ -556,7 +570,7 @@
     });
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/LCPEntryManager.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/LCPEntryManager.js
   var LCPEntryManager = class {
     _onBeforeProcessingEntry;
     _softNavigationEntryMap;
@@ -565,9 +579,9 @@
     }
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/onLCP.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/onLCP.js
   var LCPThresholds = [2500, 4e3];
-  var onLCP$1 = (onReport, opts = {}) => {
+  var onLCP = (onReport, opts = {}) => {
     let isFinalized = false;
     const softNavsEnabled = checkSoftNavsEnabled(opts);
     whenActivated(() => {
@@ -679,7 +693,7 @@
     });
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/onTTFB.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/onTTFB.js
   var TTFBThresholds = [800, 1800];
   var whenReady = (callback) => {
     if (document.prerendering) {
@@ -723,7 +737,7 @@
     });
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/attribution/index.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/attribution/index.js
   var attribution_exports = {};
   __export(attribution_exports, {
     CLSThresholds: () => CLSThresholds,
@@ -738,7 +752,7 @@
     onTTFB: () => onTTFB2
   });
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/getLoadState.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/getLoadState.js
   var getLoadState = (timestamp) => {
     if (document.readyState === "loading") {
       return "loading";
@@ -756,7 +770,7 @@
     return "complete";
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/lib/getSelector.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/lib/getSelector.js
   var getName = (node) => {
     const name = node.nodeName;
     return node.nodeType === 1 ? name.toLowerCase() : name.toUpperCase().replace(/^#/, "");
@@ -782,7 +796,7 @@
     return sel;
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onCLS.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onCLS.js
   var getLargestLayoutShiftEntry = (entries) => {
     return entries.reduce((a, b) => a.value > b.value ? a : b);
   };
@@ -823,12 +837,12 @@
       }
       return Object.assign(metric, { attribution });
     };
-    onCLS$1((metric) => {
+    onCLS((metric) => {
       onReport(attributeCLS(metric));
     }, opts);
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onFCP.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onFCP.js
   var onFCP2 = (onReport, opts = {}) => {
     opts = Object.assign({}, opts);
     const fcpEntryManager = initUnique(opts, FCPEntryManager);
@@ -877,7 +891,7 @@
     }, opts);
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onINP.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onINP.js
   var MAX_PENDING_FRAMES = 10;
   var onINP2 = (onReport, opts = {}) => {
     opts = Object.assign({}, opts);
@@ -935,7 +949,7 @@
         };
         pendingEntriesGroups.push(group);
       }
-      if (entry.interactionId || entry.entryType === "first-input") {
+      if (entry.interactionId) {
         entryToEntriesGroupMap.set(entry, group);
       }
       queueCleanup();
@@ -1071,7 +1085,7 @@
       }
       const firstEntry = metric.entries[0];
       const group = entryToEntriesGroupMap.get(firstEntry);
-      const processingStart = group.processingStart;
+      const processingStart = Math.max(group.processingStart, firstEntry.startTime);
       const nextPaintTime = Math.max(firstEntry.startTime + firstEntry.duration, processingStart);
       const processingEnd = Math.min(group.processingEnd, nextPaintTime);
       const processedEventEntries = group.entries.sort((a, b) => {
@@ -1103,14 +1117,28 @@
       return Object.assign(metric, { attribution });
     };
     observe(["long-animation-frame"], handleLoAFEntries, opts);
-    onINP$1((metric) => {
+    onINP((metric) => {
       onReport(attributeINP(metric));
     }, opts);
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onLCP.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onLCP.js
+  var DEFAULT_RESOURCE_BUFFER_SIZE = 50;
+  var resourceBufferSizeLimit = DEFAULT_RESOURCE_BUFFER_SIZE;
+  var resourceBuffer = [];
+  observe(["resource"], (entries) => {
+    for (const entry of entries) {
+      resourceBuffer.push(entry);
+      if (resourceBuffer.length > resourceBufferSizeLimit) {
+        resourceBuffer.shift();
+      }
+    }
+  });
   var onLCP2 = (onReport, opts = {}) => {
     opts = Object.assign({}, opts);
+    if (opts.resourceBufferSize != void 0) {
+      resourceBufferSizeLimit = opts.resourceBufferSize;
+    }
     const lcpEntryManager = initUnique(opts, LCPEntryManager);
     const lcpTargetMap = /* @__PURE__ */ new WeakMap();
     if (checkSoftNavsEnabled(opts)) {
@@ -1134,7 +1162,7 @@
       };
       if (metric.entries.length) {
         const lcpEntry = metric.entries.at(-1);
-        const lcpResourceEntry = lcpEntry.url && performance.getEntriesByType("resource").find((e) => e.name === lcpEntry.url);
+        const lcpResourceEntry = lcpEntry.url && (resourceBuffer.findLast((e) => e.name === lcpEntry.url) || performance.getEntriesByType("resource").findLast((e) => e.name === lcpEntry.url));
         attribution.target = lcpTargetMap.get(lcpEntry);
         attribution.lcpEntry = lcpEntry;
         if (lcpEntry.url) {
@@ -1178,12 +1206,12 @@
       }
       return Object.assign(metric, { attribution });
     };
-    onLCP$1((metric) => {
+    onLCP((metric) => {
       onReport(attributeLCP(metric));
     }, opts);
   };
 
-  // gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onTTFB.js
+  // ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onTTFB.js
   var attributeTTFB = (metric) => {
     const navigationEntry = metric.entries[0];
     let attribution = {
@@ -1227,276 +1255,231 @@
     }, opts);
   };
 
-  // Copyright 2024 The Chromium Authors
-  // Use of this source code is governed by a BSD-style license that can be
-  // found in the LICENSE file.
-  function onEachLayoutShift$1(callback) {
-      const eventObserver = new PerformanceObserver(list => {
-          const entries = list.getEntries().filter((entry) => 'hadRecentInput' in entry);
-          for (const entry of entries) {
-              if (entry.hadRecentInput) {
-                  continue;
-              }
-              const affectedNodes = entry.sources.map(source => source.node).filter(node => node instanceof Node);
-              callback({
-                  attribution: {
-                      affectedNodes,
-                  },
-                  entry,
-                  value: entry.value,
-              });
-          }
-      });
-      eventObserver.observe({
-          type: 'layout-shift',
-          buffered: true,
-      });
+  // ../../front_end/models/live-metrics/web-vitals-injected/OnEachLayoutShift.ts
+  var OnEachLayoutShift_exports = {};
+  __export(OnEachLayoutShift_exports, {
+    onEachLayoutShift: () => onEachLayoutShift
+  });
+  function onEachLayoutShift(callback) {
+    const eventObserver = new PerformanceObserver((list) => {
+      const entries = list.getEntries().filter((entry) => "hadRecentInput" in entry);
+      for (const entry of entries) {
+        if (entry.hadRecentInput) {
+          continue;
+        }
+        const affectedNodes = entry.sources.map((source) => source.node).filter((node) => node instanceof Node);
+        callback({
+          attribution: {
+            affectedNodes
+          },
+          entry,
+          value: entry.value
+        });
+      }
+    });
+    eventObserver.observe({
+      type: "layout-shift",
+      buffered: true
+    });
   }
 
-  var OnEachLayoutShift = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    onEachLayoutShift: onEachLayoutShift$1
-  });
-
-  // gen/front_end/models/live-metrics/web-vitals-injected/spec/spec.prebundle.js
+  // ../../front_end/models/live-metrics/web-vitals-injected/spec/spec.ts
   var EVENT_BINDING_NAME = "__chromium_devtools_metrics_reporter";
   var INTERNAL_KILL_SWITCH = "__chromium_devtools_kill_live_metrics";
   var SCRIPTS_PER_LOAF_LIMIT = 10;
+  var LOAF_LIMIT = 5;
   function getUniqueLayoutShiftId(entry) {
     return `layout-shift-${entry.value}-${entry.startTime}`;
   }
+  function limitScripts(loafs) {
+    return loafs.map((loaf) => {
+      loaf.scripts = loaf.scripts.slice().sort((a, b) => b.duration - a.duration).slice(0, SCRIPTS_PER_LOAF_LIMIT).sort((a, b) => a.startTime - b.startTime);
+      return loaf;
+    });
+  }
+  function createInteractionEntryEvent(interaction) {
+    const event = {
+      name: "InteractionEntry",
+      duration: interaction.value,
+      subparts: {
+        inputDelay: interaction.attribution.inputDelay,
+        processingDuration: interaction.attribution.processingDuration,
+        presentationDelay: interaction.attribution.presentationDelay
+      },
+      startTime: interaction.entries?.[0]?.startTime,
+      navigationId: interaction.navigationId,
+      entryGroupId: interaction.entries?.[0]?.interactionId,
+      nextPaintTime: interaction.attribution.nextPaintTime,
+      interactionType: interaction.attribution.interactionType,
+      eventName: interaction.entries?.[0]?.name,
+      // To limit the amount of events, just get the last 5 LoAFs
+      longAnimationFrameEntries: limitScripts(
+        interaction.attribution.longAnimationFrameEntries?.slice(-LOAF_LIMIT).map((loaf) => loaf.toJSON()) ?? []
+      )
+    };
+    const target = interaction.attribution.interactionTarget;
+    if (target) {
+      event.nodeIndex = Number(target);
+    }
+    return event;
+  }
+  function createInpChangeEvent(metric) {
+    return {
+      name: "INP",
+      value: metric.value,
+      subparts: {
+        inputDelay: metric.attribution.inputDelay,
+        processingDuration: metric.attribution.processingDuration,
+        presentationDelay: metric.attribution.presentationDelay
+      },
+      startTime: metric.entries?.[0]?.startTime,
+      entryGroupId: metric.entries?.[0]?.interactionId,
+      interactionType: metric.attribution.interactionType
+    };
+  }
 
-  // Copyright 2024 The Chromium Authors
-  // Use of this source code is governed by a BSD-style license that can be
-  // found in the LICENSE file.
-  const { onLCP, onCLS, onINP } = attribution_exports;
-  const { onEachLayoutShift } = OnEachLayoutShift;
-  const eventListenerCleanupController = new AbortController();
-  const patchAddListener = (proto) => {
-      const original = proto.addEventListener;
-      proto.addEventListener = function (type, listener, options) {
-          // Standardize options into an object
-          const navOptions = typeof options === 'boolean' ? { capture: options } : { ...options };
-          // If we already have a signal, we should respect it,
-          // but also link it to our global cleanup signal.
-          if (navOptions.signal) {
-              navOptions.signal = AbortSignal.any([navOptions.signal, eventListenerCleanupController.signal]);
-          }
-          else {
-              navOptions.signal = eventListenerCleanupController.signal;
-          }
-          return original.call(this, type, listener, navOptions);
-      };
+  // ../../front_end/models/live-metrics/web-vitals-injected/web-vitals-injected.ts
+  var { onLCP: onLCP3, onCLS: onCLS3, onINP: onINP3 } = attribution_exports;
+  var { onEachLayoutShift: onEachLayoutShift2 } = OnEachLayoutShift_exports;
+  var eventListenerCleanupController = new AbortController();
+  var patchAddListener = (proto) => {
+    const original = proto.addEventListener;
+    proto.addEventListener = function(type, listener, options) {
+      const navOptions = typeof options === "boolean" ? { capture: options } : { ...options };
+      if (navOptions.signal) {
+        navOptions.signal = AbortSignal.any([navOptions.signal, eventListenerCleanupController.signal]);
+      } else {
+        navOptions.signal = eventListenerCleanupController.signal;
+      }
+      return original.call(this, type, listener, navOptions);
+    };
   };
-  // Patch the core targets
   patchAddListener(Window.prototype);
   patchAddListener(Document.prototype);
-  // Use a class wrapper that auto-registers and auto-unregisters
-  const activeObservers = new Set();
-  class TrackedPerformanceObserver extends globalThis.PerformanceObserver {
-      constructor(callback) {
-          super(callback);
-          activeObservers.add(this);
-      }
-      // Override disconnect to remove it from our tracking set
-      disconnect() {
-          super.disconnect();
-          activeObservers.delete(this);
-      }
-  }
-  const nodeList = [];
-  const nodeToIdMap = new WeakMap();
+  var activeObservers = /* @__PURE__ */ new Set();
+  var TrackedPerformanceObserver = class extends globalThis.PerformanceObserver {
+    constructor(callback) {
+      super(callback);
+      activeObservers.add(this);
+    }
+    // Override disconnect to remove it from our tracking set
+    disconnect() {
+      super.disconnect();
+      activeObservers.delete(this);
+    }
+  };
+  var nodeList = [];
+  var nodeToIdMap = /* @__PURE__ */ new WeakMap();
   function establishNodeIndex(node) {
-      let index = nodeToIdMap.get(node);
-      if (index !== undefined) {
-          return index;
-      }
-      index = nodeList.length;
-      nodeList.push(new WeakRef(node));
-      nodeToIdMap.set(node, index);
+    let index = nodeToIdMap.get(node);
+    if (index !== void 0) {
       return index;
+    }
+    index = nodeList.length;
+    nodeList.push(new WeakRef(node));
+    nodeToIdMap.set(node, index);
+    return index;
   }
-  // Replace the global constructor
   globalThis.PerformanceObserver = TrackedPerformanceObserver;
-  /**
-   * This is a hack solution to remove any listeners that were added by web-vitals.js
-   * or additional services in this bundle. Once this function is called, the execution
-   * context should be considered dead and a new one will need to be created for live metrics
-   * to be served again.
-   */
-  let killed = false;
+  var killed = false;
   window[INTERNAL_KILL_SWITCH] = () => {
-      if (killed) {
-          return;
-      }
-      for (const observer of activeObservers) {
-          // This calls the overridden disconnect above,
-          // cleaning up BOTH the browser resource and our Set.
-          observer.disconnect();
-      }
-      activeObservers.clear();
-      eventListenerCleanupController.abort();
-      // Explicitly clear the Node List to help GC
-      nodeList.length = 0;
-      killed = true;
+    if (killed) {
+      return;
+    }
+    for (const observer of activeObservers) {
+      observer.disconnect();
+    }
+    activeObservers.clear();
+    eventListenerCleanupController.abort();
+    nodeList.length = 0;
+    killed = true;
   };
   function sendEventToDevTools(event) {
-      const payload = JSON.stringify(event);
-      window[EVENT_BINDING_NAME]?.(payload);
+    const payload = JSON.stringify(event);
+    window[EVENT_BINDING_NAME]?.(payload);
   }
-  /**
-   * The data sent over the event binding needs to be JSON serializable, so we
-   * can't send DOM nodes directly. Instead we create an ID for each node (see
-   * `establishNodeIndex`) that we can later use to retrieve a remote object
-   * for that node.
-   *
-   * This function is used by `Runtime.evaluate` calls to get a remote object
-   * for the specified index.
-   */
   window.getNodeForIndex = (index) => {
-      return nodeList[index].deref();
+    return nodeList[index].deref();
   };
-  function limitScripts(loafs) {
-      return loafs.map(loaf => {
-          const longestScripts = [];
-          for (const script of loaf.scripts) {
-              if (longestScripts.length < SCRIPTS_PER_LOAF_LIMIT) {
-                  longestScripts.push(script);
-                  continue;
-              }
-              const shorterIndex = longestScripts.findIndex(s => s.duration < script.duration);
-              if (shorterIndex === -1) {
-                  continue;
-              }
-              longestScripts[shorterIndex] = script;
-          }
-          longestScripts.sort((a, b) => a.startTime - b.startTime);
-          loaf.scripts = longestScripts;
-          return loaf;
-      });
-  }
   function isPrerendered() {
-      if (document.prerendering) {
-          return true;
-      }
-      const firstNavStart = self.performance.getEntriesByType?.('navigation')[0]?.activationStart;
-      return firstNavStart !== undefined && firstNavStart > 0;
+    if (document.prerendering) {
+      return true;
+    }
+    const firstNavStart = self.performance.getEntriesByType?.("navigation")[0]?.activationStart;
+    return firstNavStart !== void 0 && firstNavStart > 0;
   }
-  let startedHidden = null;
+  var startedHidden = null;
   function initialize() {
-      sendEventToDevTools({ name: 'reset' });
-      new PerformanceObserver(list => {
-          for (const entry of list.getEntries()) {
-              if (startedHidden === null && !isPrerendered()) {
-                  startedHidden = entry.name === 'hidden';
-              }
-          }
-      }).observe({ type: 'visibility-state', buffered: true });
-      // We want to treat bfcache navigations like a standard navigations, so emit
-      // a reset event when bfcache is restored.
-      //
-      // Metric functions will also re-emit their values using this listener's callback.
-      // To ensure this event is fired before those values are emitted, register this
-      // callback before any others.
-      onBFCacheRestore(() => {
-          startedHidden = false;
-          sendEventToDevTools({ name: 'reset', navigationType: 'back-forward-cache' });
-      });
-      let lastLcpNavigationId;
-      onLCP(metric => {
-          if (lastLcpNavigationId && metric.navigationId && metric.navigationId !== lastLcpNavigationId) {
-              sendEventToDevTools({ name: 'reset', url: window.location.href, navigationType: metric.navigationType });
-          }
-          lastLcpNavigationId = metric.navigationId;
-          const event = {
-              name: 'LCP',
-              value: metric.value,
-              startedHidden: Boolean(startedHidden),
-              subparts: {
-                  timeToFirstByte: metric.attribution.timeToFirstByte,
-                  resourceLoadDelay: metric.attribution.resourceLoadDelay,
-                  resourceLoadTime: metric.attribution.resourceLoadDuration,
-                  elementRenderDelay: metric.attribution.elementRenderDelay,
-              },
-          };
-          const element = metric.attribution.lcpEntry?.element;
-          if (element) {
-              event.nodeIndex = establishNodeIndex(element);
-          }
-          sendEventToDevTools(event);
-      }, { reportAllChanges: true, reportSoftNavs: window.devToolsReportSoftNavs });
-      onCLS(metric => {
-          const event = {
-              name: 'CLS',
-              value: metric.value,
-              clusterShiftIds: metric.entries.map(getUniqueLayoutShiftId),
-          };
-          sendEventToDevTools(event);
-      }, { reportAllChanges: true, reportSoftNavs: window.devToolsReportSoftNavs });
-      function onEachInteraction(interaction) {
-          // Multiple `InteractionEntry` events can be emitted for the same `uniqueInteractionId`
-          // However, it is easier to combine these entries in the DevTools client rather than in
-          // this injected code.
-          const event = {
-              name: 'InteractionEntry',
-              duration: interaction.value,
-              subparts: {
-                  inputDelay: interaction.attribution.inputDelay,
-                  processingDuration: interaction.attribution.processingDuration,
-                  presentationDelay: interaction.attribution.presentationDelay,
-              },
-              startTime: interaction.entries[0].startTime,
-              navigationId: interaction.navigationId,
-              entryGroupId: interaction.entries[0].interactionId,
-              nextPaintTime: interaction.attribution.nextPaintTime,
-              interactionType: interaction.attribution.interactionType,
-              eventName: interaction.entries[0].name,
-              // To limit the amount of events, just get the last 5 LoAFs
-              longAnimationFrameEntries: limitScripts(interaction.attribution.longAnimationFrameEntries.slice(-5).map(loaf => loaf.toJSON())),
-          };
-          const target = interaction.attribution.interactionTarget;
-          if (target) {
-              event.nodeIndex = Number(target);
-          }
-          sendEventToDevTools(event);
+    sendEventToDevTools({ name: "reset" });
+    new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (startedHidden === null && !isPrerendered()) {
+          startedHidden = entry.name === "hidden";
+        }
       }
-      onINP(metric => {
-          const event = {
-              name: 'INP',
-              value: metric.value,
-              subparts: {
-                  inputDelay: metric.attribution.inputDelay,
-                  processingDuration: metric.attribution.processingDuration,
-                  presentationDelay: metric.attribution.presentationDelay,
-              },
-              startTime: metric.entries[0].startTime,
-              entryGroupId: metric.entries[0].interactionId,
-              interactionType: metric.attribution.interactionType,
-          };
-          sendEventToDevTools(event);
-      }, {
-          reportAllChanges: true,
-          durationThreshold: 0,
-          includeProcessedEventEntries: false,
-          reportSoftNavs: window.devToolsReportSoftNavs,
-          onEachInteraction,
-          generateTarget(el) {
-              if (el) {
-                  return String(establishNodeIndex(el));
-              }
-              return undefined;
-          },
-      });
-      onEachLayoutShift(layoutShift => {
-          const event = {
-              name: 'LayoutShift',
-              score: layoutShift.value,
-              uniqueLayoutShiftId: getUniqueLayoutShiftId(layoutShift.entry),
-              affectedNodeIndices: layoutShift.attribution.affectedNodes.map(establishNodeIndex),
-          };
-          sendEventToDevTools(event);
-      });
+    }).observe({ type: "visibility-state", buffered: true });
+    onBFCacheRestore(() => {
+      startedHidden = false;
+      sendEventToDevTools({ name: "reset", navigationType: "back-forward-cache" });
+    });
+    let lastLcpNavigationId;
+    onLCP3((metric) => {
+      if (lastLcpNavigationId && metric.navigationId && metric.navigationId !== lastLcpNavigationId) {
+        sendEventToDevTools({ name: "reset", url: window.location.href, navigationType: metric.navigationType });
+      }
+      lastLcpNavigationId = metric.navigationId;
+      const event = {
+        name: "LCP",
+        value: metric.value,
+        startedHidden: Boolean(startedHidden),
+        subparts: {
+          timeToFirstByte: metric.attribution.timeToFirstByte,
+          resourceLoadDelay: metric.attribution.resourceLoadDelay,
+          resourceLoadTime: metric.attribution.resourceLoadDuration,
+          elementRenderDelay: metric.attribution.elementRenderDelay
+        }
+      };
+      const element = metric.attribution.lcpEntry?.element;
+      if (element) {
+        event.nodeIndex = establishNodeIndex(element);
+      }
+      sendEventToDevTools(event);
+    }, { reportAllChanges: true, reportSoftNavs: window.devToolsReportSoftNavs });
+    onCLS3((metric) => {
+      const event = {
+        name: "CLS",
+        value: metric.value,
+        clusterShiftIds: metric.entries.map(getUniqueLayoutShiftId)
+      };
+      sendEventToDevTools(event);
+    }, { reportAllChanges: true, reportSoftNavs: window.devToolsReportSoftNavs });
+    function onEachInteraction(interaction) {
+      sendEventToDevTools(createInteractionEntryEvent(interaction));
+    }
+    onINP3((metric) => {
+      sendEventToDevTools(createInpChangeEvent(metric));
+    }, {
+      reportAllChanges: true,
+      durationThreshold: 0,
+      includeProcessedEventEntries: false,
+      reportSoftNavs: window.devToolsReportSoftNavs,
+      onEachInteraction,
+      generateTarget(el) {
+        if (el) {
+          return String(establishNodeIndex(el));
+        }
+        return void 0;
+      }
+    });
+    onEachLayoutShift2((layoutShift) => {
+      const event = {
+        name: "LayoutShift",
+        score: layoutShift.value,
+        uniqueLayoutShiftId: getUniqueLayoutShiftId(layoutShift.entry),
+        affectedNodeIndices: layoutShift.attribution.affectedNodes.map(establishNodeIndex)
+      };
+      sendEventToDevTools(event);
+    });
   }
   initialize();
-
 })();

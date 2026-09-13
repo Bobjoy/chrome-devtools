@@ -72,7 +72,8 @@ export class DetachedElementsProfileView extends UI.View.SimpleView {
         return [this.selectedSizeText];
     }
 }
-export class DetachedElementsProfileType extends Common.ObjectWrapper.eventMixin(ProfileType) {
+const DetachedElementsProfileTypeBase = Common.ObjectWrapper.eventMixin(ProfileType);
+export class DetachedElementsProfileType extends DetachedElementsProfileTypeBase {
     constructor(typeId, description) {
         super(typeId || i18nString(UIStrings.detachedElementsTitle), description || i18nString(UIStrings.detachedElementsTitle));
     }
@@ -113,6 +114,14 @@ export class DetachedElementsProfileType extends Common.ObjectWrapper.eventMixin
     // eslint-disable-next-line @typescript-eslint/naming-convention
     static TypeId = 'DetachedElements';
 }
+(function (DetachedElementsProfileType) {
+    let Events;
+    (function (Events) {
+        Events["RECORDING_STOPPED"] = "RecordingStopped";
+        Events["STATS_UPDATE"] = "StatsUpdate";
+        Events["DETACHED_ELEMENTS_OBTAINED"] = "DetachedElementsObtained";
+    })(Events = DetachedElementsProfileType.Events || (DetachedElementsProfileType.Events = {}));
+})(DetachedElementsProfileType || (DetachedElementsProfileType = {}));
 export class DetachedElementsProfileHeader extends WritableProfileHeader {
     #heapProfilerModel;
     detachedElements;

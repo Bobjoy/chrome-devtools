@@ -9,7 +9,7 @@ import * as Trace from '../../models/trace/trace.js';
 import * as RecordingMetadata from './RecordingMetadata.js';
 const UIStrings = {
     /**
-     * @description Text in Timeline Loader of the Performance panel
+     * @description Error message displayed when timeline trace data cannot be parsed in the Performance panel.
      * @example {Unknown JSON format} PH1
      */
     malformedTimelineDataS: 'Malformed timeline data: {PH1}',
@@ -229,4 +229,10 @@ export class TimelineLoader {
         this.#collectedEvents = this.#collectedEvents.concat(events);
     }
 }
+export var LoadingState;
+(function (LoadingState) {
+    LoadingState["SUCCESS"] = "SUCCESS";
+    LoadingState["CANCELLED"] = "CANCELLED";
+    LoadingState["ERROR"] = "ERROR";
+})(LoadingState || (LoadingState = {}));
 //# sourceMappingURL=TimelineLoader.js.map

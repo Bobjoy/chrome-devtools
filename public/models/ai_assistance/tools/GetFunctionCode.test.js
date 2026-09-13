@@ -27,9 +27,9 @@ describe('GetFunctionCodeTool', () => {
         assert.strictEqual(displayInfo.title, 'Looking up function code');
         assert.strictEqual(displayInfo.action, 'getFunctionCode(\'https://example.com/app.js\', 10, 5)');
     });
-    it('returns error when conversationContext is not available', async () => {
+    it('returns error when PerformanceTraceContext is not available', async () => {
         const context = {
-            conversationContext: null,
+            getPerformanceTraceContext: () => null,
         };
         const tool = new GetFunctionCodeTool();
         const result = await tool.handler({ scriptUrl: 'https://example.com/app.js', line: 10, column: 5 }, context);
@@ -42,25 +42,38 @@ describe('GetFunctionCodeTool', () => {
         const tracker = new Tracing.FreshRecording.Tracker();
         const traceContext = AiAssistance.PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace, universe.targetManager, tracker, universe.debuggerWorkspaceBinding);
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetFunctionCodeTool();
         const result = await tool.handler({ scriptUrl: 'https://example.com/app.js', line: 10, column: 5 }, capabilities);
         assertIsError(result);
         assert.strictEqual(result.error, 'Cannot use this tool on an imported file.');
     });
-    it('returns error when script URL is cross-origin or file://', async () => {
+    it('returns error when script URL is cross-origin', async () => {
         const parsedTrace = makeFakeParsedTrace();
         const tracker = new Tracing.FreshRecording.Tracker();
         tracker.registerFreshRecording(parsedTrace);
         const traceContext = AiAssistance.PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace, universe.targetManager, tracker, universe.debuggerWorkspaceBinding);
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetFunctionCodeTool();
         const result = await tool.handler({ scriptUrl: 'https://cross-origin.com/app.js', line: 10, column: 5 }, capabilities);
         assertIsError(result);
-        assert.strictEqual(result.error, 'Script not found');
+        assert.strictEqual(result.error, 'Resource not found');
+    });
+    it('returns error when script URL is a file:// URL', async () => {
+        const parsedTrace = makeFakeParsedTrace();
+        const tracker = new Tracing.FreshRecording.Tracker();
+        tracker.registerFreshRecording(parsedTrace);
+        const traceContext = AiAssistance.PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace, universe.targetManager, tracker, universe.debuggerWorkspaceBinding);
+        const capabilities = {
+            getPerformanceTraceContext: () => traceContext,
+        };
+        const tool = new GetFunctionCodeTool();
+        const result = await tool.handler({ scriptUrl: 'file:///tmp/app.js', line: 10, column: 5 }, capabilities);
+        assertIsError(result);
+        assert.strictEqual(result.error, 'Resource not found');
     });
     it('returns error when scriptUrl is missing', async () => {
         const parsedTrace = makeFakeParsedTrace();
@@ -68,7 +81,7 @@ describe('GetFunctionCodeTool', () => {
         tracker.registerFreshRecording(parsedTrace);
         const traceContext = AiAssistance.PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace, universe.targetManager, tracker, universe.debuggerWorkspaceBinding);
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetFunctionCodeTool();
         const result = await tool.handler({ scriptUrl: '', line: 10, column: 5 }, capabilities);
@@ -81,7 +94,7 @@ describe('GetFunctionCodeTool', () => {
         tracker.registerFreshRecording(parsedTrace);
         const traceContext = AiAssistance.PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace, universe.targetManager, tracker, universe.debuggerWorkspaceBinding);
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetFunctionCodeTool();
         const result = await tool.handler({ scriptUrl: 'https://example.com/app.js', line: undefined, column: 5 }, capabilities);
@@ -94,7 +107,7 @@ describe('GetFunctionCodeTool', () => {
         tracker.registerFreshRecording(parsedTrace);
         const traceContext = AiAssistance.PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace, universe.targetManager, tracker, universe.debuggerWorkspaceBinding);
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetFunctionCodeTool();
         const result = await tool.handler({ scriptUrl: 'https://example.com/app.js', line: 10, column: undefined }, capabilities);
@@ -110,7 +123,7 @@ describe('GetFunctionCodeTool', () => {
             resolveFunctionCodeAtLocation: sinon.stub().resolves(null),
         });
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetFunctionCodeTool();
         const result = await tool.handler({ scriptUrl: 'https://example.com/app.js', line: 10, column: 5 }, capabilities);
@@ -134,7 +147,7 @@ describe('GetFunctionCodeTool', () => {
             formatFunctionCode: sinon.stub().returns('mock formatted function code with annotations'),
         });
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetFunctionCodeTool();
         const result = await tool.handler({ scriptUrl: 'https://example.com/app.js', line: 10, column: 5 }, capabilities);

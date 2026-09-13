@@ -7,6 +7,7 @@ import { OverlayModel } from './OverlayModel.js';
 import { RemoteObject } from './RemoteObject.js';
 import { RuntimeModel } from './RuntimeModel.js';
 import { SDKModel } from './SDKModel.js';
+import { SecurityOrigin } from './SecurityOrigin.js';
 import { type Target } from './Target.js';
 import type { TargetManager } from './TargetManager.js';
 export declare const enum NodeType {
@@ -86,6 +87,11 @@ export declare class DOMNode extends Common.ObjectWrapper.ObjectWrapper<DOMNodeE
     private requestChildDocument;
     setTopLayerIndex(idx: number): void;
     topLayerIndex(): number;
+    /**
+     * Returns the security origin of the document owning this node, or `null` if
+     * this node is not attached to a document.
+     */
+    securityOrigin(): SecurityOrigin | null;
     adProvenance(): Protocol.Network.AdProvenance | undefined;
     isRootNode(): boolean;
     isSVGNode(): boolean;
@@ -175,7 +181,10 @@ export declare class DOMNode extends Common.ObjectWrapper.ObjectWrapper<DOMNodeE
     removeAttributeInternal(name: string): void;
     copyTo(targetNode: DOMNode, anchorNode: DOMNode | null, callback?: ((arg0: string | null, arg1: DOMNode | null) => void)): void;
     moveTo(targetNode: DOMNode, anchorNode: DOMNode | null, callback?: ((arg0: string | null, arg1: DOMNode | null) => void)): void;
-    duplicate(): void;
+    duplicate(): Promise<{
+        error: string | null;
+        node: DOMNode | null;
+    }>;
     /**
      * Runs a script on the node's remote object that toggles a class name on
      * the node and injects a stylesheet into the head of the node's document
@@ -233,11 +242,23 @@ export declare class DOMNodeShortcut {
     constructor(target: Target, backendNodeId: Protocol.DOM.BackendNodeId, nodeType: number, nodeName: string, childShortcuts?: DOMNodeShortcut[]);
 }
 export declare class DOMDocument extends DOMNode {
+    #private;
     body: DOMNode | null;
     documentElement: DOMNode | null;
-    documentURL: Platform.DevToolsPath.UrlString;
-    baseURL: Platform.DevToolsPath.UrlString;
     constructor(domModel: DOMModel, payload: Protocol.DOM.Node);
+    get documentURL(): Platform.DevToolsPath.UrlString;
+    get baseURL(): Platform.DevToolsPath.UrlString;
+    /**
+     * Returns the security origin of this document.
+     *
+     * The security origin is derived from the document URL and is recomputed
+     * when the document navigates to a new URL via `setDocumentURL`.
+     */
+    securityOrigin(): SecurityOrigin;
+    /**
+     * Updates the document and base URLs, and recomputes the document's security origin.
+     */
+    setDocumentURL(url: Platform.DevToolsPath.UrlString): void;
 }
 export declare class AdoptedStyleSheet {
     readonly id: Protocol.DOM.StyleSheetId;
@@ -382,7 +403,10 @@ export declare class DOMNodeSnapshot extends DOMNode {
     removeNode(_callback?: ((arg0: string | null, arg1?: Protocol.DOM.NodeId | undefined) => void) | undefined): Promise<void>;
     copyTo(_targetNode: DOMNode, _anchorNode: DOMNode | null, _callback?: ((arg0: string | null, arg1: DOMNode | null) => void) | undefined): void;
     moveTo(_targetNode: DOMNode, _anchorNode: DOMNode | null, _callback?: ((arg0: string | null, arg1: DOMNode | null) => void) | undefined): void;
-    duplicate(): void;
+    duplicate(): Promise<{
+        error: string | null;
+        node: DOMNode | null;
+    }>;
     canInspectNode(): boolean;
     setAsInspectedNode(): Promise<void>;
 }
@@ -397,7 +421,10 @@ export declare class DOMDocumentSnapshot extends DOMDocument {
     removeNode(_callback?: ((arg0: string | null, arg1?: Protocol.DOM.NodeId | undefined) => void) | undefined): Promise<void>;
     copyTo(_targetNode: DOMNode, _anchorNode: DOMNode | null, _callback?: ((arg0: string | null, arg1: DOMNode | null) => void) | undefined): void;
     moveTo(_targetNode: DOMNode, _anchorNode: DOMNode | null, _callback?: ((arg0: string | null, arg1: DOMNode | null) => void) | undefined): void;
-    duplicate(): void;
+    duplicate(): Promise<{
+        error: string | null;
+        node: DOMNode | null;
+    }>;
     canInspectNode(): boolean;
     setAsInspectedNode(): Promise<void>;
 }

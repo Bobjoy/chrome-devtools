@@ -4,17 +4,17 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/elements/components/AccessibilityTreeNode.js
+// ../../front_end/panels/elements/components/AccessibilityTreeNode.ts
 var AccessibilityTreeNode_exports = {};
 __export(AccessibilityTreeNode_exports, {
   AccessibilityTreeNode: () => AccessibilityTreeNode
 });
-import * as i18n from "./../../../core/i18n/i18n.js";
-import * as Platform from "./../../../core/platform/platform.js";
-import * as SDK from "./../../../core/sdk/sdk.js";
-import * as RenderCoordinator from "./../../../ui/components/render_coordinator/render_coordinator.js";
-import * as UI from "./../../../ui/legacy/legacy.js";
-import { html, nothing, render } from "./../../../ui/lit/lit.js";
+import * as i18n from "../../../core/i18n/i18n.js";
+import * as Platform from "../../../core/platform/platform.js";
+import * as SDK from "../../../core/sdk/sdk.js";
+import * as RenderCoordinator from "../../../ui/components/render_coordinator/render_coordinator.js";
+import * as UI from "../../../ui/legacy/legacy.js";
+import { html, nothing, render } from "../../../ui/lit/lit.js";
 
 // gen/front_end/panels/elements/components/accessibilityTreeNode.css.js
 var accessibilityTreeNode_css_default = `/*
@@ -52,7 +52,7 @@ span {
 
 /*# sourceURL=${import.meta.resolve("./accessibilityTreeNode.css")} */`;
 
-// gen/front_end/panels/elements/components/AccessibilityTreeNode.js
+// ../../front_end/panels/elements/components/AccessibilityTreeNode.ts
 var UIStrings = {
   /**
    * @description Ignored node element text content in the accessibility tree view of the Elements panel.
@@ -89,20 +89,23 @@ var AccessibilityTreeNode = class extends HTMLElement {
     const properties = this.#properties.map(({ name: name2, value }) => SDK.AccessibilityModel.isPrintableType(value.type) ? html` <span class='attribute-name'>${name2}</span>:&nbsp;<span class='attribute-value'>${value.value}</span>` : nothing);
     const content = this.#ignored ? html`<span>${i18nString(UIStrings.ignored)}</span>` : html`${role}&nbsp;${name}${properties}`;
     await RenderCoordinator.write(`Accessibility node ${this.#id} render`, () => {
-      render(html`<div class='container'>${content}</div>`, this.#shadow, { host: this });
+      render(
+        html`<div class='container'>${content}</div>`,
+        this.#shadow,
+        { host: this }
+      );
     });
   }
 };
 customElements.define("devtools-accessibility-tree-node", AccessibilityTreeNode);
 
-// gen/front_end/panels/elements/components/AdornerManager.js
+// ../../front_end/panels/elements/components/AdornerManager.ts
 var AdornerManager_exports = {};
 __export(AdornerManager_exports, {
   AdornerManager: () => AdornerManager,
   RegisteredAdorners: () => RegisteredAdorners
 });
-var RegisteredAdorners;
-(function(RegisteredAdorners2) {
+var RegisteredAdorners = /* @__PURE__ */ ((RegisteredAdorners2) => {
   RegisteredAdorners2["AD"] = "ad";
   RegisteredAdorners2["CONTAINER"] = "container";
   RegisteredAdorners2["CUSTOM_ELEMENT"] = "custom-element";
@@ -120,7 +123,8 @@ var RegisteredAdorners;
   RegisteredAdorners2["STARTING_STYLE"] = "starting-style";
   RegisteredAdorners2["SUBGRID"] = "subgrid";
   RegisteredAdorners2["TOP_LAYER"] = "top-layer";
-})(RegisteredAdorners || (RegisteredAdorners = {}));
+  return RegisteredAdorners2;
+})(RegisteredAdorners || {});
 var AdornerManager = class {
   #adornerSettings = /* @__PURE__ */ new Map();
   #settingStore;
@@ -157,7 +161,7 @@ var AdornerManager = class {
     for (const adorner of Object.values(RegisteredAdorners)) {
       outdatedAdorners.delete(adorner);
       if (!this.#adornerSettings.has(adorner)) {
-        const isEnabled = adorner !== RegisteredAdorners.MEDIA;
+        const isEnabled = adorner !== "media" /* MEDIA */;
         this.#adornerSettings.set(adorner, isEnabled);
       }
     }
@@ -168,14 +172,14 @@ var AdornerManager = class {
   }
 };
 
-// gen/front_end/panels/elements/components/ComputedStyleProperty.js
+// ../../front_end/panels/elements/components/ComputedStyleProperty.ts
 var ComputedStyleProperty_exports = {};
 __export(ComputedStyleProperty_exports, {
   ComputedStyleProperty: () => ComputedStyleProperty,
   NavigateToSourceEvent: () => NavigateToSourceEvent
 });
-import { html as html2, render as render2 } from "./../../../ui/lit/lit.js";
-import * as VisualLogging from "./../../../ui/visual_logging/visual_logging.js";
+import { html as html2, render as render2 } from "../../../ui/lit/lit.js";
+import * as VisualLogging from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/elements/components/computedStyleProperty.css.js
 var computedStyleProperty_css_default = `/*
@@ -192,20 +196,20 @@ var computedStyleProperty_css_default = `/*
 }
 
 .computed-style-property {
-  --goto-size: 16px;
+  --goto-size: var(--sys-size-8);
 
   font-family: var(--monospace-font-family);
   font-size: var(--monospace-font-size);
-  min-height: 16px;
+  min-height: var(--sys-size-8);
   box-sizing: border-box;
-  padding-top: 2px;
+  padding-top: var(--sys-size-2);
   white-space: var(--override-computed-style-property-white-space, nowrap);
   user-select: text;
 }
 
 .computed-style-property:hover {
   background-color: var(--sys-color-state-hover-on-subtle);
-  cursor: text;
+  cursor: var(--override-cursor, text);
 }
 
 .computed-style-property.inherited {
@@ -239,7 +243,7 @@ var computedStyleProperty_css_default = `/*
   position: absolute;
   width: var(--goto-size);
   height: var(--goto-size);
-  margin: -1px 0 0 calc(-1 * var(--goto-size));
+  margin: calc(-1 * var(--sys-size-1)) 0 0 calc(-1 * var(--goto-size));
   mask: var(--image-file-goto-filled) center / contain no-repeat;
   background-color: var(--sys-color-primary-bright);
 }
@@ -301,7 +305,7 @@ var computedStyleProperty_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./computedStyleProperty.css")} */`;
 
-// gen/front_end/panels/elements/components/ComputedStyleProperty.js
+// ../../front_end/panels/elements/components/ComputedStyleProperty.ts
 var NavigateToSourceEvent = class _NavigateToSourceEvent extends Event {
   static eventName = "onnavigatetosource";
   constructor() {
@@ -353,14 +357,14 @@ var ComputedStyleProperty = class extends HTMLElement {
 };
 customElements.define("devtools-computed-style-property", ComputedStyleProperty);
 
-// gen/front_end/panels/elements/components/ComputedStyleTrace.js
+// ../../front_end/panels/elements/components/ComputedStyleTrace.ts
 var ComputedStyleTrace_exports = {};
 __export(ComputedStyleTrace_exports, {
   ComputedStyleTrace: () => ComputedStyleTrace
 });
-import * as Buttons from "./../../../ui/components/buttons/buttons.js";
-import * as UI2 from "./../../../ui/legacy/legacy.js";
-import { html as html3, render as render3 } from "./../../../ui/lit/lit.js";
+import * as Buttons from "../../../ui/components/buttons/buttons.js";
+import * as UI2 from "../../../ui/legacy/legacy.js";
+import { html as html3, render as render3 } from "../../../ui/lit/lit.js";
 
 // gen/front_end/panels/elements/components/computedStyleTrace.css.js
 var computedStyleTrace_css_default = `/*
@@ -376,26 +380,26 @@ var computedStyleTrace_css_default = `/*
 }
 
 .computed-style-trace {
-  margin-left: 16px;
+  margin-left: var(--sys-size-8);
   font-family: var(--monospace-font-family);
   font-size: var(--monospace-font-size);
 }
 
 .computed-style-trace:hover {
   background-color: var(--sys-color-state-hover-on-subtle);
-  cursor: text;
+  cursor: var(--override-cursor, text);
 }
 
 .goto {
   /* TODO: reuse with ComputedStyleProperty */
-  --size: 16px;
+  --size: var(--sys-size-8);
 
   display: none;
   cursor: pointer;
   position: absolute;
   width: var(--size);
   height: var(--size);
-  margin: -1px 0 0 calc(-1 * var(--size));
+  margin: calc(-1 * var(--sys-size-1)) 0 0 calc(-1 * var(--size));
   mask: var(--image-file-goto-filled) center / contain no-repeat;
   background-color: var(--sys-color-primary-bright);
 }
@@ -412,7 +416,7 @@ var computedStyleTrace_css_default = `/*
 }
 
 .trace-value {
-  margin-left: 16px;
+  margin-left: var(--sys-size-8);
 }
 
 .computed-style-trace.inactive slot[name="trace-value"] {
@@ -455,7 +459,7 @@ var computedStyleTrace_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./computedStyleTrace.css")} */`;
 
-// gen/front_end/panels/elements/components/ComputedStyleTrace.js
+// ../../front_end/panels/elements/components/ComputedStyleTrace.ts
 var ComputedStyleTrace = class extends HTMLElement {
   #shadow = this.attachShadow({ mode: "open" });
   #selector = "";
@@ -491,15 +495,15 @@ var ComputedStyleTrace = class extends HTMLElement {
 };
 customElements.define("devtools-computed-style-trace", ComputedStyleTrace);
 
-// gen/front_end/panels/elements/components/CSSHintDetailsView.js
+// ../../front_end/panels/elements/components/CSSHintDetailsView.ts
 var CSSHintDetailsView_exports = {};
 __export(CSSHintDetailsView_exports, {
   CSSHintDetailsView: () => CSSHintDetailsView
 });
-import "./../../../ui/kit/kit.js";
-import "./../../../ui/legacy/legacy.js";
-import * as i18n3 from "./../../../core/i18n/i18n.js";
-import { html as html4, render as render4 } from "./../../../ui/lit/lit.js";
+import "../../../ui/kit/kit.js";
+import "../../../ui/legacy/legacy.js";
+import * as i18n3 from "../../../core/i18n/i18n.js";
+import { html as html4, render as render4 } from "../../../ui/lit/lit.js";
 
 // gen/front_end/panels/elements/components/cssHintDetailsView.css.js
 var cssHintDetailsView_css_default = `/*
@@ -518,7 +522,7 @@ code {
 }
 
 .hint-popup-possible-fix {
-  margin-top: 8px;
+  margin-top: var(--sys-size-5);
 }
 
 .clickable {
@@ -539,7 +543,7 @@ code {
 
 /*# sourceURL=${import.meta.resolve("./cssHintDetailsView.css")} */`;
 
-// gen/front_end/panels/elements/components/CSSHintDetailsView.js
+// ../../front_end/panels/elements/components/CSSHintDetailsView.ts
 var UIStrings2 = {
   /**
    * @description Text for button that redirects to CSS property documentation.
@@ -584,17 +588,18 @@ var CSSHintDetailsView = class extends HTMLElement {
 };
 customElements.define("devtools-css-hint-details-view", CSSHintDetailsView);
 
-// gen/front_end/panels/elements/components/CSSPropertyDocsView.js
+// ../../front_end/panels/elements/components/CSSPropertyDocsView.ts
 var CSSPropertyDocsView_exports = {};
 __export(CSSPropertyDocsView_exports, {
+  BaselineStatus: () => BaselineStatus,
   CSSPropertyDocsView: () => CSSPropertyDocsView
 });
-import "./../../../ui/kit/kit.js";
-import "./../../../ui/legacy/legacy.js";
-import * as Common from "./../../../core/common/common.js";
-import * as i18n5 from "./../../../core/i18n/i18n.js";
-import { html as html5, nothing as nothing2, render as render5 } from "./../../../ui/lit/lit.js";
-import * as VisualLogging2 from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/kit/kit.js";
+import "../../../ui/legacy/legacy.js";
+import * as Common from "../../../core/common/common.js";
+import * as i18n5 from "../../../core/i18n/i18n.js";
+import { html as html5, nothing as nothing2, render as render5 } from "../../../ui/lit/lit.js";
+import * as VisualLogging2 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/elements/components/cssPropertyDocsView.css.js
 var cssPropertyDocsView_css_default = `/*
@@ -605,12 +610,12 @@ var cssPropertyDocsView_css_default = `/*
 
 .docs-popup-wrapper {
   max-width: 420px;
-  font-size: 12px;
+  font-size: var(--sys-typescale-body4-size);
   line-height: 1.4;
 }
 
 .docs-popup-section {
-  margin-top: 8px;
+  margin-top: var(--sys-size-5);
 }
 
 .clickable {
@@ -633,7 +638,7 @@ var cssPropertyDocsView_css_default = `/*
 #baseline {
   display: inline-flex;
   align-items: flex-start;
-  gap: 4px;
+  gap: var(--sys-size-3);
 }
 
 #baseline-icon {
@@ -643,7 +648,7 @@ var cssPropertyDocsView_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./cssPropertyDocsView.css")} */`;
 
-// gen/front_end/panels/elements/components/CSSPropertyDocsView.js
+// ../../front_end/panels/elements/components/CSSPropertyDocsView.ts
 var UIStrings3 = {
   /**
    * @description Text for button that redirects to CSS property documentation.
@@ -694,10 +699,10 @@ var BASELINE_LIMITED_AVAILABILITY_ICON = "../../../Images/baseline-limited-avail
 var getBaselineIconPath = (baseline) => {
   let relativePath;
   switch (baseline.status) {
-    case "high":
+    case "high" /* HIGH */:
       relativePath = BASELINE_HIGH_AVAILABILITY_ICON;
       break;
-    case "low":
+    case "low" /* LOW */:
       relativePath = BASELINE_LOW_AVAILABILITY_ICON;
       break;
     default:
@@ -705,59 +710,26 @@ var getBaselineIconPath = (baseline) => {
   }
   return new URL(relativePath, import.meta.url).toString();
 };
-var allBrowserIds = /* @__PURE__ */ new Set([
-  "C",
-  "CA",
-  "E",
-  "FF",
-  "FFA",
-  "S",
-  "SM"
-  /* BrowserId.SM */
-]);
+var allBrowserIds = /* @__PURE__ */ new Set(
+  ["C" /* C */, "CA" /* CA */, "E" /* E */, "FF" /* FF */, "FFA" /* FFA */, "S" /* S */, "SM" /* SM */]
+);
 var browserIdToNameAndPlatform = /* @__PURE__ */ new Map([
-  ["C", {
-    name: "Chrome",
-    platform: "desktop"
-    /* BrowserPlatform.DESKTOP */
-  }],
-  ["CA", {
-    name: "Chrome",
-    platform: "Android"
-    /* BrowserPlatform.ANDROID */
-  }],
-  ["E", {
-    name: "Edge",
-    platform: "desktop"
-    /* BrowserPlatform.DESKTOP */
-  }],
-  ["FF", {
-    name: "Firefox",
-    platform: "desktop"
-    /* BrowserPlatform.DESKTOP */
-  }],
-  ["FFA", {
-    name: "Firefox",
-    platform: "Android"
-    /* BrowserPlatform.ANDROID */
-  }],
-  ["S", {
-    name: "Safari",
-    platform: "macOS"
-    /* BrowserPlatform.MACOS */
-  }],
-  ["SM", {
-    name: "Safari",
-    platform: "iOS"
-    /* BrowserPlatform.IOS */
-  }]
+  ["C" /* C */, { name: "Chrome", platform: "desktop" /* DESKTOP */ }],
+  ["CA" /* CA */, { name: "Chrome", platform: "Android" /* ANDROID */ }],
+  ["E" /* E */, { name: "Edge", platform: "desktop" /* DESKTOP */ }],
+  ["FF" /* FF */, { name: "Firefox", platform: "desktop" /* DESKTOP */ }],
+  ["FFA" /* FFA */, { name: "Firefox", platform: "Android" /* ANDROID */ }],
+  ["S" /* S */, { name: "Safari", platform: "macOS" /* MACOS */ }],
+  ["SM" /* SM */, { name: "Safari", platform: "iOS" /* IOS */ }]
 ]);
 function formatBrowserList(browserNames) {
   const formatter = new Intl.ListFormat(i18n5.DevToolsLocale.DevToolsLocale.instance().locale, {
     style: "long",
     type: "disjunction"
   });
-  return formatter.format(browserNames.entries().map(([name, platforms]) => platforms.length !== 1 || platforms[0] === "desktop" ? name : i18nString3(UIStrings3.browserOnPlatform, { PH1: name, PH2: platforms[0] })));
+  return formatter.format(browserNames.entries().map(
+    ([name, platforms]) => platforms.length !== 1 || platforms[0] === "desktop" /* DESKTOP */ ? name : i18nString3(UIStrings3.browserOnPlatform, { PH1: name, PH2: platforms[0] })
+  ));
 }
 var formatBaselineDate = (date) => {
   if (!date) {
@@ -784,18 +756,24 @@ var getBaselineMissingBrowsers = (browsers) => {
   return missingBrowsers;
 };
 var getBaselineText = (baseline, browsers) => {
-  if (baseline.status === "false") {
+  if (baseline.status === "false" /* LIMITED */) {
     const missingBrowsers = browsers && getBaselineMissingBrowsers(browsers);
     if (missingBrowsers) {
       return i18nString3(UIStrings3.limitedAvailabilityInBrowsers, { PH1: formatBrowserList(missingBrowsers) });
     }
     return i18nString3(UIStrings3.limitedAvailability);
   }
-  if (baseline.status === "low") {
+  if (baseline.status === "low" /* LOW */) {
     return i18nString3(UIStrings3.newlyAvailableSince, { PH1: formatBaselineDate(baseline.baseline_low_date) });
   }
   return i18nString3(UIStrings3.widelyAvailableSince, { PH1: formatBaselineDate(baseline.baseline_high_date) });
 };
+var BaselineStatus = /* @__PURE__ */ ((BaselineStatus2) => {
+  BaselineStatus2["LIMITED"] = "false";
+  BaselineStatus2["LOW"] = "low";
+  BaselineStatus2["HIGH"] = "high";
+  return BaselineStatus2;
+})(BaselineStatus || {});
 var CSSPropertyDocsView = class extends HTMLElement {
   #shadow = this.attachShadow({ mode: "open" });
   #cssProperty;
@@ -855,9 +833,10 @@ var CSSPropertyDocsView = class extends HTMLElement {
 };
 customElements.define("devtools-css-property-docs-view", CSSPropertyDocsView);
 
-// gen/front_end/panels/elements/components/CSSPropertyIconResolver.js
+// ../../front_end/panels/elements/components/CSSPropertyIconResolver.ts
 var CSSPropertyIconResolver_exports = {};
 __export(CSSPropertyIconResolver_exports, {
+  PhysicalDirection: () => PhysicalDirection,
   findFlexContainerIcon: () => findFlexContainerIcon,
   findFlexItemIcon: () => findFlexItemIcon,
   findGridContainerIcon: () => findGridContainerIcon,
@@ -879,18 +858,25 @@ var writingModesAffectingFlexDirection = /* @__PURE__ */ new Set([
   "vertical-lr",
   "vertical-rl"
 ]);
+var PhysicalDirection = /* @__PURE__ */ ((PhysicalDirection2) => {
+  PhysicalDirection2["LEFT_TO_RIGHT"] = "left-to-right";
+  PhysicalDirection2["RIGHT_TO_LEFT"] = "right-to-left";
+  PhysicalDirection2["BOTTOM_TO_TOP"] = "bottom-to-top";
+  PhysicalDirection2["TOP_TO_BOTTOM"] = "top-to-bottom";
+  return PhysicalDirection2;
+})(PhysicalDirection || {});
 function reverseDirection(direction) {
-  if (direction === "left-to-right") {
-    return "right-to-left";
+  if (direction === "left-to-right" /* LEFT_TO_RIGHT */) {
+    return "right-to-left" /* RIGHT_TO_LEFT */;
   }
-  if (direction === "right-to-left") {
-    return "left-to-right";
+  if (direction === "right-to-left" /* RIGHT_TO_LEFT */) {
+    return "left-to-right" /* LEFT_TO_RIGHT */;
   }
-  if (direction === "top-to-bottom") {
-    return "bottom-to-top";
+  if (direction === "top-to-bottom" /* TOP_TO_BOTTOM */) {
+    return "bottom-to-top" /* BOTTOM_TO_TOP */;
   }
-  if (direction === "bottom-to-top") {
-    return "top-to-bottom";
+  if (direction === "bottom-to-top" /* BOTTOM_TO_TOP */) {
+    return "top-to-bottom" /* TOP_TO_BOTTOM */;
   }
   throw new Error("Unknown PhysicalFlexDirection");
 }
@@ -907,28 +893,28 @@ function getPhysicalDirections(computedStyles) {
   const isVertical = writingMode && writingModesAffectingFlexDirection.has(writingMode);
   if (isVertical) {
     return extendWithReverseDirections({
-      row: isRtl ? "bottom-to-top" : "top-to-bottom",
-      column: writingMode === "vertical-lr" ? "left-to-right" : "right-to-left"
+      row: isRtl ? "bottom-to-top" /* BOTTOM_TO_TOP */ : "top-to-bottom" /* TOP_TO_BOTTOM */,
+      column: writingMode === "vertical-lr" ? "left-to-right" /* LEFT_TO_RIGHT */ : "right-to-left" /* RIGHT_TO_LEFT */
     });
   }
   return extendWithReverseDirections({
-    row: isRtl ? "right-to-left" : "left-to-right",
-    column: "top-to-bottom"
+    row: isRtl ? "right-to-left" /* RIGHT_TO_LEFT */ : "left-to-right" /* LEFT_TO_RIGHT */,
+    column: "top-to-bottom" /* TOP_TO_BOTTOM */
   });
 }
 function rotateFlexDirectionIcon(direction) {
   let flipX = true;
   let flipY = false;
   let rotate = -90;
-  if (direction === "right-to-left") {
+  if (direction === "right-to-left" /* RIGHT_TO_LEFT */) {
     rotate = 90;
     flipY = false;
     flipX = false;
-  } else if (direction === "top-to-bottom") {
+  } else if (direction === "top-to-bottom" /* TOP_TO_BOTTOM */) {
     rotate = 0;
     flipX = false;
     flipY = false;
-  } else if (direction === "bottom-to-top") {
+  } else if (direction === "bottom-to-top" /* BOTTOM_TO_TOP */) {
     rotate = 0;
     flipX = false;
     flipY = true;
@@ -944,15 +930,15 @@ function rotateGridDirectionIcon(direction) {
   let flipX = true;
   let flipY = false;
   let rotate = -90;
-  if (direction === "right-to-left") {
+  if (direction === "right-to-left" /* RIGHT_TO_LEFT */) {
     rotate = 90;
     flipY = false;
     flipX = false;
-  } else if (direction === "top-to-bottom") {
+  } else if (direction === "top-to-bottom" /* TOP_TO_BOTTOM */) {
     rotate = 0;
     flipX = false;
     flipY = false;
-  } else if (direction === "bottom-to-top") {
+  } else if (direction === "bottom-to-top" /* BOTTOM_TO_TOP */) {
     rotate = 0;
     flipX = false;
     flipY = true;
@@ -967,7 +953,7 @@ function rotateGridDirectionIcon(direction) {
 function rotateAlignContentIcon(iconName, direction) {
   return {
     iconName,
-    rotate: direction === "right-to-left" ? 90 : direction === "left-to-right" ? -90 : 0,
+    rotate: direction === "right-to-left" /* RIGHT_TO_LEFT */ ? 90 : direction === "left-to-right" /* LEFT_TO_RIGHT */ ? -90 : 0,
     scaleX: 1,
     scaleY: 1
   };
@@ -975,23 +961,23 @@ function rotateAlignContentIcon(iconName, direction) {
 function rotateJustifyContentIcon(iconName, direction) {
   return {
     iconName,
-    rotate: direction === "top-to-bottom" ? 90 : direction === "bottom-to-top" ? -90 : 0,
-    scaleX: direction === "right-to-left" ? -1 : 1,
+    rotate: direction === "top-to-bottom" /* TOP_TO_BOTTOM */ ? 90 : direction === "bottom-to-top" /* BOTTOM_TO_TOP */ ? -90 : 0,
+    scaleX: direction === "right-to-left" /* RIGHT_TO_LEFT */ ? -1 : 1,
     scaleY: 1
   };
 }
 function rotateJustifyItemsIcon(iconName, direction) {
   return {
     iconName,
-    rotate: direction === "top-to-bottom" ? 90 : direction === "bottom-to-top" ? -90 : 0,
-    scaleX: direction === "right-to-left" ? -1 : 1,
+    rotate: direction === "top-to-bottom" /* TOP_TO_BOTTOM */ ? 90 : direction === "bottom-to-top" /* BOTTOM_TO_TOP */ ? -90 : 0,
+    scaleX: direction === "right-to-left" /* RIGHT_TO_LEFT */ ? -1 : 1,
     scaleY: 1
   };
 }
 function rotateAlignItemsIcon(iconName, direction) {
   return {
     iconName,
-    rotate: direction === "right-to-left" ? 90 : direction === "left-to-right" ? -90 : 0,
+    rotate: direction === "right-to-left" /* RIGHT_TO_LEFT */ ? 90 : direction === "left-to-right" /* LEFT_TO_RIGHT */ ? -90 : 0,
     scaleX: 1,
     scaleY: 1
   };
@@ -1109,19 +1095,19 @@ function gridAlignSelfIcon(iconName) {
   }
   return getIcon;
 }
-function rotateFlexWrapIcon(iconName, direction) {
+function rotateFlexWrapIcon(iconName, direction, reverse = false) {
   return {
     iconName,
-    rotate: direction === "bottom-to-top" || direction === "top-to-bottom" ? 90 : 0,
+    rotate: direction === "bottom-to-top" /* BOTTOM_TO_TOP */ || direction === "top-to-bottom" /* TOP_TO_BOTTOM */ ? 90 : 0,
     scaleX: 1,
-    scaleY: 1
+    scaleY: reverse ? -1 : 1
   };
 }
-function flexWrapIcon(iconName) {
+function flexWrapIcon(iconName, reverse = false) {
   function getIcon(computedStyles) {
     const directions = getPhysicalDirections(computedStyles);
     const computedFlexDirection = computedStyles.get("flex-direction") || "row";
-    return rotateFlexWrapIcon(iconName, directions[computedFlexDirection]);
+    return rotateFlexWrapIcon(iconName, directions[computedFlexDirection], reverse);
   }
   return getIcon;
 }
@@ -1167,7 +1153,12 @@ var flexContainerIcons = /* @__PURE__ */ new Map([
   ["align-items: baseline", baselineIcon],
   ["align-content: baseline", baselineIcon],
   ["flex-wrap: wrap", flexWrapIcon("flex-wrap")],
-  ["flex-wrap: nowrap", flexWrapIcon("flex-no-wrap")]
+  ["flex-wrap: nowrap", flexWrapIcon("flex-no-wrap")],
+  ["flex-wrap: wrap-reverse", flexWrapIcon(
+    "flex-wrap",
+    /* reverse */
+    true
+  )]
 ]);
 var flexItemIcons = /* @__PURE__ */ new Map([
   ["align-self: baseline", baselineIcon],
@@ -1290,17 +1281,17 @@ function findGridItemIcon(text, parentComputedStyles) {
   return null;
 }
 
-// gen/front_end/panels/elements/components/CSSQuery.js
+// ../../front_end/panels/elements/components/CSSQuery.ts
 var CSSQuery_exports = {};
 __export(CSSQuery_exports, {
   CSSQuery: () => CSSQuery
 });
-import "./../../../ui/components/tooltips/tooltips.js";
-import "./../../../ui/legacy/components/inline_editor/inline_editor.js";
-import * as SDK2 from "./../../../core/sdk/sdk.js";
-import * as UI3 from "./../../../ui/legacy/legacy.js";
-import * as Lit from "./../../../ui/lit/lit.js";
-import * as VisualLogging3 from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/components/tooltips/tooltips.js";
+import "../../../ui/legacy/components/inline_editor/inline_editor.js";
+import * as SDK2 from "../../../core/sdk/sdk.js";
+import * as UI3 from "../../../ui/legacy/legacy.js";
+import * as Lit from "../../../ui/lit/lit.js";
+import * as VisualLogging3 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/elements/components/cssQuery.css.js
 var cssQuery_css_default = `/*
@@ -1324,7 +1315,7 @@ var cssQuery_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./cssQuery.css")} */`;
 
-// gen/front_end/panels/elements/components/CSSQuery.js
+// ../../front_end/panels/elements/components/CSSQuery.ts
 var { render: render6, html: html6 } = Lit;
 var CSSQuery = class extends HTMLElement {
   #shadow = this.attachShadow({ mode: "open" });
@@ -1436,7 +1427,8 @@ var CSSQuery = class extends HTMLElement {
       return html6`${section.text}`;
     })}</span>
     `;
-    render6(html6`
+    render6(
+      html6`
         <style>${cssQuery_css_default}</style>
         <style>${UI3.inspectorCommonStyles}</style>
         <div class=${queryClasses} jslog=${VisualLogging3.cssRuleHeader(this.#jslogContext).track({ click: true, change: true })}>
@@ -1444,19 +1436,22 @@ var CSSQuery = class extends HTMLElement {
           ${this.#queryPrefix ? html6`<span>${this.#queryPrefix + " "}</span>` : Lit.nothing}
           ${this.#queryName ? html6`<span>${this.#queryName + " "}</span>` : Lit.nothing}
           ${queryText} {
-        </div>`, this.#shadow, { host: this });
+        </div>`,
+      this.#shadow,
+      { host: this }
+    );
   }
 };
 customElements.define("devtools-css-query", CSSQuery);
 
-// gen/front_end/panels/elements/components/CSSVariableValueView.js
+// ../../front_end/panels/elements/components/CSSVariableValueView.ts
 var CSSVariableValueView_exports = {};
 __export(CSSVariableValueView_exports, {
   CSSVariableParserError: () => CSSVariableParserError,
   CSSVariableValueView: () => CSSVariableValueView
 });
-import * as i18n7 from "./../../../core/i18n/i18n.js";
-import * as Lit2 from "./../../../ui/lit/lit.js";
+import * as i18n7 from "../../../core/i18n/i18n.js";
+import * as Lit2 from "../../../ui/lit/lit.js";
 
 // gen/front_end/panels/elements/components/cssVariableValueView.css.js
 var cssVariableValueView_css_default = `/*
@@ -1467,7 +1462,7 @@ var cssVariableValueView_css_default = `/*
 
 .registered-property-popup-wrapper {
   max-width: 232px;
-  font-size: 12px;
+  font-size: var(--sys-typescale-body4-size);
   line-height: 1.4;
   word-break: break-all;
 }
@@ -1478,12 +1473,12 @@ var cssVariableValueView_css_default = `/*
 }
 
 .divider {
-  margin: 8px -7px;
-  border: 1px solid var(--sys-color-divider);
+  margin: var(--sys-size-5) -7px;
+  border: var(--sys-size-1) solid var(--sys-color-divider);
 }
 
 .registered-property-links {
-  margin-top: 8px;
+  margin-top: var(--sys-size-5);
 }
 
 .clickable {
@@ -1509,7 +1504,7 @@ var cssVariableValueView_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./cssVariableValueView.css")} */`;
 
-// gen/front_end/panels/elements/components/CSSVariableValueView.js
+// ../../front_end/panels/elements/components/CSSVariableValueView.ts
 var UIStrings4 = {
   /**
    * @description Text for a link from a custom property to its defining registration.
@@ -1547,14 +1542,18 @@ var CSSVariableParserError = class extends HTMLElement {
   }
   #render(details) {
     const type = html7`<span class="monospace css-property">${details.registration.syntax()}</span>`;
-    render7(html7`
+    render7(
+      html7`
       <style>${cssVariableValueView_css_default}</style>
       <div class="variable-value-popup-wrapper">
         ${i18nTemplate2(UIStrings4.invalidPropertyValue, { type })}
         ${getLinkSection(details)}
-      </div>`, this.#shadow, {
-      host: this
-    });
+      </div>`,
+      this.#shadow,
+      {
+        host: this
+      }
+    );
   }
 };
 var CSSVariableValueView = class extends HTMLElement {
@@ -1562,7 +1561,11 @@ var CSSVariableValueView = class extends HTMLElement {
   variableName;
   #value;
   details;
-  constructor({ variableName, value, details }) {
+  constructor({
+    variableName,
+    value,
+    details
+  }) {
     super();
     this.variableName = variableName;
     this.details = details;
@@ -1588,33 +1591,37 @@ var CSSVariableValueView = class extends HTMLElement {
           ${getLinkSection(this.details)}
         </div>` : "";
     const valueText = this.value ?? i18nString4(UIStrings4.sIsNotDefined, { PH1: this.variableName });
-    render7(html7`<style>${cssVariableValueView_css_default}</style>
+    render7(
+      html7`<style>${cssVariableValueView_css_default}</style>
              <div class="variable-value-popup-wrapper">
                ${valueText}
              </div>
              ${registrationView}
-             `, this.#shadow, {
-      host: this
-    });
+             `,
+      this.#shadow,
+      {
+        host: this
+      }
+    );
   }
 };
 customElements.define("devtools-css-variable-value-view", CSSVariableValueView);
 customElements.define("devtools-css-variable-parser-error", CSSVariableParserError);
 
-// gen/front_end/panels/elements/components/ElementsBreadcrumbs.js
+// ../../front_end/panels/elements/components/ElementsBreadcrumbs.ts
 var ElementsBreadcrumbs_exports = {};
 __export(ElementsBreadcrumbs_exports, {
   ElementsBreadcrumbs: () => ElementsBreadcrumbs,
   NodeSelectedEvent: () => NodeSelectedEvent
 });
-import "./../../../ui/kit/kit.js";
-import "./../../../ui/components/node_text/node_text.js";
-import * as i18n11 from "./../../../core/i18n/i18n.js";
-import * as SDK3 from "./../../../core/sdk/sdk.js";
-import * as ComponentHelpers from "./../../../ui/components/helpers/helpers.js";
-import * as RenderCoordinator2 from "./../../../ui/components/render_coordinator/render_coordinator.js";
-import * as Lit3 from "./../../../ui/lit/lit.js";
-import * as VisualLogging4 from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/kit/kit.js";
+import "../../../ui/components/node_text/node_text.js";
+import * as i18n11 from "../../../core/i18n/i18n.js";
+import * as SDK3 from "../../../core/sdk/sdk.js";
+import * as ComponentHelpers from "../../../ui/components/helpers/helpers.js";
+import * as RenderCoordinator2 from "../../../ui/components/render_coordinator/render_coordinator.js";
+import * as Lit3 from "../../../ui/lit/lit.js";
+import * as VisualLogging4 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/elements/components/elementsBreadcrumbs.css.js
 var elementsBreadcrumbs_css_default = `/*
@@ -1673,8 +1680,8 @@ var elementsBreadcrumbs_css_default = `/*
   text-align: center;
   background-color: var(--sys-color-cdt-base-container);
   color: var(--sys-color-token-subtle);
-  margin: 1px;
-  outline: 1px solid var(--sys-color-neutral-outline);
+  margin: var(--sys-size-1);
+  outline: var(--sys-size-1) solid var(--sys-color-neutral-outline);
 }
 
 .overflow.hidden {
@@ -1708,18 +1715,18 @@ var elementsBreadcrumbs_css_default = `/*
 }
 
 .crumb:focus {
-  outline: var(--sys-color-primary) auto 1px;
+  outline: var(--sys-color-primary) auto var(--sys-size-1);
 }
 
 /*# sourceURL=${import.meta.resolve("./elementsBreadcrumbs.css")} */`;
 
-// gen/front_end/panels/elements/components/ElementsBreadcrumbsUtils.js
+// ../../front_end/panels/elements/components/ElementsBreadcrumbsUtils.ts
 var ElementsBreadcrumbsUtils_exports = {};
 __export(ElementsBreadcrumbsUtils_exports, {
   crumbsToRender: () => crumbsToRender,
   determineElementTitle: () => determineElementTitle
 });
-import * as i18n9 from "./../../../core/i18n/i18n.js";
+import * as i18n9 from "../../../core/i18n/i18n.js";
 var UIStrings5 = {
   /**
    * @description Text in elements breadcrumbs of the Elements panel. Indicates that an HTML element
@@ -1782,7 +1789,7 @@ var determineElementTitle = (domNode) => {
   }
 };
 
-// gen/front_end/panels/elements/components/ElementsBreadcrumbs.js
+// ../../front_end/panels/elements/components/ElementsBreadcrumbs.ts
 var { html: html8 } = Lit3;
 var UIStrings6 = {
   /**
@@ -2037,15 +2044,15 @@ var ElementsBreadcrumbs = class extends HTMLElement {
 };
 customElements.define("devtools-elements-breadcrumbs", ElementsBreadcrumbs);
 
-// gen/front_end/panels/elements/components/ElementsTreeExpandButton.js
+// ../../front_end/panels/elements/components/ElementsTreeExpandButton.ts
 var ElementsTreeExpandButton_exports = {};
 __export(ElementsTreeExpandButton_exports, {
   ElementsTreeExpandButton: () => ElementsTreeExpandButton
 });
-import "./../../../ui/kit/kit.js";
-import * as i18n13 from "./../../../core/i18n/i18n.js";
-import { html as html9, render as render9 } from "./../../../ui/lit/lit.js";
-import * as VisualLogging5 from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/kit/kit.js";
+import * as i18n13 from "../../../core/i18n/i18n.js";
+import { html as html9, render as render9 } from "../../../ui/lit/lit.js";
+import * as VisualLogging5 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/elements/components/elementsTreeExpandButton.css.js
 var elementsTreeExpandButton_css_default = `/*
@@ -2068,10 +2075,10 @@ var elementsTreeExpandButton_css_default = `/*
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  width: 14px;
+  width: var(--sys-size-7);
   height: 10px;
-  margin: 0 2px;
-  border: 1px solid var(--override-adorner-border-color, var(--sys-color-tonal-outline));
+  margin: 0 var(--sys-size-2);
+  border: var(--sys-size-1) solid var(--override-adorner-border-color, var(--sys-color-tonal-outline));
   border-radius: 10px;
   background: var(--override-adorner-background-color, var(--sys-color-cdt-base-container));
   padding: 0;
@@ -2098,14 +2105,14 @@ var elementsTreeExpandButton_css_default = `/*
 }
 
 .expand-button devtools-icon {
-  width: 14px;
-  height: 14px;
+  width: var(--sys-size-7);
+  height: var(--sys-size-7);
   color: var(--sys-color-primary);
 }
 
 /*# sourceURL=${import.meta.resolve("./elementsTreeExpandButton.css")} */`;
 
-// gen/front_end/panels/elements/components/ElementsTreeExpandButton.js
+// ../../front_end/panels/elements/components/ElementsTreeExpandButton.ts
 var UIStrings7 = {
   /**
    * @description ARIA label for a button expanding a collapsed subtree.
@@ -2126,29 +2133,33 @@ var ElementsTreeExpandButton = class extends HTMLElement {
     this.#render();
   }
   #render() {
-    render9(html9`
+    render9(
+      html9`
       <style>${elementsTreeExpandButton_css_default}</style>
       <button
         class="expand-button"
         tabindex="-1"
         aria-label=${i18nString7(UIStrings7.expand)}
         jslog=${VisualLogging5.action("expand").track({ click: true })}
-        @click=${this.#clickHandler}><devtools-icon name="dots-horizontal"></devtools-icon></button>`, this.#shadow, { host: this });
+        @click=${this.#clickHandler}><devtools-icon name="dots-horizontal"></devtools-icon></button>`,
+      this.#shadow,
+      { host: this }
+    );
   }
 };
 customElements.define("devtools-elements-tree-expand-button", ElementsTreeExpandButton);
 
-// gen/front_end/panels/elements/components/QueryContainer.js
+// ../../front_end/panels/elements/components/QueryContainer.ts
 var QueryContainer_exports = {};
 __export(QueryContainer_exports, {
   QueriedSizeRequestedEvent: () => QueriedSizeRequestedEvent,
   QueryContainer: () => QueryContainer
 });
-import "./../../../ui/kit/kit.js";
-import "./../../../ui/components/node_text/node_text.js";
-import * as SDK4 from "./../../../core/sdk/sdk.js";
-import * as Lit4 from "./../../../ui/lit/lit.js";
-import * as VisualLogging6 from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/kit/kit.js";
+import "../../../ui/components/node_text/node_text.js";
+import * as SDK4 from "../../../core/sdk/sdk.js";
+import * as Lit4 from "../../../ui/lit/lit.js";
+import * as VisualLogging6 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/elements/components/queryContainer.css.js
 var queryContainer_css_default = `/*
@@ -2172,8 +2183,8 @@ var queryContainer_css_default = `/*
 
 .axis-icon {
   margin-left: 0.4em;
-  width: 16px;
-  height: 12px;
+  width: var(--sys-size-8);
+  height: var(--sys-size-6);
   vertical-align: text-top;
 }
 
@@ -2187,7 +2198,7 @@ var queryContainer_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./queryContainer.css")} */`;
 
-// gen/front_end/panels/elements/components/QueryContainer.js
+// ../../front_end/panels/elements/components/QueryContainer.ts
 var { render: render10, html: html10 } = Lit4;
 var { PhysicalAxis, QueryAxis } = SDK4.CSSContainerQuery;
 var QueriedSizeRequestedEvent = class _QueriedSizeRequestedEvent extends Event {
@@ -2254,14 +2265,14 @@ var QueryContainer = class extends HTMLElement {
     });
   }
   #renderQueriedSizeDetails() {
-    if (!this.#queriedSizeDetails || this.#queriedSizeDetails.queryAxis === "") {
+    if (!this.#queriedSizeDetails || this.#queriedSizeDetails.queryAxis === QueryAxis.NONE) {
       return Lit4.nothing;
     }
-    const areBothAxesQueried = this.#queriedSizeDetails.queryAxis === "size";
+    const areBothAxesQueried = this.#queriedSizeDetails.queryAxis === QueryAxis.BOTH;
     const axisIconClasses = Lit4.Directives.classMap({
       "axis-icon": true,
       hidden: areBothAxesQueried,
-      vertical: this.#queriedSizeDetails.physicalAxis === "Vertical"
+      vertical: this.#queriedSizeDetails.physicalAxis === PhysicalAxis.VERTICAL
     });
     return html10`
       <span class="queried-size-details">
@@ -2278,7 +2289,7 @@ var QueryContainer = class extends HTMLElement {
 };
 customElements.define("devtools-query-container", QueryContainer);
 
-// gen/front_end/panels/elements/components/StylePropertyEditor.js
+// ../../front_end/panels/elements/components/StylePropertyEditor.ts
 var StylePropertyEditor_exports = {};
 __export(StylePropertyEditor_exports, {
   FlexboxEditableProperties: () => FlexboxEditableProperties,
@@ -2291,12 +2302,12 @@ __export(StylePropertyEditor_exports, {
   PropertySelectedEvent: () => PropertySelectedEvent,
   StylePropertyEditor: () => StylePropertyEditor
 });
-import "./../../../ui/kit/kit.js";
-import "./../../../ui/legacy/legacy.js";
-import * as i18n15 from "./../../../core/i18n/i18n.js";
-import * as Input from "./../../../ui/components/input/input.js";
-import * as Lit5 from "./../../../ui/lit/lit.js";
-import * as VisualLogging7 from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/kit/kit.js";
+import "../../../ui/legacy/legacy.js";
+import * as i18n15 from "../../../core/i18n/i18n.js";
+import * as Input from "../../../ui/components/input/input.js";
+import * as Lit5 from "../../../ui/lit/lit.js";
+import * as VisualLogging7 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/elements/components/stylePropertyEditor.css.js
 var stylePropertyEditor_css_default = `/*
@@ -2312,7 +2323,7 @@ var stylePropertyEditor_css_default = `/*
 .row {
   padding: 0;
   color: var(--sys-color-on-surface);
-  padding-bottom: 16px;
+  padding-bottom: var(--sys-size-8);
 }
 
 .row:last-child {
@@ -2320,7 +2331,7 @@ var stylePropertyEditor_css_default = `/*
 }
 
 .property {
-  padding-bottom: 4px;
+  padding-bottom: var(--sys-size-3);
   white-space: nowrap;
 }
 
@@ -2350,12 +2361,12 @@ var stylePropertyEditor_css_default = `/*
 }
 
 .button {
-  border: 1px solid var(--sys-color-neutral-outline);
+  border: var(--sys-size-1) solid var(--sys-color-neutral-outline);
   background-color: var(--sys-color-cdt-base-container);
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
-  min-height: 24px;
+  width: var(--sys-size-11);
+  height: var(--sys-size-11);
+  min-width: var(--sys-size-11);
+  min-height: var(--sys-size-11);
   padding: 0;
   margin: 0;
   display: flex;
@@ -2382,7 +2393,7 @@ var stylePropertyEditor_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./stylePropertyEditor.css")} */`;
 
-// gen/front_end/panels/elements/components/StylePropertyEditor.js
+// ../../front_end/panels/elements/components/StylePropertyEditor.ts
 var UIStrings8 = {
   /**
    * @description Title of the button that selects a flex property.
@@ -2594,7 +2605,8 @@ var FlexboxEditableProperties = [
     propertyName: "flex-wrap",
     propertyValues: [
       "nowrap",
-      "wrap"
+      "wrap",
+      "wrap-reverse"
     ]
   },
   {

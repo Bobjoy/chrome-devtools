@@ -4,7 +4,7 @@
 import * as Common from '../../core/common/common.js';
 import * as i18n from '../../core/i18n/i18n.js';
 import * as Platform from '../../core/platform/platform.js';
-import * as Geometry from '../../models/geometry/geometry.js';
+import * as Geometry from '../../ui/geometry/geometry.js';
 import * as InlineEditor from '../../ui/legacy/components/inline_editor/inline_editor.js';
 import * as UI from '../../ui/legacy/legacy.js';
 import * as VisualLogging from '../../ui/visual_logging/visual_logging.js';
@@ -403,6 +403,13 @@ export class AnimationUI {
         event.consume(true);
     }
 }
+export var Events;
+(function (Events) {
+    Events["ANIMATION_DRAG"] = "AnimationDrag";
+    Events["KEYFRAME_MOVE"] = "KeyframeMove";
+    Events["START_ENDPOINT_MOVE"] = "StartEndpointMove";
+    Events["FINISH_ENDPOINT_MOVE"] = "FinishEndpointMove";
+})(Events || (Events = {}));
 export const Options = {
     AnimationHeight: 26,
     AnimationSVGHeight: 50,

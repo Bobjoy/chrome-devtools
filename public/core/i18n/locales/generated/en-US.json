@@ -1211,6 +1211,9 @@
   "generated/Deprecation.ts | ExampleBrowserProcessDeprecation": {
     "message": "This is an example for showing the code required for a browser process reported deprecation."
   },
+  "generated/Deprecation.ts | FencedFrame": {
+    "message": "Fenced Frame API is deprecated and scheduled for removal."
+  },
   "generated/Deprecation.ts | Fledge": {
     "message": "The Protected Audience API is deprecated and will be removed in a future release."
   },
@@ -2546,8 +2549,29 @@
   "panels/accessibility/accessibility-meta.ts | shoAccessibility": {
     "message": "Show Accessibility"
   },
+  "panels/accessibility/AccessibilityAnnouncementRecordingListView.ts | api": {
+    "message": "API"
+  },
+  "panels/accessibility/AccessibilityAnnouncementRecordingListView.ts | ariaLive": {
+    "message": "ARIA live"
+  },
+  "panels/accessibility/AccessibilityAnnouncementRecordingListView.ts | ariaLiveRecordingList": {
+    "message": "Accessibility Announcements"
+  },
+  "panels/accessibility/AccessibilityAnnouncementRecordingListView.ts | jsTriggered": {
+    "message": "JS-triggered"
+  },
+  "panels/accessibility/AccessibilityAnnouncementRecordingListView.ts | message": {
+    "message": "Message"
+  },
+  "panels/accessibility/AccessibilityAnnouncementRecordingListView.ts | politeness": {
+    "message": "Politeness"
+  },
+  "panels/accessibility/AccessibilityAnnouncementRecordingListView.ts | time": {
+    "message": "Time"
+  },
   "panels/accessibility/AccessibilityAnnouncementRecordingView.ts | ariaLiveRecording": {
-    "message": "A11y Announcements recording"
+    "message": "Announcements recording"
   },
   "panels/accessibility/AccessibilityNodeView.ts | accessibilityNodeNotExposed": {
     "message": "Accessibility node not exposed"
@@ -3701,6 +3725,12 @@
   "panels/application/components/AdsView.ts | adIframesTitle": {
     "message": "Ad iframes (total {PH1})"
   },
+  "panels/application/components/AdsView.ts | adScripts": {
+    "message": "Ad scripts"
+  },
+  "panels/application/components/AdsView.ts | adScriptsTitle": {
+    "message": "Ad scripts (total {PH1})"
+  },
   "panels/application/components/AdsView.ts | average": {
     "message": "(Average: {PH1})"
   },
@@ -3742,6 +3772,9 @@
   },
   "panels/application/components/AdsView.ts | unnamed": {
     "message": "<unnamed>"
+  },
+  "panels/application/components/AdsView.ts | url": {
+    "message": "URL"
   },
   "panels/application/components/AdsView.ts | viewportAdCount": {
     "message": "Viewport ad count"
@@ -7880,6 +7913,9 @@
   "panels/elements/elements-meta.ts | showHtmlComments": {
     "message": "Show HTML comments"
   },
+  "panels/elements/elements-meta.ts | showInactiveCSSRules": {
+    "message": "Show inactive CSS rules"
+  },
   "panels/elements/elements-meta.ts | showLayout": {
     "message": "Show Layout"
   },
@@ -8102,6 +8138,9 @@
   "panels/elements/ElementsTreeOutline.ts | pageDom": {
     "message": "Page DOM"
   },
+  "panels/elements/ElementsTreeOutline.ts | reveal": {
+    "message": "reveal"
+  },
   "panels/elements/ElementsTreeOutline.ts | showAllLines": {
     "message": "Show all ({PH1} lines)"
   },
@@ -8243,6 +8282,9 @@
   "panels/elements/StylePropertiesSection.ts | insertStyleRuleBelow": {
     "message": "Insert style rule below"
   },
+  "panels/elements/StylePropertiesSection.ts | notMatching": {
+    "message": "This rule doesn’t currently match the selected element"
+  },
   "panels/elements/StylePropertiesSection.ts | sattributesStyle": {
     "message": "{PH1}[Attributes Style]"
   },
@@ -8311,6 +8353,9 @@
   },
   "panels/elements/StylePropertyTreeElement.ts | overriddenByAnimation": {
     "message": "Overridden by animation styles."
+  },
+  "panels/elements/StylePropertyTreeElement.ts | positionAreaEditorButton": {
+    "message": "Open position-area editor"
   },
   "panels/elements/StylePropertyTreeElement.ts | shiftClickToChangeColorFormat": {
     "message": "Shift + Click to change color format."
@@ -9022,30 +9067,6 @@
   },
   "panels/issues/IssueView.ts | warned": {
     "message": "Warned"
-  },
-  "panels/js_timeline/js_timeline-meta.ts | performance": {
-    "message": "Performance"
-  },
-  "panels/js_timeline/js_timeline-meta.ts | record": {
-    "message": "Record"
-  },
-  "panels/js_timeline/js_timeline-meta.ts | recordAndReload": {
-    "message": "Record and reload"
-  },
-  "panels/js_timeline/js_timeline-meta.ts | showPerformance": {
-    "message": "Show Performance"
-  },
-  "panels/js_timeline/js_timeline-meta.ts | showRecentTimelineSessions": {
-    "message": "Show recent timeline sessions"
-  },
-  "panels/js_timeline/js_timeline-meta.ts | stop": {
-    "message": "Stop"
-  },
-  "panels/js_timeline/js_timeline-meta.ts | timelineDebugMode": {
-    "message": "Timeline debug mode (trace event details, etc.)"
-  },
-  "panels/js_timeline/js_timeline-meta.ts | timelineShowAllEvents": {
-    "message": "Show all events"
   },
   "panels/layer_viewer/layer_viewer-meta.ts | paints": {
     "message": "Paints"
@@ -9864,7 +9885,7 @@
     "message": "Network throttling is enabled"
   },
   "panels/mobile_throttling/NetworkPanelIndicator.ts | requestsMayBeBlocked": {
-    "message": "Requests may be blocked. See the Network request blocking panel"
+    "message": "Requests may be blocked. See the Request conditions panel"
   },
   "panels/mobile_throttling/NetworkPanelIndicator.ts | requestsMayBeOverridden": {
     "message": "Requests may be overridden locally. See the Sources panel"
@@ -10382,8 +10403,8 @@
   "panels/network/network-meta.ts | disableCache": {
     "message": "Disable cache while DevTools is open"
   },
-  "panels/network/network-meta.ts | disableNetworkRequestBlocking": {
-    "message": "Disable network request blocking"
+  "panels/network/network-meta.ts | disableRequestBlockingAndThrottling": {
+    "message": "Disable request blocking and throttling"
   },
   "panels/network/network-meta.ts | diskCache": {
     "message": "disk cache"
@@ -10400,8 +10421,8 @@
   "panels/network/network-meta.ts | enableCache": {
     "message": "Enable cache"
   },
-  "panels/network/network-meta.ts | enableNetworkRequestBlocking": {
-    "message": "Enable network request blocking"
+  "panels/network/network-meta.ts | enableRequestBlockingAndThrottling": {
+    "message": "Enable request blocking and throttling"
   },
   "panels/network/network-meta.ts | frame": {
     "message": "frame"
@@ -10439,9 +10460,6 @@
   "panels/network/network-meta.ts | networkConditions": {
     "message": "Network conditions"
   },
-  "panels/network/network-meta.ts | networkRequestBlocking": {
-    "message": "Network request blocking"
-  },
   "panels/network/network-meta.ts | networkRequestConditions": {
     "message": "Request conditions"
   },
@@ -10456,6 +10474,9 @@
   },
   "panels/network/network-meta.ts | removeAllNetworkRequestBlockingOrThrottlingPatterns": {
     "message": "Remove all network request blocking or throttling patterns"
+  },
+  "panels/network/network-meta.ts | requestBlockingAndThrottling": {
+    "message": "Request blocking and throttling"
   },
   "panels/network/network-meta.ts | reset": {
     "message": "reset"
@@ -11380,6 +11401,9 @@
   },
   "panels/network/RequestHeadersView.ts | earlyHintsHeaders": {
     "message": "Early hints headers"
+  },
+  "panels/network/RequestHeadersView.ts | earlyPreloadsIgnoredCacheDisabledWarning": {
+    "message": "Early Hints preloads were ignored because cache is disabled. Enable cache and reload the page to use them."
   },
   "panels/network/RequestHeadersView.ts | fromDiskCache": {
     "message": "(from disk cache)"
@@ -15417,7 +15441,7 @@
     "message": "Dismiss"
   },
   "panels/timeline/components/CWVMetrics.ts | fieldMismatchNotice": {
-    "message": "There are many reasons why local and field metrics [may not match](https://web.dev/articles/lab-and-field-data-differences). Adjust [throttling settings and device emulation](https://developer.chrome.com/docs/devtools/device-mode) to analyze traces more similar to the average user’s environment."
+    "message": "Local and field metrics [may not match](https://web.dev/articles/lab-and-field-data-differences) for several reasons. Adjust [throttling settings and device emulation](https://developer.chrome.com/docs/devtools/device-mode) to analyze traces more similar to the average user’s environment."
   },
   "panels/timeline/components/CWVMetrics.ts | fieldMismatchTitle": {
     "message": "Field & local metrics mismatch"
@@ -15453,7 +15477,7 @@
     "message": "{PH1} is a likely performance bottleneck."
   },
   "panels/timeline/components/DetailsView.ts | sIsLikelyPoorPageResponsiveness": {
-    "message": "{PH1} is indicating poor page responsiveness."
+    "message": "{PH1} indicates poor page responsiveness."
   },
   "panels/timeline/components/DetailsView.ts | sTookS": {
     "message": "{PH1} took {PH2}."
@@ -15471,7 +15495,7 @@
     "message": "Explanation"
   },
   "panels/timeline/components/ExportTraceOptions.ts | exportTraceOptionsDialogTitle": {
-    "message": "Save performance trace "
+    "message": "Save performance trace"
   },
   "panels/timeline/components/ExportTraceOptions.ts | includeAnnotations": {
     "message": "Include annotations"
@@ -15483,7 +15507,7 @@
     "message": "Include script source maps"
   },
   "panels/timeline/components/ExportTraceOptions.ts | moreInfoLabel": {
-    "message": "Additional information:"
+    "message": "More information:"
   },
   "panels/timeline/components/ExportTraceOptions.ts | resourceContentPrivacyInfo": {
     "message": "Includes the full content of all loaded HTML, CSS, and scripts (except extensions)."
@@ -15513,13 +15537,13 @@
     "message": "Configure field metrics fetching"
   },
   "panels/timeline/components/FieldSettingsDialog.ts | doesNotHaveSufficientData": {
-    "message": "The Chrome UX Report does not have sufficient real-world speed data for this page."
+    "message": "The Chrome UX Report doesn’t have enough real-world speed data for this page."
   },
   "panels/timeline/components/FieldSettingsDialog.ts | fetchAggregated": {
     "message": "Fetch aggregated field metrics from the {PH1} to help you contextualize local measurements with what real users experience on the site."
   },
   "panels/timeline/components/FieldSettingsDialog.ts | invalidOrigin": {
-    "message": "\"{PH1}\" is not a valid origin or URL."
+    "message": "\"{PH1}\" isn’t a valid origin or URL."
   },
   "panels/timeline/components/FieldSettingsDialog.ts | mapDevelopmentOrigins": {
     "message": "Set a development origin to automatically get relevant field metrics for its production origin."
@@ -15546,7 +15570,7 @@
     "message": "URL"
   },
   "panels/timeline/components/FieldSettingsDialog.ts | whenPerformanceIsShown": {
-    "message": "When DevTools is open, the URLs you visit will be sent to Google to query field metrics. These requests are not tied to your Google account."
+    "message": "When DevTools is open, the URLs you visit will be sent to Google to query field metrics. These requests aren’t tied to your Google account."
   },
   "panels/timeline/components/IgnoreListSetting.ts | addNewRegex": {
     "message": "Add a regular expression rule for the script’s URL"
@@ -15651,7 +15675,7 @@
     "message": "Auto ({PH1})"
   },
   "panels/timeline/components/LiveMetricsView.ts | clearCurrentLog": {
-    "message": "Clear the current log"
+    "message": "Clear current log"
   },
   "panels/timeline/components/LiveMetricsView.ts | collectionPeriod": {
     "message": "Collection period: {PH1}"
@@ -15723,13 +15747,13 @@
     "message": "Learn more about local and field metrics"
   },
   "panels/timeline/components/LiveMetricsView.ts | localFieldLearnMoreTooltip": {
-    "message": "Local metrics are captured from the current page using your network connection and device. field metrics is measured by real users using many different network connections and devices."
+    "message": "Local metrics are captured from the current page using your network connection and device. Field metrics are measured by real users using many different network connections and devices."
   },
   "panels/timeline/components/LiveMetricsView.ts | localMetrics": {
     "message": "Local metrics"
   },
   "panels/timeline/components/LiveMetricsView.ts | logToConsole": {
-    "message": "Log additional interaction data to the console"
+    "message": "Log more interaction data to the console"
   },
   "panels/timeline/components/LiveMetricsView.ts | mobile": {
     "message": "Mobile"
@@ -16065,10 +16089,10 @@
     "message": "Development origin"
   },
   "panels/timeline/components/OriginMap.ts | invalidOrigin": {
-    "message": "\"{PH1}\" is not a valid origin or URL."
+    "message": "\"{PH1}\" isn’t a valid origin or URL."
   },
   "panels/timeline/components/OriginMap.ts | pageHasNoData": {
-    "message": "The Chrome UX Report does not have sufficient real user data for this page."
+    "message": "The Chrome UX Report doesn’t have enough real user data for this page."
   },
   "panels/timeline/components/OriginMap.ts | productionOrigin": {
     "message": "Production origin"
@@ -16083,7 +16107,7 @@
     "message": "Annotate a trace for yourself and others"
   },
   "panels/timeline/components/SidebarAnnotationsTab.ts | deleteAnnotationTutorialDescription": {
-    "message": "Hover over the list in the sidebar with Annotations tab selected to access the delete function."
+    "message": "Hover over the list in the sidebar Annotations tab to delete an annotation."
   },
   "panels/timeline/components/SidebarAnnotationsTab.ts | deleteAnnotationTutorialTitle": {
     "message": "Delete an annotation"
@@ -16095,7 +16119,7 @@
     "message": "A \"{PH1}\" event annotated with the text \"{PH2}\""
   },
   "panels/timeline/components/SidebarAnnotationsTab.ts | entryLabelTutorialDescription": {
-    "message": "Double-click or press Enter on an item and type to create an item label."
+    "message": "Double-click or press Enter on an item and type to add an item label."
   },
   "panels/timeline/components/SidebarAnnotationsTab.ts | entryLabelTutorialTitle": {
     "message": "Label an item"
@@ -16113,7 +16137,7 @@
     "message": "A time range starting at {PH1} and ending at {PH2}"
   },
   "panels/timeline/components/SidebarAnnotationsTab.ts | timeRangeTutorialDescription": {
-    "message": "Shift-drag in the flamechart then type to create a time range annotation."
+    "message": "Shift-drag in the flame chart, then type to add a time range annotation."
   },
   "panels/timeline/components/SidebarAnnotationsTab.ts | timeRangeTutorialTitle": {
     "message": "Define a time range"
@@ -16149,7 +16173,7 @@
     "message": "Nodes"
   },
   "panels/timeline/CountersGraph.ts | noEventsFound": {
-    "message": "No memory usage data found within selected events."
+    "message": "No memory usage data found within selected events"
   },
   "panels/timeline/CountersGraph.ts | ss": {
     "message": "[{PH1} – {PH2}]"
@@ -16556,9 +16580,6 @@
   "panels/timeline/TimelinePanel.ts | exportingFailed": {
     "message": "Exporting the trace failed"
   },
-  "panels/timeline/TimelinePanel.ts | fixMe": {
-    "message": "Fix me"
-  },
   "panels/timeline/TimelinePanel.ts | frameSelected": {
     "message": "Frame selected"
   },
@@ -16626,7 +16647,7 @@
     "message": "- Selector stats is enabled"
   },
   "panels/timeline/TimelinePanel.ts | shortcutsDialogTitle": {
-    "message": "Keyboard shortcuts for flamechart"
+    "message": "Keyboard shortcuts for flame chart"
   },
   "panels/timeline/TimelinePanel.ts | showDataAddedByExtensions": {
     "message": "Show data added by extensions of the Performance panel"
@@ -16653,7 +16674,7 @@
     "message": "3rd parties classified by third-party-web"
   },
   "panels/timeline/TimelinePanel.ts | timelineScrollPan": {
-    "message": "Scroll & Pan"
+    "message": "Scroll & pan"
   },
   "panels/timeline/TimelinePanel.ts | timelineZoom": {
     "message": "Zoom"
@@ -16668,7 +16689,7 @@
     "message": "Elapsed (ms)"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | elapsedExplanation": {
-    "message": "Elapsed time spent matching a selector against the DOM in milliseconds."
+    "message": "Elapsed time spent matching a selector against the DOM in milliseconds"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | invalidationCount": {
     "message": "Invalidation count"
@@ -16683,19 +16704,19 @@
     "message": "Match attempts"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | matchAttemptsExplanation": {
-    "message": "Count of nodes that the engine attempted to match against a style rule."
+    "message": "Count of nodes that the engine attempted to match against a style rule"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | matchCount": {
     "message": "Match count"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | matchCountExplanation": {
-    "message": "Count of nodes that matched a style rule."
+    "message": "Count of nodes that matched a style rule"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | selector": {
     "message": "Selector"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | selectorExplanation": {
-    "message": "CSS selector text of a style rule."
+    "message": "CSS selector text of a style rule"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | selectorStats": {
     "message": "Selector stats"
@@ -16704,10 +16725,10 @@
     "message": "% of slow-path non-matches"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | slowPathNonMatchesExplanation": {
-    "message": "The percentage of non-matching nodes (Match Attempts - Match Count) that couldn’t be quickly ruled out by the bloom filter due to high selector complexity. Lower is better."
+    "message": "The percentage of non-matching nodes (match attempts − match count) that couldn’t be quickly ruled out by the bloom filter due to high selector complexity. Lower is better."
   },
   "panels/timeline/TimelineSelectorStatsView.ts | styleSheetId": {
-    "message": "Style Sheet"
+    "message": "Style sheet"
   },
   "panels/timeline/TimelineSelectorStatsView.ts | styleSheetIdExplanation": {
     "message": "Links to the selector rule definition in the style sheets. Note that a selector rule could be defined in multiple places in a style sheet or defined in multiple style sheets. Selector rules from browser user-agent style sheet or dynamic style sheets don’t have a link."
@@ -16758,7 +16779,7 @@
     "message": "Group by subdomain"
   },
   "panels/timeline/TimelineTreeView.ts | groupByThirdParties": {
-    "message": "Group by Third Parties"
+    "message": "Group by 3rd parties"
   },
   "panels/timeline/TimelineTreeView.ts | groupByUrl": {
     "message": "Group by URL"
@@ -16794,7 +16815,7 @@
     "message": "Performance"
   },
   "panels/timeline/TimelineTreeView.ts | selectItemForDetails": {
-    "message": "Select item for details."
+    "message": "Select item for details"
   },
   "panels/timeline/TimelineTreeView.ts | selfTime": {
     "message": "Self time"
@@ -16815,10 +16836,10 @@
     "message": "Use regular expression"
   },
   "panels/timeline/TimelineTreeView.ts | viewBottomUp": {
-    "message": "View Bottom-up"
+    "message": "View bottom-up"
   },
   "panels/timeline/TimelineTreeView.ts | vRuntime": {
-    "message": "[V8 Runtime]"
+    "message": "[V8 runtime]"
   },
   "panels/timeline/TimelineUIUtils.ts | aggregatedTime": {
     "message": "Aggregated time"
@@ -16875,7 +16896,7 @@
     "message": "Effect has unsupported timing parameters"
   },
   "panels/timeline/TimelineUIUtils.ts | compositingFailedEffectSuppressedByDevtools": {
-    "message": "Effect suppressed by DevTools "
+    "message": "Effect suppressed by DevTools"
   },
   "panels/timeline/TimelineUIUtils.ts | compositingFailedFilterRelatedPropertyMayMovePixels": {
     "message": "Filter-related property may move pixels"
@@ -16908,7 +16929,7 @@
     "message": "Transform-related property cannot be accelerated on target"
   },
   "panels/timeline/TimelineUIUtils.ts | compositingFailedUnknownReason": {
-    "message": "Unknown Reason"
+    "message": "Unknown reason"
   },
   "panels/timeline/TimelineUIUtils.ts | compositingFailedUnsupportedCSSProperty": {
     "message": "{propertyCount, plural,\n    =1 {Unsupported CSS property: {properties}}\n    other {Unsupported CSS properties: {properties}}\n  }"
@@ -17082,7 +17103,7 @@
     "message": "{PH1}: {PH2}"
   },
   "panels/timeline/TimelineUIUtils.ts | sSelectorStatsInfo": {
-    "message": "Select \"{PH1}\" to collect detailed CSS selector matching statistics."
+    "message": "Select \"{PH1}\" to collect detailed CSS selector matching statistics"
   },
   "panels/timeline/TimelineUIUtils.ts | sSelf": {
     "message": "{PH1} (self)"
@@ -17133,7 +17154,7 @@
     "message": "Show all"
   },
   "panels/timeline/TrackConfigBanner.ts | someTracksAreHidden": {
-    "message": "Some tracks are hidden in this trace. You can configure tracks by right clicking the track name."
+    "message": "Some tracks are hidden in this trace. You can configure tracks by right-clicking the track name."
   },
   "panels/timeline/UIDevtoolsUtils.ts | async": {
     "message": "Async"
@@ -17384,8 +17405,17 @@
   "panels/whats_new/whats_new-meta.ts | whatsNew": {
     "message": "What’s new"
   },
+  "ui/comments/comments-meta.ts | comments": {
+    "message": "Comments"
+  },
+  "ui/comments/comments-meta.ts | showComments": {
+    "message": "Show comments"
+  },
   "ui/comments/comments-meta.ts | toggleCommentMode": {
     "message": "Add comments to send to your AI coding agent"
+  },
+  "ui/comments/CommentsStatusBarPill.ts | commentsCount": {
+    "message": "Comments ({PH1})"
   },
   "ui/components/dialogs/Dialog.ts | close": {
     "message": "Close"
@@ -17526,7 +17556,7 @@
     "message": "{PH1}, suggestion {PH2} of {PH3}"
   },
   "ui/legacy/ActionRegistration.ts | background_services": {
-    "message": "Background Services"
+    "message": "Background services"
   },
   "ui/legacy/ActionRegistration.ts | changes": {
     "message": "Changes"
@@ -17550,7 +17580,7 @@
     "message": "Help"
   },
   "ui/legacy/ActionRegistration.ts | javascript_profiler": {
-    "message": "JavaScript Profiler"
+    "message": "JavaScript profiler"
   },
   "ui/legacy/ActionRegistration.ts | layers": {
     "message": "Layers"
@@ -17682,10 +17712,10 @@
     "message": "Domain"
   },
   "ui/legacy/components/cookie_table/CookiesTable.ts | editableCookies": {
-    "message": "Editable Cookies"
+    "message": "Editable cookies"
   },
   "ui/legacy/components/cookie_table/CookiesTable.ts | httpOnlyCookiesCannotBeAdded": {
-    "message": "HttpOnly cookies cannot be added as context"
+    "message": "HttpOnly cookies can’t be added as context"
   },
   "ui/legacy/components/cookie_table/CookiesTable.ts | na": {
     "message": "N/A"
@@ -17697,7 +17727,7 @@
     "message": "(opaque)"
   },
   "ui/legacy/components/cookie_table/CookiesTable.ts | partitionKeySite": {
-    "message": "Partition Key Site"
+    "message": "Partition key site"
   },
   "ui/legacy/components/cookie_table/CookiesTable.ts | path": {
     "message": "Path"
@@ -17739,7 +17769,7 @@
     "message": "Add new"
   },
   "ui/legacy/components/data_grid/DataGrid.ts | checked": {
-    "message": "checked"
+    "message": "Checked"
   },
   "ui/legacy/components/data_grid/DataGrid.ts | collapsed": {
     "message": "collapsed"
@@ -17751,10 +17781,10 @@
     "message": "Edit \"{PH1}\""
   },
   "ui/legacy/components/data_grid/DataGrid.ts | emptyRowCreated": {
-    "message": "An empty table row has been created. You may double click or use context menu to edit."
+    "message": "An empty table row was added. Double-click or use the context menu to edit."
   },
   "ui/legacy/components/data_grid/DataGrid.ts | enterToSort": {
-    "message": "Column sort state: {PH1}. Press enter to apply sorting filter"
+    "message": "Column sort state: {PH1}. Press enter to sort."
   },
   "ui/legacy/components/data_grid/DataGrid.ts | expanded": {
     "message": "expanded"
@@ -17763,7 +17793,7 @@
     "message": "Header options"
   },
   "ui/legacy/components/data_grid/DataGrid.ts | levelS": {
-    "message": "level {PH1}"
+    "message": "Level {PH1}"
   },
   "ui/legacy/components/data_grid/DataGrid.ts | refresh": {
     "message": "Refresh"
@@ -17772,19 +17802,19 @@
     "message": "Reset columns"
   },
   "ui/legacy/components/data_grid/DataGrid.ts | rowsS": {
-    "message": "Rows: {PH1}"
+    "message": "rows: {PH1}"
   },
   "ui/legacy/components/data_grid/DataGrid.ts | sortableColumn": {
-    "message": "Sortable column. Press enter to apply sorting filter"
+    "message": "Sortable column. Press enter to sort."
   },
   "ui/legacy/components/data_grid/DataGrid.ts | sortByString": {
     "message": "Sort by"
   },
   "ui/legacy/components/data_grid/DataGrid.ts | sRowS": {
-    "message": "{PH1} Row {PH2}"
+    "message": "{PH1} row {PH2}"
   },
   "ui/legacy/components/data_grid/DataGrid.ts | sSUseTheUpAndDownArrowKeysTo": {
-    "message": "{PH1} {PH2}, use the up and down arrow keys to navigate and interact with the rows of the table; Use browse mode to read cell by cell."
+    "message": "{PH1} {PH2}, use the up and down arrow keys to navigate and interact with the rows of the table; use browse mode to read cell by cell."
   },
   "ui/legacy/components/data_grid/ShowMoreDataGridNode.ts | showAllD": {
     "message": "Show all {PH1}"
@@ -17815,6 +17845,36 @@
   },
   "ui/legacy/components/inline_editor/CSSShadowEditor.ts | yOffset": {
     "message": "Y offset"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | auto": {
+    "message": "Auto"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | block": {
+    "message": "Block"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | blockAxisMode": {
+    "message": "Block axis mode"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | coordinate": {
+    "message": "Coordinate"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | inline": {
+    "message": "Inline"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | inlineAxisMode": {
+    "message": "Inline axis mode"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | logical": {
+    "message": "Logical"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | physical": {
+    "message": "Physical"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | positionAreaGrid": {
+    "message": "position-area grid"
+  },
+  "ui/legacy/components/inline_editor/PositionAreaEditor.ts | positionAreaGridDescription": {
+    "message": "Use arrow keys to navigate, Space or Enter to select, and Shift + arrow keys to select a range."
   },
   "ui/legacy/components/object_ui/CustomPreviewComponent.ts | showAsJavascriptObject": {
     "message": "Show as JavaScript object"
@@ -17888,14 +17948,8 @@
   "ui/legacy/components/object_ui/RemoteObjectPreviewFormatter.ts | thePropertyIsComputedWithAGetter": {
     "message": "The property is computed with a getter"
   },
-  "ui/legacy/components/perf_ui/BrickBreaker.ts | congrats": {
-    "message": "Congrats, you win!"
-  },
-  "ui/legacy/components/perf_ui/BrickBreaker.ts | ps": {
-    "message": "PS: You can also open the game by typing fixme"
-  },
   "ui/legacy/components/perf_ui/FilmStripView.ts | doubleclickToZoomImageClickTo": {
-    "message": "Doubleclick to zoom image. Click to view preceding requests."
+    "message": "Double-click to zoom image. Click to view preceding requests."
   },
   "ui/legacy/components/perf_ui/FilmStripView.ts | nextFrame": {
     "message": "Next frame"
@@ -17919,13 +17973,13 @@
     "message": "Configure tracks"
   },
   "ui/legacy/components/perf_ui/FlameChart.ts | eventSelectedFromGroup": {
-    "message": "Selected a {PH1} event within {PH2}. Press enter to focus this event."
+    "message": "Selected a {PH1} event within {PH2}. Press Enter to focus this event."
   },
   "ui/legacy/components/perf_ui/FlameChart.ts | exitTrackConfigurationMode": {
     "message": "Finish configuring tracks"
   },
   "ui/legacy/components/perf_ui/FlameChart.ts | flameChart": {
-    "message": "Flame Chart"
+    "message": "Flame chart"
   },
   "ui/legacy/components/perf_ui/FlameChart.ts | labelEntry": {
     "message": "Label entry"
@@ -17964,13 +18018,13 @@
     "message": "Medium"
   },
   "ui/legacy/components/perf_ui/OverviewGrid.ts | leftResizer": {
-    "message": "Left Resizer"
+    "message": "Left resizer"
   },
   "ui/legacy/components/perf_ui/OverviewGrid.ts | overviewGridWindow": {
     "message": "Overview grid window"
   },
   "ui/legacy/components/perf_ui/OverviewGrid.ts | rightResizer": {
-    "message": "Right Resizer"
+    "message": "Right resizer"
   },
   "ui/legacy/components/perf_ui/perf_ui-meta.ts | classic": {
     "message": "Classic"
@@ -18022,6 +18076,9 @@
   },
   "ui/legacy/components/quick_open/quick_open-meta.ts | runCommand": {
     "message": "Run command"
+  },
+  "ui/legacy/components/quick_open/QuickOpen.ts | typeQuestionMarkToSeeAvailableCommands": {
+    "message": "Type question mark to see available commands"
   },
   "ui/legacy/components/quick_open/QuickOpen.ts | typeToSeeAvailableCommands": {
     "message": "Type ? to see available commands"
@@ -18081,7 +18138,7 @@
     "message": "Find"
   },
   "ui/legacy/components/source_frame/source_frame-meta.ts | defaultIndentation": {
-    "message": "Default indentation:"
+    "message": "Default indentation"
   },
   "ui/legacy/components/source_frame/source_frame-meta.ts | eSpaces": {
     "message": "8 spaces"
@@ -18123,7 +18180,7 @@
     "message": "{PH1} lines, {PH2} characters selected"
   },
   "ui/legacy/components/source_frame/SourceFrame.ts | doNotPaste": {
-    "message": "Don’t paste code you do not understand or have not reviewed yourself into DevTools. This could allow attackers to steal your identity or take control of your computer. Please type \"{PH1}\" below to allow pasting."
+    "message": "Don’t paste code you don’t understand or haven’t reviewed yourself into DevTools. This could allow attackers to steal your identity or take control of your computer. Type \"{PH1}\" below to allow pasting."
   },
   "ui/legacy/components/source_frame/SourceFrame.ts | doYouTrustThisCode": {
     "message": "Do you trust this code?"
@@ -18135,7 +18192,7 @@
     "message": "Formatting…"
   },
   "ui/legacy/components/source_frame/SourceFrame.ts | lineSColumnS": {
-    "message": "Line {PH1}, Column {PH2}"
+    "message": "Line {PH1}, column {PH2}"
   },
   "ui/legacy/components/source_frame/SourceFrame.ts | loading": {
     "message": "Loading…"
@@ -18249,7 +18306,7 @@
     "message": "Minimize drawer"
   },
   "ui/legacy/InspectorDrawerView.ts | moreTools": {
-    "message": "More Tools"
+    "message": "More tools"
   },
   "ui/legacy/InspectorDrawerView.ts | toggleDrawerOrientation": {
     "message": "Toggle drawer orientation"
@@ -18261,7 +18318,7 @@
     "message": "DevTools is now available in {PH1}"
   },
   "ui/legacy/InspectorView.ts | drawer": {
-    "message": "Tool drawer"
+    "message": "Drawer"
   },
   "ui/legacy/InspectorView.ts | drawerExpanded": {
     "message": "Drawer expanded"
@@ -18477,7 +18534,7 @@
     "message": "Another profiler is already active"
   },
   "ui/legacy/UIUtils.ts | asyncCall": {
-    "message": "Async Call"
+    "message": "Async call"
   },
   "ui/legacy/UIUtils.ts | cancel": {
     "message": "Cancel"

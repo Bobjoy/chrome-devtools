@@ -1,5 +1,6 @@
 import type * as CommentManager from '../../models/comment_manager/comment_manager.js';
 export type EditorAnchorSignature = CommentManager.CommentManager.EditorAnchorSignature;
+export type TimelineAnchorSignature = CommentManager.CommentManager.TimelineAnchorSignature;
 export type CommentAnchorSignature = CommentManager.CommentManager.CommentAnchorSignature;
 export type CommentThread = CommentManager.CommentManager.CommentThread;
 /**
@@ -11,6 +12,93 @@ export type CommentThread = CommentManager.CommentManager.CommentThread;
  * @returns The first matching Element or null if none is found.
  */
 export declare function closestAcrossShadow(element: Element, selector: string): Element | null;
+/**
+ * Resolves the file path attribute for a CodeMirror editor element.
+ *
+ * @param element The editor element to check.
+ * @returns The file path string or undefined if not found.
+ */
+export declare function getEditorFilePath(element: Element): string | undefined;
+/**
+ * Determines whether an anchor is backed by a tracked DOM element.
+ *
+ * Canvas-rendered anchors (such as Performance panel timeline entries) do not have
+ * individual DOM nodes and manage their own overlays in canvas coordinates.
+ * These anchors return false and bypass DOM-level node caching, rematching,
+ * and IntersectionObserver tracking.
+ *
+ * @param anchor The comment anchor signature to check.
+ * @returns True if the anchor corresponds to a DOM-tracked element; otherwise false.
+ */
+export declare function isDomTrackedAnchor(anchor: CommentAnchorSignature): boolean;
+/**
+ * Result returned by a {@link CustomAnchorResolver} representing an anchor
+ * within a specialized or canvas-rendered view.
+ */
+export interface CustomAnchorResult {
+    /** The anchor signature representing the commented item. */
+    anchor: CommentAnchorSignature;
+    /** The DOM element acting as the visual host (e.g. the canvas element). */
+    anchorElement?: Element;
+    /** Optional bounding box within the page for the hover or highlight overlay. */
+    highlightRect?: {
+        top: number;
+        left: number;
+        width: number;
+        height: number;
+        visible?: boolean;
+    };
+}
+/**
+ * Extension point allowing views that render custom content (such as canvas-based
+ * flame charts) to provide custom anchor resolution for comments without direct DOM nodes.
+ */
+export interface CustomAnchorResolver {
+    /**
+     * Determines whether this resolver can handle anchors for the target element.
+     *
+     * @param element The element currently hovered or clicked.
+     * @returns True if this resolver manages anchors within the given element.
+     */
+    matches(element: Element): boolean;
+    /**
+     * Resolves an anchor signature and highlight bounds for a point within the element.
+     *
+     * @param element The target element matched by this resolver.
+     * @param options Pointer coordinates and a flag indicating if resolution is for a hover preview.
+     * @returns The resolved anchor result, or null if no anchor is present at the specified location.
+     */
+    resolve(element: Element, options?: {
+        clientX: number;
+        clientY: number;
+        forHover?: boolean;
+    }): CustomAnchorResult | null;
+}
+/**
+ * Registers a custom anchor resolver. Usually called when a view becomes visible
+ * (e.g. inside `wasShown()`).
+ *
+ * @param resolver The custom anchor resolver to register.
+ */
+export declare function registerCustomAnchorResolver(resolver: CustomAnchorResolver): void;
+/**
+ * Unregisters a custom anchor resolver. Usually called when a view hides
+ * (e.g. inside `willHide()`).
+ *
+ * @param resolver The custom anchor resolver to unregister.
+ */
+export declare function unregisterCustomAnchorResolver(resolver: CustomAnchorResolver): void;
+/**
+ * Clears all registered custom anchor resolvers. Test-only helper.
+ */
+export declare function clearCustomAnchorResolversForTest(): void;
+/**
+ * Finds the first registered custom anchor resolver that matches the given element.
+ *
+ * @param element The element to check.
+ * @returns The matching resolver, or null if no resolver matches.
+ */
+export declare function getCustomAnchorResolverForElement(element: Element): CustomAnchorResolver | null;
 /**
  * Checks whether an element contains non-empty text content (after trimming whitespace),
  * including text from any nested shadow roots.
@@ -37,12 +125,17 @@ export declare function isTabTitle(element: Element): boolean;
  * 3. Checks for domain IDs (`data-network-request-id` or `data-backend-node-id`) across shadow boundaries,
  *    returning the owning domain element.
  * 4. Escalates minor controls / sub-elements up to semantic containers (e.g., TableRow, TreeItem).
- * 5. Falls back to the nearest visual logging element if no semantic container is found.
+ * 5. Falls back to the nearest visual logging element if no semantic container is found,
+ *    excluding top-level containers and minor controls.
  *
  * @param element The source DOM element to resolve.
  * @returns The resolved semantic anchor Element, or null if unresolvable/empty/excluded.
  */
-export declare function resolveCommentAnchorElement(element: Element): Element | null;
+export declare function resolveCommentAnchorElement(element: Element, options?: {
+    clientX: number;
+    clientY: number;
+    forHover?: boolean;
+}): Element | null;
 /**
  * Extracts the trailing Visual Element type name from a full visual logging path.
  * Used as a fast pre-filter optimization before calculating full ancestor VE paths.
@@ -82,7 +175,11 @@ export declare function getSiblingIndex(element: Element, vePath: string, root?:
  * @param root Optional root Document or Element to search within for sibling index calculation.
  * @returns The resolved CommentAnchorSignature, or null if unresolvable.
  */
-export declare function resolveCommentAnchor(element: Element, root?: Document | Element): CommentAnchorSignature | null;
+export declare function resolveCommentAnchor(element: Element, root?: Document | Element, options?: {
+    clientX: number;
+    clientY: number;
+    forHover?: boolean;
+}): CommentAnchorSignature | null;
 /**
  * Searches a document or element tree (recursively traversing all Shadow DOM roots)
  * and returns all matching descendant elements up to the specified limit in document order.
@@ -119,6 +216,23 @@ export declare function deepQuerySelector(root: Document | Element, selector: st
  * @returns The rematched live Element, or null if no match is found.
  */
 export declare function rematchCommentAnchor(comment: CommentThread, root?: Document | Element, cachedJslogElements?: Element[]): Element | null;
+export interface VisibleRect {
+    left: number;
+    top: number;
+    right: number;
+    bottom: number;
+    width: number;
+    height: number;
+}
+/**
+ * Computes the visible viewport-relative bounding box of an element after clipping against
+ * all ancestor scroll/overflow containers and viewport boundaries across shadow DOM roots.
+ *
+ * @param element The source DOM element.
+ * @param targetRect Optional explicit bounding box (e.g. for sub-lines or custom targets).
+ * @returns The clipped viewport-relative rectangle or null if the element is completely clipped out of view or invisible.
+ */
+export declare function computeVisibleRect(element: Element, targetRect?: DOMRect): VisibleRect | null;
 /**
  * Checks whether an element is connected to the DOM, visible according to `checkVisibility()`,
  * and has non-zero bounding box dimensions.

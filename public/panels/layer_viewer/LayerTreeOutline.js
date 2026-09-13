@@ -45,6 +45,7 @@ export const DEFAULT_VIEW = (input, output, target) => {
       <li role="treeitem"
           data-layer-id=${layer.id()}
           data-backend-node-id=${domNode ? domNode.backendNodeId() : nothing}
+          data-target-id=${domNode ? domNode.domModel().target().id() : nothing}
           jslog=${VisualLogging.treeItem('layer-item')}
           class=${isHovered ? 'hovered' : ''}
           ?selected=${isSelected}
@@ -101,7 +102,8 @@ export const DEFAULT_VIEW = (input, output, target) => {
   `, target);
     // clang-format on
 };
-export class LayerTreeOutline extends Common.ObjectWrapper.eventMixin(UI.Widget.Widget) {
+const LayerTreeOutlineBase = Common.ObjectWrapper.eventMixin(UI.Widget.Widget);
+export class LayerTreeOutline extends LayerTreeOutlineBase {
     layerViewHost;
     layerTree;
     layerSnapshotMap;
@@ -236,4 +238,8 @@ export class LayerTreeOutline extends Common.ObjectWrapper.eventMixin(UI.Widget.
         this.layerViewHost.showContextMenu(contextMenu, selection);
     }
 }
+export var Events;
+(function (Events) {
+    Events["PAINT_PROFILER_REQUESTED"] = "PaintProfilerRequested";
+})(Events || (Events = {}));
 //# sourceMappingURL=LayerTreeOutline.js.map

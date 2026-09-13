@@ -4,14 +4,15 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/recorder/extensions/ExtensionManager.js
+// ../../front_end/panels/recorder/extensions/ExtensionManager.ts
 var ExtensionManager_exports = {};
 __export(ExtensionManager_exports, {
+  Events: () => Events,
   ExtensionManager: () => ExtensionManager
 });
-import * as Common from "./../../../core/common/common.js";
-import * as Extensions from "./../../../models/extensions/extensions.js";
-import * as PanelCommon from "./../../common/common.js";
+import * as Common from "../../../core/common/common.js";
+import * as Extensions from "../../../models/extensions/extensions.js";
+import * as PanelCommon from "../../common/common.js";
 var instance = null;
 var ExtensionManager = class _ExtensionManager extends Common.ObjectWrapper.ObjectWrapper {
   static instance() {
@@ -27,18 +28,18 @@ var ExtensionManager = class _ExtensionManager extends Common.ObjectWrapper.Obje
   }
   attach() {
     const pluginManager = Extensions.RecorderPluginManager.RecorderPluginManager.instance();
-    pluginManager.addEventListener("pluginAdded", this.#handlePlugin);
-    pluginManager.addEventListener("pluginRemoved", this.#handlePlugin);
-    pluginManager.addEventListener("viewRegistered", this.#handleView);
+    pluginManager.addEventListener(Extensions.RecorderPluginManager.Events.PLUGIN_ADDED, this.#handlePlugin);
+    pluginManager.addEventListener(Extensions.RecorderPluginManager.Events.PLUGIN_REMOVED, this.#handlePlugin);
+    pluginManager.addEventListener(Extensions.RecorderPluginManager.Events.VIEW_REGISTERED, this.#handleView);
     for (const descriptor of pluginManager.views()) {
       this.#handleView({ data: descriptor });
     }
   }
   detach() {
     const pluginManager = Extensions.RecorderPluginManager.RecorderPluginManager.instance();
-    pluginManager.removeEventListener("pluginAdded", this.#handlePlugin);
-    pluginManager.removeEventListener("pluginRemoved", this.#handlePlugin);
-    pluginManager.removeEventListener("viewRegistered", this.#handleView);
+    pluginManager.removeEventListener(Extensions.RecorderPluginManager.Events.PLUGIN_ADDED, this.#handlePlugin);
+    pluginManager.removeEventListener(Extensions.RecorderPluginManager.Events.PLUGIN_REMOVED, this.#handlePlugin);
+    pluginManager.removeEventListener(Extensions.RecorderPluginManager.Events.VIEW_REGISTERED, this.#handleView);
     this.#views.clear();
   }
   extensions() {
@@ -52,7 +53,7 @@ var ExtensionManager = class _ExtensionManager extends Common.ObjectWrapper.Obje
     return view;
   }
   #handlePlugin = () => {
-    this.dispatchEventToListeners("extensionsUpdated", this.extensions());
+    this.dispatchEventToListeners("extensionsUpdated" /* EXTENSIONS_UPDATED */, this.extensions());
   };
   #handleView = (event) => {
     const descriptor = event.data;
@@ -61,6 +62,10 @@ var ExtensionManager = class _ExtensionManager extends Common.ObjectWrapper.Obje
     }
   };
 };
+var Events = /* @__PURE__ */ ((Events2) => {
+  Events2["EXTENSIONS_UPDATED"] = "extensionsUpdated";
+  return Events2;
+})(Events || {});
 export {
   ExtensionManager_exports as ExtensionManager
 };

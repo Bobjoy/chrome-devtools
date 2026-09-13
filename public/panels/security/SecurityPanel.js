@@ -14,6 +14,7 @@ import { Directives, html, nothing, render } from '../../ui/lit/lit.js';
 import * as VisualLogging from '../../ui/visual_logging/visual_logging.js';
 import lockIconStyles from './lockIcon.css.js';
 import mainViewStyles from './mainView.css.js';
+import { ShowOriginEvent } from './OriginTreeElement.js';
 import originViewStyles from './originView.css.js';
 import { Events, SecurityModel, securityStateCompare, SecurityStyleExplanation, SummaryMessages, } from './SecurityModel.js';
 import { SecurityPanelSidebar } from './SecurityPanelSidebar.js';
@@ -430,7 +431,7 @@ const SignatureSchemeStrings = new Map([
 const LOCK_ICON_NAME = 'lock';
 const WARNING_ICON_NAME = 'warning';
 const UNKNOWN_ICON_NAME = 'indeterminate-question-box';
-export function getSecurityStateIconForDetailedView(securityState, className) {
+function getSecurityStateIconNameForDetailedView(securityState) {
     let iconName;
     switch (securityState) {
         case "neutral" /* Protocol.Security.SecurityState.Neutral */: // fallthrough
@@ -446,7 +447,10 @@ export function getSecurityStateIconForDetailedView(securityState, className) {
             iconName = UNKNOWN_ICON_NAME;
             break;
     }
-    return createIcon(iconName, className);
+    return iconName;
+}
+export function getSecurityStateIconForDetailedView(securityState, className) {
+    return createIcon(getSecurityStateIconNameForDetailedView(securityState), className);
 }
 export function getSecurityStateIconForOverview(securityState, className) {
     let iconName;
@@ -503,7 +507,6 @@ const DEFAULT_VIEW = (input, output, target) => {
     // clang-format on
 };
 export class SecurityPanel extends UI.Panel.Panel {
-    view;
     mainView;
     sidebar;
     lastResponseReceivedForLoaderId;
@@ -513,6 +516,7 @@ export class SecurityPanel extends UI.Panel.Panel {
     eventListeners;
     securityModel;
     splitWidget;
+    view;
     constructor(view = DEFAULT_VIEW) {
         super('security');
         this.view = view;
@@ -522,14 +526,14 @@ export class SecurityPanel extends UI.Panel.Panel {
         this.sidebar.element.setAttribute('jslog', `${VisualLogging.pane('sidebar').track({ resize: true })}`);
         this.mainView = new SecurityMainView();
         this.mainView.panel = this;
-        this.sidebar.onShowOrigin = (origin) => {
-            if (origin) {
-                this.showOrigin(origin);
+        this.element.addEventListener(ShowOriginEvent.eventName, (event) => {
+            if (event.origin) {
+                this.showOrigin(event.origin);
             }
             else {
                 this.setVisibleView(this.mainView);
             }
-        };
+        });
         this.lastResponseReceivedForLoaderId = new Map();
         this.origins = new Map();
         this.filterRequestCounts = new Map();
@@ -570,7 +574,7 @@ export class SecurityPanel extends UI.Panel.Panel {
         this.view({ panel: this }, this, this.contentElement);
     }
     updateVisibleSecurityState(visibleSecurityState) {
-        this.sidebar.updateOverviewSecurityState(visibleSecurityState.securityState);
+        this.sidebar.securityOverviewElement.setSecurityState(visibleSecurityState.securityState);
         this.mainView.updateVisibleSecurityState(visibleSecurityState);
     }
     onVisibleSecurityStateChanged({ data }) {
@@ -1117,79 +1121,105 @@ function renderSan(sanList, isSanListTruncatable, isSanListTruncated, onToggleTr
     </div>`;
     // clang-format on
 }
+function renderDetailsTable(rows) {
+    // clang-format off
+    return html `
+    <table class="details-table">
+      ${rows.map(row => html `
+        <tr class="details-table-row">
+          <td>${row.key}</td>
+          <td>${row.value}</td>
+        </tr>`)}
+    </table>`;
+    // clang-format on
+}
+function formatKeyExchange(securityDetails) {
+    // A TLS connection negotiates a cipher suite and, when doing an ephemeral
+    // ECDH key exchange, a "named group". In TLS 1.2, the cipher suite is
+    // named like TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256. The DevTools protocol
+    // tried to decompose this name and calls the "ECDHE_RSA" portion the
+    // "keyExchange", because it determined the rough shape of the key
+    // exchange portion of the handshake. (A keyExchange of "RSA" meant a very
+    // different handshake set.) But ECDHE_RSA was still parameterized by a
+    // named group (e.g. X25519), which the DevTools protocol exposes as
+    // "keyExchangeGroup".
+    //
+    // Then, starting TLS 1.3, the cipher suites are named like
+    // TLS_AES_128_GCM_SHA256. The handshake shape is implicit in the
+    // protocol. keyExchange is empty and we only have keyExchangeGroup.
+    //
+    // "Key exchange group" isn't common terminology and, in TLS 1.3,
+    // something like "X25519" is better labelled as "key exchange" than "key
+    // exchange group" anyway. So combine the two fields when displaying in
+    // the UI.
+    if (securityDetails.keyExchange && securityDetails.keyExchangeGroup) {
+        return securityDetails.keyExchange + ' with ' + securityDetails.keyExchangeGroup;
+    }
+    return securityDetails.keyExchange || securityDetails.keyExchangeGroup || null;
+}
+function buildConnectionDetailsRows(securityDetails) {
+    const rows = [{ key: i18nString(UIStrings.protocol), value: securityDetails.protocol }];
+    const keyExchange = formatKeyExchange(securityDetails);
+    if (keyExchange) {
+        rows.push({ key: i18nString(UIStrings.keyExchange), value: keyExchange });
+    }
+    if (securityDetails.serverSignatureAlgorithm) {
+        // See https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-signaturescheme
+        let sigString = SignatureSchemeStrings.get(securityDetails.serverSignatureAlgorithm);
+        sigString ??= i18nString(UIStrings.unknownField) + ' (' + securityDetails.serverSignatureAlgorithm + ')';
+        rows.push({ key: i18nString(UIStrings.serverSignature), value: sigString });
+    }
+    rows.push({
+        key: i18nString(UIStrings.cipher),
+        value: securityDetails.cipher + (securityDetails.mac ? ' with ' + securityDetails.mac : ''),
+    });
+    if (securityDetails.encryptedClientHello) {
+        rows.push({ key: i18nString(UIStrings.encryptedClientHello), value: i18nString(UIStrings.enabled) });
+    }
+    return rows;
+}
+function renderConnectionSection(securityDetails) {
+    const rows = buildConnectionDetailsRows(securityDetails);
+    // clang-format off
+    return html `
+    <div class="origin-view-section-title" role="heading" aria-level="2">${i18nString(UIStrings.connection)}</div>
+    ${renderDetailsTable(rows)}`;
+    // clang-format on
+}
+function renderTitleSection(origin, securityState, onRevealInNetwork) {
+    // clang-format off
+    return html `
+    <div class="title-section-header" role="heading" aria-level="1">${i18nString(UIStrings.origin)}</div>
+    <div class="origin-display">
+      <devtools-icon
+          name=${getSecurityStateIconNameForDetailedView(securityState)}
+          class=${`security-property security-property-${securityState}`}>
+      </devtools-icon>
+      ${renderHighlightedUrl(origin, securityState)}
+    </div>
+    <div class="view-network-button">
+      <devtools-button
+          .variant=${"outlined" /* Buttons.Button.Variant.OUTLINED */}
+          .jslogContext=${'reveal-in-network'}
+          @click=${onRevealInNetwork}>${i18nString(UIStrings.viewRequestsInNetworkPanel)}</devtools-button>
+    </div>`;
+    // clang-format on
+}
 export class SecurityOriginView extends UI.Widget.VBox {
     #origin;
-    #originDisplay;
+    #titleSection;
     constructor(origin, originState) {
         super({ jslog: `${VisualLogging.pane('security.origin-view')}` });
         this.registerRequiredCSS(originViewStyles, lockIconStyles);
         this.setMinimumSize(200, 100);
         this.#origin = origin;
         this.element.classList.add('security-origin-view');
-        const titleSection = this.element.createChild('div', 'title-section');
-        const titleDiv = titleSection.createChild('div', 'title-section-header');
-        titleDiv.textContent = i18nString(UIStrings.origin);
-        UI.ARIAUtils.markAsHeading(titleDiv, 1);
-        this.#originDisplay = titleSection.createChild('div', 'origin-display');
-        this.#renderOriginDisplay(originState.securityState);
-        const originNetworkDiv = titleSection.createChild('div', 'view-network-button');
-        const originNetworkButton = UI.UIUtils.createTextButton(i18nString(UIStrings.viewRequestsInNetworkPanel), event => {
-            event.consume();
-            const parsedURL = new Common.ParsedURL.ParsedURL(origin);
-            void Common.Revealer.reveal(NetworkForward.UIFilter.UIRequestFilter.filters([
-                { filterType: NetworkForward.UIFilter.FilterType.Domain, filterValue: parsedURL.host },
-                { filterType: NetworkForward.UIFilter.FilterType.Scheme, filterValue: parsedURL.scheme },
-            ]));
-        }, { jslogContext: 'reveal-in-network' });
-        originNetworkDiv.appendChild(originNetworkButton);
-        UI.ARIAUtils.markAsLink(originNetworkButton);
+        this.#titleSection = this.element.createChild('div', 'title-section');
+        this.#renderTitleSection(originState.securityState);
         if (originState.securityDetails) {
-            const connectionSection = this.element.createChild('div', 'origin-view-section');
-            const connectionDiv = connectionSection.createChild('div', 'origin-view-section-title');
-            connectionDiv.textContent = i18nString(UIStrings.connection);
-            UI.ARIAUtils.markAsHeading(connectionDiv, 2);
-            let table = new SecurityDetailsTable();
-            connectionSection.appendChild(table.element());
-            table.addRow(i18nString(UIStrings.protocol), originState.securityDetails.protocol);
-            // A TLS connection negotiates a cipher suite and, when doing an ephemeral
-            // ECDH key exchange, a "named group". In TLS 1.2, the cipher suite is
-            // named like TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256. The DevTools protocol
-            // tried to decompose this name and calls the "ECDHE_RSA" portion the
-            // "keyExchange", because it determined the rough shape of the key
-            // exchange portion of the handshake. (A keyExchange of "RSA" meant a very
-            // different handshake set.) But ECDHE_RSA was still parameterized by a
-            // named group (e.g. X25519), which the DevTools protocol exposes as
-            // "keyExchangeGroup".
-            //
-            // Then, starting TLS 1.3, the cipher suites are named like
-            // TLS_AES_128_GCM_SHA256. The handshake shape is implicit in the
-            // protocol. keyExchange is empty and we only have keyExchangeGroup.
-            //
-            // "Key exchange group" isn't common terminology and, in TLS 1.3,
-            // something like "X25519" is better labelled as "key exchange" than "key
-            // exchange group" anyway. So combine the two fields when displaying in
-            // the UI.
-            if (originState.securityDetails.keyExchange && originState.securityDetails.keyExchangeGroup) {
-                table.addRow(i18nString(UIStrings.keyExchange), originState.securityDetails.keyExchange + ' with ' + originState.securityDetails.keyExchangeGroup);
-            }
-            else if (originState.securityDetails.keyExchange) {
-                table.addRow(i18nString(UIStrings.keyExchange), originState.securityDetails.keyExchange);
-            }
-            else if (originState.securityDetails.keyExchangeGroup) {
-                table.addRow(i18nString(UIStrings.keyExchange), originState.securityDetails.keyExchangeGroup);
-            }
-            if (originState.securityDetails.serverSignatureAlgorithm) {
-                // See https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-signaturescheme
-                let sigString = SignatureSchemeStrings.get(originState.securityDetails.serverSignatureAlgorithm);
-                sigString ??=
-                    i18nString(UIStrings.unknownField) + ' (' + originState.securityDetails.serverSignatureAlgorithm + ')';
-                table.addRow(i18nString(UIStrings.serverSignature), sigString);
-            }
-            table.addRow(i18nString(UIStrings.cipher), originState.securityDetails.cipher +
-                (originState.securityDetails.mac ? ' with ' + originState.securityDetails.mac : ''));
-            if (originState.securityDetails.encryptedClientHello) {
-                table.addRow(i18nString(UIStrings.encryptedClientHello), i18nString(UIStrings.enabled));
-            }
+            const connectionSection = this.element.createChild('div', 'origin-view-section connection-section');
+            // eslint-disable-next-line @devtools/no-lit-render-outside-of-view
+            render(renderConnectionSection(originState.securityDetails), connectionSection);
             // Create the certificate section outside the callback, so that it appears in the right place.
             const certificateSection = this.element.createChild('div', 'origin-view-section');
             const certificateDiv = certificateSection.createChild('div', 'origin-view-section-title');
@@ -1208,7 +1238,7 @@ export class SecurityOriginView extends UI.Widget.VBox {
             const sanDiv = this.#createSanDiv(originState.securityDetails.sanList);
             const validFromString = new Date(1000 * originState.securityDetails.validFrom).toUTCString();
             const validUntilString = new Date(1000 * originState.securityDetails.validTo).toUTCString();
-            table = new SecurityDetailsTable();
+            const table = new SecurityDetailsTable();
             certificateSection.appendChild(table.element());
             table.addRow(i18nString(UIStrings.subject), originState.securityDetails.subjectName);
             table.addRow(i18n.i18n.lockedString('SAN'), sanDiv);
@@ -1322,18 +1352,20 @@ export class SecurityOriginView extends UI.Widget.VBox {
         return container;
     }
     setSecurityState(newSecurityState) {
-        this.#renderOriginDisplay(newSecurityState);
+        this.#renderTitleSection(newSecurityState);
     }
-    #renderOriginDisplay(securityState) {
-        const icon = getSecurityStateIconForDetailedView(securityState, `security-property security-property-${securityState}`);
-        // clang-format off
+    #renderTitleSection(securityState) {
         // eslint-disable-next-line @devtools/no-lit-render-outside-of-view
-        render(html `
-      ${icon}
-      ${renderHighlightedUrl(this.#origin, securityState)}
-    `, this.#originDisplay);
-        // clang-format on
+        render(renderTitleSection(this.#origin, securityState, this.#revealInNetwork), this.#titleSection);
     }
+    #revealInNetwork = (event) => {
+        event.consume();
+        const parsedURL = new Common.ParsedURL.ParsedURL(this.#origin);
+        void Common.Revealer.reveal(NetworkForward.UIFilter.UIRequestFilter.filters([
+            { filterType: NetworkForward.UIFilter.FilterType.Domain, filterValue: parsedURL.host },
+            { filterType: NetworkForward.UIFilter.FilterType.Scheme, filterValue: parsedURL.scheme },
+        ]));
+    };
 }
 export class SecurityDetailsTable {
     #element;

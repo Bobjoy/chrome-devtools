@@ -4,7 +4,7 @@
 /* eslint-disable @devtools/no-imperative-dom-api */
 import * as Common from '../../core/common/common.js';
 import * as Platform from '../../core/platform/platform.js';
-import * as Geometry from '../../models/geometry/geometry.js';
+import * as Geometry from '../geometry/geometry.js';
 import * as VisualLogging from '../visual_logging/visual_logging.js';
 import * as ARIAUtils from './ARIAUtils.js';
 import { SimpleResizerWidget } from './ResizerWidget.js';
@@ -12,7 +12,8 @@ import splitWidgetStyles from './splitWidget.css.js';
 import { ToolbarButton } from './Toolbar.js';
 import { registerWidgetConfig, Widget, widgetConfig, WidgetElement } from './Widget.js';
 import { ZoomManager } from './ZoomManager.js';
-export class SplitWidget extends Common.ObjectWrapper.eventMixin(Widget) {
+const SplitWidgetBase = Common.ObjectWrapper.eventMixin(Widget);
+export class SplitWidget extends SplitWidgetBase {
     #sidebarElement;
     #mainElement;
     #resizerElement;
@@ -60,7 +61,14 @@ export class SplitWidget extends Common.ObjectWrapper.eventMixin(Widget) {
         const mainSlot = this.#mainElement.createChild('slot');
         mainSlot.name = 'main';
         mainSlot.addEventListener('slotchange', (_) => {
-            const assignedNode = mainSlot.assignedNodes()[0];
+            const assignedNode = mainSlot.assignedNodes().find(node => {
+                const widget = node instanceof HTMLElement ? Widget.get(node) : null;
+                if (widget) {
+                    return widget === this.#mainWidget || widget.isShowing();
+                }
+                return node instanceof HTMLElement && !node.classList.contains('hidden');
+            }) ??
+                mainSlot.assignedNodes()[0];
             const widget = assignedNode instanceof HTMLElement ? Widget.getOrCreateWidget(assignedNode) : null;
             if (widget && widget !== this.#mainWidget) {
                 this.setMainWidget(widget);
@@ -69,7 +77,14 @@ export class SplitWidget extends Common.ObjectWrapper.eventMixin(Widget) {
         const sidebarSlot = this.#sidebarElement.createChild('slot');
         sidebarSlot.name = 'sidebar';
         sidebarSlot.addEventListener('slotchange', (_) => {
-            const assignedNode = sidebarSlot.assignedNodes()[0];
+            const assignedNode = sidebarSlot.assignedNodes().find(node => {
+                const widget = node instanceof HTMLElement ? Widget.get(node) : null;
+                if (widget) {
+                    return widget === this.#sidebarWidget || widget.isShowing();
+                }
+                return node instanceof HTMLElement && !node.classList.contains('hidden');
+            }) ??
+                sidebarSlot.assignedNodes()[0];
             const widget = assignedNode instanceof HTMLElement ? Widget.getOrCreateWidget(assignedNode) : null;
             if (widget && widget !== this.#sidebarWidget) {
                 this.setSidebarWidget(widget);
@@ -809,6 +824,17 @@ export class SplitWidgetElement extends WidgetElement {
     }
 }
 customElements.define('devtools-split-view', SplitWidgetElement);
+export var ShowMode;
+(function (ShowMode) {
+    ShowMode["BOTH"] = "Both";
+    ShowMode["ONLY_MAIN"] = "OnlyMain";
+    ShowMode["ONLY_SIDEBAR"] = "OnlySidebar";
+})(ShowMode || (ShowMode = {}));
+export var Events;
+(function (Events) {
+    Events["SIDEBAR_SIZE_CHANGED"] = "SidebarSizeChanged";
+    Events["SHOW_MODE_CHANGED"] = "ShowModeChanged";
+})(Events || (Events = {}));
 const MinPadding = 20;
 const suppressUnused = function (_value) { };
 //# sourceMappingURL=SplitWidget.js.map

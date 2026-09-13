@@ -137,6 +137,14 @@ export const scopeIdentifiers = async function (script, scope, ancestorScopes) {
     return { boundVariables, freeVariables };
 };
 const identifierAndPunctuationRegExp = /^\s*([A-Za-z_$][A-Za-z_$0-9]*)\s*([.;,=]?)\s*$/;
+var Punctuation;
+(function (Punctuation) {
+    Punctuation["NONE"] = "none";
+    Punctuation["COMMA"] = "comma";
+    Punctuation["DOT"] = "dot";
+    Punctuation["SEMICOLON"] = "semicolon";
+    Punctuation["EQUALS"] = "equals";
+})(Punctuation || (Punctuation = {}));
 const resolveDebuggerScope = async (scope, debuggerWorkspaceBinding) => {
     if (!scope.callFrame()
         .debuggerModel.target()
@@ -306,10 +314,12 @@ export const resolveScopeChain = async function (callFrame, debuggerWorkspaceBin
     //    1) We have a flag indicating whether the source map contained variable/binding information.
     //    2) We have a chrome feature flag.
     if (callFrame.script.isWasm()) {
-        return callFrame.scopeChain();
+        return callFrame.scopeChain().filter(scope => !scope.empty());
     }
     const thisObject = await resolveThisObject(callFrame, debuggerWorkspaceBinding);
-    return callFrame.scopeChain().map(scope => new ScopeWithSourceMappedVariables(scope, thisObject, debuggerWorkspaceBinding));
+    const scopes = callFrame.scopeChain().filter(scope => !scope.empty() ||
+        scope.type() === "local" /* Protocol.Debugger.ScopeType.Local */);
+    return scopes.map(scope => new ScopeWithSourceMappedVariables(scope, thisObject, debuggerWorkspaceBinding));
 };
 /**
  * @returns A mapping from original name -> compiled name. If the orignal name is unavailable (e.g. because the compiled name was
@@ -326,7 +336,7 @@ export const allVariablesInCallFrame = async (callFrame, debuggerWorkspaceBindin
     if (cachedMap) {
         return cachedMap;
     }
-    const scopeChain = callFrame.scopeChain();
+    const scopeChain = callFrame.scopeChain().filter(scope => !scope.empty());
     const nameMappings = await Promise.all(scopeChain.map(scope => resolveDebuggerScope(scope, debuggerWorkspaceBinding)));
     const reverseMapping = new Map();
     const compiledNames = new Set();
@@ -388,11 +398,11 @@ export const allVariablesAtPosition = async (location, debuggerWorkspaceBinding)
     return reverseMapping;
 };
 export const resolveThisObject = async (callFrame, debuggerWorkspaceBinding) => {
-    const scopeChain = callFrame.scopeChain();
-    if (scopeChain.length === 0) {
+    const innermostScope = callFrame.scopeChain().find(scope => !scope.empty() || scope.type() === "local" /* Protocol.Debugger.ScopeType.Local */);
+    if (!innermostScope) {
         return callFrame.thisObject();
     }
-    const { thisMapping } = await resolveDebuggerScope(scopeChain[0], debuggerWorkspaceBinding);
+    const { thisMapping } = await resolveDebuggerScope(innermostScope, debuggerWorkspaceBinding);
     if (!thisMapping) {
         return callFrame.thisObject();
     }

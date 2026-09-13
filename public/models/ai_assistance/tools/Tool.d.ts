@@ -5,6 +5,7 @@ import type * as Trace from '../../trace/trace.js';
 import type { AiWidget, ConversationContext, FunctionHandlerOptions } from '../agents/AiAgent.js';
 import type { executeJsCode } from '../agents/ExecuteJavascript.js';
 import type { ChangeManager } from '../ChangeManager.js';
+import type { PerformanceTraceContext } from '../contexts/PerformanceTraceContext.js';
 /**
  * Result indicating an error occurred during tool execution.
  */
@@ -46,13 +47,12 @@ export type DataHandlerResult<DataType> = ToolDataResult<DataType> | ToolApprova
  */
 export type ContextHandlerResult<ContextType = unknown> = ToolContextResult<ContextType> | ToolApprovalResult | ToolErrorResult;
 /**
- * Base capability for all tool contexts, providing access to the conversation context.
+ * Base capability interface for all tool contexts.
+ * This interface is intentionally empty: tools must explicitly declare any
+ * capabilities they require (e.g. `TargetCapability`, `PerformanceTraceCapability`)
+ * rather than relying on implicitly provided context.
  */
 export interface BaseToolCapability {
-    /**
-     * The active context for the current conversation step, if any.
-     */
-    conversationContext: ConversationContext<unknown> | null;
 }
 /**
  * Capability for tools that need to execute JavaScript code on the inspected page.
@@ -89,24 +89,55 @@ export interface StyleMutationCapability {
  */
 export interface TargetCapability {
     /**
-     * Returns the current SDK Target for the inspected page.
+     * Returns the primary SDK Target for the inspected page.
+     *
+     * WARNING: This method does not perform a security origin check. When a conversation
+     * is locked to an iframe or subframe origin, this still returns the primary page target
+     * so tools can resolve DOM nodes and frame hierarchies across frames.
+     *
+     * Tools that consume this target must independently validate the security origin of
+     * any resolved entities (e.g. via `node.securityOrigin()`) against `getEstablishedOrigin()`.
      */
     getTarget(): SDK.Target.Target | null;
 }
 /**
- * Capability for tools that need to enforce origin locking for security.
+ * Capability for tools that enforce conversation origin boundaries.
  */
 export interface OriginLockCapability {
     /**
-     * Returns the origin that the current conversation is locked to, if any.
+     * Returns the security origin locked for the current conversation.
+     *
+     * TODO: When V1 agents (StylingAgent, AccessibilityAgent) are removed,
+     * simplify getEstablishedOrigin() to return SDK.SecurityOrigin.SecurityOrigin
+     * non-optionally.
+     *
+     * @returns The established {@link SDK.SecurityOrigin.SecurityOrigin}, or `undefined`
+     * if the conversation is not yet locked to an origin (e.g. before the first query).
      */
-    getEstablishedOrigin(): string | undefined;
+    getEstablishedOrigin(): SDK.SecurityOrigin.SecurityOrigin | undefined;
 }
 /**
- * Capability for tools that need to run or query Lighthouse audits.
+ * Checks whether a target origin matches the established conversation origin lock.
+ * Fails closed (returns false) if established origin is missing/opaque or target is cross-origin.
  */
-export interface LighthouseCapability {
-    lighthouseRecording?: (overrides?: LHModel.RunTypes.RunOverrides) => Promise<LHModel.ReporterTypes.ReportJSON | null>;
+export declare function isOriginAllowedByLock(establishedOrigin: SDK.SecurityOrigin.SecurityOrigin | undefined, targetOrigin: SDK.SecurityOrigin.SecurityOrigin | null | undefined): boolean;
+/**
+ * Capability for tools that need to inspect an active Lighthouse report from context.
+ */
+export interface LighthouseReportCapability {
+    getLighthouseReport(): LHModel.ReporterTypes.ReportJSON | null;
+}
+/**
+ * Capability for tools that trigger new Lighthouse audit runs.
+ */
+export interface LighthouseRecordingCapability {
+    runLighthouse(overrides?: LHModel.RunTypes.RunOverrides): Promise<LHModel.ReporterTypes.ReportJSON | null>;
+}
+/**
+ * Capability for tools that need access to the active performance trace context.
+ */
+export interface PerformanceTraceCapability {
+    getPerformanceTraceContext(): PerformanceTraceContext | null;
 }
 /**
  * Capability for tools that need to record performance traces.
@@ -118,7 +149,7 @@ export interface PerformanceRecordingCapability {
  * Unified context interface providing all capabilities available in the project.
  * Used by the agent to pass a complete context to any tool type-safely.
  */
-export type AllToolsCapabilities = BaseToolCapability & PageExecutionCapability & StyleMutationCapability & TargetCapability & OriginLockCapability & LighthouseCapability & PerformanceRecordingCapability & ServerLoggingCapability;
+export type AllToolsCapabilities = BaseToolCapability & PageExecutionCapability & StyleMutationCapability & TargetCapability & OriginLockCapability & LighthouseReportCapability & LighthouseRecordingCapability & PerformanceRecordingCapability & PerformanceTraceCapability & ServerLoggingCapability;
 /**
  * Base argument type for AI Tools.
  */
@@ -136,6 +167,8 @@ export declare const enum ToolName {
     LIST_PAGE_ORIGINS = "listPageOrigins",
     LIST_STORAGE_KEYS = "listStorageKeys",
     GET_STORAGE_VALUES = "getStorageValues",
+    LIST_COOKIES = "listCookies",
+    GET_COOKIE_VALUES = "getCookieValues",
     GET_TRACE_EVENT_BY_KEY = "getTraceEventByKey",
     SELECT_TRACE_EVENT_BY_KEY = "selectTraceEventByKey",
     LIST_SOURCES = "listSources",
@@ -146,7 +179,8 @@ export declare const enum ToolName {
     GET_DETAILED_CALL_TREE = "getDetailedCallTree",
     GET_FUNCTION_CODE = "getFunctionCode",
     GET_RESOURCE_CONTENT = "getResourceContent",
-    GET_INSIGHT_DETAILS = "getInsightDetails"
+    GET_INSIGHT_DETAILS = "getInsightDetails",
+    GET_STORAGE_BREAKDOWN = "getStorageBreakdown"
 }
 /**
  * Base metadata interface for a Tool.
@@ -211,8 +245,13 @@ export interface ContextTool<ArgsType extends ToolArgs = ToolArgs, ContextClass 
  * Represents any AI Assistance tool: either a `DataTool` (returns data/widgets) or a `ContextTool` (switches active context).
  */
 export type Tool<ArgsType extends ToolArgs = ToolArgs, ReturnType = unknown, CapabilitiesType extends BaseToolCapability = BaseToolCapability> = DataTool<ArgsType, ReturnType, CapabilitiesType> | ContextTool<ArgsType, ReturnType, CapabilitiesType>;
+/**
+ * Capability provided to tools that handle sensitive user data (e.g. cookies or storage values).
+ * Calling `disableLogging()` irreversibly disables server-side logging for the remainder of
+ * the conversation session to prevent sensitive data from being logged on future turns.
+ */
 export interface ServerLoggingCapability {
-    setLoggingEnabled(enabled: boolean): void;
+    disableLogging(): void;
 }
 export declare const enum ToolAnnotation {
     REDACT_FROM_HISTORY = "redact-from-history"

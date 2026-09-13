@@ -66,7 +66,11 @@ describeWithEnvironment('CommentOverlayManager', () => {
         item.setAttribute('jslog', 'TreeItem; context: agent-item');
         item.textContent = 'color: #333;';
         container.appendChild(item);
-        const changes = [{ property: 'color', oldValue: '#333', newValue: '#000' }];
+        const changes = [{
+                id: 'change-1',
+                description: 'Changed property "color" from "#333" to "#000"',
+                timestamp: 123456789,
+            }];
         const thread = manager.createComment(item, 'Auto-fixed color', 'AGENT', changes);
         assert.isNotNull(thread);
         assert.strictEqual(thread?.comments[0].author, 'AGENT');
@@ -98,7 +102,7 @@ describeWithEnvironment('CommentOverlayManager', () => {
             unobserveSpy.restore();
         }
     });
-    it('clears all comment threads, pin positions, and resets cursor when clear() is called', () => {
+    it('clears all comment threads and pin positions when clear() is called', () => {
         manager.setCommentMode(true);
         const item = document.createElement('div');
         item.setAttribute('jslog', 'TreeItem; context: clear-test');
@@ -108,20 +112,31 @@ describeWithEnvironment('CommentOverlayManager', () => {
         assert.lengthOf(manager.getCommentThreads(), 1);
         assert.lengthOf(manager.getPinPositions(), 1);
         assert.isTrue(manager.isCommentMode());
-        assert.strictEqual(document.body.style.cursor, 'crosshair');
         manager.clear();
         assert.lengthOf(manager.getCommentThreads(), 0);
         assert.lengthOf(manager.getPinPositions(), 0);
         assert.isFalse(manager.isCommentMode());
-        assert.strictEqual(document.body.style.cursor, '');
     });
-    it('toggles comment mode and updates document cursor', () => {
+    it('toggles comment mode', () => {
         manager.setCommentMode(true);
         assert.isTrue(manager.isCommentMode());
-        assert.strictEqual(document.body.style.cursor, 'crosshair');
         manager.setCommentMode(false);
         assert.isFalse(manager.isCommentMode());
-        assert.strictEqual(document.body.style.cursor, '');
+    });
+    it('updates cursor when hovering over commentable elements in comment mode', () => {
+        manager.start(container, 'Hover cursor test');
+        manager.setCommentMode(true);
+        const commentableEl = document.createElement('div');
+        commentableEl.setAttribute('jslog', 'TreeItem; context: commentable-hover');
+        commentableEl.textContent = 'hover me';
+        container.appendChild(commentableEl);
+        commentableEl.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, cancelable: true }));
+        assert.strictEqual(commentableEl.style.cursor, Comments.CommentOverlayManager.COMMENT_MODE_CURSOR);
+        commentableEl.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true, cancelable: true }));
+        assert.strictEqual(commentableEl.style.cursor, '');
+        commentableEl.dispatchEvent(new MouseEvent('mouseover', { bubbles: true, cancelable: true }));
+        manager.setCommentMode(false);
+        assert.strictEqual(commentableEl.style.cursor, '');
     });
     it('handles element clicks in comment mode', () => {
         const item = document.createElement('div');
@@ -464,6 +479,206 @@ describeWithEnvironment('CommentOverlayManager', () => {
             assert.lengthOf(pins, 2);
             assert.strictEqual(pins[1].top, pins[0].top + 26);
         });
+    });
+    describe('Container and scroll clipping', () => {
+        it('clips highlight box and pin to ancestor scroll container when element is partially visible', () => {
+            const scrollParent = document.createElement('div');
+            scrollParent.style.overflow = 'hidden';
+            scrollParent.getBoundingClientRect = () => new DOMRect(0, 50, 400, 100);
+            container.appendChild(scrollParent);
+            const item = document.createElement('div');
+            item.setAttribute('jslog', 'TreeItem; context: clipped-item');
+            item.textContent = 'display: flex;';
+            // Element starts at top: 100 and extends to bottom: 200 (past parent bottom: 150)
+            item.getBoundingClientRect = () => new DOMRect(10, 100, 200, 100);
+            scrollParent.appendChild(item);
+            manager.start(container);
+            manager.setCommentMode(true);
+            const thread = manager.createComment(item, 'Clipped comment');
+            assert.isNotNull(thread);
+            const highlights = manager.getHighlightRects();
+            assert.lengthOf(highlights, 1);
+            assert.strictEqual(highlights[0].top, 100);
+            assert.strictEqual(highlights[0].height, 50); // Clipped to 150 - 100 = 50
+            assert.strictEqual(highlights[0].left, 10);
+            assert.strictEqual(highlights[0].width, 200);
+            const pins = manager.getPinPositions();
+            assert.lengthOf(pins, 1);
+            assert.strictEqual(pins[0].top, 100 - 12);
+            assert.strictEqual(pins[0].left, 10 + 200 - 12);
+        });
+        it('hides highlight box and pin when element is completely scrolled out of scroll container', () => {
+            const scrollParent = document.createElement('div');
+            scrollParent.style.overflow = 'hidden';
+            scrollParent.getBoundingClientRect = () => new DOMRect(0, 50, 400, 100);
+            container.appendChild(scrollParent);
+            const item = document.createElement('div');
+            item.setAttribute('jslog', 'TreeItem; context: out-of-view-item');
+            item.textContent = 'display: none;';
+            // Element is completely below scrollParent (top: 200, bottom: 250)
+            item.getBoundingClientRect = () => new DOMRect(10, 200, 200, 50);
+            scrollParent.appendChild(item);
+            manager.start(container);
+            manager.setCommentMode(true);
+            const thread = manager.createComment(item, 'Out of view comment');
+            assert.isNotNull(thread);
+            const highlights = manager.getHighlightRects();
+            assert.lengthOf(highlights, 0);
+            const pins = manager.getPinPositions();
+            assert.lengthOf(pins, 0);
+        });
+        it('clips hover highlight to ancestor scroll container boundaries', () => {
+            const scrollParent = document.createElement('div');
+            scrollParent.style.overflow = 'hidden';
+            scrollParent.getBoundingClientRect = () => new DOMRect(0, 0, 300, 100);
+            container.appendChild(scrollParent);
+            const item = document.createElement('div');
+            item.setAttribute('jslog', 'TreeItem; context: hover-clipped');
+            item.textContent = 'hover clipped';
+            // Element extends beyond parent bottom (top: 50, bottom: 150)
+            item.getBoundingClientRect = () => new DOMRect(0, 50, 300, 100);
+            scrollParent.appendChild(item);
+            manager.start(container);
+            manager.setCommentMode(true);
+            const mouseoverEvent = new MouseEvent('mouseover', { bubbles: true, cancelable: true });
+            item.dispatchEvent(mouseoverEvent);
+            const hover = manager.getHoverHighlight();
+            assert.isNotNull(hover);
+            assert.strictEqual(hover?.top, 50);
+            assert.strictEqual(hover?.height, 50); // Clipped to 100 - 50 = 50
+            assert.strictEqual(hover?.width, 300);
+        });
+    });
+    it('creates comment with custom signature using CustomAnchorResolver', () => {
+        const customTarget = document.createElement('div');
+        customTarget.classList.add('custom-resolver-target');
+        container.appendChild(customTarget);
+        const customResolver = {
+            matches(el) {
+                return el === customTarget;
+            },
+            resolve(_el, options) {
+                return {
+                    anchor: {
+                        vePath: 'Panel: custom > View: main',
+                        textSignature: 'Custom Text',
+                        timeline: {
+                            traceId: 'trace-test-1',
+                            traceEventKey: 'key-123',
+                            entryName: 'Custom Entry',
+                            startTimeMicro: (options?.clientX ?? 0) * 1000,
+                            chartLocation: 'main',
+                        },
+                    },
+                    anchorElement: customTarget,
+                    highlightRect: {
+                        top: options?.clientY ?? 10,
+                        left: options?.clientX ?? 20,
+                        width: 80,
+                        height: 30,
+                        visible: true,
+                    },
+                };
+            },
+        };
+        Comments.CommentAnchorResolver.registerCustomAnchorResolver(customResolver);
+        try {
+            manager.start(container);
+            manager.setCommentMode(true);
+            const thread = manager.createComment(customTarget, 'Investigate custom target', 'DEVELOPER', undefined, { clientX: 40, clientY: 60 });
+            assert.isNotNull(thread);
+            assert.isNotNull(thread?.anchor.timeline);
+            assert.strictEqual(thread?.anchor.timeline?.traceId, 'trace-test-1');
+            assert.strictEqual(thread?.anchor.timeline?.startTimeMicro, 40000);
+            assert.strictEqual(thread?.comments[0].text, 'Investigate custom target');
+            assert.lengthOf(manager.getPinPositions(), 0);
+            assert.lengthOf(manager.getHighlightRects(), 0);
+        }
+        finally {
+            Comments.CommentAnchorResolver.unregisterCustomAnchorResolver(customResolver);
+        }
+    });
+    it('updates cursor and highlight when hovering over custom resolver elements and clears on unanchored coordinates or leave', () => {
+        const customTarget = document.createElement('div');
+        customTarget.classList.add('custom-resolver-target');
+        container.appendChild(customTarget);
+        const customResolver = {
+            matches(el) {
+                return el === customTarget;
+            },
+            resolve(_el, options) {
+                if (options && options.clientX > 100) {
+                    return null;
+                }
+                return {
+                    anchor: {
+                        vePath: 'Panel: custom > View: main',
+                        textSignature: 'Custom Text',
+                    },
+                    anchorElement: customTarget,
+                    highlightRect: {
+                        top: 10,
+                        left: 20,
+                        width: 80,
+                        height: 30,
+                        visible: true,
+                    },
+                };
+            },
+        };
+        Comments.CommentAnchorResolver.registerCustomAnchorResolver(customResolver);
+        try {
+            manager.start(container);
+            manager.setCommentMode(true);
+            customTarget.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, cancelable: true, clientX: 50, clientY: 50 }));
+            assert.strictEqual(customTarget.style.cursor, Comments.CommentOverlayManager.COMMENT_MODE_CURSOR);
+            const hoverData = manager.getHoverHighlight();
+            assert.isNotNull(hoverData);
+            assert.strictEqual(hoverData?.left, 20);
+            customTarget.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, cancelable: true, clientX: 150, clientY: 50 }));
+            assert.strictEqual(customTarget.style.cursor, '');
+            assert.isNull(manager.getHoverHighlight());
+            customTarget.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, cancelable: true, clientX: 50, clientY: 50 }));
+            assert.strictEqual(customTarget.style.cursor, Comments.CommentOverlayManager.COMMENT_MODE_CURSOR);
+            customTarget.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true, cancelable: true }));
+            assert.strictEqual(customTarget.style.cursor, '');
+            assert.isNull(manager.getHoverHighlight());
+        }
+        finally {
+            Comments.CommentAnchorResolver.unregisterCustomAnchorResolver(customResolver);
+        }
+    });
+    it('updates cursor and consumes event when custom resolver omits highlightRect', () => {
+        const customTarget = document.createElement('div');
+        customTarget.classList.add('custom-resolver-target');
+        container.appendChild(customTarget);
+        const customResolver = {
+            matches(el) {
+                return el === customTarget;
+            },
+            resolve(_el, _options) {
+                return {
+                    anchor: {
+                        vePath: 'Panel: custom > View: main',
+                        textSignature: 'Custom Text Without Highlight Rect',
+                    },
+                    anchorElement: customTarget,
+                };
+            },
+        };
+        Comments.CommentAnchorResolver.registerCustomAnchorResolver(customResolver);
+        try {
+            manager.start(container);
+            manager.setCommentMode(true);
+            const event = new MouseEvent('mousemove', { bubbles: true, cancelable: true, clientX: 50, clientY: 50 });
+            customTarget.dispatchEvent(event);
+            assert.strictEqual(customTarget.style.cursor, Comments.CommentOverlayManager.COMMENT_MODE_CURSOR);
+            assert.isNull(manager.getHoverHighlight());
+            assert.isTrue(event.defaultPrevented);
+        }
+        finally {
+            Comments.CommentAnchorResolver.unregisterCustomAnchorResolver(customResolver);
+        }
     });
 });
 //# sourceMappingURL=CommentOverlayManager.test.js.map

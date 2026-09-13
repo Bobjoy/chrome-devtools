@@ -139,7 +139,8 @@ export const DEFAULT_VIEW = (input, _output, target) => {
     render(template, target);
 };
 /** Grid component to show SpeculationRules rule sets. **/
-export class RuleSetGrid extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+const RuleSetGridBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class RuleSetGrid extends RuleSetGridBase {
     #view;
     #data = null;
     constructor(view = DEFAULT_VIEW) {
@@ -189,4 +190,8 @@ export class RuleSetGrid extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox)
         void Common.Revealer.reveal(new PreloadingHelper.PreloadingForward.AttemptViewWithFilter(ruleSet.id));
     }
 }
+export var Events;
+(function (Events) {
+    Events["SELECT"] = "select";
+})(Events || (Events = {}));
 //# sourceMappingURL=RuleSetGrid.js.map

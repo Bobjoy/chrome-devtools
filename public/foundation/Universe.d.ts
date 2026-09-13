@@ -27,6 +27,7 @@ export interface CreationOptions {
 export declare class Universe {
     readonly context: Root.DevToolsContext.DevToolsContext;
     readonly autofillManager: AutofillManager.AutofillManager.AutofillManager;
+    readonly cd4aBridge: CommentManager.CD4ABridge.CD4ABridge | null;
     readonly supportsEmulation: boolean;
     readonly initAutomaticFilesystem: boolean;
     readonly fileSystemWorkspaceBinding: Persistence.FileSystemWorkspaceBinding.FileSystemWorkspaceBinding;
@@ -44,6 +45,7 @@ export declare class Universe {
     get debuggerWorkspaceBinding(): Bindings.DebuggerWorkspaceBinding.DebuggerWorkspaceBinding;
     get deviceModeModel(): Emulation.DeviceModeModel.DeviceModeModel | null;
     get domDebuggerManager(): SDK.DOMDebuggerModel.DOMDebuggerManager;
+    get domIssuesManager(): IssuesManager.DOMIssuesManager.DOMIssuesManager;
     get domModelUndoStack(): SDK.DOMModel.DOMModelUndoStack;
     get emulatedDevicesList(): Emulation.EmulatedDevices.EmulatedDevicesList;
     get eventBreakpointsManager(): SDK.EventBreakpointsModel.EventBreakpointsManager;

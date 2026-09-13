@@ -1,10 +1,10 @@
-// gen/front_end/panels/explain/explain-meta.prebundle.js
-import * as Common from "./../../core/common/common.js";
-import * as i18n from "./../../core/i18n/i18n.js";
-import * as AiAssistanceModel from "./../../models/ai_assistance/ai_assistance.js";
-import * as Console from "./../console/console.js";
-import * as UI from "./../../ui/legacy/legacy.js";
-import * as SettingUIRegistration from "./../../ui/settings/settings.js";
+// ../../front_end/panels/explain/explain-meta.ts
+import * as Common from "../../core/common/common.js";
+import * as i18n from "../../core/i18n/i18n.js";
+import * as AiAssistanceModel from "../../models/ai_assistance/ai_assistance.js";
+import * as Console from "../console/console.js";
+import * as UI from "../../ui/legacy/legacy.js";
+import * as SettingUIRegistration from "../../ui/settings/settings.js";
 var UIStrings = {
   /**
    * @description Message to offer insights for a console error message.
@@ -77,14 +77,17 @@ function isPolicyRestricted(config) {
 function isFeatureEnabled(config) {
   return (config?.aidaAvailability?.enabled && config?.devToolsConsoleInsights?.enabled) === true;
 }
-SettingUIRegistration.SettingUIRegistration.register(AiAssistanceModel.AiUtils.consoleInsightsEnabledSettingDescriptor, {
-  category: "AI",
-  title: i18nLazyString(UIStrings.enableConsoleInsights)
-});
+SettingUIRegistration.SettingUIRegistration.register(
+  AiAssistanceModel.AiUtils.consoleInsightsEnabledSettingDescriptor,
+  {
+    category: Common.Settings.SettingCategory.AI,
+    title: i18nLazyString(UIStrings.enableConsoleInsights)
+  }
+);
 for (const action of actions) {
   UI.ActionRegistration.registerActionExtension({
     ...action,
-    category: "CONSOLE",
+    category: UI.ActionRegistration.ActionCategory.CONSOLE,
     async loadActionDelegate() {
       const Explain = await import("./explain.js");
       return new Explain.ActionDelegate();

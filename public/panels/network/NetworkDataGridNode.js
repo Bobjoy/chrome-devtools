@@ -341,6 +341,18 @@ const UIStrings = {
 };
 const str_ = i18n.i18n.registerUIStrings('panels/network/NetworkDataGridNode.ts', UIStrings);
 const i18nString = i18n.i18n.getLocalizedString.bind(undefined, str_);
+export var Events;
+(function (Events) {
+    // RequestSelected might fire twice for the same "activation"
+    Events["RequestSelected"] = "RequestSelected";
+    Events["RequestActivated"] = "RequestActivated";
+})(Events || (Events = {}));
+export var RequestPanelBehavior;
+(function (RequestPanelBehavior) {
+    RequestPanelBehavior["ShowPanel"] = "ShowPanel";
+    RequestPanelBehavior["HidePanel"] = "HidePanel";
+    RequestPanelBehavior["Unchanged"] = "Unchanged";
+})(RequestPanelBehavior || (RequestPanelBehavior = {}));
 export class NetworkNode extends DataGrid.SortableDataGrid.SortableDataGridNode {
     parentViewInternal;
     isHovered;
@@ -996,6 +1008,7 @@ export class NetworkRequestNode extends NetworkNode {
     }
     createCells(trElement) {
         this.initiatorCell = null;
+        trElement.setAttribute('data-network-request-id', this.requestInternal.requestId());
         trElement.classList.toggle('network-throttled-row', Boolean(this.throttlingConditions()?.urlPattern));
         trElement.classList.toggle('network-warning-row', this.isWarning());
         trElement.classList.toggle('network-error-row', this.isError());

@@ -1,5 +1,4 @@
 import * as Common from '../../core/common/common.js';
-import * as Platform from '../../core/platform/platform.js';
 import * as UI from '../../ui/legacy/legacy.js';
 import { IsolateSelector } from './IsolateSelector.js';
 import type { ProfileType } from './ProfileHeader.js';
@@ -26,16 +25,8 @@ export interface ViewOutput {
 }
 export type View = (input: ViewInput, output: ViewOutput, target: HTMLElement) => void;
 export declare const DEFAULT_VIEW: View;
-declare const ProfileLauncherView_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<EventTypes>;
-    addEventListener<T extends Events.PROFILE_TYPE_SELECTED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<EventTypes, T>;
-    once<T extends Events.PROFILE_TYPE_SELECTED>(eventType: T): Promise<EventTypes[T]>;
-    removeEventListener<T extends Events.PROFILE_TYPE_SELECTED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: Events.PROFILE_TYPE_SELECTED): boolean;
-    dispatchEventToListeners<T extends Events.PROFILE_TYPE_SELECTED>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.VBox;
-export declare class ProfileLauncherView extends ProfileLauncherView_base {
+declare const ProfileLauncherViewBase: Common.ObjectWrapper.EventMixin<EventTypes, typeof UI.Widget.VBox>;
+export declare class ProfileLauncherView extends ProfileLauncherViewBase {
     #private;
     readonly panel: ProfilesPanel;
     readonly selectedProfileTypeSetting: Common.Settings.Setting<string>;

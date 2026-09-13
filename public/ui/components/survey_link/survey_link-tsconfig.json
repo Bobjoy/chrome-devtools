@@ -1,13 +1,14 @@
 {
-  "checkJs": true,
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "checkJs": true,
-    "composite": true,
-    "declaration": true,
+    "checkJs": false,
+    "composite": false,
+    "declaration": false,
+    "disableSourceOfProjectReferenceRedirect": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": false,
     "inlineSources": true,
     "lib": [
       "dom",
@@ -19,44 +20,52 @@
       "ESNext.Array"
     ],
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "outDir": ".",
+    "preserveConstEnums": true,
     "rootDir": "../../../../../../../front_end/ui/components/survey_link",
+    "rootDirs": [
+      "../../../../../../../",
+      "../../../../"
+    ],
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
-    "tsBuildInfoFile": "survey_link-tsconfig.json.tsbuildinfo",
-    "typeRoots": [],
-    "types": [],
+    "typeRoots": [
+
+    ],
+    "types": [
+
+    ],
     "useUnknownInCatchVariables": false
   },
   "files": [
     "../../../../../../../front_end/ui/components/survey_link/SurveyLink.ts",
     "../../../../../../../front_end/legacy/legacy-defs.d.ts",
     "../../../../../../../front_end/global_typings/global_defs.d.ts",
-    "../../../../../../../node_modules/@types/filesystem/index.d.ts"
+    "../../../../../../../node_modules/@types/filesystem/index.d.ts",
+    "../../../../../../../node_modules/@types/filewriter/index.d.ts"
   ],
   "references": [
     {
-      "path": "../../../core/common/bundle-tsconfig.json"
+      "path": "../../../core/common/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../core/host/bundle-tsconfig.json"
+      "path": "../../../core/host/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../core/i18n/bundle-tsconfig.json"
+      "path": "../../../core/i18n/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../lit/bundle-tsconfig.json"
+      "path": "../../kit/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../kit/bundle-tsconfig.json"
+      "path": "../../lit/bundle-tsconfig.ref.json"
     }
   ]
 }

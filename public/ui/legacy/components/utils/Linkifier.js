@@ -860,6 +860,13 @@ export class Linkifier extends Common.ObjectWrapper.ObjectWrapper {
         return result;
     }
 }
+export var LinkDecorator;
+(function (LinkDecorator) {
+    let Events;
+    (function (Events) {
+        Events["LINK_ICON_CHANGED"] = "LinkIconChanged";
+    })(Events = LinkDecorator.Events || (LinkDecorator.Events = {}));
+})(LinkDecorator || (LinkDecorator = {}));
 export class LinkContextMenuProvider {
     appendApplicableItems(_event, contextMenu, target) {
         let targetNode = target;
@@ -971,7 +978,11 @@ export class ContentProviderContextMenuProvider {
         }
     }
 }
-const DEFAULT_SCRIPT_LOCATION_VIEW = (input, _output, target) => {
+export var Events;
+(function (Events) {
+    Events["LIVE_LOCATION_UPDATED"] = "liveLocationUpdated";
+})(Events || (Events = {}));
+export const DEFAULT_SCRIPT_LOCATION_VIEW = (input, _output, target) => {
     render(html `${input.linkifier.linkifyScriptLocation(input.target ?? null, input.scriptId ?? null, input.sourceURL, input.lineNumber, input.options)}`, target);
 };
 export class ScriptLocationLink extends UI.Widget.Widget {

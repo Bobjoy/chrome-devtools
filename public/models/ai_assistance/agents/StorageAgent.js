@@ -56,13 +56,18 @@ export function isSamePageOrigin(target, context) {
     if (!target || !context) {
         return false;
     }
-    const pageOrigin = Common.ParsedURL.ParsedURL.extractOrigin(target.inspectedURL());
-    return pageOrigin !== '' && context.isOriginAllowed(pageOrigin);
+    const inspectedURL = target.inspectedURL();
+    if (!inspectedURL) {
+        return false;
+    }
+    const pageOrigin = SDK.SecurityOrigin.SecurityOrigin.create(inspectedURL);
+    return !pageOrigin.isOpaque() && context.isOriginAllowed(pageOrigin);
 }
 const MAX_TARGET_ORIGINS = 100;
 function resolveTargetOrigins(context, origins) {
     const primaryOrigin = context?.getOrigin();
-    const rawList = (origins && origins.length > 0) ? origins : (primaryOrigin ? [primaryOrigin] : []);
+    const primaryString = primaryOrigin?.siteId();
+    const rawList = (origins && origins.length > 0) ? origins : (primaryString ? [primaryString] : []);
     const uniqueOrigins = Array.from(new Set(rawList));
     return uniqueOrigins.slice(0, MAX_TARGET_ORIGINS);
 }
@@ -103,18 +108,20 @@ export class StorageAgent extends AiAgent {
                 if (!isSamePrimaryPageOrigin(this.targetManager, this.context)) {
                     return { error: 'No origin available or not allowed.' };
                 }
-                const origins = new Set();
+                const origins = [];
                 for (const frame of SDK.ResourceTreeModel.ResourceTreeModel.frames(this.targetManager)) {
                     if (!isSamePageOrigin(frame.resourceTreeModel().target().outermostTarget(), this.context)) {
                         continue;
                     }
-                    const origin = frame.securityOrigin;
-                    if (!origin || origins.has(origin)) {
+                    const origin = frame.securityOrigin();
+                    if (origin.isOpaque()) {
                         continue;
                     }
-                    origins.add(origin);
+                    if (!origins.some(existing => existing.isSameOriginWith(origin))) {
+                        origins.push(origin);
+                    }
                 }
-                return { result: { origins: Array.from(origins) } };
+                return { result: { origins: origins.map(o => o.siteId()) } };
             },
         });
         this.declareFunction('listStorageKeys', {
@@ -150,7 +157,7 @@ export class StorageAgent extends AiAgent {
                 };
             },
             handler: async (args) => {
-                this.setServerSideLoggingActive(false);
+                this.disableServerSideLogging();
                 if (!isSamePrimaryPageOrigin(this.targetManager, this.context)) {
                     return { error: 'No origin available or not allowed.' };
                 }
@@ -217,7 +224,7 @@ export class StorageAgent extends AiAgent {
                 };
             },
             handler: async (args, options) => {
-                this.setServerSideLoggingActive(false);
+                this.disableServerSideLogging();
                 if (!isSamePrimaryPageOrigin(this.targetManager, this.context)) {
                     return { error: 'No origin available or not allowed.' };
                 }
@@ -297,7 +304,7 @@ export class StorageAgent extends AiAgent {
                 };
             },
             handler: async (args) => {
-                this.setServerSideLoggingActive(false);
+                this.disableServerSideLogging();
                 if (!isSamePrimaryPageOrigin(this.targetManager, this.context)) {
                     return { error: 'No origin available or not allowed.' };
                 }
@@ -346,7 +353,7 @@ export class StorageAgent extends AiAgent {
                 };
             },
             handler: async (args, options) => {
-                this.setServerSideLoggingActive(false);
+                this.disableServerSideLogging();
                 if (!isSamePrimaryPageOrigin(this.targetManager, this.context)) {
                     return { error: 'No origin available or not allowed.' };
                 }
@@ -480,10 +487,10 @@ export class StorageAgent extends AiAgent {
     async preRun() {
         const item = this.context?.getItem();
         if (item instanceof CookieItem && Boolean(item.name)) {
-            this.setServerSideLoggingActive(false);
+            this.disableServerSideLogging();
         }
         else if (item instanceof DOMStorageItem && Boolean(item.key)) {
-            this.setServerSideLoggingActive(false);
+            this.disableServerSideLogging();
         }
     }
     async *handleContextDetails(context) {
@@ -528,8 +535,9 @@ export async function getCookiesForDomain(target, origin) {
     return allCookies.filter(cookie => !cookie.httpOnly());
 }
 export function findFrameForOrigin(context, origin, targetManager) {
+    const parsedOrigin = SDK.SecurityOrigin.SecurityOrigin.create(origin);
     for (const frame of SDK.ResourceTreeModel.ResourceTreeModel.frames(targetManager)) {
-        if (frame.securityOrigin === origin) {
+        if (frame.securityOrigin().isSameOriginWith(parsedOrigin)) {
             const target = frame.resourceTreeModel().target();
             if (isSamePageOrigin(target.outermostTarget(), context)) {
                 return frame;

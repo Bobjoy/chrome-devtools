@@ -93,6 +93,8 @@ export class Model extends EventTarget {
                 throw new Error('processor did not parse trace');
             }
             const file = this.#storeAndCreateParsedTraceFile(syntheticEventsManager, traceEvents, metadata, this.#processor.data, this.#processor.insights);
+            // Reclaim memory used by the temporary event-to-index lookup map now that trace parsing is complete.
+            syntheticEventsManager.clearRegistrationIndex();
             // We only push the file onto this.#traces here once we know it's valid
             // and there's been no errors in the parsing.
             this.#traces.push(file);
@@ -160,6 +162,11 @@ export class Model extends EventTarget {
         this.#processor.reset();
     }
 }
+export var ModelUpdateType;
+(function (ModelUpdateType) {
+    ModelUpdateType["COMPLETE"] = "COMPLETE";
+    ModelUpdateType["PROGRESS_UPDATE"] = "PROGRESS_UPDATE";
+})(ModelUpdateType || (ModelUpdateType = {}));
 export class ModelUpdateEvent extends Event {
     data;
     static eventName = 'modelupdate';

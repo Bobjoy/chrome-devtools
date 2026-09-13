@@ -238,11 +238,9 @@ interface UseGcaApi {
 }
 interface DevToolsAiV2Architecture {
     enabled: boolean;
+    userTier?: string;
 }
 interface DevToolsProtocolMonitor {
-    enabled: boolean;
-}
-interface DevToolsWebMCPSupport {
     enabled: boolean;
 }
 interface DevToolsAdsPanel {
@@ -314,7 +312,6 @@ export type HostConfig = Platform.TypeScriptUtilities.RecursivePartial<{
     devToolsConsoleInsightsTeasers: ConsoleInsightsTeasers;
     devToolsGeminiRebranding: HostConfigGeminiRebranding;
     devToolsProtocolMonitor: DevToolsProtocolMonitor;
-    devToolsWebMCPSupport: DevToolsWebMCPSupport;
     devToolsAdsPanel: DevToolsAdsPanel;
     devToolsUseGcaApi: UseGcaApi;
     devToolsPlusButton: DevToolsPlusButton;
@@ -345,6 +342,6 @@ export declare const hostConfig: Platform.TypeScriptUtilities.RecursiveReadonly<
  */
 export type Condition = (config?: HostConfig) => boolean;
 export declare const conditions: {
-    canDock: () => boolean;
+    canDock: Condition;
 };
 export {};

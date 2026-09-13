@@ -4,14 +4,17 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/buttons/Button.js
+// ../../front_end/ui/components/buttons/Button.ts
 var Button_exports = {};
 __export(Button_exports, {
-  Button: () => Button
+  Button: () => Button,
+  Size: () => Size,
+  ToggleType: () => ToggleType,
+  Variant: () => Variant
 });
-import "./../../kit/kit.js";
-import * as Lit from "./../../lit/lit.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
+import "../../kit/kit.js";
+import * as Lit from "../../lit/lit.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
 
 // gen/front_end/ui/components/buttons/button.css.js
 var button_css_default = `/*
@@ -50,7 +53,7 @@ var button_css_default = `/*
 button {
   --hover-layer-color: var(--sys-color-state-hover-on-subtle);
   --active-layer-color: var(--sys-color-state-ripple-neutral-on-subtle);
-  --button-border-size: 1px;
+  --button-border-size: var(--sys-size-1);
   --button-height: var(--sys-size-11);
   --button-width: fit-content;
 
@@ -146,7 +149,7 @@ button {
 
     devtools-icon.long-click {
       position: absolute;
-      top: 2px;
+      top: var(--sys-size-2);
       left: 3px;
     }
 
@@ -346,21 +349,21 @@ button {
 
 .spinner {
   display: block;
-  width: 12px;
-  height: 12px;
-  border-radius: 6px;
-  border: 2px solid var(--sys-color-cdt-base-container);
+  width: var(--sys-size-6);
+  height: var(--sys-size-6);
+  border-radius: var(--sys-size-4);
+  border: var(--sys-size-2) solid var(--sys-color-cdt-base-container);
   animation: spinner-animation 1s linear infinite;
   border-right-color: transparent;
-  margin-right: 4px;
+  margin-right: var(--sys-size-3);
 
   &.outlined {
-    border: 2px solid var(--sys-color-primary);
+    border: var(--sys-size-2) solid var(--sys-color-primary);
     border-right-color: transparent;
   }
 
   &.disabled {
-    border: 2px solid var(--sys-color-state-disabled);
+    border: var(--sys-size-2) solid var(--sys-color-state-disabled);
     border-right-color: transparent;
   }
 }
@@ -375,17 +378,61 @@ button {
   }
 }
 
+@media (forced-colors: active) {
+  button.outlined {
+    background: ButtonFace;
+    border-color: ButtonText;
+    color: ButtonText;
+
+    devtools-icon {
+      color: ButtonText;
+    }
+
+    &:disabled {
+      border-color: GrayText;
+      color: GrayText;
+
+      devtools-icon {
+        color: GrayText;
+      }
+    }
+  }
+}
+
 /*# sourceURL=${import.meta.resolve("./button.css")} */`;
 
-// gen/front_end/ui/components/buttons/Button.js
+// ../../front_end/ui/components/buttons/Button.ts
 var { html, Directives: { ifDefined, ref, classMap } } = Lit;
+var Variant = /* @__PURE__ */ ((Variant2) => {
+  Variant2["PRIMARY"] = "primary";
+  Variant2["TONAL"] = "tonal";
+  Variant2["OUTLINED"] = "outlined";
+  Variant2["TEXT"] = "text";
+  Variant2["TOOLBAR"] = "toolbar";
+  Variant2["PRIMARY_TOOLBAR"] = "primary_toolbar";
+  Variant2["ICON"] = "icon";
+  Variant2["ICON_TOGGLE"] = "icon_toggle";
+  Variant2["ADORNER_ICON"] = "adorner_icon";
+  return Variant2;
+})(Variant || {});
+var Size = /* @__PURE__ */ ((Size2) => {
+  Size2["MICRO"] = "MICRO";
+  Size2["SMALL"] = "SMALL";
+  Size2["REGULAR"] = "REGULAR";
+  return Size2;
+})(Size || {});
+var ToggleType = /* @__PURE__ */ ((ToggleType2) => {
+  ToggleType2["PRIMARY"] = "primary-toggle";
+  ToggleType2["RED"] = "red-toggle";
+  return ToggleType2;
+})(ToggleType || {});
 var Button = class extends HTMLElement {
   static formAssociated = true;
   #shadow = this.attachShadow({ mode: "open", delegatesFocus: true });
   #boundOnClick = this.#onClick.bind(this);
   #props = {
-    size: "REGULAR",
-    variant: "primary",
+    size: "REGULAR" /* REGULAR */,
+    variant: "primary" /* PRIMARY */,
     toggleOnClick: true,
     disabled: false,
     active: false,
@@ -415,7 +462,7 @@ var Button = class extends HTMLElement {
     this.#props.iconName = data.iconName;
     this.#props.toggledIconName = data.toggledIconName;
     this.#props.toggleOnClick = data.toggleOnClick !== void 0 ? data.toggleOnClick : true;
-    this.#props.size = "REGULAR";
+    this.#props.size = "REGULAR" /* REGULAR */;
     if ("size" in data && data.size) {
       this.#props.size = data.size;
     }
@@ -565,12 +612,12 @@ var Button = class extends HTMLElement {
       event.preventDefault();
       this.form.reset();
     }
-    if (this.#props.toggleOnClick && this.#props.variant === "icon_toggle" && this.#props.iconName) {
+    if (this.#props.toggleOnClick && this.#props.variant === "icon_toggle" /* ICON_TOGGLE */ && this.#props.iconName) {
       this.toggled = !this.#props.toggled;
     }
   }
   #isToolbarVariant() {
-    return this.#props.variant === "toolbar" || this.#props.variant === "primary_toolbar";
+    return this.#props.variant === "toolbar" /* TOOLBAR */ || this.#props.variant === "primary_toolbar" /* PRIMARY_TOOLBAR */;
   }
   #render() {
     const nodes = this.#slotRef.value?.assignedNodes();
@@ -586,7 +633,7 @@ var Button = class extends HTMLElement {
         throw new Error("Toolbar button does not accept children");
       }
     }
-    if (this.#props.variant === "icon") {
+    if (this.#props.variant === "icon" /* ICON */) {
       if (!this.#props.iconName) {
         throw new Error("Icon button requires an icon");
       }
@@ -596,33 +643,34 @@ var Button = class extends HTMLElement {
     }
     const hasIcon = Boolean(this.#props.iconName);
     const classes = {
-      primary: this.#props.variant === "primary",
-      tonal: this.#props.variant === "tonal",
-      outlined: this.#props.variant === "outlined",
-      text: this.#props.variant === "text",
+      primary: this.#props.variant === "primary" /* PRIMARY */,
+      tonal: this.#props.variant === "tonal" /* TONAL */,
+      outlined: this.#props.variant === "outlined" /* OUTLINED */,
+      text: this.#props.variant === "text" /* TEXT */,
       toolbar: this.#isToolbarVariant(),
-      "primary-toolbar": this.#props.variant === "primary_toolbar",
-      icon: this.#props.variant === "icon" || this.#props.variant === "icon_toggle" || this.#props.variant === "adorner_icon",
-      "primary-toggle": this.#props.toggleType === "primary-toggle",
-      "red-toggle": this.#props.toggleType === "red-toggle",
+      "primary-toolbar": this.#props.variant === "primary_toolbar" /* PRIMARY_TOOLBAR */,
+      icon: this.#props.variant === "icon" /* ICON */ || this.#props.variant === "icon_toggle" /* ICON_TOGGLE */ || this.#props.variant === "adorner_icon" /* ADORNER_ICON */,
+      "primary-toggle": this.#props.toggleType === "primary-toggle" /* PRIMARY */,
+      "red-toggle": this.#props.toggleType === "red-toggle" /* RED */,
       toggled: Boolean(this.#props.toggled),
       checked: Boolean(this.#props.checked),
       "text-with-icon": hasIcon && !isEmpty,
       "only-icon": hasIcon && isEmpty,
-      micro: this.#props.size === "MICRO",
-      small: this.#props.size === "SMALL",
+      micro: this.#props.size === "MICRO" /* MICRO */,
+      small: this.#props.size === "SMALL" /* SMALL */,
       "reduced-focus-ring": Boolean(this.#props.reducedFocusRing),
       active: this.#props.active,
       inverse: Boolean(this.#props.inverseColorTheme)
     };
     const spinnerClasses = {
-      primary: this.#props.variant === "primary",
-      outlined: this.#props.variant === "outlined",
+      primary: this.#props.variant === "primary" /* PRIMARY */,
+      outlined: this.#props.variant === "outlined" /* OUTLINED */,
       disabled: this.#props.disabled,
       spinner: true
     };
     const jslog = this.#props.jslogContext && VisualLogging.action().track({ click: true }).context(this.#props.jslogContext);
-    Lit.render(html`
+    Lit.render(
+      html`
         <style>${button_css_default}</style>
         <button title=${ifDefined(this.title || void 0)}
                 ?disabled=${this.#props.disabled}
@@ -640,7 +688,10 @@ var Button = class extends HTMLElement {
           ${this.#props.spinner ? html`<span class=${classMap(spinnerClasses)}></span>` : ""}
           <slot @slotchange=${this.#render} ${ref(this.#slotRef)}></slot>
         </button>
-      `, this.#shadow, { host: this });
+      `,
+      this.#shadow,
+      { host: this }
+    );
   }
   // Based on https://web.dev/more-capable-form-controls/ to make custom elements form-friendly.
   // Form controls usually expose a "value" property.
@@ -680,15 +731,15 @@ var Button = class extends HTMLElement {
 };
 customElements.define("devtools-button", Button);
 
-// gen/front_end/ui/components/buttons/FloatingButton.js
+// ../../front_end/ui/components/buttons/FloatingButton.ts
 var FloatingButton_exports = {};
 __export(FloatingButton_exports, {
   FloatingButton: () => FloatingButton,
   create: () => create
 });
-import "./../../kit/kit.js";
-import * as VisualLogging2 from "./../../visual_logging/visual_logging.js";
-import * as Lit2 from "./../../lit/lit.js";
+import "../../kit/kit.js";
+import * as VisualLogging2 from "../../visual_logging/visual_logging.js";
+import * as Lit2 from "../../lit/lit.js";
 
 // gen/front_end/ui/components/buttons/floatingButton.css.js
 var floatingButton_css_default = `/*
@@ -757,8 +808,8 @@ button {
   }
 
   &:focus-visible {
-    outline: 2px solid var(--sys-color-state-focus-ring);
-    outline-offset: 2px;
+    outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
+    outline-offset: var(--sys-size-2);
   }
 
   &:disabled > devtools-icon {
@@ -810,9 +861,34 @@ button {
   }
 }
 
+@media (forced-colors: active) {
+  button {
+    forced-color-adjust: none;
+    box-shadow: 0 0 0 var(--sys-size-1) ButtonText;
+
+    :host-context(:not(.theme-with-dark-background)) &,
+    :host-context(.theme-with-dark-background) &:not(:disabled) {
+      background-color: ButtonFace;
+    }
+
+    :host-context(:not(.theme-with-dark-background)) &:not(:disabled) > devtools-icon,
+    :host-context(.theme-with-dark-background) &:not(:disabled) > devtools-icon {
+      color: ButtonText;
+    }
+
+    &:focus-visible {
+      outline-color: ButtonText;
+    }
+
+    &:disabled > devtools-icon {
+      color: GrayText;
+    }
+  }
+}
+
 /*# sourceURL=${import.meta.resolve("./floatingButton.css")} */`;
 
-// gen/front_end/ui/components/buttons/FloatingButton.js
+// ../../front_end/ui/components/buttons/FloatingButton.ts
 var { html: html2, Directives: { classMap: classMap2 } } = Lit2;
 var FloatingButton = class extends HTMLElement {
   static observedAttributes = ["icon-name", "jslogcontext", "disabled"];
@@ -881,9 +957,13 @@ var FloatingButton = class extends HTMLElement {
     const classes = classMap2({
       gemini: this.iconName === "spark"
     });
-    Lit2.render(html2`
+    Lit2.render(
+      html2`
         <style>${floatingButton_css_default}</style>
-        <button class=${classes} ?disabled=${this.disabled}><devtools-icon .name=${this.iconName}></devtools-icon></button>`, this.#shadow, { host: this });
+        <button class=${classes} ?disabled=${this.disabled}><devtools-icon .name=${this.iconName}></devtools-icon></button>`,
+      this.#shadow,
+      { host: this }
+    );
   }
   #updateJslog() {
     if (this.jslogContext) {
@@ -912,13 +992,13 @@ var textButton_css_default = `/*
  */
 
 .text-button {
-  margin: 2px;
-  height: 24px;
-  font-size: 12px;
+  margin: var(--sys-size-2);
+  height: var(--sys-size-11);
+  font-size: var(--sys-typescale-body4-size);
   font-family: var(--default-font-family);
-  border: 1px solid var(--sys-color-tonal-outline);
-  border-radius: 12px;
-  padding: 0 12px;
+  border: var(--sys-size-1) solid var(--sys-color-tonal-outline);
+  border-radius: var(--sys-shape-corner-medium-small);
+  padding: 0 var(--sys-size-6);
   font-weight: 500;
   color: var(--sys-color-primary);
   background-color: var(--sys-color-cdt-base-container);
@@ -937,7 +1017,7 @@ var textButton_css_default = `/*
 }
 
 .text-button:not(:disabled, .primary-button):focus-visible {
-  outline: 2px solid var(--sys-color-state-focus-ring);
+  outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
   color: var(--sys-color-on-primary);
   background-color: var(--sys-color-cdt-base-container);
 }
@@ -954,7 +1034,7 @@ var textButton_css_default = `/*
   background: none;
   border: none;
   outline: none;
-  border-radius: 2px;
+  border-radius: var(--sys-size-2);
   margin: 0;
   padding: 0 !important; /* stylelint-disable-line declaration-no-important */
   font: inherit;
@@ -981,8 +1061,8 @@ var textButton_css_default = `/*
 
 .text-button.primary-button:not(:disabled):focus-visible {
   background-color: var(--sys-color-primary);
-  outline-offset: 2px;
-  outline: 2px solid var(--sys-color-state-focus-ring);
+  outline-offset: var(--sys-size-2);
+  outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
   color: var(--sys-color-on-primary);
 }
 
@@ -1006,7 +1086,7 @@ var textButton_css_default = `/*
     background-color: ButtonFace;
     color: Highlight !important; /* stylelint-disable-line declaration-no-important */
     border-color: Highlight;
-    outline: 2px solid ButtonText;
+    outline: var(--sys-size-2) solid ButtonText;
     box-shadow: var(--legacy-focus-ring-active-shadow);
   }
 
@@ -1022,7 +1102,7 @@ var textButton_css_default = `/*
     forced-color-adjust: none;
     background-color: Highlight;
     color: HighlightText;
-    border: 1px solid Highlight;
+    border: var(--sys-size-1) solid Highlight;
   }
 
   .text-button.primary-button:not(:disabled):focus-visible {

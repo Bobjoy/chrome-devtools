@@ -34,14 +34,14 @@ import '../../legacy.js';
 import * as Common from '../../../../core/common/common.js';
 import * as i18n from '../../../../core/i18n/i18n.js';
 import * as TextUtils from '../../../../core/text_utils/text_utils.js';
-import * as FormatterActions from '../../../../entrypoints/formatter_worker/FormatterActions.js'; // eslint-disable-line @devtools/es-modules-import
+import * as FormatterActions from '../../../../entrypoints/formatter_actions/formatter_actions.js';
 import { render } from '../../../../ui/lit/lit.js';
 import * as UI from '../../legacy.js';
 import resourceSourceFrameStyles from './resourceSourceFrame.css.js';
 import { SourceFrameImpl } from './SourceFrame.js';
 const UIStrings = {
     /**
-     * @description Text to find an item
+     * @description Placeholder text for the search input in the resource source frame.
      */
     find: 'Find',
 };

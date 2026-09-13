@@ -1,3 +1,4 @@
+import * as i18n from '../../../core/i18n/i18n.js';
 import * as Handlers from '../handlers/handlers.js';
 import type * as Types from '../types/types.js';
 import { type InsightModel, type InsightSetContext } from './types.js';
@@ -35,7 +36,7 @@ export declare const UIStrings: {
      */
     readonly noInteractions: 'No interactions detected';
 };
-export declare const i18nString: (id: string, values?: import("../../../core/i18n/i18nTypes.js").Values | undefined) => import("../../../core/platform/UIString.js").LocalizedString;
+export declare const i18nString: i18n.LocalizeString;
 export type INPBreakdownInsightModel = InsightModel<typeof UIStrings, {
     longestInteractionEvent?: Types.Events.SyntheticInteractionPair;
     highPercentileInteractionEvent?: Types.Events.SyntheticInteractionPair;

@@ -7,6 +7,7 @@ import * as Platform from '../platform/platform.js';
 import * as Root from '../root/root.js';
 import * as TextUtils from '../text_utils/text_utils.js';
 import { CSSFontFace } from './CSSFontFace.js';
+import { CSSLocation } from './CSSLocation.js';
 import { CSSMatchedStyles } from './CSSMatchedStyles.js';
 import { CSSMedia } from './CSSMedia.js';
 import { cssMetadata } from './CSSMetadata.js';
@@ -18,6 +19,11 @@ import { Events as ResourceTreeModelEvents, ResourceTreeModel, } from './Resourc
 import { SDKModel } from './SDKModel.js';
 import { cssSourceMapsEnabledSettingDescriptor } from './SDKSettings.js';
 import { SourceMapManager } from './SourceMapManager.js';
+export var ColorScheme;
+(function (ColorScheme) {
+    ColorScheme["LIGHT"] = "light";
+    ColorScheme["DARK"] = "dark";
+})(ColorScheme || (ColorScheme = {}));
 export class CSSModel extends SDKModel {
     agent;
     #domModel;
@@ -853,26 +859,7 @@ export class Edit {
         this.payload = payload;
     }
 }
-export class CSSLocation {
-    #cssModel;
-    styleSheetId;
-    url;
-    lineNumber;
-    columnNumber;
-    constructor(header, lineNumber, columnNumber) {
-        this.#cssModel = header.cssModel();
-        this.styleSheetId = header.id;
-        this.url = header.resourceURL();
-        this.lineNumber = lineNumber;
-        this.columnNumber = columnNumber || 0;
-    }
-    cssModel() {
-        return this.#cssModel;
-    }
-    header() {
-        return this.#cssModel.styleSheetHeaderForId(this.styleSheetId);
-    }
-}
+export { CSSLocation };
 class CSSDispatcher {
     #cssModel;
     constructor(cssModel) {
@@ -959,5 +946,9 @@ export class CSSPropertyTracker extends Common.ObjectWrapper.ObjectWrapper {
     }
 }
 const StylePollingInterval = 1000; // throttling interval for style polling, in milliseconds
+export var CSSPropertyTrackerEvents;
+(function (CSSPropertyTrackerEvents) {
+    CSSPropertyTrackerEvents["TRACKED_CSS_PROPERTIES_UPDATED"] = "TrackedCSSPropertiesUpdated";
+})(CSSPropertyTrackerEvents || (CSSPropertyTrackerEvents = {}));
 SDKModel.register(CSSModel, { capabilities: 2 /* Capability.DOM */, autostart: true });
 //# sourceMappingURL=CSSModel.js.map

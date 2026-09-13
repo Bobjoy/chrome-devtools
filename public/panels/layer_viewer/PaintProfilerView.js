@@ -184,7 +184,8 @@ const DEFAULT_VIEW = (input, output, target) => {
     const pieChartData = calculatePieChartData(input, canvas.width, samplesPerBar, emptyPieChartData);
     render(getTemplate(pieChartData), target);
 };
-export class PaintProfilerView extends Common.ObjectWrapper.eventMixin(UI.Widget.Widget) {
+const PaintProfilerViewBase = Common.ObjectWrapper.eventMixin(UI.Widget.Widget);
+export class PaintProfilerView extends PaintProfilerViewBase {
     canvasContainer;
     #selectionWindow;
     innerBarWidth;
@@ -411,6 +412,10 @@ export class PaintProfilerView extends Common.ObjectWrapper.eventMixin(UI.Widget
         this.isProfiling = false;
     }
 }
+export var Events;
+(function (Events) {
+    Events["WINDOW_CHANGED"] = "WindowChanged";
+})(Events || (Events = {}));
 function paramToString(param, name) {
     if (typeof param !== 'object') {
         return typeof param === 'string' && param.length > 100 ? name : JSON.stringify(param);

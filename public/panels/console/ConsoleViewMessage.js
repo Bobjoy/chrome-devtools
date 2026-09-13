@@ -54,6 +54,7 @@ import objectValueStyles from '../../ui/legacy/components/object_ui/objectValue.
 import * as Components from '../../ui/legacy/components/utils/utils.js';
 import * as UI from '../../ui/legacy/legacy.js';
 import { html, nothing, render } from '../../ui/lit/lit.js';
+import * as Settings from '../../ui/settings/settings.js';
 import * as VisualLogging from '../../ui/visual_logging/visual_logging.js';
 import * as Elements from '../elements/elements.js';
 import { format, updateStyle } from './ConsoleFormat.js';
@@ -633,7 +634,9 @@ export class ConsoleViewMessage {
         };
         clickableElement.addEventListener('click', toggleStackTrace, false);
         if (this.message.type === "trace" /* Protocol.Runtime.ConsoleAPICalledEventType.Trace */ &&
-            Common.Settings.Settings.instance().moduleSetting('console-trace-expand').get()) {
+            Common.Settings.Settings.instance()
+                .resolve(Settings.ConsoleSettings.consoleTraceExpandSettingDescriptor)
+                .get()) {
             this.expandTrace(true);
         }
         this.hasStackTrace = true;
@@ -717,7 +720,7 @@ export class ConsoleViewMessage {
                 appendOrShow(formattedResult, this.linkifyStringAsFragment(parameters[i].description || ''));
             }
             else {
-                formattedResult.appendChild(this.formatParameter(parameters[i], false, true));
+                appendOrShow(formattedResult, this.formatParameter(parameters[i], false, true));
             }
             if (i < parameters.length - 1) {
                 UI.UIUtils.createTextChild(formattedResult, ' ');
@@ -727,7 +730,9 @@ export class ConsoleViewMessage {
     }
     formatParameter(output, forceObjectFormat, includePreview) {
         if (output.customPreview()) {
-            return new ObjectUI.CustomPreviewComponent.CustomPreviewComponent(output).element;
+            const component = new ObjectUI.CustomPreviewComponent.CustomPreviewComponent();
+            component.object = output;
+            return component;
         }
         const outputType = forceObjectFormat ? 'object' : (output.subtype || output.type);
         let element;
@@ -1047,11 +1052,11 @@ export class ConsoleViewMessage {
         for (const token of tokens) {
             switch (token.type) {
                 case 'generic': {
-                    formattedResult.append(this.formatParameter(token.value, true /* force */, false /* includePreview */));
+                    appendOrShow(formattedResult, this.formatParameter(token.value, true /* force */, false /* includePreview */));
                     break;
                 }
                 case 'optimal': {
-                    formattedResult.append(this.formatParameter(token.value, false /* force */, true /* includePreview */));
+                    appendOrShow(formattedResult, this.formatParameter(token.value, false /* force */, true /* includePreview */));
                     break;
                 }
                 case 'string': {
@@ -1100,7 +1105,9 @@ export class ConsoleViewMessage {
         if (!this.contentElementInternal) {
             return;
         }
-        if (Common.Settings.Settings.instance().moduleSetting('console-timestamps-enabled').get()) {
+        if (Common.Settings.Settings.instance()
+            .resolve(Settings.ConsoleSettings.consoleTimestampsEnabledSettingDescriptor)
+            .get()) {
             if (!this.timestampElement) {
                 this.timestampElement = document.createElement('span');
                 this.timestampElement.classList.add('console-timestamp');
@@ -2009,7 +2016,7 @@ export class ConsoleTableMessageView extends ConsoleViewMessage {
                 formattedResult.classList.add('console-message-text');
                 const tableElement = formattedResult.createChild('div', 'console-message-formatted-table');
                 const dataGridContainer = tableElement.createChild('span');
-                tableElement.appendChild(this.formatParameter(actualTable, true, false));
+                appendOrShow(tableElement, this.formatParameter(actualTable, true, false));
                 const shadowRoot = dataGridContainer.attachShadow({ mode: 'open' });
                 const dataGridWidget = this.dataGrid.asWidget();
                 dataGridWidget.markAsRoot();

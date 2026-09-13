@@ -531,7 +531,13 @@ const UIStrings = {
 };
 const str_ = i18n.i18n.registerUIStrings('panels/network/NetworkLogView.ts', UIStrings);
 const i18nString = i18n.i18n.getLocalizedString.bind(undefined, str_);
-export class NetworkLogView extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+var FetchStyle;
+(function (FetchStyle) {
+    FetchStyle[FetchStyle["BROWSER"] = 0] = "BROWSER";
+    FetchStyle[FetchStyle["NODE_JS"] = 1] = "NODE_JS";
+})(FetchStyle || (FetchStyle = {}));
+const NetworkLogViewBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class NetworkLogView extends NetworkLogViewBase {
     networkInvertFilterSetting;
     networkHideDataURLSetting;
     networkHideChromeExtensions;
@@ -1011,7 +1017,7 @@ export class NetworkLogView extends Common.ObjectWrapper.eventMixin(UI.Widget.VB
                 jslogContext: actionName,
                 variant: "tonal" /* Buttons.Button.Variant.TONAL */,
             });
-            this.recordingHint.contentElement.appendChild(button);
+            this.recordingHint.element.appendChild(button);
         }
         this.recordingHint.show(this.element);
         this.setHidden(true);
@@ -1461,7 +1467,10 @@ export class NetworkLogView extends Common.ObjectWrapper.eventMixin(UI.Widget.VB
         this.suggestionBuilder.addItem(NetworkForward.UIFilter.FilterType.Scheme, String(request.scheme));
         this.suggestionBuilder.addItem(NetworkForward.UIFilter.FilterType.StatusCode, String(request.statusCode));
         this.suggestionBuilder.addItem(NetworkForward.UIFilter.FilterType.ResourceType, request.resourceType().name());
-        this.suggestionBuilder.addItem(NetworkForward.UIFilter.FilterType.Url, request.securityOrigin());
+        const requestURLSecurityOrigin = request.requestURLSecurityOrigin();
+        if (!requestURLSecurityOrigin.isOpaque()) {
+            this.suggestionBuilder.addItem(NetworkForward.UIFilter.FilterType.Url, requestURLSecurityOrigin.siteId());
+        }
         const priority = request.priority();
         if (priority) {
             this.suggestionBuilder.addItem(NetworkForward.UIFilter.FilterType.Priority, PerfUI.NetworkPriorities.uiLabelForNetworkPriority(priority));

@@ -4,14 +4,15 @@
 import { assert } from 'chai';
 import sinon from 'sinon';
 import * as Host from '../../../core/host/host.js';
-import * as Root from '../../../core/root/root.js';
+import * as SDK from '../../../core/sdk/sdk.js';
 import { mockAidaClient, MockAidaPayloadLimitError, MockAidaQuotaError } from '../../../testing/AiAssistanceHelpers.js';
-import { describeWithEnvironment, } from '../../../testing/EnvironmentHelpers.js';
+import { setupLocaleHooks } from '../../../testing/LocaleHelpers.js';
 import * as AiAssistance from '../ai_assistance.js';
 function mockConversationContext() {
     return new (class extends AiAssistance.AiAgent.ConversationContext {
-        getURL() {
-            return 'https://origin.test';
+        jslogContext = 'ai-context-file';
+        getOrigin() {
+            return SDK.SecurityOrigin.SecurityOrigin.create('https://origin.test');
         }
         getItem() {
             return null;
@@ -41,11 +42,12 @@ class AiAgentMock extends AiAssistance.AiAgent.AiAgent {
     declareFunctionForTest(name, declaration) {
         this.declareFunction(name, declaration);
     }
-    setServerSideLoggingActiveForTest(active) {
-        this.setServerSideLoggingActive(active);
+    disableServerSideLoggingForTest() {
+        this.disableServerSideLogging();
     }
 }
-describeWithEnvironment('AiAgent', () => {
+describe('AiAgent', () => {
+    setupLocaleHooks();
     describe('buildRequest', () => {
         beforeEach(() => {
             sinon.stub(crypto, 'randomUUID').returns('sessionId');
@@ -224,40 +226,22 @@ describeWithEnvironment('AiAgent', () => {
             assert.isUndefined(request.historical_contexts);
         });
     });
-    describe('serverSideLoggingActive', () => {
-        it('enables logging when setServerSideLoggingActive(true) is called if logging was allowed', async () => {
+    describe('disableServerSideLogging', () => {
+        it('disables server-side logging when called', async () => {
             const agent = new AiAgentMock({
                 aidaClient: mockAidaClient(),
                 serverSideLoggingAllowed: true,
             });
-            agent.setServerSideLoggingActiveForTest(false);
-            assert.isTrue(agent.buildRequest({ text: 'test input' }, Host.AidaClient.Role.USER).metadata?.disable_user_content_logging);
-            agent.setServerSideLoggingActiveForTest(true);
             assert.isFalse(agent.buildRequest({ text: 'test input' }, Host.AidaClient.Role.USER).metadata?.disable_user_content_logging);
+            agent.disableServerSideLoggingForTest();
+            assert.isTrue(agent.buildRequest({ text: 'test input' }, Host.AidaClient.Role.USER).metadata?.disable_user_content_logging);
         });
-        it('does not enable logging when setServerSideLoggingActive(true) is called if logging was not allowed', async () => {
+        it('keeps logging disabled when initialized with serverSideLoggingAllowed: false', async () => {
             const agent = new AiAgentMock({
                 aidaClient: mockAidaClient(),
                 serverSideLoggingAllowed: false,
             });
-            agent.setServerSideLoggingActiveForTest(true);
-            assert.isTrue(agent.buildRequest({ text: 'test input' }, Host.AidaClient.Role.USER)
-                .metadata?.disable_user_content_logging);
-        });
-        it('does not enable logging when setServerSideLoggingActive(true) is called if rebranded is enabled', async () => {
-            const originalDevToolsGeminiRebranding = Root.Runtime.hostConfig.devToolsGeminiRebranding;
-            Root.Runtime.hostConfig.devToolsGeminiRebranding = { enabled: true };
-            try {
-                const agent = new AiAgentMock({
-                    aidaClient: mockAidaClient(),
-                    serverSideLoggingAllowed: true,
-                });
-                agent.setServerSideLoggingActiveForTest(true);
-                assert.isTrue(agent.buildRequest({ text: 'test input' }, Host.AidaClient.Role.USER).metadata?.disable_user_content_logging);
-            }
-            finally {
-                Root.Runtime.hostConfig.devToolsGeminiRebranding = originalDevToolsGeminiRebranding;
-            }
+            assert.isTrue(agent.buildRequest({ text: 'test input' }, Host.AidaClient.Role.USER).metadata?.disable_user_content_logging);
         });
     });
     describe('run', () => {
@@ -371,13 +355,14 @@ describeWithEnvironment('AiAgent', () => {
         });
     });
     describe('ConversationContext', () => {
-        function getTestContext(url) {
+        function getTestContext(originString) {
             class TestContext extends AiAssistance.AiAgent.ConversationContext {
+                jslogContext = 'ai-context-file';
                 getTitle() {
                     throw new Error('Method not implemented.');
                 }
-                getURL() {
-                    return url;
+                getOrigin() {
+                    return SDK.SecurityOrigin.SecurityOrigin.create(originString);
                 }
                 getItem() {
                     return undefined;
@@ -386,81 +371,24 @@ describeWithEnvironment('AiAgent', () => {
             return new TestContext();
         }
         it('checks context origins', () => {
-            const tests = [
-                {
-                    dataOrigin: 'https://google.test',
-                    establishedOrigin: 'https://google.test',
-                    isAllowed: true,
-                },
-                {
-                    dataOrigin: 'https://google.test',
-                    establishedOrigin: 'about:blank',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'https://google.test',
-                    establishedOrigin: 'https://www.google.test',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'https://a.test',
-                    establishedOrigin: 'https://b.test',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'https://a.test',
-                    establishedOrigin: 'file:///tmp',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'https://a.test',
-                    establishedOrigin: 'http://a.test',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'null',
-                    establishedOrigin: 'null',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'null',
-                    establishedOrigin: undefined,
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'data:',
-                    establishedOrigin: 'data:',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'about://',
-                    establishedOrigin: 'about://',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'about:srcdoc',
-                    establishedOrigin: 'about:srcdoc',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'detached',
-                    establishedOrigin: 'detached',
-                    isAllowed: false,
-                },
-                {
-                    dataOrigin: 'trace-1-10',
-                    establishedOrigin: 'trace-1-10',
-                    isAllowed: true,
-                },
-                {
-                    dataOrigin: 'trace-1-10',
-                    establishedOrigin: 'trace-1-20',
-                    isAllowed: false,
-                },
-            ];
-            for (const test of tests) {
-                assert.strictEqual(getTestContext(test.dataOrigin).isOriginAllowed(test.establishedOrigin), test.isAllowed, `Checking origin ${test.dataOrigin} against ${test.establishedOrigin}`);
+            function isAllowed(opts) {
+                const origin = opts.established ? SDK.SecurityOrigin.SecurityOrigin.create(opts.established) : undefined;
+                return getTestContext(opts.newContext).isOriginAllowed(origin);
             }
+            assert.isTrue(isAllowed({ established: 'https://google.test', newContext: 'https://google.test' }));
+            assert.isFalse(isAllowed({ established: 'about:blank', newContext: 'https://google.test' }));
+            assert.isFalse(isAllowed({ established: 'https://www.google.test', newContext: 'https://google.test' }));
+            assert.isFalse(isAllowed({ established: 'https://b.test', newContext: 'https://a.test' }));
+            assert.isFalse(isAllowed({ established: 'file:///tmp', newContext: 'https://a.test' }));
+            assert.isFalse(isAllowed({ established: 'http://a.test', newContext: 'https://a.test' }));
+            assert.isFalse(isAllowed({ established: 'null', newContext: 'null' }));
+            assert.isFalse(isAllowed({ established: undefined, newContext: 'null' }));
+            assert.isFalse(isAllowed({ established: 'data:', newContext: 'data:' }));
+            assert.isFalse(isAllowed({ established: 'about://', newContext: 'about://' }));
+            assert.isFalse(isAllowed({ established: 'about:srcdoc', newContext: 'about:srcdoc' }));
+            assert.isFalse(isAllowed({ established: 'detached', newContext: 'detached' }));
+            assert.isTrue(isAllowed({ established: 'imported-trace://example.com', newContext: 'imported-trace://example.com' }));
+            assert.isFalse(isAllowed({ established: 'imported-trace://other.com', newContext: 'imported-trace://example.com' }));
         });
     });
     describe('functions', () => {
@@ -551,22 +479,22 @@ describeWithEnvironment('AiAgent', () => {
                 ],
             });
         });
-        it('toggles logging dynamically during a multi-turn conversation run', async () => {
+        it('disables logging during a multi-turn conversation run and keeps it disabled', async () => {
             const aidaClient = mockAidaClient([
-                // 1. Initial turn: Aida returns a call to 'toggleLoggingFn' with enabled=false
+                // 1. Initial turn: Aida returns a call to 'disableLoggingFn'
                 [{
-                        explanation: 'I will call toggleLoggingFn to disable logging.',
+                        explanation: 'I will call disableLoggingFn to disable logging.',
                         functionCalls: [{
-                                name: 'toggleLoggingFn',
-                                args: { enabled: false },
+                                name: 'disableLoggingFn',
+                                args: {},
                             }],
                     }],
-                // 2. Second turn: Aida client responds to the function output and returns a call to 'toggleLoggingFn' with enabled=true
+                // 2. Second turn: Aida client responds to the function output
                 [{
-                        explanation: 'I will call toggleLoggingFn to enable logging.',
+                        explanation: 'Second turn response.',
                         functionCalls: [{
-                                name: 'toggleLoggingFn',
-                                args: { enabled: true },
+                                name: 'anotherFn',
+                                args: {},
                             }],
                     }],
                 // 3. Third turn: Final answer
@@ -574,28 +502,35 @@ describeWithEnvironment('AiAgent', () => {
                         explanation: 'All done.',
                     }],
             ]);
-            class ToggleLoggingAgent extends AiAssistance.AiAgent.AiAgent {
+            class DisableLoggingAgent extends AiAssistance.AiAgent.AiAgent {
                 preamble = 'preamble';
                 clientFeature = 0;
                 userTier = undefined;
                 options = {};
                 constructor(opts) {
                     super(opts);
-                    this.declareFunction('toggleLoggingFn', {
-                        description: 'toggles logging',
+                    this.declareFunction('disableLoggingFn', {
+                        description: 'disables logging',
                         parameters: {
                             type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
-                            description: 'Parameters for toggle logging function',
-                            properties: {
-                                enabled: {
-                                    type: 4 /* Host.AidaClient.ParametersTypes.BOOLEAN */,
-                                    description: 'Whether to enable logging',
-                                },
-                            },
-                            required: ['enabled'],
+                            description: 'Parameters for disable logging function',
+                            properties: {},
+                            required: [],
                         },
-                        handler: async (args) => {
-                            this.setServerSideLoggingActive(args.enabled);
+                        handler: async () => {
+                            this.disableServerSideLogging();
+                            return { result: 'ok' };
+                        },
+                    });
+                    this.declareFunction('anotherFn', {
+                        description: 'another function',
+                        parameters: {
+                            type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
+                            description: 'Parameters for another function',
+                            properties: {},
+                            required: [],
+                        },
+                        handler: async () => {
                             return { result: 'ok' };
                         },
                     });
@@ -605,7 +540,7 @@ describeWithEnvironment('AiAgent', () => {
                     return;
                 }
             }
-            const agent = new ToggleLoggingAgent({
+            const agent = new DisableLoggingAgent({
                 aidaClient,
                 serverSideLoggingAllowed: true,
             });
@@ -615,12 +550,12 @@ describeWithEnvironment('AiAgent', () => {
             // First call (initial request): Logging is active (disable_user_content_logging: false)
             const firstCallRequest = aidaClient.doConversation.getCall(0).args[0];
             assert.isFalse(firstCallRequest.metadata?.disable_user_content_logging);
-            // Second call (after toggleLoggingFn(false)): Logging is inactive (disable_user_content_logging: true)
+            // Second call (after disableLoggingFn()): Logging is inactive (disable_user_content_logging: true)
             const secondCallRequest = aidaClient.doConversation.getCall(1).args[0];
             assert.isTrue(secondCallRequest.metadata?.disable_user_content_logging);
-            // Third call (after toggleLoggingFn(true)): Logging is active again (disable_user_content_logging: false)
+            // Third call: Logging remains inactive (disable_user_content_logging: true)
             const thirdCallRequest = aidaClient.doConversation.getCall(2).args[0];
-            assert.isFalse(thirdCallRequest.metadata?.disable_user_content_logging);
+            assert.isTrue(thirdCallRequest.metadata?.disable_user_content_logging);
         });
         it('should abort execution if origin becomes blocked after approval', async () => {
             let called = 0;
@@ -639,7 +574,7 @@ describeWithEnvironment('AiAgent', () => {
                         }],
                 ]),
                 // Mock allowedOrigin to return blocked if our flag is set.
-                allowedOrigin: () => originBlocked ? { blocked: true } : { origin: 'https://google.com' },
+                allowedOrigin: () => originBlocked ? { blocked: true } : { origin: SDK.SecurityOrigin.SecurityOrigin.create('https://google.com') },
                 // Mock the side effect confirmation to simulate user approval AND concurrent navigation.
                 confirmSideEffectForTest: () => {
                     const resolvers = Promise.withResolvers();
@@ -688,7 +623,7 @@ describeWithEnvironment('AiAgent', () => {
                             explanation: 'Final answer',
                         }],
                 ]),
-                allowedOrigin: () => originBlocked ? { blocked: true } : { origin: 'https://google.com' },
+                allowedOrigin: () => originBlocked ? { blocked: true } : { origin: SDK.SecurityOrigin.SecurityOrigin.create('https://google.com') },
             });
             agent.declareFunctionForTest('testFn', {
                 description: 'test fn description',
@@ -709,6 +644,53 @@ describeWithEnvironment('AiAgent', () => {
             const errorResponse = findFirstErrorResponse(responses);
             assert.strictEqual(errorResponse.error, "cross-origin" /* AiAssistance.AiAgent.ErrorType.CROSS_ORIGIN */);
             assert.strictEqual(called, 1);
+        });
+        it('should remove the abort listener from signal after side effect confirmation resolves', async () => {
+            const abortController = new AbortController();
+            const addEventListenerSpy = sinon.spy(abortController.signal, 'addEventListener');
+            const removeEventListenerSpy = sinon.spy(abortController.signal, 'removeEventListener');
+            const agent = new AiAgentMock({
+                aidaClient: mockAidaClient([
+                    [
+                        {
+                            explanation: 'Calling function',
+                            functionCalls: [{ name: 'testFn', args: {} }],
+                        },
+                    ],
+                    [{
+                            explanation: 'Final answer',
+                        }],
+                ]),
+                confirmSideEffectForTest: () => {
+                    const resolvers = Promise.withResolvers();
+                    resolvers.resolve(true);
+                    return resolvers;
+                },
+            });
+            agent.declareFunctionForTest('testFn', {
+                description: 'test fn description',
+                parameters: {
+                    type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
+                    description: 'test parameters',
+                    properties: {},
+                    required: [],
+                },
+                handler: async (_args, options) => {
+                    if (!options?.approved) {
+                        return { requiresApproval: true, description: 'test approval' };
+                    }
+                    return { result: 'success' };
+                },
+            });
+            await Array.fromAsync(agent.run('query', {
+                selected: mockConversationContext(),
+                signal: abortController.signal,
+            }));
+            sinon.assert.calledWith(addEventListenerSpy, 'abort');
+            sinon.assert.calledWith(removeEventListenerSpy, 'abort');
+            const abortListener = addEventListenerSpy.getCalls().find(call => call.args[0] === 'abort')?.args[1];
+            assert.isDefined(abortListener);
+            sinon.assert.calledWith(removeEventListenerSpy, 'abort', abortListener);
         });
     });
     describe('parseTextResponseForSuggestions', () => {

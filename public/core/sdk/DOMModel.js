@@ -11,6 +11,19 @@ import { RemoteObject } from './RemoteObject.js';
 import { Events as ResourceTreeModelEvents, ResourceTreeModel } from './ResourceTreeModel.js';
 import { RuntimeModel } from './RuntimeModel.js';
 import { SDKModel } from './SDKModel.js';
+import { SecurityOrigin } from './SecurityOrigin.js';
+export var NodeType;
+(function (NodeType) {
+    NodeType[NodeType["ELEMENT_NODE"] = 1] = "ELEMENT_NODE";
+    NodeType[NodeType["ATTRIBUTE_NODE"] = 2] = "ATTRIBUTE_NODE";
+    NodeType[NodeType["TEXT_NODE"] = 3] = "TEXT_NODE";
+    NodeType[NodeType["CDATA_SECTION_NODE"] = 4] = "CDATA_SECTION_NODE";
+    NodeType[NodeType["PROCESSING_INSTRUCTION_NODE"] = 7] = "PROCESSING_INSTRUCTION_NODE";
+    NodeType[NodeType["COMMENT_NODE"] = 8] = "COMMENT_NODE";
+    NodeType[NodeType["DOCUMENT_NODE"] = 9] = "DOCUMENT_NODE";
+    NodeType[NodeType["DOCUMENT_TYPE_NODE"] = 10] = "DOCUMENT_TYPE_NODE";
+    NodeType[NodeType["DOCUMENT_FRAGMENT_NODE"] = 11] = "DOCUMENT_FRAGMENT_NODE";
+})(NodeType || (NodeType = {}));
 /** Keep this list in sync with https://w3c.github.io/aria/#state_prop_def **/
 export const ARIA_ATTRIBUTES = new Set([
     'role',
@@ -294,6 +307,13 @@ export class DOMNode extends Common.ObjectWrapper.ObjectWrapper {
     }
     topLayerIndex() {
         return this.#topLayerIndex;
+    }
+    /**
+     * Returns the security origin of the document owning this node, or `null` if
+     * this node is not attached to a document.
+     */
+    securityOrigin() {
+        return this.ownerDocument?.securityOrigin() ?? null;
     }
     adProvenance() {
         if (this.#adProvenance !== undefined) {
@@ -867,15 +887,17 @@ export class DOMNode extends Common.ObjectWrapper.ObjectWrapper {
             }
         });
     }
-    duplicate() {
+    async duplicate() {
         if (this.isInShadowTree()) {
-            return;
+            return { error: 'Cannot duplicate node in shadow tree', node: null };
         }
         const parentNode = this.parentNode ? this.parentNode : this;
         if (parentNode.nodeName() === '#document') {
-            return;
+            return { error: 'Parent node is document', node: null };
         }
-        this.copyTo(parentNode, this.nextSibling);
+        return await new Promise(resolve => {
+            this.copyTo(parentNode, this.nextSibling, (error, node) => resolve({ error, node }));
+        });
     }
     /**
      * Runs a script on the node's remote object that toggles a class name on
@@ -1171,6 +1193,8 @@ export class DOMNode extends Common.ObjectWrapper.ObjectWrapper {
             nodeName: this.nodeName(),
             localName: this.localName(),
             nodeValue: this.nodeValueInternal,
+            documentURL: this.documentURL,
+            baseURL: this.baseURL,
         }) :
             new DOMNodeSnapshot(this.domModel());
         snapshot.id = this.id;
@@ -1191,10 +1215,6 @@ export class DOMNode extends Common.ObjectWrapper.ObjectWrapper {
             ownerDocumentSnapshot || ((snapshot instanceof DOMDocument) ? snapshot : this.ownerDocument);
         snapshot.#isInShadowTree = this.#isInShadowTree;
         snapshot.childNodeCountInternal = this.childNodeCountInternal;
-        if (snapshot instanceof DOMDocument && this instanceof DOMDocument) {
-            snapshot.documentURL = this.documentURL;
-            snapshot.baseURL = this.baseURL;
-        }
         if (!this.childrenInternal && this.childNodeCountInternal > 0) {
             await this.getSubtree(1, false);
         }
@@ -1320,15 +1340,40 @@ export class DOMNodeShortcut {
 export class DOMDocument extends DOMNode {
     body;
     documentElement;
-    documentURL;
-    baseURL;
+    #documentURL;
+    #baseURL;
+    #securityOrigin;
     constructor(domModel, payload) {
         super(domModel);
         this.body = null;
         this.documentElement = null;
         this.init(this, false, payload);
-        this.documentURL = (payload.documentURL || '');
-        this.baseURL = (payload.baseURL || '');
+        this.#documentURL = (payload.documentURL || '');
+        this.#baseURL = (payload.baseURL || '');
+        this.#securityOrigin = SecurityOrigin.create(this.#documentURL);
+    }
+    get documentURL() {
+        return this.#documentURL;
+    }
+    get baseURL() {
+        return this.#baseURL;
+    }
+    /**
+     * Returns the security origin of this document.
+     *
+     * The security origin is derived from the document URL and is recomputed
+     * when the document navigates to a new URL via `setDocumentURL`.
+     */
+    securityOrigin() {
+        return this.#securityOrigin;
+    }
+    /**
+     * Updates the document and base URLs, and recomputes the document's security origin.
+     */
+    setDocumentURL(url) {
+        this.#documentURL = url;
+        this.#baseURL = url;
+        this.#securityOrigin = SecurityOrigin.create(url);
     }
 }
 export class AdoptedStyleSheet {
@@ -1401,8 +1446,7 @@ export class DOMModel extends SDKModel {
         if (node) {
             const contentDocument = node.contentDocument();
             if (contentDocument && contentDocument.documentURL !== frame.url) {
-                contentDocument.documentURL = frame.url;
-                contentDocument.baseURL = frame.url;
+                contentDocument.setDocumentURL(frame.url);
                 this.dispatchEventToListeners(Events.DocumentURLChanged, contentDocument);
             }
         }
@@ -2099,6 +2143,7 @@ export class DOMNodeSnapshot extends DOMNode {
     moveTo(_targetNode, _anchorNode, _callback) {
     }
     duplicate() {
+        return Promise.resolve({ error: null, node: null });
     }
     canInspectNode() {
         return false;
@@ -2131,6 +2176,7 @@ export class DOMDocumentSnapshot extends DOMDocument {
     moveTo(_targetNode, _anchorNode, _callback) {
     }
     duplicate() {
+        return Promise.resolve({ error: null, node: null });
     }
     canInspectNode() {
         return false;

@@ -45,12 +45,9 @@ describe('UserTimingsHandler', function () {
             await Trace.Handlers.ModelHandlers.UserTimings.finalize();
             return Trace.Handlers.ModelHandlers.UserTimings.data();
         }
-        beforeEach(async function () {
+        before(async function () {
             const events = await TraceLoader.rawEvents(this, 'user-timings.json.gz');
             timingsData = await getTimingsDataFromEvents(events);
-        });
-        afterEach(function () {
-            Trace.Handlers.ModelHandlers.UserTimings.reset();
         });
         describe('performance.measure events parsing', function () {
             it('parses the start and end events and returns a list of blocks', async () => {
@@ -134,7 +131,7 @@ describe('UserTimingsHandler', function () {
         });
     });
     describe('console timings', function () {
-        beforeEach(async function () {
+        before(async function () {
             const { data } = await TraceLoader.traceEngine(this, 'timings-track.json.gz');
             timingsData = data.UserTimings;
         });

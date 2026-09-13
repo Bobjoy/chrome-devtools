@@ -8,6 +8,13 @@ import * as Insights from './insights/insights.js';
 import * as Lantern from './lantern/lantern.js';
 import * as LanternComputationData from './LanternComputationData.js';
 import * as Types from './types/types.js';
+var Status;
+(function (Status) {
+    Status["IDLE"] = "IDLE";
+    Status["PARSING"] = "PARSING";
+    Status["FINISHED_PARSING"] = "FINISHED_PARSING";
+    Status["ERRORED_WHILE_PARSING"] = "ERRORED_WHILE_PARSING";
+})(Status || (Status = {}));
 export class TraceParseProgressEvent extends Event {
     data;
     static eventName = 'traceparseprogress';
@@ -16,6 +23,19 @@ export class TraceParseProgressEvent extends Event {
         this.data = data;
     }
 }
+/**
+ * Parsing a trace can take time. On large traces we see a breakdown of time like so:
+ *   - handleEvent() loop:  ~20%
+ *   - finalize() loop:     ~60%
+ *   - shallowClone calls:  ~20%
+ * The numbers below are set so we can report a progress percentage of [0...1]
+ */
+var ProgressPhase;
+(function (ProgressPhase) {
+    ProgressPhase[ProgressPhase["HANDLE_EVENT"] = 0.2] = "HANDLE_EVENT";
+    ProgressPhase[ProgressPhase["FINALIZE"] = 0.8] = "FINALIZE";
+    ProgressPhase[ProgressPhase["CLONE"] = 1] = "CLONE";
+})(ProgressPhase || (ProgressPhase = {}));
 function calculateProgress(value, phase) {
     // Finalize values should be [0.2...0.8]
     if (phase === 0.8 /* ProgressPhase.FINALIZE */) {
@@ -163,7 +183,7 @@ export class TraceProcessor extends EventTarget {
         // Handle each event.
         for (let i = 0; i < traceEvents.length; ++i) {
             // Every so often we take a break just to render.
-            if (i % eventsPerChunk === 0 && i) {
+            if (options.yieldToMain !== false && i % eventsPerChunk === 0 && i) {
                 // Take the opportunity to provide status update events.
                 const percent = calculateProgress(i / traceEvents.length, 0.2 /* ProgressPhase.HANDLE_EVENT */);
                 this.dispatchEvent(new TraceParseProgressEvent({ percent }));
@@ -186,9 +206,11 @@ export class TraceProcessor extends EventTarget {
             const [name, handler] = sortedHandlers[i];
             if (handler.finalize) {
                 options.logger?.start(`parse:${name}:finalize`);
-                // Yield to the UI because finalize() calls can be expensive
-                // TODO(jacktfranklin): consider using `scheduler.yield()` or `scheduler.postTask(() => {}, {priority: 'user-blocking'})`
-                await new Promise(resolve => setTimeout(resolve, 0));
+                if (options.yieldToMain !== false) {
+                    // Yield to the UI because finalize() calls can be expensive
+                    // TODO(jacktfranklin): consider using `scheduler.yield()` or `scheduler.postTask(() => {}, {priority: 'user-blocking'})`
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                }
                 await handler.finalize(finalizeOptions);
                 options.logger?.end(`parse:${name}:finalize`);
             }

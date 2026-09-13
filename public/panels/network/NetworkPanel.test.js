@@ -7,13 +7,13 @@ import * as Common from '../../core/common/common.js';
 import * as SDK from '../../core/sdk/sdk.js';
 import * as Logs from '../../models/logs/logs.js';
 import * as Tracing from '../../services/tracing/tracing.js';
-import { renderElementIntoDOM } from '../../testing/DOMHelpers.js';
-import { createTarget, describeWithEnvironment, registerNoopActions } from '../../testing/EnvironmentHelpers.js';
+import { createTarget, describeWithEnvironment, } from '../../testing/EnvironmentHelpers.js';
 import { MockCDPConnection } from '../../testing/MockCDPConnection.js';
 import { createNetworkPanelForMockConnection } from '../../testing/NetworkHelpers.js';
+import { createNetworkRequest } from '../../testing/NetworkRequestHelpers.js';
 import * as RenderCoordinator from '../../ui/components/render_coordinator/render_coordinator.js';
+import * as PerfUI from '../../ui/legacy/components/perf_ui/perf_ui.js';
 import * as UI from '../../ui/legacy/legacy.js';
-import * as Network from './network.js';
 describeWithEnvironment('NetworkPanel', () => {
     let target;
     let networkPanel;
@@ -57,33 +57,23 @@ describeWithEnvironment('NetworkPanel', () => {
     };
     describe('in scope', tracingTests(true));
     describe('out of scpe', tracingTests(false));
-});
-describeWithEnvironment('NetworkPanel', () => {
-    let networkPanel;
-    beforeEach(async () => {
-        registerNoopActions(['inspector-main.reload']);
-        UI.ActionRegistration.maybeRemoveActionExtension('network.toggle-recording');
-        UI.ActionRegistration.maybeRemoveActionExtension('network.clear');
-        await import('./network-meta.js');
-        createTarget();
-        const dummyStorage = new Common.Settings.SettingsStorage({});
-        Common.Settings.Settings.instance({
-            forceNew: true,
-            syncedStorage: dummyStorage,
-            globalStorage: dummyStorage,
-            localStorage: dummyStorage,
-            settingRegistrations: Common.SettingRegistration.getRegisteredSettings(),
-            console: Common.Console.Console.instance(),
+    it('filters network log when a film strip frame is selected', async () => {
+        Common.Settings.Settings.instance().moduleSetting('network-record-film-strip-setting').set(true);
+        const filmStripElement = networkPanel.element.querySelector('.network-film-strip');
+        assert.instanceOf(filmStripElement, HTMLElement);
+        const filmStripView = UI.Widget.Widget.get(filmStripElement);
+        assert.exists(filmStripView);
+        const request = createNetworkRequest({
+            requestId: '1',
+            url: 'https://example.com',
         });
-        const actionRegistryInstance = UI.ActionRegistry.ActionRegistry.instance({ forceNew: true });
-        UI.ShortcutRegistry.ShortcutRegistry.instance({ forceNew: true, actionRegistry: actionRegistryInstance });
-        networkPanel = Network.NetworkPanel.NetworkPanel.instance({ forceNew: true, displayScreenshotDelay: 0 });
-        renderElementIntoDOM(networkPanel);
-        await RenderCoordinator.done();
-    });
-    afterEach(async () => {
-        await RenderCoordinator.done();
-        networkPanel.detach();
+        request.setIssueTime(0, 0);
+        request.endTime = 10;
+        Logs.NetworkLog.NetworkLog.instance().dispatchEventToListeners(Logs.NetworkLog.Events.RequestUpdated, { request });
+        const setWindowSpy = sinon.spy(networkPanel.networkLogView, 'setWindow');
+        filmStripView.dispatchEventToListeners("FrameSelected" /* PerfUI.FilmStripView.Events.FRAME_SELECTED */, 5000);
+        sinon.assert.calledOnce(setWindowSpy);
+        sinon.assert.calledWith(setWindowSpy, 0, 5);
     });
     it('clears network log on button click', async () => {
         const networkLogResetSpy = sinon.spy(Logs.NetworkLog.NetworkLog.instance(), 'reset');

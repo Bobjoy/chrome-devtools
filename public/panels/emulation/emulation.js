@@ -4,53 +4,54 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/emulation/AdvancedApp.js
+// ../../front_end/panels/emulation/AdvancedApp.ts
 var AdvancedApp_exports = {};
 __export(AdvancedApp_exports, {
   AdvancedApp: () => AdvancedApp,
   AdvancedAppProvider: () => AdvancedAppProvider
 });
-import * as Host3 from "./../../core/host/host.js";
-import * as UI5 from "./../../ui/legacy/legacy.js";
-import * as ThemeSupport from "./../../ui/legacy/theme_support/theme_support.js";
+import * as Host3 from "../../core/host/host.js";
+import * as UI5 from "../../ui/legacy/legacy.js";
+import * as ThemeSupport from "../../ui/legacy/theme_support/theme_support.js";
 
-// gen/front_end/panels/emulation/DeviceModeView.js
+// ../../front_end/panels/emulation/DeviceModeView.ts
 var DeviceModeView_exports = {};
 __export(DeviceModeView_exports, {
   ActionDelegate: () => ActionDelegate,
   DEFAULT_DEVICE_MODE_VIEW: () => DEFAULT_DEVICE_MODE_VIEW,
   DEFAULT_RULER_VIEW: () => DEFAULT_RULER_VIEW,
   DeviceModeView: () => DeviceModeView,
-  Ruler: () => Ruler
+  Ruler: () => Ruler,
+  RulerEvents: () => RulerEvents
 });
-import * as Common4 from "./../../core/common/common.js";
-import * as Host2 from "./../../core/host/host.js";
-import * as i18n5 from "./../../core/i18n/i18n.js";
-import * as Root from "./../../core/root/root.js";
-import * as SDK2 from "./../../core/sdk/sdk.js";
-import * as EmulationModel2 from "./../../models/emulation/emulation.js";
-import * as Geometry from "./../../models/geometry/geometry.js";
-import * as UI4 from "./../../ui/legacy/legacy.js";
-import { Directives as Directives3, html as html3, nothing as nothing2, render as render3 } from "./../../ui/lit/lit.js";
-import * as VisualLogging3 from "./../../ui/visual_logging/visual_logging.js";
+import * as Common4 from "../../core/common/common.js";
+import * as Host2 from "../../core/host/host.js";
+import * as i18n5 from "../../core/i18n/i18n.js";
+import * as Root from "../../core/root/root.js";
+import * as SDK2 from "../../core/sdk/sdk.js";
+import * as EmulationModel2 from "../../models/emulation/emulation.js";
+import * as Geometry from "../../ui/geometry/geometry.js";
+import * as UI4 from "../../ui/legacy/legacy.js";
+import { Directives as Directives3, html as html3, nothing as nothing2, render as render3 } from "../../ui/lit/lit.js";
+import * as VisualLogging3 from "../../ui/visual_logging/visual_logging.js";
 
-// gen/front_end/panels/emulation/DeviceModeToolbar.js
+// ../../front_end/panels/emulation/DeviceModeToolbar.ts
 var DeviceModeToolbar_exports = {};
 __export(DeviceModeToolbar_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW,
   DeviceModeToolbar: () => DeviceModeToolbar
 });
-import "./../../ui/legacy/legacy.js";
-import * as Common from "./../../core/common/common.js";
-import * as Host from "./../../core/host/host.js";
-import * as i18n from "./../../core/i18n/i18n.js";
-import * as Platform from "./../../core/platform/platform.js";
-import * as EmulationModel from "./../../models/emulation/emulation.js";
-import * as Buttons from "./../../ui/components/buttons/buttons.js";
-import * as UI from "./../../ui/legacy/legacy.js";
-import { Directive, Directives, html, i18nTemplate, noChange, render } from "./../../ui/lit/lit.js";
-import * as VisualLogging from "./../../ui/visual_logging/visual_logging.js";
-import * as MobileThrottling from "./../mobile_throttling/mobile_throttling.js";
+import "../../ui/legacy/legacy.js";
+import * as Common from "../../core/common/common.js";
+import * as Host from "../../core/host/host.js";
+import * as i18n from "../../core/i18n/i18n.js";
+import * as Platform from "../../core/platform/platform.js";
+import * as EmulationModel from "../../models/emulation/emulation.js";
+import * as Buttons from "../../ui/components/buttons/buttons.js";
+import * as UI from "../../ui/legacy/legacy.js";
+import { Directive, Directives, html, i18nTemplate, noChange, render } from "../../ui/lit/lit.js";
+import * as VisualLogging from "../../ui/visual_logging/visual_logging.js";
+import * as MobileThrottling from "../mobile_throttling/mobile_throttling.js";
 var AutoWidthSelectDirective = class _AutoWidthSelectDirective extends Directive.Directive {
   static itemWidthCache = /* @__PURE__ */ new Map();
   constructor(partInfo) {
@@ -348,11 +349,13 @@ var DEFAULT_VIEW = (input, _output, target) => {
     title: i18nString(UIStrings.throttling),
     bindToGlobalConditions: true
   })}></select>
-      <select class="dark-text toolbar-has-dropdown-shrinkable" ${widget(MobileThrottling.ThrottlingManager.SaveDataOverrideSelect)}></select>
+      <select class="dark-text toolbar-has-dropdown-shrinkable" ${widget(
+    MobileThrottling.ThrottlingManager.SaveDataOverrideSelect
+  )}></select>
 
       <div class="device-mode-empty-toolbar-element"></div>
       <devtools-button class="toolbar-button"
-                       .data=${{ variant: "toolbar", iconName: "screen-rotation" }}
+                       .data=${{ variant: Buttons.Button.Variant.TOOLBAR, iconName: "screen-rotation" }}
                        jslog=${VisualLogging.action("screen-rotation").track({ click: true })}
                        @click=${input.onModeMenuClick}
                        .title=${input.modeButtonTitle}
@@ -362,7 +365,7 @@ var DEFAULT_VIEW = (input, _output, target) => {
       <!-- Show dual screen toolbar -->
       ${input.showSpanButton ? html`
         <devtools-button class="toolbar-button"
-                         .data=${{ variant: "toolbar", iconName: "device-fold" }}
+                         .data=${{ variant: Buttons.Button.Variant.TOOLBAR, iconName: "device-fold" }}
                          jslog=${VisualLogging.action("device-fold").track({ click: true })}
                          .title=${i18nString(UIStrings.toggleDualscreenMode)}
                          @click=${input.onSpanClick}>
@@ -384,7 +387,7 @@ var DEFAULT_VIEW = (input, _output, target) => {
     <devtools-toolbar class="device-mode-toolbar-options" wrappable>
       <div class="device-mode-empty-toolbar-element"></div>
       <devtools-button
-        .data=${{ variant: "toolbar", iconName: "dots-vertical", title: i18nString(UIStrings.moreOptions) }}
+        .data=${{ variant: Buttons.Button.Variant.TOOLBAR, iconName: "dots-vertical", title: i18nString(UIStrings.moreOptions) }}
         @click=${input.onMoreOptionsClick}
         jslog=${VisualLogging.dropDown("more-options").track({ click: true })}
       ></devtools-button></devtools-toolbar>
@@ -421,9 +424,20 @@ var DeviceModeToolbar = class extends UI.Widget.Widget {
     this.autoAdjustScaleSetting.addChangeListener(this.requestUpdate, this);
     this.lastMode = /* @__PURE__ */ new Map();
     this.emulatedDevicesList = EmulationModel.EmulatedDevices.EmulatedDevicesList.instance();
-    this.emulatedDevicesList.addEventListener("CustomDevicesUpdated", this.deviceListChanged, this);
-    this.emulatedDevicesList.addEventListener("StandardDevicesUpdated", this.deviceListChanged, this);
-    this.persistenceSetting = Common.Settings.Settings.instance().createSetting("emulation.device-mode-value", { device: "", orientation: "", mode: "" });
+    this.emulatedDevicesList.addEventListener(
+      EmulationModel.EmulatedDevices.Events.CUSTOM_DEVICES_UPDATED,
+      this.deviceListChanged,
+      this
+    );
+    this.emulatedDevicesList.addEventListener(
+      EmulationModel.EmulatedDevices.Events.STANDARD_DEVICES_UPDATED,
+      this.deviceListChanged,
+      this
+    );
+    this.persistenceSetting = Common.Settings.Settings.instance().createSetting(
+      "emulation.device-mode-value",
+      { device: "", orientation: "", mode: "" }
+    );
   }
   get model() {
     return this.#model;
@@ -437,14 +451,14 @@ var DeviceModeToolbar = class extends UI.Widget.Widget {
       this.#model.scaleSetting().removeChangeListener(this.requestUpdate, this);
       this.#model.uaSetting().removeChangeListener(this.requestUpdate, this);
       this.#model.deviceScaleFactorSetting().removeChangeListener(this.requestUpdate, this);
-      this.#model.removeEventListener("Updated", this.requestUpdate, this);
+      this.#model.removeEventListener(EmulationModel.DeviceModeModel.Events.UPDATED, this.requestUpdate, this);
     }
     this.#model = model;
     this.#model.toolbarControlsEnabledSetting().addChangeListener(this.requestUpdate, this);
     this.#model.scaleSetting().addChangeListener(this.requestUpdate, this);
     this.#model.uaSetting().addChangeListener(this.requestUpdate, this);
     this.#model.deviceScaleFactorSetting().addChangeListener(this.requestUpdate, this);
-    this.#model.addEventListener("Updated", this.requestUpdate, this);
+    this.#model.addEventListener(EmulationModel.DeviceModeModel.Events.UPDATED, this.requestUpdate, this);
     this.requestUpdate();
   }
   wasShown() {
@@ -650,7 +664,7 @@ var DeviceModeToolbar = class extends UI.Widget.Widget {
       return [];
     }
     const deviceScaleFactorSetting = this.model.deviceScaleFactorSetting();
-    const defaultValue = this.model.uaSetting().get() === "Mobile" || this.model.uaSetting().get() === "Mobile (no touch)" ? EmulationModel.DeviceModeModel.defaultMobileScaleFactor : window.devicePixelRatio;
+    const defaultValue = this.model.uaSetting().get() === EmulationModel.DeviceModeModel.UA.MOBILE || this.model.uaSetting().get() === EmulationModel.DeviceModeModel.UA.MOBILE_NO_TOUCH ? EmulationModel.DeviceModeModel.defaultMobileScaleFactor : window.devicePixelRatio;
     const values = [1, 2, 3];
     if (!values.includes(defaultValue)) {
       values.push(defaultValue);
@@ -683,10 +697,10 @@ var DeviceModeToolbar = class extends UI.Widget.Widget {
     const uaSetting = this.model.uaSetting();
     const currentUserAgent = uaSetting.get();
     return [
-      "Mobile",
-      "Mobile (no touch)",
-      "Desktop",
-      "Desktop (touch)"
+      EmulationModel.DeviceModeModel.UA.MOBILE,
+      EmulationModel.DeviceModeModel.UA.MOBILE_NO_TOUCH,
+      EmulationModel.DeviceModeModel.UA.DESKTOP,
+      EmulationModel.DeviceModeModel.UA.DESKTOP_TOUCH
     ].map((value) => ({
       title: value,
       value,
@@ -703,20 +717,62 @@ var DeviceModeToolbar = class extends UI.Widget.Widget {
       return;
     }
     const model = this.model;
-    appendToggleItem(contextMenu.headerSection(), this.showMediaInspectorSetting, i18nString(UIStrings.hideMediaQueries), i18nString(UIStrings.showMediaQueries), void 0, "media-queries");
-    appendToggleItem(contextMenu.headerSection(), this.showRulersSetting, i18nString(UIStrings.hideRulers), i18nString(UIStrings.showRulers), void 0, "rulers");
-    appendToggleItem(contextMenu.defaultSection(), this.showDeviceScaleFactorSetting, i18nString(UIStrings.removeDevicePixelRatio), i18nString(UIStrings.addDevicePixelRatio), void 0, "device-pixel-ratio");
-    appendToggleItem(contextMenu.defaultSection(), this.showUserAgentTypeSetting, i18nString(UIStrings.removeDeviceType), i18nString(UIStrings.addDeviceType), void 0, "device-type");
+    appendToggleItem(
+      contextMenu.headerSection(),
+      this.showMediaInspectorSetting,
+      i18nString(UIStrings.hideMediaQueries),
+      i18nString(UIStrings.showMediaQueries),
+      void 0,
+      "media-queries"
+    );
+    appendToggleItem(
+      contextMenu.headerSection(),
+      this.showRulersSetting,
+      i18nString(UIStrings.hideRulers),
+      i18nString(UIStrings.showRulers),
+      void 0,
+      "rulers"
+    );
+    appendToggleItem(
+      contextMenu.defaultSection(),
+      this.showDeviceScaleFactorSetting,
+      i18nString(UIStrings.removeDevicePixelRatio),
+      i18nString(UIStrings.addDevicePixelRatio),
+      void 0,
+      "device-pixel-ratio"
+    );
+    appendToggleItem(
+      contextMenu.defaultSection(),
+      this.showUserAgentTypeSetting,
+      i18nString(UIStrings.removeDeviceType),
+      i18nString(UIStrings.addDeviceType),
+      void 0,
+      "device-type"
+    );
     contextMenu.appendItemsAtLocation("deviceModeMenu");
-    contextMenu.footerSection().appendItem(i18nString(UIStrings.resetToDefaults), this.reset.bind(this), { jslogContext: "reset-to-defaults" });
-    contextMenu.footerSection().appendItem(i18nString(UIStrings.closeDevtools), Host.InspectorFrontendHost.InspectorFrontendHostInstance.closeWindow.bind(Host.InspectorFrontendHost.InspectorFrontendHostInstance), { jslogContext: "close-dev-tools" });
+    contextMenu.footerSection().appendItem(
+      i18nString(UIStrings.resetToDefaults),
+      this.reset.bind(this),
+      { jslogContext: "reset-to-defaults" }
+    );
+    contextMenu.footerSection().appendItem(
+      i18nString(UIStrings.closeDevtools),
+      Host.InspectorFrontendHost.InspectorFrontendHostInstance.closeWindow.bind(
+        Host.InspectorFrontendHost.InspectorFrontendHostInstance
+      ),
+      { jslogContext: "close-dev-tools" }
+    );
     function appendToggleItem(section, setting, title1, title2, disabled, context) {
       if (typeof disabled === "undefined") {
         disabled = model.type() === EmulationModel.DeviceModeModel.Type.None;
       }
       const isEnabled = Boolean(setting.get() && !disabled);
       const jslogContext = `${context}-${isEnabled ? "disable" : "enable"}`;
-      section.appendItem(isEnabled ? title1 : title2, setting.set.bind(setting, !setting.get()), { disabled, jslogContext });
+      section.appendItem(
+        isEnabled ? title1 : title2,
+        setting.set.bind(setting, !setting.get()),
+        { disabled, jslogContext }
+      );
     }
   }
   reset() {
@@ -731,7 +787,12 @@ var DeviceModeToolbar = class extends UI.Widget.Widget {
       return;
     }
     const scale = this.autoAdjustScaleSetting.get() ? void 0 : this.model.scaleSetting().get();
-    this.model.emulate(EmulationModel.DeviceModeModel.Type.Device, device, this.lastMode.get(device) || device.modes[0], scale);
+    this.model.emulate(
+      EmulationModel.DeviceModeModel.Type.Device,
+      device,
+      this.lastMode.get(device) || device.modes[0],
+      scale
+    );
   }
   switchToResponsive() {
     this.model?.emulate(EmulationModel.DeviceModeModel.Type.Responsive, null, null);
@@ -920,7 +981,11 @@ var DeviceModeToolbar = class extends UI.Widget.Widget {
       }
     }
     function addMode(mode, title) {
-      contextMenu.defaultSection().appendCheckboxItem(title, applyMode.bind(null, mode), { checked: model.mode() === mode, jslogContext: "device-mode" });
+      contextMenu.defaultSection().appendCheckboxItem(
+        title,
+        applyMode.bind(null, mode),
+        { checked: model.mode() === mode, jslogContext: "device-mode" }
+      );
     }
     function applyMode(mode) {
       const scale = autoAdjustScaleSetting.get() ? void 0 : model.scaleSetting().get();
@@ -969,15 +1034,15 @@ var deviceModeView_css_default = `/*
 .device-mode-toolbar {
   flex: none;
   background-color: var(--app-color-toolbar-background);
-  border-bottom: 1px solid var(--sys-color-divider);
+  border-bottom: var(--sys-size-1) solid var(--sys-color-divider);
   display: flex;
   flex-direction: row;
   align-items: stretch;
 }
 
 .device-mode-x {
-  margin: 0 1px;
-  font-size: 16px;
+  margin: 0 var(--sys-size-1);
+  font-size: var(--sys-typescale-body1-size);
 }
 
 .device-mode-size-input {
@@ -987,11 +1052,11 @@ var deviceModeView_css_default = `/*
    * 2 pixels padding between the characters and the
    * step-buttons.
    */
-  width: calc(4ch + 2ch + 2px);
+  width: calc(4ch + 2ch + var(--sys-size-2));
   max-height: 18px;
   border: var(--sys-color-neutral-outline);
-  border-radius: 4px;
-  margin: 0 2px;
+  border-radius: var(--sys-shape-corner-extra-small);
+  margin: 0 var(--sys-size-2);
   text-align: center;
   font-size: inherit;
   font-family: inherit;
@@ -1035,15 +1100,15 @@ devtools-toolbar.device-mode-toolbar-options {
 .device-mode-media-container {
   flex: none;
   overflow: hidden;
-  box-shadow: inset 0 -1px var(--sys-color-divider);
+  box-shadow: inset 0 calc(-1 * var(--sys-size-1)) var(--sys-color-divider);
 }
 
 .device-mode-content-clip .device-mode-media-container {
-  margin-bottom: 20px;
+  margin-bottom: var(--sys-size-9);
 }
 
 .device-mode-presets-container {
-  flex: 0 0 20px;
+  flex: 0 0 var(--sys-size-9);
   display: flex;
 }
 
@@ -1052,7 +1117,7 @@ devtools-toolbar.device-mode-toolbar-options {
   justify-content: center;
   position: relative;
   background-color: var(--sys-color-surface1);
-  border-bottom: 1px solid var(--sys-color-divider);
+  border-bottom: var(--sys-size-1) solid var(--sys-color-divider);
 }
 
 .device-mode-presets-container:hover {
@@ -1068,8 +1133,8 @@ devtools-toolbar.device-mode-toolbar-options {
 }
 
 .device-mode-preset-bar {
-  border-left: 2px solid var(--sys-color-divider);
-  border-right: 2px solid var(--sys-color-divider);
+  border-left: var(--sys-size-2) solid var(--sys-color-divider);
+  border-right: var(--sys-size-2) solid var(--sys-color-divider);
   pointer-events: auto;
   text-align: center;
   flex: none;
@@ -1078,7 +1143,7 @@ devtools-toolbar.device-mode-toolbar-options {
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  margin-bottom: 1px;
+  margin-bottom: var(--sys-size-1);
 }
 
 .device-mode-preset-bar:hover {
@@ -1113,14 +1178,14 @@ devtools-toolbar.device-mode-toolbar-options {
 }
 
 .device-mode-content-clip .device-mode-screen-area {
-  --override-screen-area-box-shadow: hsl(240deg 3% 84%) 0 0 0 0.5px, hsl(0deg 0% 80% / 40%) 0 0 20px;
+  --override-screen-area-box-shadow: hsl(240deg 3% 84%) 0 0 0 0.5px, hsl(0deg 0% 80% / 40%) 0 0 var(--sys-size-9);
 
   box-shadow: var(--override-screen-area-box-shadow);
 }
 
 .theme-with-dark-background .device-mode-content-clip .device-mode-screen-area,
 :host-context(.theme-with-dark-background) .device-mode-content-clip .device-mode-screen-area {
-  --override-screen-area-box-shadow: rgb(40 40 42) 0 0 0 0.5px, rgb(51 51 51 / 40%) 0 0 20px;
+  --override-screen-area-box-shadow: rgb(40 40 42) 0 0 0 0.5px, rgb(51 51 51 / 40%) 0 0 var(--sys-size-9);
 }
 
 .device-mode-resizer {
@@ -1143,56 +1208,56 @@ devtools-toolbar.device-mode-toolbar-options {
 
 .device-mode-right-resizer {
   top: 0;
-  bottom: -1px;
-  right: -20px;
-  width: 20px;
+  bottom: calc(-1 * var(--sys-size-1));
+  right: calc(-1 * var(--sys-size-9));
+  width: var(--sys-size-9);
 }
 
 .device-mode-left-resizer {
   top: 0;
-  bottom: -1px;
-  left: -20px;
-  width: 20px;
+  bottom: calc(-1 * var(--sys-size-1));
+  left: calc(-1 * var(--sys-size-9));
+  width: var(--sys-size-9);
   opacity: 0%;
 }
 
 .device-mode-bottom-resizer {
   left: 0;
-  right: -1px;
-  bottom: -20px;
-  height: 20px;
+  right: calc(-1 * var(--sys-size-1));
+  bottom: calc(-1 * var(--sys-size-9));
+  height: var(--sys-size-9);
 }
 
 .device-mode-bottom-right-resizer {
-  inset: 0 -20px -20px 0;
+  inset: 0 calc(-1 * var(--sys-size-9)) calc(-1 * var(--sys-size-9)) 0;
   background-color: var(--sys-color-surface1);
 }
 
 .device-mode-bottom-left-resizer {
-  inset: 0 0 -20px -20px;
+  inset: 0 0 calc(-1 * var(--sys-size-9)) calc(-1 * var(--sys-size-9));
   opacity: 0%;
 }
 
 .device-mode-right-resizer > div {
   /* stylelint-disable-next-line custom-property-pattern */
   content: var(--image-file-resizeHorizontal);
-  width: 6px;
+  width: var(--sys-size-4);
   height: 26px;
 }
 
 .device-mode-left-resizer > div {
   /* stylelint-disable-next-line custom-property-pattern */
   content: var(--image-file-resizeHorizontal);
-  width: 6px;
+  width: var(--sys-size-4);
   height: 26px;
 }
 
 .device-mode-bottom-resizer > div {
   /* stylelint-disable-next-line custom-property-pattern */
   content: var(--image-file-resizeVertical);
-  margin-bottom: -2px;
+  margin-bottom: calc(-1 * var(--sys-size-2));
   width: 26px;
-  height: 6px;
+  height: var(--sys-size-4);
 }
 
 .device-mode-bottom-right-resizer > div {
@@ -1233,33 +1298,33 @@ devtools-toolbar.device-mode-toolbar-options {
 }
 
 .device-mode-ruler-top {
-  height: 20px;
+  height: var(--sys-size-9);
   right: 0;
 }
 
 .device-mode-ruler-left {
-  width: 20px;
+  width: var(--sys-size-9);
   bottom: 0;
 }
 
 .device-mode-ruler-content {
   pointer-events: none;
   position: absolute;
-  left: -20px;
-  top: -20px;
+  left: calc(-1 * var(--sys-size-9));
+  top: calc(-1 * var(--sys-size-9));
 }
 
 .device-mode-ruler-top .device-mode-ruler-content {
-  border-top: 1px solid transparent;
+  border-top: var(--sys-size-1) solid transparent;
   right: 0;
-  bottom: 20px;
+  bottom: var(--sys-size-9);
   background-color: var(--sys-color-cdt-base-container);
 }
 
 .device-mode-ruler-left .device-mode-ruler-content {
-  border-left: 1px solid transparent;
-  border-top: 1px solid transparent;
-  right: 20px;
+  border-left: var(--sys-size-1) solid transparent;
+  border-top: var(--sys-size-1) solid transparent;
+  right: var(--sys-size-9);
   bottom: 0;
 }
 
@@ -1268,13 +1333,13 @@ devtools-toolbar.device-mode-toolbar-options {
 }
 
 .device-mode-ruler-top .device-mode-ruler-inner {
-  inset: 0 0 0 20px;
-  border-bottom: 1px solid var(--sys-color-token-subtle);
+  inset: 0 0 0 var(--sys-size-9);
+  border-bottom: var(--sys-size-1) solid var(--sys-color-token-subtle);
 }
 
 .device-mode-ruler-left .device-mode-ruler-inner {
   inset: 19px 0 0;
-  border-right: 1px solid var(--sys-color-token-subtle);
+  border-right: var(--sys-size-1) solid var(--sys-color-token-subtle);
   background-color: var(--sys-color-cdt-base-container);
 }
 
@@ -1286,8 +1351,8 @@ devtools-toolbar.device-mode-toolbar-options {
   width: 0;
   height: 5px;
   bottom: 0;
-  border-right: 1px solid var(--sys-color-token-subtle);
-  margin-right: -1px;
+  border-right: var(--sys-size-1) solid var(--sys-color-token-subtle);
+  margin-right: calc(-1 * var(--sys-size-1));
 }
 
 .device-mode-ruler-top .device-mode-ruler-marker.device-mode-ruler-marker-medium {
@@ -1302,8 +1367,8 @@ devtools-toolbar.device-mode-toolbar-options {
   height: 0;
   width: 5px;
   right: 0;
-  border-bottom: 1px solid var(--sys-color-token-subtle);
-  margin-bottom: -1px;
+  border-bottom: var(--sys-size-1) solid var(--sys-color-token-subtle);
+  margin-bottom: calc(-1 * var(--sys-size-1));
 }
 
 .device-mode-ruler-left .device-mode-ruler-marker.device-mode-ruler-marker-medium {
@@ -1325,25 +1390,26 @@ devtools-toolbar.device-mode-toolbar-options {
 }
 
 .device-mode-ruler-top .device-mode-ruler-text {
-  left: 2px;
-  top: -2px;
+  left: var(--sys-size-2);
+  top: calc(-1 * var(--sys-size-2));
 }
 
 .device-mode-ruler-left .device-mode-ruler-text {
-  left: -4px;
+  left: calc(-1 * var(--sys-size-3));
   top: -15px;
   transform: rotate(270deg);
 }
 
 /*# sourceURL=${import.meta.resolve("./deviceModeView.css")} */`;
 
-// gen/front_end/panels/emulation/InspectedPagePlaceholder.js
+// ../../front_end/panels/emulation/InspectedPagePlaceholder.ts
 var InspectedPagePlaceholder_exports = {};
 __export(InspectedPagePlaceholder_exports, {
+  Events: () => Events,
   InspectedPagePlaceholder: () => InspectedPagePlaceholder
 });
-import * as Common2 from "./../../core/common/common.js";
-import * as UI2 from "./../../ui/legacy/legacy.js";
+import * as Common2 from "../../core/common/common.js";
+import * as UI2 from "../../ui/legacy/legacy.js";
 
 // gen/front_end/panels/emulation/inspectedPagePlaceholder.css.js
 var inspectedPagePlaceholder_css_default = `/*
@@ -1358,9 +1424,12 @@ var inspectedPagePlaceholder_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./inspectedPagePlaceholder.css")} */`;
 
-// gen/front_end/panels/emulation/InspectedPagePlaceholder.js
+// ../../front_end/panels/emulation/InspectedPagePlaceholder.ts
 var inspectedPagePlaceholderInstance;
-var InspectedPagePlaceholder = class _InspectedPagePlaceholder extends Common2.ObjectWrapper.eventMixin(UI2.Widget.Widget) {
+var InspectedPagePlaceholderBase = Common2.ObjectWrapper.eventMixin(
+  UI2.Widget.Widget
+);
+var InspectedPagePlaceholder = class _InspectedPagePlaceholder extends InspectedPagePlaceholderBase {
   constructor() {
     super({ useShadowDom: true });
     this.registerRequiredCSS(inspectedPagePlaceholder_css_default);
@@ -1399,28 +1468,33 @@ var InspectedPagePlaceholder = class _InspectedPagePlaceholder extends Common2.O
     };
     if (force) {
       --bounds.height;
-      this.dispatchEventToListeners("Update", bounds);
+      this.dispatchEventToListeners("Update" /* UPDATE */, bounds);
       ++bounds.height;
     }
-    this.dispatchEventToListeners("Update", bounds);
+    this.dispatchEventToListeners("Update" /* UPDATE */, bounds);
   }
 };
+var Events = /* @__PURE__ */ ((Events2) => {
+  Events2["UPDATE"] = "Update";
+  return Events2;
+})(Events || {});
 
-// gen/front_end/panels/emulation/MediaQueryInspector.js
+// ../../front_end/panels/emulation/MediaQueryInspector.ts
 var MediaQueryInspector_exports = {};
 __export(MediaQueryInspector_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW2,
   MediaQueryInspector: () => MediaQueryInspector,
-  MediaQueryUIModel: () => MediaQueryUIModel
+  MediaQueryUIModel: () => MediaQueryUIModel,
+  Section: () => Section
 });
-import * as Common3 from "./../../core/common/common.js";
-import * as i18n3 from "./../../core/i18n/i18n.js";
-import * as Platform2 from "./../../core/platform/platform.js";
-import * as SDK from "./../../core/sdk/sdk.js";
-import * as Bindings from "./../../models/bindings/bindings.js";
-import * as UI3 from "./../../ui/legacy/legacy.js";
-import { Directives as Directives2, html as html2, nothing, render as render2 } from "./../../ui/lit/lit.js";
-import * as VisualLogging2 from "./../../ui/visual_logging/visual_logging.js";
+import * as Common3 from "../../core/common/common.js";
+import * as i18n3 from "../../core/i18n/i18n.js";
+import * as Platform2 from "../../core/platform/platform.js";
+import * as SDK from "../../core/sdk/sdk.js";
+import * as Bindings from "../../models/bindings/bindings.js";
+import * as UI3 from "../../ui/legacy/legacy.js";
+import { Directives as Directives2, html as html2, nothing, render as render2 } from "../../ui/lit/lit.js";
+import * as VisualLogging2 from "../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/emulation/mediaQueryInspector.css.js
 var mediaQueryInspector_css_default = `/*
@@ -1435,8 +1509,8 @@ var mediaQueryInspector_css_default = `/*
 }
 
 .media-inspector-marker-container {
-  height: 14px;
-  margin: 2px 0;
+  height: var(--sys-size-7);
+  margin: var(--sys-size-2) 0;
   position: relative;
 }
 
@@ -1452,7 +1526,7 @@ var mediaQueryInspector_css_default = `/*
 .media-inspector-marker {
   flex: none;
   pointer-events: auto;
-  margin: 1px 0;
+  margin: var(--sys-size-1) 0;
   white-space: nowrap;
   z-index: auto;
   position: relative;
@@ -1463,15 +1537,15 @@ var mediaQueryInspector_css_default = `/*
 }
 
 .media-inspector-marker:hover {
-  margin: -1px 0;
+  margin: calc(-1 * var(--sys-size-1)) 0;
   opacity: 100%;
 }
 
 .media-inspector-marker-min-width {
   flex: auto;
   background-color: var(--sys-color-yellow-container);
-  border-right: 2px solid var(--sys-color-yellow-bright);
-  border-left: 2px solid var(--sys-color-yellow-bright);
+  border-right: var(--sys-size-2) solid var(--sys-color-yellow-bright);
+  border-left: var(--sys-size-2) solid var(--sys-color-yellow-bright);
 
   &:hover {
     background-color: color-mix(in srgb, var(--sys-color-yellow-container), var(--sys-color-yellow-bright) 30%);
@@ -1479,17 +1553,17 @@ var mediaQueryInspector_css_default = `/*
 }
 
 .media-inspector-marker-min-width-right {
-  border-left: 2px solid var(--sys-color-yellow-bright);
+  border-left: var(--sys-size-2) solid var(--sys-color-yellow-bright);
 }
 
 .media-inspector-marker-min-width-left {
-  border-right: 2px solid var(--sys-color-yellow-bright);
+  border-right: var(--sys-size-2) solid var(--sys-color-yellow-bright);
 }
 
 .media-inspector-marker-min-max-width {
   background-color: var(--sys-color-tertiary-container);
-  border-left: 2px solid var(--sys-color-tertiary);
-  border-right: 2px solid var(--sys-color-tertiary);
+  border-left: var(--sys-size-2) solid var(--sys-color-tertiary);
+  border-right: var(--sys-size-2) solid var(--sys-color-tertiary);
 }
 
 .media-inspector-marker-min-max-width:hover {
@@ -1498,8 +1572,8 @@ var mediaQueryInspector_css_default = `/*
 
 .media-inspector-marker-max-width {
   background-color: var(--sys-color-inverse-primary);
-  border-right: 2px solid var(--sys-color-primary-bright);
-  border-left: 2px solid var(--sys-color-primary-bright);
+  border-right: var(--sys-size-2) solid var(--sys-color-primary-bright);
+  border-left: var(--sys-size-2) solid var(--sys-color-primary-bright);
 }
 
 /* Clear background colors when query is not active and not hovering */
@@ -1528,33 +1602,33 @@ var mediaQueryInspector_css_default = `/*
 }
 
 .media-inspector-marker-label-container-left {
-  left: -2px;
+  left: calc(-1 * var(--sys-size-2));
 }
 
 .media-inspector-marker-label-container-right {
-  right: -2px;
+  right: calc(-1 * var(--sys-size-2));
 }
 
 .media-inspector-marker-label {
   color: var(--sys-color-on-surface);
   position: absolute;
-  top: 1px;
+  top: var(--sys-size-1);
   bottom: 0;
-  font-size: 12px;
+  font-size: var(--sys-typescale-body4-size);
   pointer-events: none;
 }
 
 .media-inspector-label-right {
-  right: 4px;
+  right: var(--sys-size-3);
 }
 
 .media-inspector-label-left {
-  left: 4px;
+  left: var(--sys-size-3);
 }
 
 /*# sourceURL=${import.meta.resolve("./mediaQueryInspector.css")} */`;
 
-// gen/front_end/panels/emulation/MediaQueryInspector.js
+// ../../front_end/panels/emulation/MediaQueryInspector.ts
 var UIStrings2 = {
   /**
    * @description A context menu item in the media query inspector of the device mode toolbar.
@@ -1581,7 +1655,7 @@ var DEFAULT_VIEW2 = (input, _output, target) => {
               @click=${() => input.onMediaQueryClicked(marker.model)}
               @contextmenu=${(event) => input.onContextMenu(event, marker.locations)}
           >
-            ${section === 0 ? renderMaxSection(input.zoomFactor, marker.model) : section === 1 ? renderMinMaxSection(input.zoomFactor, marker.model) : renderMinSection(input.zoomFactor, marker.model)}
+            ${section === 0 /* MAX */ ? renderMaxSection(input.zoomFactor, marker.model) : section === 1 /* MIN_MAX */ ? renderMinMaxSection(input.zoomFactor, marker.model) : renderMinSection(input.zoomFactor, marker.model)}
           </div>
         `)}
       </div>
@@ -1672,7 +1746,11 @@ var MediaQueryInspector = class extends UI3.Widget.Widget {
     this.view = view;
     this.#scale = 1;
     SDK.TargetManager.TargetManager.instance().observeModels(SDK.CSSModel.CSSModel, this);
-    UI3.ZoomManager.ZoomManager.instance().addEventListener("ZoomChanged", this.requestUpdate.bind(this), this);
+    UI3.ZoomManager.ZoomManager.instance().addEventListener(
+      UI3.ZoomManager.Events.ZOOM_CHANGED,
+      this.requestUpdate.bind(this),
+      this
+    );
   }
   get getWidthCallback() {
     return this.#getWidthCallback;
@@ -1705,7 +1783,11 @@ var MediaQueryInspector = class extends UI3.Widget.Widget {
     this.cssModel.removeEventListener(SDK.CSSModel.Events.StyleSheetAdded, this.scheduleMediaQueriesUpdate, this);
     this.cssModel.removeEventListener(SDK.CSSModel.Events.StyleSheetRemoved, this.scheduleMediaQueriesUpdate, this);
     this.cssModel.removeEventListener(SDK.CSSModel.Events.StyleSheetChanged, this.scheduleMediaQueriesUpdate, this);
-    this.cssModel.removeEventListener(SDK.CSSModel.Events.MediaQueryResultChanged, this.scheduleMediaQueriesUpdate, this);
+    this.cssModel.removeEventListener(
+      SDK.CSSModel.Events.MediaQueryResultChanged,
+      this.scheduleMediaQueriesUpdate,
+      this
+    );
     delete this.cssModel;
   }
   get scale() {
@@ -1721,11 +1803,11 @@ var MediaQueryInspector = class extends UI3.Widget.Widget {
   onMediaQueryClicked(model) {
     const modelMaxWidth = model.maxWidthExpression();
     const modelMinWidth = model.minWidthExpression();
-    if (model.section() === 0) {
+    if (model.section() === 0 /* MAX */) {
       this.setWidthCallback?.(modelMaxWidth ? modelMaxWidth.computedLength() || 0 : 0);
       return;
     }
-    if (model.section() === 2) {
+    if (model.section() === 2 /* MIN */) {
       this.setWidthCallback?.(modelMinWidth ? modelMinWidth.computedLength() || 0 : 0);
       return;
     }
@@ -1746,15 +1828,28 @@ var MediaQueryInspector = class extends UI3.Widget.Widget {
       if (!uiLocation) {
         continue;
       }
-      const descriptor = typeof uiLocation.columnNumber === "number" ? Platform2.StringUtilities.sprintf("%s:%d:%d", uiLocation.uiSourceCode.url(), uiLocation.lineNumber + 1, uiLocation.columnNumber + 1) : Platform2.StringUtilities.sprintf("%s:%d", uiLocation.uiSourceCode.url(), uiLocation.lineNumber + 1);
+      const descriptor = typeof uiLocation.columnNumber === "number" ? Platform2.StringUtilities.sprintf(
+        "%s:%d:%d",
+        uiLocation.uiSourceCode.url(),
+        uiLocation.lineNumber + 1,
+        uiLocation.columnNumber + 1
+      ) : Platform2.StringUtilities.sprintf("%s:%d", uiLocation.uiSourceCode.url(), uiLocation.lineNumber + 1);
       uiLocations.set(descriptor, uiLocation);
     }
     const contextMenuItems = [...uiLocations.keys()].sort();
     const contextMenu = new UI3.ContextMenu.ContextMenu(event);
-    const subMenuItem = contextMenu.defaultSection().appendSubMenuItem(i18nString2(UIStrings2.revealInSourceCode), void 0, "reveal-in-source-list");
+    const subMenuItem = contextMenu.defaultSection().appendSubMenuItem(
+      i18nString2(UIStrings2.revealInSourceCode),
+      void 0,
+      "reveal-in-source-list"
+    );
     for (let i = 0; i < contextMenuItems.length; ++i) {
       const title = contextMenuItems[i];
-      subMenuItem.defaultSection().appendItem(title, this.revealSourceLocation.bind(this, uiLocations.get(title)), { jslogContext: "reveal-in-source" });
+      subMenuItem.defaultSection().appendItem(
+        title,
+        this.revealSourceLocation.bind(this, uiLocations.get(title)),
+        { jslogContext: "reveal-in-source" }
+      );
     }
     void contextMenu.show();
   }
@@ -1850,14 +1945,24 @@ var MediaQueryInspector = class extends UI3.Widget.Widget {
       return;
     }
     const markers = Map.groupBy(this.buildMediaQueryMarkers(), (marker) => marker.model.section());
-    this.view({
-      zoomFactor: this.zoomFactor(),
-      markers,
-      onMediaQueryClicked: this.onMediaQueryClicked.bind(this),
-      onContextMenu: this.onContextMenu.bind(this)
-    }, {}, this.contentElement);
+    this.view(
+      {
+        zoomFactor: this.zoomFactor(),
+        markers,
+        onMediaQueryClicked: this.onMediaQueryClicked.bind(this),
+        onContextMenu: this.onContextMenu.bind(this)
+      },
+      {},
+      this.contentElement
+    );
   }
 };
+var Section = /* @__PURE__ */ ((Section2) => {
+  Section2[Section2["MAX"] = 0] = "MAX";
+  Section2[Section2["MIN_MAX"] = 1] = "MIN_MAX";
+  Section2[Section2["MIN"] = 2] = "MIN";
+  return Section2;
+})(Section || {});
 var MediaQueryUIModel = class _MediaQueryUIModel {
   cssMedia;
   #minWidthExpression;
@@ -1871,11 +1976,11 @@ var MediaQueryUIModel = class _MediaQueryUIModel {
     this.#maxWidthExpression = maxWidthExpression;
     this.#active = active;
     if (maxWidthExpression && !minWidthExpression) {
-      this.#section = 0;
+      this.#section = 0 /* MAX */;
     } else if (minWidthExpression && maxWidthExpression) {
-      this.#section = 1;
+      this.#section = 1 /* MIN_MAX */;
     } else {
-      this.#section = 2;
+      this.#section = 2 /* MIN */;
     }
   }
   static createFromMediaQuery(cssMedia, mediaQuery) {
@@ -1952,10 +2057,10 @@ var MediaQueryUIModel = class _MediaQueryUIModel {
     const otherMinWidthExpression = other.minWidthExpression();
     const thisMinLength = thisMinWidthExpression ? thisMinWidthExpression.computedLength() || 0 : 0;
     const otherMinLength = otherMinWidthExpression ? otherMinWidthExpression.computedLength() || 0 : 0;
-    if (this.section() === 0) {
+    if (this.section() === 0 /* MAX */) {
       return otherMaxLength - thisMaxLength;
     }
-    if (this.section() === 2) {
+    if (this.section() === 2 /* MIN */) {
       return thisMinLength - otherMinLength;
     }
     return thisMinLength - otherMinLength || otherMaxLength - thisMaxLength;
@@ -1991,7 +2096,7 @@ var MediaQueryUIModel = class _MediaQueryUIModel {
   }
 };
 
-// gen/front_end/panels/emulation/DeviceModeView.js
+// ../../front_end/panels/emulation/DeviceModeView.ts
 var { classMap: classMap2, ref, styleMap } = Directives3;
 var { widget: widget2 } = UI4.Widget;
 var UIStrings3 = {
@@ -2062,12 +2167,13 @@ var DEFAULT_DEVICE_MODE_VIEW = (input, _output, target) => {
     i18nString3(UIStrings3.laptopL),
     "4K"
   ];
-  render3(input.showDeviceMode ? html3`${UI4.Widget.widget(DeviceModeToolbar, { model: input.model })}
+  render3(
+    input.showDeviceMode ? html3`${UI4.Widget.widget(DeviceModeToolbar, { model: input.model })}
     <div class=${classMap2({
-    "device-mode-content-clip": true,
-    vbox: true,
-    "device-mode-rulers-visible": input.showRulers
-  })}>
+      "device-mode-content-clip": true,
+      vbox: true,
+      "device-mode-rulers-visible": input.showRulers
+    })}>
       <div class="device-mode-presets-container" jslog=${VisualLogging3.responsivePresets()}>
         <div class="device-mode-presets-container-inner">
           ${sizes.map((size, idx) => html3`
@@ -2084,19 +2190,19 @@ var DEFAULT_DEVICE_MODE_VIEW = (input, _output, target) => {
       </div>
       <div class="device-mode-media-container">
         ${input.showMediaInspector ? widget2(MediaQueryInspector, {
-    scale: input.scale,
-    getWidthCallback: () => input.model.appliedDeviceSize().width,
-    setWidthCallback: input.model.setWidth.bind(input.model)
-  }) : nothing2}
+      scale: input.scale,
+      getWidthCallback: () => input.model.appliedDeviceSize().width,
+      setWidthCallback: input.model.setWidth.bind(input.model)
+    }) : nothing2}
       </div>
       <div class="device-mode-content-area">
         <div class="device-mode-screen-area"
              style=${styleMap(input.cachedCssScreenRect ? {
-    left: `${input.cachedCssScreenRect.left}px`,
-    top: `${input.cachedCssScreenRect.top}px`,
-    width: `${input.cachedCssScreenRect.width}px`,
-    height: `${input.cachedCssScreenRect.height}px`
-  } : {})}>
+      left: `${input.cachedCssScreenRect.left}px`,
+      top: `${input.cachedCssScreenRect.top}px`,
+      width: `${input.cachedCssScreenRect.width}px`,
+      height: `${input.cachedCssScreenRect.height}px`
+    } : {})}>
           <div class="device-mode-resizer device-mode-bottom-right-resizer"
                ?hidden=${!input.resizable}
                jslog=${VisualLogging3.slider("device-mode-resizer").track({ drag: true })}
@@ -2131,11 +2237,11 @@ var DEFAULT_DEVICE_MODE_VIEW = (input, _output, target) => {
           </div>
           <div class="device-mode-page-area"
                style=${styleMap(input.cachedCssVisiblePageRect ? {
-    left: `${input.cachedCssVisiblePageRect.left}px`,
-    top: `${input.cachedCssVisiblePageRect.top}px`,
-    width: `${input.cachedCssVisiblePageRect.width}px`,
-    height: `${input.cachedCssVisiblePageRect.height}px`
-  } : {})}>
+      left: `${input.cachedCssVisiblePageRect.left}px`,
+      top: `${input.cachedCssVisiblePageRect.top}px`,
+      width: `${input.cachedCssVisiblePageRect.width}px`,
+      height: `${input.cachedCssVisiblePageRect.height}px`
+    } : {})}>
             ${widget2(() => InspectedPagePlaceholder.instance(), { minimumSize: new Geometry.Size(1, 1) })}
           </div>
         </div>
@@ -2143,27 +2249,30 @@ var DEFAULT_DEVICE_MODE_VIEW = (input, _output, target) => {
           <devtools-widget class="device-mode-ruler-top device-mode-ruler"
               style=${styleMap({ left: `${input.cachedCssScreenRect?.left ?? 0}px`, top: `${input.cachedCssScreenRect?.top ?? 0}px` })}
               ${UI4.Widget.widget(Ruler, {
-    scale: input.scale,
-    horizontal: true
-  })}
+      scale: input.scale,
+      horizontal: true
+    })}
               @device-mode-ruler-marker-selected=${(e) => input.model.setWidthAndScaleToFit(e.detail)}>
           </devtools-widget>
           <devtools-widget class="device-mode-ruler-left device-mode-ruler"
               style=${styleMap({ left: `${input.cachedCssScreenRect?.left ?? 0}px`, top: `${input.cachedCssScreenRect?.top ?? 0}px` })}
               ${UI4.Widget.widget(Ruler, {
-    scale: input.scale,
-    horizontal: false
-  })}
+      scale: input.scale,
+      horizontal: false
+    })}
               @device-mode-ruler-marker-selected=${(e) => input.model.setHeightAndScaleToFit(e.detail)}>
           </devtools-widget>
         ` : nothing2}
       </div>
     </div>
-  ` : widget2(() => InspectedPagePlaceholder.instance(), { minimumSize: new Geometry.Size(150, 150) }), target, {
-    container: {
-      classes: ["device-mode-view"]
+  ` : widget2(() => InspectedPagePlaceholder.instance(), { minimumSize: new Geometry.Size(150, 150) }),
+    target,
+    {
+      container: {
+        classes: ["device-mode-view"]
+      }
     }
-  });
+  );
 };
 var DeviceModeView = class _DeviceModeView extends UI4.Widget.VBox {
   wrapperInstance;
@@ -2196,7 +2305,7 @@ var DeviceModeView = class _DeviceModeView extends UI4.Widget.VBox {
     this.setMinimumSize(150, 150);
     this.registerRequiredCSS(deviceModeView_css_default);
     this.model = EmulationModel2.DeviceModeModel.DeviceModeModel.instance();
-    this.model.addEventListener("Updated", this.updateUI, this);
+    this.model.addEventListener(EmulationModel2.DeviceModeModel.Events.UPDATED, this.updateUI, this);
     this.showMediaInspectorSetting = Common4.Settings.Settings.instance().moduleSetting("show-media-query-inspector");
     this.showMediaInspectorSetting.addChangeListener(this.updateUI, this);
     this.showRulersSetting = Common4.Settings.Settings.instance().moduleSetting("emulation.show-rulers");
@@ -2206,9 +2315,14 @@ var DeviceModeView = class _DeviceModeView extends UI4.Widget.VBox {
     this.#showDeviceModeSetting = model.enabledSetting();
     this.#showDeviceModeSetting.setRequiresUserAction(Boolean(Root.Runtime.Runtime.queryParam("hasOtherClients")));
     this.#showDeviceModeSetting.addChangeListener(this.#showDeviceModeChanged, this);
-    SDK2.TargetManager.TargetManager.instance().addModelListener(SDK2.OverlayModel.OverlayModel, "ScreenshotRequested", this.screenshotRequestedFromOverlay, this);
+    SDK2.TargetManager.TargetManager.instance().addModelListener(
+      SDK2.OverlayModel.OverlayModel,
+      SDK2.OverlayModel.Events.SCREENSHOT_REQUESTED,
+      this.screenshotRequestedFromOverlay,
+      this
+    );
     this.performUpdate();
-    UI4.ZoomManager.ZoomManager.instance().addEventListener("ZoomChanged", this.zoomChanged, this);
+    UI4.ZoomManager.ZoomManager.instance().addEventListener(UI4.ZoomManager.Events.ZOOM_CHANGED, this.zoomChanged, this);
   }
   #showDeviceModeChanged() {
     if (!this.#showDeviceModeSetting.get()) {
@@ -2285,9 +2399,20 @@ var DeviceModeView = class _DeviceModeView extends UI4.Widget.VBox {
       cursor = "nesw-resize";
     }
     resizer.setCursor(cursor);
-    resizer.addEventListener("ResizeStart", this.onResizeStart, this);
-    resizer.addEventListener("ResizeUpdateXY", this.onResizeUpdate.bind(this, widthFactor, heightFactor));
-    resizer.addEventListener("ResizeEnd", this.onResizeEnd, this);
+    resizer.addEventListener(
+      UI4.ResizerWidget.Events.RESIZE_START,
+      this.onResizeStart,
+      this
+    );
+    resizer.addEventListener(
+      UI4.ResizerWidget.Events.RESIZE_UPDATE_XY,
+      this.onResizeUpdate.bind(this, widthFactor, heightFactor)
+    );
+    resizer.addEventListener(
+      UI4.ResizerWidget.Events.RESIZE_END,
+      this.onResizeEnd,
+      this
+    );
     return resizer;
   }
   onResizeStart() {
@@ -2385,7 +2510,10 @@ var DeviceModeView = class _DeviceModeView extends UI4.Widget.VBox {
     const handleWidth = this.contentElement.querySelector(".device-mode-right-resizer")?.offsetWidth || 20;
     const handleHeight = this.contentElement.querySelector(".device-mode-bottom-resizer")?.offsetHeight || 20;
     const availableSize = new Geometry.Size(Math.max(rect.width * zoomFactor, 1), Math.max(rect.height * zoomFactor, 1));
-    const preferredSize = new Geometry.Size(Math.max((rect.width - 2 * handleWidth) * zoomFactor, 1), Math.max((rect.height - handleHeight) * zoomFactor, 1));
+    const preferredSize = new Geometry.Size(
+      Math.max((rect.width - 2 * handleWidth) * zoomFactor, 1),
+      Math.max((rect.height - handleHeight) * zoomFactor, 1)
+    );
     this.model.setAvailableSize(availableSize, preferredSize);
   }
   zoomChanged() {
@@ -2456,20 +2584,31 @@ var DEFAULT_RULER_VIEW = (input, output, target) => {
       </div>
     `);
   }
-  render3(html3`
+  render3(
+    html3`
     <div class="device-mode-ruler-content">
       <div class="device-mode-ruler-inner">
         ${markers}
       </div>
     </div>
-  `, target, {
-    container: {
-      classes: ["device-mode-ruler"],
-      attributes: { jslog: VisualLogging3.deviceModeRuler().track({ click: true }) }
+  `,
+    target,
+    {
+      container: {
+        classes: ["device-mode-ruler"],
+        attributes: { jslog: VisualLogging3.deviceModeRuler().track({ click: true }) }
+      }
     }
-  });
+  );
 };
-var Ruler = class extends Common4.ObjectWrapper.eventMixin(UI4.Widget.Widget) {
+var RulerEvents = /* @__PURE__ */ ((RulerEvents2) => {
+  RulerEvents2["MARKER_SELECTED"] = "MarkerSelected";
+  return RulerEvents2;
+})(RulerEvents || {});
+var RulerBase = Common4.ObjectWrapper.eventMixin(
+  UI4.Widget.Widget
+);
+var Ruler = class extends RulerBase {
   #view;
   #horizontal = true;
   #scale = 1;
@@ -2506,7 +2645,7 @@ var Ruler = class extends Common4.ObjectWrapper.eventMixin(UI4.Widget.Widget) {
     this.requestUpdate();
   }
   #onMarkerClick = (size) => {
-    this.dispatchEventToListeners("MarkerSelected", size);
+    this.dispatchEventToListeners("MarkerSelected" /* MARKER_SELECTED */, size);
   };
   performUpdate() {
     if (!this.isShowing()) {
@@ -2627,7 +2766,7 @@ function getQuadBoundingBox(quad) {
   return { minX, maxX, minY, maxY };
 }
 
-// gen/front_end/panels/emulation/AdvancedApp.js
+// ../../front_end/panels/emulation/AdvancedApp.ts
 var appInstance = null;
 var AdvancedApp = class _AdvancedApp {
   rootSplitWidget;
@@ -2639,7 +2778,11 @@ var AdvancedApp = class _AdvancedApp {
   #universe;
   constructor(universe) {
     this.#universe = universe;
-    UI5.DockController.DockController.instance().addEventListener("BeforeDockSideChanged", this.openToolboxWindow, this);
+    UI5.DockController.DockController.instance().addEventListener(
+      UI5.DockController.Events.BEFORE_DOCK_SIDE_CHANGED,
+      this.openToolboxWindow,
+      this
+    );
   }
   /**
    * Note: it's used by toolbox.ts without real type checks.
@@ -2664,11 +2807,23 @@ var AdvancedApp = class _AdvancedApp {
     this.rootSplitWidget.setDefaultFocusedChild(UI5.InspectorView.InspectorView.instance());
     UI5.InspectorView.InspectorView.instance().setOwnerSplit(this.rootSplitWidget);
     this.inspectedPagePlaceholder = InspectedPagePlaceholder.instance();
-    this.inspectedPagePlaceholder.addEventListener("Update", this.onSetInspectedPageBounds.bind(this), this);
+    this.inspectedPagePlaceholder.addEventListener("Update" /* UPDATE */, this.onSetInspectedPageBounds.bind(this), this);
     this.deviceModeView = new DeviceModeView();
-    UI5.DockController.DockController.instance().addEventListener("BeforeDockSideChanged", this.onBeforeDockSideChange, this);
-    UI5.DockController.DockController.instance().addEventListener("DockSideChanged", this.onDockSideChange, this);
-    UI5.DockController.DockController.instance().addEventListener("AfterDockSideChanged", this.onAfterDockSideChange, this);
+    UI5.DockController.DockController.instance().addEventListener(
+      UI5.DockController.Events.BEFORE_DOCK_SIDE_CHANGED,
+      this.onBeforeDockSideChange,
+      this
+    );
+    UI5.DockController.DockController.instance().addEventListener(
+      UI5.DockController.Events.DOCK_SIDE_CHANGED,
+      this.onDockSideChange,
+      this
+    );
+    UI5.DockController.DockController.instance().addEventListener(
+      UI5.DockController.Events.AFTER_DOCK_SIDE_CHANGED,
+      this.onAfterDockSideChange,
+      this
+    );
     this.onDockSideChange();
     console.timeStamp("AdvancedApp.attachToBody");
     rootView.attachToDocument(document2);
@@ -2676,7 +2831,7 @@ var AdvancedApp = class _AdvancedApp {
     this.inspectedPagePlaceholder.update();
   }
   openToolboxWindow(event) {
-    if (event.data.to !== "undocked") {
+    if (event.data.to !== UI5.DockController.DockState.UNDOCKED) {
       return;
     }
     if (this.toolboxWindow) {
@@ -2703,7 +2858,7 @@ var AdvancedApp = class _AdvancedApp {
     }
   }
   onBeforeDockSideChange(event) {
-    if (event.data.to === "undocked" && this.toolboxRootView) {
+    if (event.data.to === UI5.DockController.DockState.UNDOCKED && this.toolboxRootView) {
       this.rootSplitWidget.hideSidebar();
       this.inspectedPagePlaceholder.update();
     }
@@ -2715,9 +2870,9 @@ var AdvancedApp = class _AdvancedApp {
     if (toDockSide === void 0) {
       throw new Error("Got onDockSideChange event with unexpected undefined for dockSide()");
     }
-    if (toDockSide === "undocked") {
+    if (toDockSide === UI5.DockController.DockState.UNDOCKED) {
       this.updateForUndocked();
-    } else if (this.toolboxRootView && event && event.data.from === "undocked") {
+    } else if (this.toolboxRootView && event && event.data.from === UI5.DockController.DockState.UNDOCKED) {
       this.rootSplitWidget.hideSidebar();
     } else {
       this.updateForDocked(toDockSide);
@@ -2727,7 +2882,7 @@ var AdvancedApp = class _AdvancedApp {
     if (!this.changingDockSide) {
       return;
     }
-    if (event.data.from && event.data.from === "undocked") {
+    if (event.data.from && event.data.from === UI5.DockController.DockState.UNDOCKED) {
       this.updateForDocked(event.data.to);
     }
     this.changingDockSide = false;
@@ -2735,20 +2890,17 @@ var AdvancedApp = class _AdvancedApp {
   }
   updateForDocked(dockSide) {
     const resizerElement = this.rootSplitWidget.resizerElement();
-    resizerElement.style.transform = dockSide === "right" ? "translateX(2px)" : dockSide === "left" ? "translateX(-2px)" : "";
+    resizerElement.style.transform = dockSide === UI5.DockController.DockState.RIGHT ? "translateX(2px)" : dockSide === UI5.DockController.DockState.LEFT ? "translateX(-2px)" : "";
     this.rootSplitWidget.setVertical(
-      dockSide === "right" || dockSide === "left"
-      /* UI.DockController.DockState.LEFT */
+      dockSide === UI5.DockController.DockState.RIGHT || dockSide === UI5.DockController.DockState.LEFT
     );
     this.rootSplitWidget.setSecondIsSidebar(
-      dockSide === "right" || dockSide === "bottom"
-      /* UI.DockController.DockState.BOTTOM */
+      dockSide === UI5.DockController.DockState.RIGHT || dockSide === UI5.DockController.DockState.BOTTOM
     );
     this.rootSplitWidget.toggleResizer(this.rootSplitWidget.resizerElement(), true);
     this.rootSplitWidget.toggleResizer(
       UI5.InspectorView.InspectorView.instance().topResizerElement(),
-      dockSide === "bottom"
-      /* UI.DockController.DockState.BOTTOM */
+      dockSide === UI5.DockController.DockState.BOTTOM
     );
     this.rootSplitWidget.showBoth();
   }
@@ -2758,7 +2910,7 @@ var AdvancedApp = class _AdvancedApp {
     this.rootSplitWidget.hideMain();
   }
   isDocked() {
-    return UI5.DockController.DockController.instance().dockSide() !== "undocked";
+    return UI5.DockController.DockController.instance().dockSide() !== UI5.DockController.DockState.UNDOCKED;
   }
   onSetInspectedPageBounds(event) {
     if (this.changingDockSide) {

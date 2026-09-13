@@ -4,16 +4,16 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryHighlightChipList.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryHighlightChipList.ts
 var LinearMemoryHighlightChipList_exports = {};
 __export(LinearMemoryHighlightChipList_exports, {
   LinearMemoryHighlightChipList: () => LinearMemoryHighlightChipList
 });
-import "./../../../ui/kit/kit.js";
-import * as i18n from "./../../../core/i18n/i18n.js";
-import * as UI from "./../../../ui/legacy/legacy.js";
-import { Directives, html, render } from "./../../../ui/lit/lit.js";
-import * as VisualLogging from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/kit/kit.js";
+import * as i18n from "../../../core/i18n/i18n.js";
+import * as UI from "../../../ui/legacy/legacy.js";
+import { Directives, html, render } from "../../../ui/lit/lit.js";
+import * as VisualLogging from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/linear_memory_inspector/components/linearMemoryHighlightChipList.css.js
 var linearMemoryHighlightChipList_css_default = `/*
@@ -23,26 +23,26 @@ var linearMemoryHighlightChipList_css_default = `/*
  */
 
 .highlight-chip-list {
-  min-height: 20px;
+  min-height: var(--sys-size-9);
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
   align-items: center;
   background-color: var(--sys-color-cdt-base-container);
-  margin: 8px 0;
-  gap: 8px;
-  row-gap: 6px;
+  margin: var(--sys-size-5) 0;
+  gap: var(--sys-size-5);
+  row-gap: var(--sys-size-4);
 }
 
 .highlight-chip {
   background: var(--sys-color-cdt-base-container);
-  border: 1px solid var(--sys-color-divider);
+  border: var(--sys-size-1) solid var(--sys-color-divider);
   height: 18px;
-  border-radius: 4px;
+  border-radius: var(--sys-shape-corner-extra-small);
   flex: 0 0 auto;
   max-width: 250px;
   position: relative;
-  padding: 0 6px;
+  padding: 0 var(--sys-size-4);
 }
 
 .highlight-chip:hover {
@@ -55,8 +55,8 @@ var linearMemoryHighlightChipList_css_default = `/*
   position: absolute;
   right: 0;
   top: 0;
-  border-radius: 4px;
-  width: 24px;
+  border-radius: var(--sys-shape-corner-extra-small);
+  width: var(--sys-size-11);
   align-items: center;
   justify-content: center;
 }
@@ -116,8 +116,8 @@ var linearMemoryHighlightChipList_css_default = `/*
 }
 
 .highlight-chip.focused {
-  outline: 2px solid var(--sys-color-state-focus-ring);
-  outline-offset: 2px;
+  outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
+  outline-offset: var(--sys-size-2);
 }
 
 .highlight-chip:hover > .delete-highlight-container {
@@ -148,7 +148,7 @@ var linearMemoryHighlightChipList_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./linearMemoryHighlightChipList.css")} */`;
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryHighlightChipList.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryHighlightChipList.ts
 var UIStrings = {
   /**
    * @description Tooltip text that appears when hovering over an inspected variable's button in the highlight chip list in the Memory inspector panel.
@@ -162,7 +162,10 @@ var UIStrings = {
    */
   deleteHighlight: "Stop highlighting this memory"
 };
-var str_ = i18n.i18n.registerUIStrings("panels/linear_memory_inspector/components/LinearMemoryHighlightChipList.ts", UIStrings);
+var str_ = i18n.i18n.registerUIStrings(
+  "panels/linear_memory_inspector/components/LinearMemoryHighlightChipList.ts",
+  UIStrings
+);
 var i18nString = i18n.i18n.getLocalizedString.bind(void 0, str_);
 var { classMap } = Directives;
 var DEFAULT_VIEW = (input, output, target) => {
@@ -248,24 +251,25 @@ var LinearMemoryHighlightChipList = class extends UI.Widget.Widget {
   }
 };
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryInspector.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryInspector.ts
 var LinearMemoryInspector_exports = {};
 __export(LinearMemoryInspector_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW6,
+  Events: () => Events,
   LinearMemoryInspector: () => LinearMemoryInspector
 });
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryViewer.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryViewer.ts
 var LinearMemoryViewer_exports = {};
 __export(LinearMemoryViewer_exports, {
   ByteSelectedEvent: () => ByteSelectedEvent,
   LinearMemoryViewer: () => LinearMemoryViewer,
   ResizeEvent: () => ResizeEvent
 });
-import * as Lit from "./../../../ui/lit/lit.js";
-import * as VisualLogging2 from "./../../../ui/visual_logging/visual_logging.js";
+import * as Lit from "../../../ui/lit/lit.js";
+import * as VisualLogging2 from "../../../ui/visual_logging/visual_logging.js";
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryInspectorUtils.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryInspectorUtils.ts
 var LinearMemoryInspectorUtils_exports = {};
 __export(LinearMemoryInspectorUtils_exports, {
   DECIMAL_REGEXP: () => DECIMAL_REGEXP,
@@ -306,7 +310,7 @@ var linearMemoryViewer_css_default = `/*
 :host {
   flex: auto;
   display: flex;
-  min-height: 20px;
+  min-height: var(--sys-size-9);
 }
 
 .view {
@@ -319,13 +323,13 @@ var linearMemoryViewer_css_default = `/*
 
 .row {
   display: flex;
-  height: 20px;
+  height: var(--sys-size-9);
   align-items: center;
 }
 
 .cell {
   text-align: center;
-  border: 1px solid transparent;
+  border: var(--sys-size-1) solid transparent;
   border-radius: 2px;
 
   &.focused-area {
@@ -350,7 +354,7 @@ var linearMemoryViewer_css_default = `/*
 }
 
 .text-cell {
-  min-width: 14px;
+  min-width: var(--sys-size-7);
   color: var(--sys-color-on-surface-subtle);
 }
 
@@ -364,10 +368,10 @@ var linearMemoryViewer_css_default = `/*
 }
 
 .divider {
-  width: 1px;
+  width: var(--sys-size-1);
   height: inherit;
   background-color: var(--sys-color-divider);
-  margin: 0 4px;
+  margin: 0 var(--sys-size-3);
 }
 
 .highlight-area {
@@ -376,7 +380,7 @@ var linearMemoryViewer_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./linearMemoryViewer.css")} */`;
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryViewer.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryViewer.ts
 var { render: render2, html: html2 } = Lit;
 var ByteSelectedEvent = class _ByteSelectedEvent extends Event {
   static eventName = "byteselected";
@@ -609,11 +613,11 @@ var LinearMemoryViewer = class extends HTMLElement {
 };
 customElements.define("devtools-linear-memory-inspector-viewer", LinearMemoryViewer);
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryInspector.js
-import * as Common from "./../../../core/common/common.js";
-import * as i18n13 from "./../../../core/i18n/i18n.js";
-import * as UI6 from "./../../../ui/legacy/legacy.js";
-import { html as html7, nothing as nothing2, render as render7 } from "./../../../ui/lit/lit.js";
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryInspector.ts
+import * as Common from "../../../core/common/common.js";
+import * as i18n13 from "../../../core/i18n/i18n.js";
+import * as UI6 from "../../../ui/legacy/legacy.js";
+import { html as html7, nothing as nothing2, render as render7 } from "../../../ui/lit/lit.js";
 
 // gen/front_end/panels/linear_memory_inspector/components/linearMemoryInspector.css.js
 var linearMemoryInspector_css_default = `/*
@@ -640,7 +644,7 @@ var linearMemoryInspector_css_default = `/*
     flex-direction: column;
     font-family: var(--monospace-font-family);
     font-size: var(--monospace-font-size);
-    padding: 9px 12px 9px 7px;
+    padding: 9px var(--sys-size-6) 9px 7px;
   }
 
   devtools-linear-memory-inspector-viewer {
@@ -648,7 +652,7 @@ var linearMemoryInspector_css_default = `/*
   }
 
   .navigator-widget ~ devtools-linear-memory-inspector-viewer {
-    margin-top: 12px;
+    margin-top: var(--sys-size-6);
   }
 
   .value-interpreter {
@@ -658,18 +662,20 @@ var linearMemoryInspector_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./linearMemoryInspector.css")} */`;
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryNavigator.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryNavigator.ts
 var LinearMemoryNavigator_exports = {};
 __export(LinearMemoryNavigator_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW2,
-  LinearMemoryNavigator: () => LinearMemoryNavigator
+  LinearMemoryNavigator: () => LinearMemoryNavigator,
+  Mode: () => Mode,
+  Navigation: () => Navigation
 });
-import "./../../../ui/kit/kit.js";
-import * as i18n3 from "./../../../core/i18n/i18n.js";
-import * as Buttons from "./../../../ui/components/buttons/buttons.js";
-import * as UI2 from "./../../../ui/legacy/legacy.js";
-import * as Lit2 from "./../../../ui/lit/lit.js";
-import * as VisualLogging3 from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/kit/kit.js";
+import * as i18n3 from "../../../core/i18n/i18n.js";
+import * as Buttons from "../../../ui/components/buttons/buttons.js";
+import * as UI2 from "../../../ui/legacy/legacy.js";
+import * as Lit2 from "../../../ui/lit/lit.js";
+import * as VisualLogging3 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/linear_memory_inspector/components/linearMemoryNavigator.css.js
 var linearMemoryNavigator_css_default = `/*
@@ -679,7 +685,7 @@ var linearMemoryNavigator_css_default = `/*
  */
 
 .navigator {
-  min-height: 24px;
+  min-height: var(--sys-size-11);
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
@@ -737,7 +743,7 @@ var linearMemoryNavigator_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./linearMemoryNavigator.css")} */`;
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryNavigator.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryNavigator.ts
 var UIStrings2 = {
   /**
    * @description Tooltip text that appears when hovering over a valid memory address (for example, 0x0) in the address line in the Memory inspector panel.
@@ -767,6 +773,17 @@ var UIStrings2 = {
 var str_2 = i18n3.i18n.registerUIStrings("panels/linear_memory_inspector/components/LinearMemoryNavigator.ts", UIStrings2);
 var i18nString2 = i18n3.i18n.getLocalizedString.bind(void 0, str_2);
 var { render: render3, html: html3, Directives: { ifDefined } } = Lit2;
+var Navigation = /* @__PURE__ */ ((Navigation2) => {
+  Navigation2["BACKWARD"] = "Backward";
+  Navigation2["FORWARD"] = "Forward";
+  return Navigation2;
+})(Navigation || {});
+var Mode = /* @__PURE__ */ ((Mode2) => {
+  Mode2["EDIT"] = "Edit";
+  Mode2["SUBMITTED"] = "Submitted";
+  Mode2["INVALID_SUBMIT"] = "InvalidSubmit";
+  return Mode2;
+})(Mode || {});
 var DEFAULT_VIEW2 = (input, _output, target) => {
   const result = html3`
     <style>${linearMemoryNavigator_css_default}</style>
@@ -775,20 +792,14 @@ var DEFAULT_VIEW2 = (input, _output, target) => {
         ${createButton({
     icon: "undo",
     title: i18nString2(UIStrings2.goBackInAddressHistory),
-    onClick: () => input.onNavigateHistory?.(
-      "Backward"
-      /* Navigation.BACKWARD */
-    ),
+    onClick: () => input.onNavigateHistory?.("Backward" /* BACKWARD */),
     enabled: input.canGoBackInHistory,
     jslogContext: "linear-memory-inspector.history-back"
   })}
         ${createButton({
     icon: "redo",
     title: i18nString2(UIStrings2.goForwardInAddressHistory),
-    onClick: () => input.onNavigateHistory?.(
-      "Forward"
-      /* Navigation.FORWARD */
-    ),
+    onClick: () => input.onNavigateHistory?.("Forward" /* FORWARD */),
     enabled: input.canGoForwardInHistory,
     jslogContext: "linear-memory-inspector.history-forward"
   })}
@@ -797,10 +808,7 @@ var DEFAULT_VIEW2 = (input, _output, target) => {
         ${createButton({
     icon: "chevron-left",
     title: i18nString2(UIStrings2.previousPage),
-    onClick: () => input.onNavigatePage?.(
-      "Backward"
-      /* Navigation.BACKWARD */
-    ),
+    onClick: () => input.onNavigatePage?.("Backward" /* BACKWARD */),
     enabled: true,
     jslogContext: "linear-memory-inspector.previous-page"
   })}
@@ -808,10 +816,7 @@ var DEFAULT_VIEW2 = (input, _output, target) => {
         ${createButton({
     icon: "chevron-right",
     title: i18nString2(UIStrings2.nextPage),
-    onClick: () => input.onNavigatePage?.(
-      "Forward"
-      /* Navigation.FORWARD */
-    ),
+    onClick: () => input.onNavigatePage?.("Forward" /* FORWARD */),
     enabled: true,
     jslogContext: "linear-memory-inspector.next-page"
   })}
@@ -839,23 +844,17 @@ function createAddressInput(data) {
     jslog=${VisualLogging3.textField("linear-memory-inspector.address").track({
     change: true
   })}
-    title=${ifDefined(data.valid ? i18nString2(UIStrings2.enterAddress) : data.error)}
-    @change=${(e) => data.onAddressChange?.(
-    e.target.value,
-    "Submitted"
-    /* Mode.SUBMITTED */
+    title=${ifDefined(
+    data.valid ? i18nString2(UIStrings2.enterAddress) : data.error
   )}
-    @input=${(e) => data.onAddressChange?.(
-    e.target.value,
-    "Edit"
-    /* Mode.EDIT */
-  )}
+    @change=${(e) => data.onAddressChange?.(e.target.value, "Submitted" /* SUBMITTED */)}
+    @input=${(e) => data.onAddressChange?.(e.target.value, "Edit" /* EDIT */)}
     ${Lit2.Directives.ref((el) => {
     if (el) {
       const inputEl = el;
-      if (data.mode === "Submitted") {
+      if (data.mode === "Submitted" /* SUBMITTED */) {
         inputEl.blur();
-      } else if (data.mode === "InvalidSubmit") {
+      } else if (data.mode === "InvalidSubmit" /* INVALID_SUBMIT */) {
         inputEl.select();
       }
     }
@@ -866,7 +865,7 @@ function createButton(data) {
   return html3`
     <devtools-button class="navigator-button"
       .data=${{
-    variant: "icon",
+    variant: Buttons.Button.Variant.ICON,
     iconName: data.icon,
     disabled: !data.enabled
   }}
@@ -882,7 +881,7 @@ var LinearMemoryNavigator = class extends UI2.Widget.Widget {
   #valid = true;
   #canGoBackInHistory = false;
   #canGoForwardInHistory = false;
-  #mode = "Submitted";
+  #mode = "Submitted" /* SUBMITTED */;
   #onRefreshRequest;
   #onAddressChange;
   #onNavigatePage;
@@ -985,19 +984,19 @@ var LinearMemoryNavigator = class extends UI2.Widget.Widget {
   }
 };
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryValueInterpreter.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryValueInterpreter.ts
 var LinearMemoryValueInterpreter_exports = {};
 __export(LinearMemoryValueInterpreter_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW5,
   LinearMemoryValueInterpreter: () => LinearMemoryValueInterpreter
 });
-import "./../../../ui/kit/kit.js";
-import * as i18n11 from "./../../../core/i18n/i18n.js";
-import * as Platform3 from "./../../../core/platform/platform.js";
-import * as Buttons3 from "./../../../ui/components/buttons/buttons.js";
-import * as UI5 from "./../../../ui/legacy/legacy.js";
-import * as Lit5 from "./../../../ui/lit/lit.js";
-import * as VisualLogging6 from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/kit/kit.js";
+import * as i18n11 from "../../../core/i18n/i18n.js";
+import * as Platform3 from "../../../core/platform/platform.js";
+import * as Buttons3 from "../../../ui/components/buttons/buttons.js";
+import * as UI5 from "../../../ui/legacy/legacy.js";
+import * as Lit5 from "../../../ui/lit/lit.js";
+import * as VisualLogging6 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/linear_memory_inspector/components/linearMemoryValueInterpreter.css.js
 var linearMemoryValueInterpreter_css_default = `/*
@@ -1013,7 +1012,7 @@ var linearMemoryValueInterpreter_css_default = `/*
   }
 
   .value-interpreter {
-    border: 1px solid var(--sys-color-divider);
+    border: var(--sys-size-1) solid var(--sys-color-divider);
     background-color: var(--sys-color-cdt-base-container);
     overflow: hidden;
     width: 400px;
@@ -1031,8 +1030,8 @@ var linearMemoryValueInterpreter_css_default = `/*
 
   .settings-toolbar-button {
     padding: 0;
-    width: 20px;
-    height: 20px;
+    width: var(--sys-size-9);
+    height: var(--sys-size-9);
     border: none;
     outline: none;
     background-color: transparent;
@@ -1044,26 +1043,26 @@ var linearMemoryValueInterpreter_css_default = `/*
 
   .divider {
     display: block;
-    height: 1px;
-    margin-bottom: 12px;
+    height: var(--sys-size-1);
+    margin-bottom: var(--sys-size-6);
     background-color: var(--sys-color-divider);
   }
 }
 
 /*# sourceURL=${import.meta.resolve("./linearMemoryValueInterpreter.css")} */`;
 
-// gen/front_end/panels/linear_memory_inspector/components/ValueInterpreterDisplay.js
+// ../../front_end/panels/linear_memory_inspector/components/ValueInterpreterDisplay.ts
 var ValueInterpreterDisplay_exports = {};
 __export(ValueInterpreterDisplay_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW3,
   ValueInterpreterDisplay: () => ValueInterpreterDisplay
 });
-import "./../../../ui/kit/kit.js";
-import * as i18n7 from "./../../../core/i18n/i18n.js";
-import * as Buttons2 from "./../../../ui/components/buttons/buttons.js";
-import * as UI3 from "./../../../ui/legacy/legacy.js";
-import * as Lit3 from "./../../../ui/lit/lit.js";
-import * as VisualLogging4 from "./../../../ui/visual_logging/visual_logging.js";
+import "../../../ui/kit/kit.js";
+import * as i18n7 from "../../../core/i18n/i18n.js";
+import * as Buttons2 from "../../../ui/components/buttons/buttons.js";
+import * as UI3 from "../../../ui/legacy/legacy.js";
+import * as Lit3 from "../../../ui/lit/lit.js";
+import * as VisualLogging4 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/linear_memory_inspector/components/valueInterpreterDisplay.css.js
 var valueInterpreterDisplay_css_default = `/*
@@ -1081,10 +1080,10 @@ var valueInterpreterDisplay_css_default = `/*
   width: 100%;
   display: grid;
   grid-template-columns: auto auto 1fr;
-  gap: 4px 24px;
-  min-height: 24px;
+  gap: var(--sys-size-3) var(--sys-size-11);
+  min-height: var(--sys-size-11);
   overflow: hidden;
-  padding: 2px 12px;
+  padding: var(--sys-size-2) var(--sys-size-6);
   align-items: baseline;
   justify-content: start;
 }
@@ -1095,7 +1094,7 @@ var valueInterpreterDisplay_css_default = `/*
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 24px;
+  min-height: var(--sys-size-11);
 }
 
 .value-type-value-with-link {
@@ -1108,10 +1107,10 @@ var valueInterpreterDisplay_css_default = `/*
 }
 
 .signed-divider {
-  width: 1px;
+  width: var(--sys-size-1);
   height: 15px;
   background-color: var(--sys-color-divider);
-  margin: 0 4px;
+  margin: 0 var(--sys-size-3);
 }
 
 .selectable-text {
@@ -1125,11 +1124,14 @@ var valueInterpreterDisplay_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./valueInterpreterDisplay.css")} */`;
 
-// gen/front_end/panels/linear_memory_inspector/components/ValueInterpreterDisplayUtils.js
+// ../../front_end/panels/linear_memory_inspector/components/ValueInterpreterDisplayUtils.ts
 var ValueInterpreterDisplayUtils_exports = {};
 __export(ValueInterpreterDisplayUtils_exports, {
+  Endianness: () => Endianness,
   VALUE_INTEPRETER_MAX_NUM_BYTES: () => VALUE_INTEPRETER_MAX_NUM_BYTES,
   VALUE_TYPE_MODE_LIST: () => VALUE_TYPE_MODE_LIST,
+  ValueType: () => ValueType,
+  ValueTypeMode: () => ValueTypeMode,
   format: () => format,
   formatFloat: () => formatFloat,
   formatInteger: () => formatInteger,
@@ -1140,8 +1142,8 @@ __export(ValueInterpreterDisplayUtils_exports, {
   isValidMode: () => isValidMode,
   valueTypeToLocalizedString: () => valueTypeToLocalizedString
 });
-import * as i18n5 from "./../../../core/i18n/i18n.js";
-import * as Platform from "./../../../core/platform/platform.js";
+import * as i18n5 from "../../../core/i18n/i18n.js";
+import * as Platform from "../../../core/platform/platform.js";
 var UIStrings3 = {
   /**
    * @description Text that is shown in the Memory inspector panel if a value cannot be correctly formatted
@@ -1153,86 +1155,77 @@ var UIStrings3 = {
 var str_3 = i18n5.i18n.registerUIStrings("panels/linear_memory_inspector/components/ValueInterpreterDisplayUtils.ts", UIStrings3);
 var i18nString3 = i18n5.i18n.getLocalizedString.bind(void 0, str_3);
 var VALUE_INTEPRETER_MAX_NUM_BYTES = 8;
+var ValueType = /* @__PURE__ */ ((ValueType2) => {
+  ValueType2["INT8"] = "Integer 8-bit";
+  ValueType2["INT16"] = "Integer 16-bit";
+  ValueType2["INT32"] = "Integer 32-bit";
+  ValueType2["INT64"] = "Integer 64-bit";
+  ValueType2["FLOAT32"] = "Float 32-bit";
+  ValueType2["FLOAT64"] = "Float 64-bit";
+  ValueType2["POINTER32"] = "Pointer 32-bit";
+  ValueType2["POINTER64"] = "Pointer 64-bit";
+  return ValueType2;
+})(ValueType || {});
+var Endianness = /* @__PURE__ */ ((Endianness2) => {
+  Endianness2["LITTLE"] = "Little Endian";
+  Endianness2["BIG"] = "Big Endian";
+  return Endianness2;
+})(Endianness || {});
+var ValueTypeMode = /* @__PURE__ */ ((ValueTypeMode2) => {
+  ValueTypeMode2["DECIMAL"] = "dec";
+  ValueTypeMode2["HEXADECIMAL"] = "hex";
+  ValueTypeMode2["OCTAL"] = "oct";
+  ValueTypeMode2["SCIENTIFIC"] = "sci";
+  return ValueTypeMode2;
+})(ValueTypeMode || {});
 function getDefaultValueTypeMapping() {
   return new Map(DEFAULT_MODE_MAPPING);
 }
 var DEFAULT_MODE_MAPPING = /* @__PURE__ */ new Map([
-  [
-    "Integer 8-bit",
-    "dec"
-    /* ValueTypeMode.DECIMAL */
-  ],
-  [
-    "Integer 16-bit",
-    "dec"
-    /* ValueTypeMode.DECIMAL */
-  ],
-  [
-    "Integer 32-bit",
-    "dec"
-    /* ValueTypeMode.DECIMAL */
-  ],
-  [
-    "Integer 64-bit",
-    "dec"
-    /* ValueTypeMode.DECIMAL */
-  ],
-  [
-    "Float 32-bit",
-    "dec"
-    /* ValueTypeMode.DECIMAL */
-  ],
-  [
-    "Float 64-bit",
-    "dec"
-    /* ValueTypeMode.DECIMAL */
-  ],
-  [
-    "Pointer 32-bit",
-    "hex"
-    /* ValueTypeMode.HEXADECIMAL */
-  ],
-  [
-    "Pointer 64-bit",
-    "hex"
-    /* ValueTypeMode.HEXADECIMAL */
-  ]
+  ["Integer 8-bit" /* INT8 */, "dec" /* DECIMAL */],
+  ["Integer 16-bit" /* INT16 */, "dec" /* DECIMAL */],
+  ["Integer 32-bit" /* INT32 */, "dec" /* DECIMAL */],
+  ["Integer 64-bit" /* INT64 */, "dec" /* DECIMAL */],
+  ["Float 32-bit" /* FLOAT32 */, "dec" /* DECIMAL */],
+  ["Float 64-bit" /* FLOAT64 */, "dec" /* DECIMAL */],
+  ["Pointer 32-bit" /* POINTER32 */, "hex" /* HEXADECIMAL */],
+  ["Pointer 64-bit" /* POINTER64 */, "hex" /* HEXADECIMAL */]
 ]);
 var VALUE_TYPE_MODE_LIST = [
-  "dec",
-  "hex",
-  "oct",
-  "sci"
+  "dec" /* DECIMAL */,
+  "hex" /* HEXADECIMAL */,
+  "oct" /* OCTAL */,
+  "sci" /* SCIENTIFIC */
 ];
 function valueTypeToLocalizedString(valueType) {
   return i18n5.i18n.lockedString(valueType);
 }
 function isValidMode(type, mode) {
   switch (type) {
-    case "Integer 8-bit":
-    case "Integer 16-bit":
-    case "Integer 32-bit":
-    case "Integer 64-bit":
-      return mode === "dec" || mode === "hex" || mode === "oct";
-    case "Float 32-bit":
-    case "Float 64-bit":
-      return mode === "sci" || mode === "dec";
-    case "Pointer 32-bit":
+    case "Integer 8-bit" /* INT8 */:
+    case "Integer 16-bit" /* INT16 */:
+    case "Integer 32-bit" /* INT32 */:
+    case "Integer 64-bit" /* INT64 */:
+      return mode === "dec" /* DECIMAL */ || mode === "hex" /* HEXADECIMAL */ || mode === "oct" /* OCTAL */;
+    case "Float 32-bit" /* FLOAT32 */:
+    case "Float 64-bit" /* FLOAT64 */:
+      return mode === "sci" /* SCIENTIFIC */ || mode === "dec" /* DECIMAL */;
+    case "Pointer 32-bit" /* POINTER32 */:
     // fallthrough
-    case "Pointer 64-bit":
-      return mode === "hex";
+    case "Pointer 64-bit" /* POINTER64 */:
+      return mode === "hex" /* HEXADECIMAL */;
     default:
       return Platform.assertNever(type, `Unknown value type: ${type}`);
   }
 }
 function isNumber(type) {
   switch (type) {
-    case "Integer 8-bit":
-    case "Integer 16-bit":
-    case "Integer 32-bit":
-    case "Integer 64-bit":
-    case "Float 32-bit":
-    case "Float 64-bit":
+    case "Integer 8-bit" /* INT8 */:
+    case "Integer 16-bit" /* INT16 */:
+    case "Integer 32-bit" /* INT32 */:
+    case "Integer 64-bit" /* INT64 */:
+    case "Float 32-bit" /* FLOAT32 */:
+    case "Float 64-bit" /* FLOAT64 */:
       return true;
     default:
       return false;
@@ -1246,14 +1239,14 @@ function getPointerAddress(type, buffer, endianness) {
   }
   try {
     const dataView = new DataView(buffer);
-    const isLittleEndian = endianness === "Little Endian";
-    return type === "Pointer 32-bit" ? dataView.getUint32(0, isLittleEndian) : dataView.getBigUint64(0, isLittleEndian);
+    const isLittleEndian = endianness === "Little Endian" /* LITTLE */;
+    return type === "Pointer 32-bit" /* POINTER32 */ ? dataView.getUint32(0, isLittleEndian) : dataView.getBigUint64(0, isLittleEndian);
   } catch {
     return NaN;
   }
 }
 function isPointer(type) {
-  return type === "Pointer 32-bit" || type === "Pointer 64-bit";
+  return type === "Pointer 32-bit" /* POINTER32 */ || type === "Pointer 64-bit" /* POINTER64 */;
 }
 function format(formatData) {
   if (!formatData.mode) {
@@ -1261,42 +1254,34 @@ function format(formatData) {
     return i18nString3(UIStrings3.notApplicable);
   }
   const valueView = new DataView(formatData.buffer);
-  const isLittleEndian = formatData.endianness === "Little Endian";
+  const isLittleEndian = formatData.endianness === "Little Endian" /* LITTLE */;
   let value;
   try {
     switch (formatData.type) {
-      case "Integer 8-bit":
+      case "Integer 8-bit" /* INT8 */:
         value = formatData.signed ? valueView.getInt8(0) : valueView.getUint8(0);
         return formatInteger(value, formatData.mode);
-      case "Integer 16-bit":
+      case "Integer 16-bit" /* INT16 */:
         value = formatData.signed ? valueView.getInt16(0, isLittleEndian) : valueView.getUint16(0, isLittleEndian);
         return formatInteger(value, formatData.mode);
-      case "Integer 32-bit":
+      case "Integer 32-bit" /* INT32 */:
         value = formatData.signed ? valueView.getInt32(0, isLittleEndian) : valueView.getUint32(0, isLittleEndian);
         return formatInteger(value, formatData.mode);
-      case "Integer 64-bit":
+      case "Integer 64-bit" /* INT64 */:
         value = formatData.signed ? valueView.getBigInt64(0, isLittleEndian) : valueView.getBigUint64(0, isLittleEndian);
         return formatInteger(value, formatData.mode);
-      case "Float 32-bit":
+      case "Float 32-bit" /* FLOAT32 */:
         value = valueView.getFloat32(0, isLittleEndian);
         return formatFloat(value, formatData.mode);
-      case "Float 64-bit":
+      case "Float 64-bit" /* FLOAT64 */:
         value = valueView.getFloat64(0, isLittleEndian);
         return formatFloat(value, formatData.mode);
-      case "Pointer 32-bit":
+      case "Pointer 32-bit" /* POINTER32 */:
         value = valueView.getUint32(0, isLittleEndian);
-        return formatInteger(
-          value,
-          "hex"
-          /* ValueTypeMode.HEXADECIMAL */
-        );
-      case "Pointer 64-bit":
+        return formatInteger(value, "hex" /* HEXADECIMAL */);
+      case "Pointer 64-bit" /* POINTER64 */:
         value = valueView.getBigUint64(0, isLittleEndian);
-        return formatInteger(
-          value,
-          "hex"
-          /* ValueTypeMode.HEXADECIMAL */
-        );
+        return formatInteger(value, "hex" /* HEXADECIMAL */);
       default:
         return Platform.assertNever(formatData.type, `Unknown value type: ${formatData.type}`);
     }
@@ -1306,9 +1291,9 @@ function format(formatData) {
 }
 function formatFloat(value, mode) {
   switch (mode) {
-    case "dec":
+    case "dec" /* DECIMAL */:
       return value.toFixed(2).toString();
-    case "sci":
+    case "sci" /* SCIENTIFIC */:
       return value.toExponential(2).toString();
     default:
       throw new Error(`Unknown mode for floats: ${mode}.`);
@@ -1316,14 +1301,14 @@ function formatFloat(value, mode) {
 }
 function formatInteger(value, mode) {
   switch (mode) {
-    case "dec":
+    case "dec" /* DECIMAL */:
       return value.toString();
-    case "hex":
+    case "hex" /* HEXADECIMAL */:
       if (value < 0) {
         return i18nString3(UIStrings3.notApplicable);
       }
       return "0x" + value.toString(16).toUpperCase();
-    case "oct":
+    case "oct" /* OCTAL */:
       if (value < 0) {
         return i18nString3(UIStrings3.notApplicable);
       }
@@ -1333,7 +1318,7 @@ function formatInteger(value, mode) {
   }
 }
 
-// gen/front_end/panels/linear_memory_inspector/components/ValueInterpreterDisplay.js
+// ../../front_end/panels/linear_memory_inspector/components/ValueInterpreterDisplay.ts
 var UIStrings4 = {
   /**
    * @description Tooltip text that appears when hovering over an unsigned interpretation of the memory in the value interpreter in the Memory inspector panel.
@@ -1363,7 +1348,9 @@ var { render: render4, nothing, html: html4 } = Lit3;
 var SORTED_VALUE_TYPES = Array.from(getDefaultValueTypeMapping().keys());
 var DEFAULT_VIEW3 = (input, _output, target) => {
   function parse(signed, type) {
-    return format({ buffer: input.buffer, endianness: input.endianness, type, signed, mode: input.valueTypeModes.get(type) });
+    return format(
+      { buffer: input.buffer, endianness: input.endianness, type, signed, mode: input.valueTypeModes.get(type) }
+    );
   }
   const parseSigned = parse.bind(void 0, true);
   const parseUnsigned = parse.bind(void 0, false);
@@ -1402,9 +1389,9 @@ var DEFAULT_VIEW3 = (input, _output, target) => {
                   .disabled=${jumpDisabled}
                   jslog=${VisualLogging4.action("linear-memory-inspector.jump-to-address").track({ click: true })}
                   @click=${() => input.onJumpToAddressClicked(Number(address))}
-                  .variant=${"icon_toggle"}
+                  .variant=${Buttons2.Button.Variant.ICON_TOGGLE}
                   .iconName=${"open-externally"}
-                  .size=${"SMALL"}>
+                  .size=${Buttons2.Button.Size.SMALL}>
                 </devtools-button>
               </div>
             </div>` : nothing;
@@ -1413,12 +1400,12 @@ var DEFAULT_VIEW3 = (input, _output, target) => {
     `, target);
 };
 function renderSignedAndUnsigned(signedValue, unsignedValue, type, mode) {
-  const showSignedAndUnsigned = signedValue !== unsignedValue && mode !== "hex" && mode !== "oct";
+  const showSignedAndUnsigned = signedValue !== unsignedValue && mode !== "hex" /* HEXADECIMAL */ && mode !== "oct" /* OCTAL */;
   const unsignedRendered = html4`<span class="value-type-cell selectable-text"  title=${i18nString4(UIStrings4.unsignedValue)} data-value="true">${unsignedValue}</span>`;
   if (!showSignedAndUnsigned) {
     return unsignedRendered;
   }
-  const showInMultipleLines = type === "Integer 32-bit" || type === "Integer 64-bit";
+  const showInMultipleLines = type === "Integer 32-bit" /* INT32 */ || type === "Integer 64-bit" /* INT64 */;
   const signedRendered = html4`<span class="selectable-text" data-value="true" title=${i18nString4(UIStrings4.signedValue)}>${signedValue}</span>`;
   if (showInMultipleLines) {
     return html4`
@@ -1438,7 +1425,7 @@ function renderSignedAndUnsigned(signedValue, unsignedValue, type, mode) {
 }
 var ValueInterpreterDisplay = class extends UI3.Widget.Widget {
   #view;
-  #endianness = "Little Endian";
+  #endianness = "Little Endian" /* LITTLE */;
   #buffer = new ArrayBuffer(0);
   #valueTypes = /* @__PURE__ */ new Set();
   #valueTypeModeConfig = getDefaultValueTypeMapping();
@@ -1508,29 +1495,33 @@ var ValueInterpreterDisplay = class extends UI3.Widget.Widget {
   }
   performUpdate() {
     const valueTypes = SORTED_VALUE_TYPES.filter((type) => this.#valueTypes.has(type));
-    this.#view({
-      buffer: this.#buffer,
-      valueTypes,
-      endianness: this.#endianness,
-      memoryLength: this.#memoryLength,
-      valueTypeModes: this.#valueTypeModeConfig,
-      onValueTypeModeChange: this.#onValueTypeModeChange,
-      onJumpToAddressClicked: this.#onJumpToAddressClicked
-    }, void 0, this.contentElement);
+    this.#view(
+      {
+        buffer: this.#buffer,
+        valueTypes,
+        endianness: this.#endianness,
+        memoryLength: this.#memoryLength,
+        valueTypeModes: this.#valueTypeModeConfig,
+        onValueTypeModeChange: this.#onValueTypeModeChange,
+        onJumpToAddressClicked: this.#onJumpToAddressClicked
+      },
+      void 0,
+      this.contentElement
+    );
   }
 };
 
-// gen/front_end/panels/linear_memory_inspector/components/ValueInterpreterSettings.js
+// ../../front_end/panels/linear_memory_inspector/components/ValueInterpreterSettings.ts
 var ValueInterpreterSettings_exports = {};
 __export(ValueInterpreterSettings_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW4,
   ValueInterpreterSettings: () => ValueInterpreterSettings
 });
-import * as i18n9 from "./../../../core/i18n/i18n.js";
-import * as Platform2 from "./../../../core/platform/platform.js";
-import * as UI4 from "./../../../ui/legacy/legacy.js";
-import * as Lit4 from "./../../../ui/lit/lit.js";
-import * as VisualLogging5 from "./../../../ui/visual_logging/visual_logging.js";
+import * as i18n9 from "../../../core/i18n/i18n.js";
+import * as Platform2 from "../../../core/platform/platform.js";
+import * as UI4 from "../../../ui/legacy/legacy.js";
+import * as Lit4 from "../../../ui/lit/lit.js";
+import * as VisualLogging5 from "../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/linear_memory_inspector/components/valueInterpreterSettings.css.js
 var valueInterpreterSettings_css_default = `/*
@@ -1543,13 +1534,13 @@ var valueInterpreterSettings_css_default = `/*
   :scope {
     flex: auto;
     display: flex;
-    min-height: 20px;
+    min-height: var(--sys-size-9);
   }
 
   .settings {
     display: flex;
     flex-wrap: wrap;
-    margin: 0 12px 12px;
+    margin: 0 var(--sys-size-6) var(--sys-size-6);
     gap: 15px 45px;
   }
 
@@ -1566,7 +1557,7 @@ var valueInterpreterSettings_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./valueInterpreterSettings.css")} */`;
 
-// gen/front_end/panels/linear_memory_inspector/components/ValueInterpreterSettings.js
+// ../../front_end/panels/linear_memory_inspector/components/ValueInterpreterSettings.ts
 var { render: render5, html: html5 } = Lit4;
 var UIStrings5 = {
   /**
@@ -1576,27 +1567,15 @@ var UIStrings5 = {
 };
 var str_5 = i18n9.i18n.registerUIStrings("panels/linear_memory_inspector/components/ValueInterpreterSettings.ts", UIStrings5);
 var i18nString5 = i18n9.i18n.getLocalizedString.bind(void 0, str_5);
-var GROUP_TO_TYPES = /* @__PURE__ */ new Map([
-  ["Integer", [
-    "Integer 8-bit",
-    "Integer 16-bit",
-    "Integer 32-bit",
-    "Integer 64-bit"
-    /* ValueType.INT64 */
-  ]],
-  ["Floating point", [
-    "Float 32-bit",
-    "Float 64-bit"
-    /* ValueType.FLOAT64 */
-  ]],
-  ["Other", [
-    "Pointer 32-bit",
-    "Pointer 64-bit"
-    /* ValueType.POINTER64 */
-  ]]
-]);
+var GROUP_TO_TYPES = /* @__PURE__ */ new Map(
+  [
+    ["Integer" /* INTEGER */, ["Integer 8-bit" /* INT8 */, "Integer 16-bit" /* INT16 */, "Integer 32-bit" /* INT32 */, "Integer 64-bit" /* INT64 */]],
+    ["Floating point" /* FLOAT */, ["Float 32-bit" /* FLOAT32 */, "Float 64-bit" /* FLOAT64 */]],
+    ["Other" /* OTHER */, ["Pointer 32-bit" /* POINTER32 */, "Pointer 64-bit" /* POINTER64 */]]
+  ]
+);
 function valueTypeGroupToLocalizedString(group) {
-  if (group === "Other") {
+  if (group === "Other" /* OTHER */) {
     return i18nString5(UIStrings5.otherGroup);
   }
   return group;
@@ -1660,7 +1639,7 @@ var ValueInterpreterSettings = class extends UI4.Widget.Widget {
   }
 };
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryValueInterpreter.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryValueInterpreter.ts
 var UIStrings6 = {
   /**
    * @description Tooltip text that appears when hovering over the gear button to open and close settings in the Memory inspector panel. These settings
@@ -1683,11 +1662,7 @@ function renderEndiannessSetting(onEndiannessChanged, currentEndiannes) {
         jslog=${VisualLogging6.dropDown("linear-memory-inspector.endianess").track({ change: true })}
         style="border: none;"
         data-endianness="true" @change=${(e) => onEndiannessChanged(e.target.value)}>
-        ${[
-    "Little Endian",
-    "Big Endian"
-    /* Endianness.BIG */
-  ].map((endianness) => {
+        ${["Little Endian" /* LITTLE */, "Big Endian" /* BIG */].map((endianness) => {
     return html6`<option value=${endianness} .selected=${currentEndiannes === endianness}
             jslog=${VisualLogging6.item(Platform3.StringUtilities.toKebabCase(endianness)).track({ click: true, resize: true })}>${i18n11.i18n.lockedString(endianness)}</option>`;
   })}
@@ -1696,7 +1671,8 @@ function renderEndiannessSetting(onEndiannessChanged, currentEndiannes) {
     `;
 }
 var DEFAULT_VIEW5 = (input, _output, target) => {
-  render6(html6`
+  render6(
+    html6`
     <style>${UI5.inspectorCommonStyles}</style>
     <style>${linearMemoryValueInterpreter_css_default}</style>
     <div class="value-interpreter">
@@ -1707,31 +1683,33 @@ var DEFAULT_VIEW5 = (input, _output, target) => {
             jslog=${VisualLogging6.toggleSubpane("linear-memory-inspector.toggle-value-settings").track({ click: true })}
             .iconName=${"gear"}
             .toggledIconName=${"gear-filled"}
-            .toggleType=${"primary-toggle"}
-            .variant=${"icon_toggle"}
+            .toggleType=${Buttons3.Button.ToggleType.PRIMARY}
+            .variant=${Buttons3.Button.Variant.ICON_TOGGLE}
         ></devtools-button>
       </div>
       <span class="divider"></span>
       <div>
         ${input.showSettings ? widget(ValueInterpreterSettings, {
-    valueTypes: input.valueTypes,
-    onToggle: input.onValueTypeToggled
-  }) : widget(ValueInterpreterDisplay, {
-    buffer: input.buffer,
-    valueTypes: input.valueTypes,
-    endianness: input.endianness,
-    valueTypeModes: input.valueTypeModes,
-    memoryLength: input.memoryLength,
-    onValueTypeModeChange: input.onValueTypeModeChange,
-    onJumpToAddressClicked: input.onJumpToAddressClicked
-  })}
+      valueTypes: input.valueTypes,
+      onToggle: input.onValueTypeToggled
+    }) : widget(ValueInterpreterDisplay, {
+      buffer: input.buffer,
+      valueTypes: input.valueTypes,
+      endianness: input.endianness,
+      valueTypeModes: input.valueTypeModes,
+      memoryLength: input.memoryLength,
+      onValueTypeModeChange: input.onValueTypeModeChange,
+      onJumpToAddressClicked: input.onJumpToAddressClicked
+    })}
       </div>
     </div>
-  `, target);
+  `,
+    target
+  );
 };
 var LinearMemoryValueInterpreter = class extends UI5.Widget.Widget {
   #view;
-  #endianness = "Little Endian";
+  #endianness = "Little Endian" /* LITTLE */;
   #buffer = new ArrayBuffer(0);
   #valueTypes = /* @__PURE__ */ new Set();
   #valueTypeModeConfig = /* @__PURE__ */ new Map();
@@ -1834,7 +1812,7 @@ var LinearMemoryValueInterpreter = class extends UI5.Widget.Widget {
   }
 };
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryInspector.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryInspector.ts
 var UIStrings7 = {
   /**
    * @description Tooltip text that appears when hovering over an invalid address in the address line in the Memory inspector panel.
@@ -1846,6 +1824,13 @@ var UIStrings7 = {
 var str_7 = i18n13.i18n.registerUIStrings("panels/linear_memory_inspector/components/LinearMemoryInspector.ts", UIStrings7);
 var i18nString7 = i18n13.i18n.getLocalizedString.bind(void 0, str_7);
 var { widget: widget2 } = UI6.Widget;
+var Events = /* @__PURE__ */ ((Events2) => {
+  Events2["MEMORY_REQUEST"] = "MemoryRequest";
+  Events2["ADDRESS_CHANGED"] = "AddressChanged";
+  Events2["SETTINGS_CHANGED"] = "SettingsChanged";
+  Events2["DELETE_MEMORY_HIGHLIGHT"] = "DeleteMemoryHighlight";
+  return Events2;
+})(Events || {});
 var AddressHistoryEntry = class {
   #address = 0;
   #callback;
@@ -1864,43 +1849,47 @@ var AddressHistoryEntry = class {
   }
 };
 var DEFAULT_VIEW6 = (input, _output, target) => {
-  const navigatorAddressToShow = input.currentNavigatorMode === "Submitted" ? formatAddress(input.address) : input.currentNavigatorAddressLine;
+  const navigatorAddressToShow = input.currentNavigatorMode === "Submitted" /* SUBMITTED */ ? formatAddress(input.address) : input.currentNavigatorAddressLine;
   const navigatorAddressIsValid = isValidAddress(navigatorAddressToShow, input.outerMemoryLength);
-  const invalidAddressMsg = i18nString7(UIStrings7.addressHasToBeANumberBetweenSAnd, { PH1: formatAddress(0), PH2: formatAddress(input.outerMemoryLength) });
+  const invalidAddressMsg = i18nString7(
+    UIStrings7.addressHasToBeANumberBetweenSAnd,
+    { PH1: formatAddress(0), PH2: formatAddress(input.outerMemoryLength) }
+  );
   const errorMsg = navigatorAddressIsValid ? void 0 : invalidAddressMsg;
   const highlightedMemoryAreas = input.highlightInfo ? [input.highlightInfo] : [];
   const focusedMemoryHighlight = getSmallestEnclosingMemoryHighlight(highlightedMemoryAreas, input.address);
-  render7(html7`
+  render7(
+    html7`
     <style>${linearMemoryInspector_css_default}</style>
     <div class="view">
       <devtools-widget class="navigator-widget"
         ${widget2(LinearMemoryNavigator, {
-    address: navigatorAddressToShow,
-    valid: navigatorAddressIsValid,
-    mode: input.currentNavigatorMode,
-    error: errorMsg,
-    canGoBackInHistory: input.canGoBackInHistory,
-    canGoForwardInHistory: input.canGoForwardInHistory,
-    onRefreshRequest: input.onRefreshRequest,
-    onAddressChange: input.onAddressChange,
-    onNavigatePage: input.onNavigatePage,
-    onNavigateHistory: input.onNavigateHistory
-  })}></devtools-widget>
+      address: navigatorAddressToShow,
+      valid: navigatorAddressIsValid,
+      mode: input.currentNavigatorMode,
+      error: errorMsg,
+      canGoBackInHistory: input.canGoBackInHistory,
+      canGoForwardInHistory: input.canGoForwardInHistory,
+      onRefreshRequest: input.onRefreshRequest,
+      onAddressChange: input.onAddressChange,
+      onNavigatePage: input.onNavigatePage,
+      onNavigateHistory: input.onNavigateHistory
+    })}></devtools-widget>
       ${widget2(LinearMemoryHighlightChipList, {
-    highlightInfos: highlightedMemoryAreas,
-    focusedMemoryHighlight,
-    jumpToAddress: (address) => input.onJumpToAddress(address),
-    deleteHighlight: input.onDeleteMemoryHighlight
-  })}
+      highlightInfos: highlightedMemoryAreas,
+      focusedMemoryHighlight,
+      jumpToAddress: (address) => input.onJumpToAddress(address),
+      deleteHighlight: input.onDeleteMemoryHighlight
+    })}
       <devtools-linear-memory-inspector-viewer
         .data=${{
-    memory: input.memorySlice,
-    address: input.address,
-    memoryOffset: input.viewerStart,
-    focus: input.currentNavigatorMode === "Submitted",
-    highlightInfo: input.highlightInfo,
-    focusedMemoryHighlight
-  }}
+      memory: input.memorySlice,
+      address: input.address,
+      memoryOffset: input.viewerStart,
+      focus: input.currentNavigatorMode === "Submitted" /* SUBMITTED */,
+      highlightInfo: input.highlightInfo,
+      focusedMemoryHighlight
+    }}
         @byteselected=${input.onByteSelected}
         @resize=${input.onResize}>
       </devtools-linear-memory-inspector-viewer>
@@ -1908,18 +1897,23 @@ var DEFAULT_VIEW6 = (input, _output, target) => {
     ${input.hideValueInspector ? nothing2 : html7`
     <div class="value-interpreter">
       ${widget2(LinearMemoryValueInterpreter, {
-    buffer: input.memory.slice(input.address - input.memoryOffset, input.address + VALUE_INTEPRETER_MAX_NUM_BYTES).buffer,
-    valueTypes: input.valueTypes,
-    valueTypeModes: input.valueTypeModes,
-    endianness: input.endianness,
-    memoryLength: input.outerMemoryLength,
-    onValueTypeModeChange: input.onValueTypeModeChanged,
-    onJumpToAddressClicked: input.onJumpToAddress,
-    onValueTypeToggled: input.onValueTypeToggled,
-    onEndiannessChanged: input.onEndiannessChanged
-  })}
+      buffer: input.memory.slice(
+        input.address - input.memoryOffset,
+        input.address + VALUE_INTEPRETER_MAX_NUM_BYTES
+      ).buffer,
+      valueTypes: input.valueTypes,
+      valueTypeModes: input.valueTypeModes,
+      endianness: input.endianness,
+      memoryLength: input.outerMemoryLength,
+      onValueTypeModeChange: input.onValueTypeModeChanged,
+      onJumpToAddressClicked: input.onJumpToAddress,
+      onValueTypeToggled: input.onValueTypeToggled,
+      onEndiannessChanged: input.onEndiannessChanged
+    })}
     </div>`}
-    `, target);
+    `,
+    target
+  );
 };
 function getPageRangeForAddress(address, numBytesPerPage, outerMemoryLength) {
   const pageNumber = Math.floor(address / numBytesPerPage);
@@ -1944,19 +1938,22 @@ function getSmallestEnclosingMemoryHighlight(highlightedMemoryAreas, address) {
   }
   return smallestEnclosingHighlight;
 }
-var LinearMemoryInspector = class extends Common.ObjectWrapper.eventMixin(UI6.Widget.Widget) {
+var LinearMemoryInspectorBase = Common.ObjectWrapper.eventMixin(
+  UI6.Widget.Widget
+);
+var LinearMemoryInspector = class extends LinearMemoryInspectorBase {
   #history = new Common.SimpleHistoryManager.SimpleHistoryManager(10);
   #memory = new Uint8Array();
   #memoryOffset = 0;
   #outerMemoryLength = 0;
   #address = -1;
   #highlightInfo;
-  #currentNavigatorMode = "Submitted";
+  #currentNavigatorMode = "Submitted" /* SUBMITTED */;
   #currentNavigatorAddressLine = `${this.#address}`;
   #numBytesPerPage = 4;
   #valueTypeModes = getDefaultValueTypeMapping();
   #valueTypes = new Set(this.#valueTypeModes.keys());
-  #endianness = "Little Endian";
+  #endianness = "Little Endian" /* LITTLE */;
   #hideValueInspector = false;
   #view;
   constructor(element, view) {
@@ -2001,7 +1998,7 @@ var LinearMemoryInspector = class extends Common.ObjectWrapper.eventMixin(UI6.Wi
   performUpdate() {
     const { start, end } = getPageRangeForAddress(this.#address, this.#numBytesPerPage, this.#outerMemoryLength);
     if (start < this.#memoryOffset || end > this.#memoryOffset + this.#memory.length) {
-      this.dispatchEventToListeners("MemoryRequest", { start, end, address: this.#address });
+      this.dispatchEventToListeners("MemoryRequest" /* MEMORY_REQUEST */, { start, end, address: this.#address });
       return;
     }
     if (this.#address < this.#memoryOffset || this.#address > this.#memoryOffset + this.#memory.length || this.#address < 0) {
@@ -2048,19 +2045,19 @@ var LinearMemoryInspector = class extends Common.ObjectWrapper.eventMixin(UI6.Wi
     this.#view(viewInput, {}, this.contentElement);
   }
   #onJumpToAddress(address) {
-    this.#currentNavigatorMode = "Submitted";
+    this.#currentNavigatorMode = "Submitted" /* SUBMITTED */;
     const addressInRange = Math.max(0, Math.min(address, this.#outerMemoryLength - 1));
     this.#jumpToAddress(addressInRange);
   }
   #onDeleteMemoryHighlight(highlight) {
-    this.dispatchEventToListeners("DeleteMemoryHighlight", highlight);
+    this.dispatchEventToListeners("DeleteMemoryHighlight" /* DELETE_MEMORY_HIGHLIGHT */, highlight);
   }
   #onRefreshRequest() {
     const { start, end } = getPageRangeForAddress(this.#address, this.#numBytesPerPage, this.#outerMemoryLength);
-    this.dispatchEventToListeners("MemoryRequest", { start, end, address: this.#address });
+    this.dispatchEventToListeners("MemoryRequest" /* MEMORY_REQUEST */, { start, end, address: this.#address });
   }
   #onByteSelected(e) {
-    this.#currentNavigatorMode = "Submitted";
+    this.#currentNavigatorMode = "Submitted" /* SUBMITTED */;
     const addressInRange = Math.max(0, Math.min(e.data, this.#outerMemoryLength - 1));
     this.#jumpToAddress(addressInRange);
   }
@@ -2069,7 +2066,7 @@ var LinearMemoryInspector = class extends Common.ObjectWrapper.eventMixin(UI6.Wi
   }
   #onEndiannessChanged(endianness) {
     this.#endianness = endianness;
-    this.dispatchEventToListeners("SettingsChanged", this.#createSettings());
+    this.dispatchEventToListeners("SettingsChanged" /* SETTINGS_CHANGED */, this.#createSettings());
     void this.requestUpdate();
   }
   #onAddressChange(address, mode) {
@@ -2081,10 +2078,10 @@ var LinearMemoryInspector = class extends Common.ObjectWrapper.eventMixin(UI6.Wi
       this.#jumpToAddress(newAddress);
       return;
     }
-    if (mode === "Submitted" && !isValid) {
-      this.#currentNavigatorMode = "InvalidSubmit";
+    if (mode === "Submitted" /* SUBMITTED */ && !isValid) {
+      this.#currentNavigatorMode = "InvalidSubmit" /* INVALID_SUBMIT */;
     } else {
-      this.#currentNavigatorMode = "Edit";
+      this.#currentNavigatorMode = "Edit" /* EDIT */;
     }
     void this.requestUpdate();
   }
@@ -2096,21 +2093,21 @@ var LinearMemoryInspector = class extends Common.ObjectWrapper.eventMixin(UI6.Wi
       valueTypes.delete(type);
     }
     this.#valueTypes = valueTypes;
-    this.dispatchEventToListeners("SettingsChanged", this.#createSettings());
+    this.dispatchEventToListeners("SettingsChanged" /* SETTINGS_CHANGED */, this.#createSettings());
     void this.requestUpdate();
   }
   #onValueTypeModeChanged(type, mode) {
     const valueTypeModes = new Map(this.#valueTypeModes);
     valueTypeModes.set(type, mode);
     this.#valueTypeModes = valueTypeModes;
-    this.dispatchEventToListeners("SettingsChanged", this.#createSettings());
+    this.dispatchEventToListeners("SettingsChanged" /* SETTINGS_CHANGED */, this.#createSettings());
     void this.requestUpdate();
   }
   #navigateHistory(navigation) {
-    return navigation === "Forward" ? this.#history.rollover() : this.#history.rollback();
+    return navigation === "Forward" /* FORWARD */ ? this.#history.rollover() : this.#history.rollback();
   }
   #navigatePage(navigation) {
-    const newAddress = navigation === "Forward" ? this.#address + this.#numBytesPerPage : this.#address - this.#numBytesPerPage;
+    const newAddress = navigation === "Forward" /* FORWARD */ ? this.#address + this.#numBytesPerPage : this.#address - this.#numBytesPerPage;
     const addressInRange = Math.max(0, Math.min(newAddress, this.#outerMemoryLength - 1));
     this.#jumpToAddress(addressInRange);
   }
@@ -2133,12 +2130,12 @@ var LinearMemoryInspector = class extends Common.ObjectWrapper.eventMixin(UI6.Wi
     const historyEntry = new AddressHistoryEntry(address, () => this.#jumpToAddress(address));
     this.#history.push(historyEntry);
     this.#address = address;
-    this.dispatchEventToListeners("AddressChanged", this.#address);
+    this.dispatchEventToListeners("AddressChanged" /* ADDRESS_CHANGED */, this.#address);
     void this.requestUpdate();
   }
 };
 
-// gen/front_end/panels/linear_memory_inspector/components/LinearMemoryViewerUtils.js
+// ../../front_end/panels/linear_memory_inspector/components/LinearMemoryViewerUtils.ts
 var LinearMemoryViewerUtils_exports = {};
 export {
   LinearMemoryHighlightChipList_exports as LinearMemoryHighlightChipList,

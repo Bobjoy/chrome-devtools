@@ -3,7 +3,13 @@
 // found in the LICENSE file.
 import * as Common from '../../core/common/common.js';
 import * as CommentManager from '../../models/comment_manager/comment_manager.js';
-import { deepQuerySelectorAll, isElementVisible, rematchCommentAnchor, resolveCommentAnchor, resolveCommentAnchorElement, } from './CommentAnchorResolver.js';
+import { computeVisibleRect, deepQuerySelectorAll, getCustomAnchorResolverForElement, getEditorFilePath, isDomTrackedAnchor, rematchCommentAnchor, resolveCommentAnchor, resolveCommentAnchorElement, } from './CommentAnchorResolver.js';
+export const COMMENT_MODE_CURSOR = 'var(--comment-cursor)';
+export var Events;
+(function (Events) {
+    Events["POSITIONS_UPDATED"] = "PositionsUpdated";
+    Events["HOVER_HIGHLIGHT_CHANGED"] = "HoverHighlightChanged";
+})(Events || (Events = {}));
 /**
  * Orchestrates live DOM overlay positioning, coordinates interactive commenting UI mode,
  * and tracks live DOM element positions via observers and event listeners.
@@ -43,6 +49,7 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
     #resizeRafId;
     #mutationObserver;
     #rematchTimeoutId;
+    #cursorElement = null;
     constructor(commentManager) {
         super();
         this.#commentManager = commentManager;
@@ -51,9 +58,9 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
         }, this);
         this.#commentManager.addEventListener("CommentModeChanged" /* CommentManager.CommentManager.Events.COMMENT_MODE_CHANGED */, ({ data: active }) => {
             if (!active) {
-                this.#setHoverHighlight(null);
+                this.#clearHover();
             }
-            document.body.style.cursor = active ? 'crosshair' : '';
+            document.body.style.cursor = active ? COMMENT_MODE_CURSOR : '';
         }, this);
     }
     get commentManager() {
@@ -81,6 +88,22 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
     isCommentMode() {
         return this.#commentManager.isCommentMode();
     }
+    #setHoverCursor(element) {
+        const previousElement = this.#cursorElement;
+        const newElement = element instanceof HTMLElement ? element : null;
+        if (previousElement === newElement) {
+            return;
+        }
+        if (previousElement) {
+            previousElement.style.cursor = '';
+            previousElement.style.removeProperty('--override-cursor');
+        }
+        if (newElement) {
+            newElement.style.cursor = COMMENT_MODE_CURSOR;
+            newElement.style.setProperty('--override-cursor', COMMENT_MODE_CURSOR);
+        }
+        this.#cursorElement = newElement;
+    }
     #setHoverHighlight(data) {
         if (data === null && this.#hoverData === null) {
             return;
@@ -93,6 +116,10 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
         this.#hoverData = data;
         this.dispatchEventToListeners("HoverHighlightChanged" /* Events.HOVER_HIGHLIGHT_CHANGED */, data);
     }
+    #clearHover() {
+        this.#setHoverHighlight(null);
+        this.#setHoverCursor(null);
+    }
     getHoverHighlight() {
         return this.#hoverData;
     }
@@ -102,23 +129,39 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
     getHighlightRects() {
         return this.#highlightRects;
     }
-    handleElementClick(element, commentText = 'New comment') {
+    handleElementClick(element, commentText = 'New comment', options) {
         if (!this.isCommentMode()) {
             return null;
         }
-        return this.createComment(element, commentText, 'DEVELOPER');
+        return this.createComment(element, commentText, 'DEVELOPER', undefined, options);
     }
-    createComment(element, text, author = 'DEVELOPER', changes) {
-        const anchorEl = resolveCommentAnchorElement(element);
-        const anchor = resolveCommentAnchor(element);
+    createComment(element, text, author = 'DEVELOPER', changes, options) {
+        let anchorEl = null;
+        let anchor = null;
+        const customResolver = getCustomAnchorResolverForElement(element);
+        if (customResolver) {
+            const result = customResolver.resolve(element, options);
+            if (result) {
+                anchor = result.anchor;
+                anchorEl = result.anchorElement ?? element;
+            }
+        }
+        else {
+            anchorEl = resolveCommentAnchorElement(element, options);
+            anchor = resolveCommentAnchor(element, undefined, options);
+        }
         if (!anchor || !anchorEl) {
             return null;
         }
         const thread = this.#commentManager.createCommentThread(anchor, text, author, changes);
-        this.#liveNodeCache.set(thread, anchorEl);
-        const observer = this.#getIntersectionObserver();
-        observer.observe(anchorEl);
-        this.#observedThreads.add(anchorEl);
+        // Non-DOM anchors (e.g. canvas-rendered timeline entries) manage their own overlays
+        // and do not have individual backing DOM nodes to cache or observe.
+        if (isDomTrackedAnchor(anchor)) {
+            this.#liveNodeCache.set(thread, anchorEl);
+            const observer = this.#getIntersectionObserver();
+            observer.observe(anchorEl);
+            this.#observedThreads.add(anchorEl);
+        }
         this.#updatePositions();
         return thread;
     }
@@ -161,6 +204,10 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
         const oldElements = new Set();
         const newElements = new Set();
         for (const thread of this.#commentManager.getCommentThreads()) {
+            // Non-DOM anchors do not track DOM nodes and should not be rematched here.
+            if (!isDomTrackedAnchor(thread.anchor)) {
+                continue;
+            }
             const oldEl = this.#liveNodeCache.get(thread);
             if (oldEl) {
                 oldElements.add(oldEl);
@@ -193,36 +240,47 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
         const newHighlights = [];
         const elementPinCounts = new Map();
         for (const thread of this.#commentManager.getCommentThreads()) {
+            // Non-DOM anchors have their positions managed by their respective panels.
+            if (!isDomTrackedAnchor(thread.anchor)) {
+                continue;
+            }
             const el = this.#liveNodeCache.get(thread) || null;
             if (!el || !el.isConnected) {
                 continue;
+            }
+            if (thread.anchor.editor?.filePath) {
+                const currentFilePath = getEditorFilePath(el);
+                if (currentFilePath && currentFilePath !== thread.anchor.editor.filePath) {
+                    continue;
+                }
             }
             const observer = this.#getIntersectionObserver();
             if (!this.#observedThreads.has(el)) {
                 observer.observe(el);
                 this.#observedThreads.add(el);
             }
-            if (!isElementVisible(el)) {
+            const visibleRect = computeVisibleRect(el);
+            if (!visibleRect) {
                 continue;
             }
-            const rect = el.getBoundingClientRect();
             const offsetIndex = elementPinCounts.get(el) || 0;
             elementPinCounts.set(el, offsetIndex + 1);
             // Offset by 26px vertically (24px pin icon height + 2px spacing) so multiple comment pins on the same element stack vertically without overlapping.
             const offsetY = offsetIndex * 26;
-            // Offset by -12px (half of the 24px pin diameter) so the pin icon is centered on the top-right corner of the target element.
+            // Offset by -12px (half of the 24px pin diameter) so the pin icon is centered on the top-right corner of the visible clipped area.
             newPins.push({
                 id: thread.id,
-                top: scrollY + rect.top - 12 + offsetY,
-                left: scrollX + rect.right - 12,
+                top: scrollY + visibleRect.top - 12 + offsetY,
+                left: scrollX + visibleRect.right - 12,
                 visible: true,
+                index: thread.index,
             });
             newHighlights.push({
                 id: thread.id,
-                top: scrollY + rect.top,
-                left: scrollX + rect.left,
-                width: rect.width,
-                height: rect.height,
+                top: scrollY + visibleRect.top,
+                left: scrollX + visibleRect.left,
+                width: visibleRect.width,
+                height: visibleRect.height,
                 visible: true,
             });
         }
@@ -269,10 +327,15 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
      * Stops and detaches all active listeners and observers without clearing comment threads.
      */
     stop() {
+        document.body.style.cursor = '';
         this.#removeClickListener();
         this.#removeScrollListener();
         this.#removeResizeObserver();
         this.#removeMutationObserver();
+        this.#clearHover();
+        this.#intersectionObserver?.disconnect();
+        this.#intersectionObserver = undefined;
+        this.#observedThreads = new WeakSet();
     }
     /**
      * Sets up capturing click, hover, and pointer interaction listeners on the container.
@@ -295,7 +358,9 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
             if (!(target instanceof Element)) {
                 return;
             }
-            const thread = this.handleElementClick(target, defaultText);
+            const mouseEvent = event;
+            const options = { clientX: mouseEvent.clientX, clientY: mouseEvent.clientY };
+            const thread = this.handleElementClick(target, defaultText, options);
             if (thread) {
                 event.consume(true);
             }
@@ -309,31 +374,40 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
             if (!(target instanceof Element)) {
                 return;
             }
-            const anchorEl = resolveCommentAnchorElement(target);
+            const mouseEvent = event;
+            const options = { clientX: mouseEvent.clientX, clientY: mouseEvent.clientY };
+            const anchorEl = resolveCommentAnchorElement(target, options);
             if (anchorEl) {
                 event.consume(true);
             }
         };
         this.#hoverListener = (event) => {
             if (!this.isCommentMode()) {
-                this.#setHoverHighlight(null);
+                this.#clearHover();
                 return;
             }
             const composedTarget = event.composedPath()[0];
             const target = (composedTarget instanceof Element) ? composedTarget : event.target;
             if (!(target instanceof Element)) {
-                this.#setHoverHighlight(null);
+                this.#clearHover();
                 return;
             }
             const isLeaveEvent = event.type === 'mouseout' || event.type === 'mouseleave' || event.type === 'pointerout';
-            const anchorEl = resolveCommentAnchorElement(target);
+            const customResolver = getCustomAnchorResolverForElement(target);
+            if (customResolver) {
+                this.#handleCustomHover(target, event, customResolver);
+                return;
+            }
+            const mouseEvent = event;
+            const options = { clientX: mouseEvent.clientX, clientY: mouseEvent.clientY };
+            const anchorEl = resolveCommentAnchorElement(target, options);
             if (isLeaveEvent) {
                 const relatedTarget = event.relatedTarget;
-                if (anchorEl && relatedTarget instanceof Node && anchorEl.contains(relatedTarget)) {
+                if (anchorEl && relatedTarget instanceof Node && anchorEl.isSelfOrAncestor(relatedTarget)) {
                     event.consume(true);
                     return;
                 }
-                this.#setHoverHighlight(null);
+                this.#clearHover();
                 if (anchorEl) {
                     event.consume(true);
                 }
@@ -342,39 +416,26 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
             if (anchorEl) {
                 const cmLine = target.closest('.cm-line');
                 const highlightTarget = (cmLine && anchorEl.classList.contains('cm-editor')) ? cmLine : anchorEl;
-                const rect = highlightTarget.getBoundingClientRect();
-                let visibleLeft = rect.left;
-                let visibleRight = rect.right;
-                let visibleTop = rect.top;
-                let visibleBottom = rect.bottom;
-                if (anchorEl.classList.contains('cm-editor')) {
-                    const scroller = anchorEl.querySelector('.cm-scroller') || anchorEl;
-                    const scrollerRect = scroller.getBoundingClientRect();
-                    visibleLeft = Math.max(visibleLeft, scrollerRect.left);
-                    visibleRight = Math.min(visibleRight, scrollerRect.right);
-                    visibleTop = Math.max(visibleTop, scrollerRect.top);
-                    visibleBottom = Math.min(visibleBottom, scrollerRect.bottom);
-                }
-                const visibleWidth = Math.max(0, visibleRight - visibleLeft);
-                const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-                if (visibleWidth > 0 && visibleHeight > 0) {
+                const visibleRect = computeVisibleRect(highlightTarget);
+                if (visibleRect) {
                     const scrollX = window.scrollX;
                     const scrollY = window.scrollY;
                     this.#setHoverHighlight({
-                        top: scrollY + visibleTop,
-                        left: scrollX + visibleLeft,
-                        width: visibleWidth,
-                        height: visibleHeight,
+                        top: scrollY + visibleRect.top,
+                        left: scrollX + visibleRect.left,
+                        width: visibleRect.width,
+                        height: visibleRect.height,
                         visible: true,
                     });
+                    this.#setHoverCursor(highlightTarget);
                 }
                 else {
-                    this.#setHoverHighlight(null);
+                    this.#clearHover();
                 }
                 event.consume(true);
             }
             else {
-                this.#setHoverHighlight(null);
+                this.#clearHover();
             }
         };
         container.addEventListener('click', this.#clickListener, { capture: true });
@@ -407,6 +468,38 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
         }
     }
     /**
+     * Handles hover events for elements managed by a {@link CustomAnchorResolver}
+     * (e.g. canvas-rendered flame charts where individual items lack backing DOM nodes).
+     * Uses coordinate hit-testing to highlight specific entries rather than the entire element.
+     */
+    #handleCustomHover(target, event, customResolver) {
+        const isLeaveEvent = event.type === 'mouseout' || event.type === 'mouseleave' || event.type === 'pointerout';
+        if (isLeaveEvent) {
+            this.#clearHover();
+            return;
+        }
+        const mouseEvent = event;
+        const result = customResolver.resolve(target, { clientX: mouseEvent.clientX, clientY: mouseEvent.clientY, forHover: true });
+        if (result) {
+            if (result.highlightRect && result.highlightRect.visible !== false) {
+                this.#setHoverHighlight({
+                    top: result.highlightRect.top,
+                    left: result.highlightRect.left,
+                    width: result.highlightRect.width,
+                    height: result.highlightRect.height,
+                    visible: result.highlightRect.visible ?? true,
+                });
+            }
+            else {
+                this.#setHoverHighlight(null);
+            }
+            this.#setHoverCursor(result.anchorElement ?? target);
+            event.consume(true);
+            return;
+        }
+        this.#clearHover();
+    }
+    /**
      * Registers a capturing scroll listener on the window or target container.
      *
      * Because DevTools contains multiple independently scrolling subpanes (such as the Elements tree,
@@ -417,7 +510,7 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
         this.#removeScrollListener();
         this.#scrollTarget = target;
         this.#scrollListener = () => {
-            this.#setHoverHighlight(null);
+            this.#clearHover();
             if (this.#scrollRafId !== undefined) {
                 cancelAnimationFrame(this.#scrollRafId);
             }
@@ -449,7 +542,7 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
     #installResizeObserver(element = document.body) {
         this.#removeResizeObserver();
         this.#devToolsResizeObserver = new ResizeObserver(() => {
-            this.#setHoverHighlight(null);
+            this.#clearHover();
             if (this.#resizeRafId !== undefined) {
                 cancelAnimationFrame(this.#resizeRafId);
             }
@@ -499,8 +592,14 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
         this.#mutationObserver.observe(targetNode, {
             childList: true,
             subtree: true,
-            attributes: true,
-            attributeFilter: ['jslog', 'data-network-request-id', 'data-backend-node-id', 'aria-expanded'],
+            attributeFilter: [
+                'jslog',
+                'data-network-request-id',
+                'data-backend-node-id',
+                'data-target-id',
+                'aria-expanded',
+                'data-file-path',
+            ],
         });
     }
     #removeMutationObserver() {
@@ -520,9 +619,6 @@ export class CommentOverlayManager extends Common.ObjectWrapper.ObjectWrapper {
     clear() {
         this.#commentManager.clear();
         this.stop();
-        this.#intersectionObserver?.disconnect();
-        this.#intersectionObserver = undefined;
-        this.#observedThreads = new WeakSet();
         this.#pinPositions = [];
         this.#highlightRects = [];
         this.#updatePositions();

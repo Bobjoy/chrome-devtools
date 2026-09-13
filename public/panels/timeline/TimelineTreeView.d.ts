@@ -1,25 +1,16 @@
 import '../../ui/legacy/legacy.js';
 import * as Common from '../../core/common/common.js';
-import * as Platform from '../../core/platform/platform.js';
 import * as Trace from '../../models/trace/trace.js';
 import * as DataGrid from '../../ui/legacy/components/data_grid/data_grid.js';
 import * as Components from '../../ui/legacy/components/utils/utils.js';
 import * as UI from '../../ui/legacy/legacy.js';
 import { TimelineRegExp } from './TimelineFilters.js';
 import { type TimelineSelection } from './TimelineSelection.js';
-declare const TimelineTreeView_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<TimelineTreeView.EventTypes>;
-    addEventListener<T extends keyof TimelineTreeView.EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<TimelineTreeView.EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<TimelineTreeView.EventTypes, T>;
-    once<T extends keyof TimelineTreeView.EventTypes>(eventType: T): Promise<TimelineTreeView.EventTypes[T]>;
-    removeEventListener<T extends keyof TimelineTreeView.EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<TimelineTreeView.EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: keyof TimelineTreeView.EventTypes): boolean;
-    dispatchEventToListeners<T extends keyof TimelineTreeView.EventTypes>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<TimelineTreeView.EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.VBox;
 /**
  * For an overview, read: https://chromium.googlesource.com/devtools/devtools-frontend/+/refs/heads/main/front_end/panels/timeline/README.md#timeline-tree-views
  */
-export declare class TimelineTreeView extends TimelineTreeView_base implements UI.SearchableView.Searchable {
+declare const TimelineTreeViewBase: Common.ObjectWrapper.EventMixin<TimelineTreeView.EventTypes, typeof UI.Widget.VBox>;
+export declare class TimelineTreeView extends TimelineTreeViewBase implements UI.SearchableView.Searchable {
     #private;
     private searchResults;
     linkifier: Components.Linkifier.Linkifier;
@@ -209,16 +200,8 @@ export declare class BottomUpTimelineTreeView extends AggregatedTimelineTreeView
     constructor(element?: HTMLElement);
     buildTree(): Trace.Extras.TraceTree.Node;
 }
-declare const TimelineStackView_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<TimelineStackView.EventTypes>;
-    addEventListener<T extends keyof TimelineStackView.EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<TimelineStackView.EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<TimelineStackView.EventTypes, T>;
-    once<T extends keyof TimelineStackView.EventTypes>(eventType: T): Promise<TimelineStackView.EventTypes[T]>;
-    removeEventListener<T extends keyof TimelineStackView.EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<TimelineStackView.EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: keyof TimelineStackView.EventTypes): boolean;
-    dispatchEventToListeners<T extends keyof TimelineStackView.EventTypes>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<TimelineStackView.EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.VBox;
-export declare class TimelineStackView extends TimelineStackView_base {
+declare const TimelineStackViewBase: Common.ObjectWrapper.EventMixin<TimelineStackView.EventTypes, typeof UI.Widget.VBox>;
+export declare class TimelineStackView extends TimelineStackViewBase {
     private readonly treeView;
     private readonly dataGrid;
     constructor(treeView: TimelineTreeView);

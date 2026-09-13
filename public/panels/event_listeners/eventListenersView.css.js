@@ -58,7 +58,7 @@ export default `/*
   color: var(--sys-color-primary);
   background-color: var(--sys-color-cdt-base-container);
   border-radius: 7px;
-  border: 1px solid var(--sys-color-tonal-outline);
+  border: var(--sys-size-1) solid var(--sys-color-tonal-outline);
   margin-left: 5px;
   display: block;
   flex-shrink: 0;
@@ -83,7 +83,7 @@ export default `/*
   justify-content: center;
 }
 
-.sources.panel .empty-view-scroller {
+.sources.panel .placeholder > .empty-widget-container {
   display: none;
 }
 

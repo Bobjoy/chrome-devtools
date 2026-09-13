@@ -5,12 +5,12 @@ import { assert } from 'chai';
 import sinon from 'sinon';
 import * as SDK from '../../../core/sdk/sdk.js';
 import { assertIsError, assertIsResult, } from '../../../testing/AiAssistanceHelpers.js';
-import { describeWithEnvironment, } from '../../../testing/EnvironmentHelpers.js';
+import { setupLocaleHooks } from '../../../testing/LocaleHelpers.js';
 import { MockCDPConnection } from '../../../testing/MockCDPConnection.js';
 import { createStubbedDomNodeWithModels, getMatchedStyles, ruleMatch, } from '../../../testing/StyleHelpers.js';
 import * as AiAssistance from '../ai_assistance.js';
-describeWithEnvironment('GetStylesTool', () => {
-    let element;
+describe('GetStylesTool', () => {
+    setupLocaleHooks();
     let target;
     let domModel;
     let connection;
@@ -20,16 +20,10 @@ describeWithEnvironment('GetStylesTool', () => {
         target.model.returns(null);
         domModel = sinon.createStubInstance(SDK.DOMModel.DOMModel);
         domModel.target.returns(target);
-        element = sinon.createStubInstance(SDK.DOMModel.DOMNode);
-        element.domModel.returns(domModel);
-        element.backendNodeId.returns(99);
     });
     it('successfully returns computed and authored styles', async () => {
         const { node: resolvedNode, cssModel } = createStubbedDomNodeWithModels({ nodeId: 42 });
         resolvedNode.ownerDocument = {
-            documentURL: 'https://example.com',
-        };
-        element.ownerDocument = {
             documentURL: 'https://example.com',
         };
         sinon.stub(SDK.DOMModel.DeferredDOMNode.prototype, 'resolvePromise').resolves(resolvedNode);
@@ -40,9 +34,8 @@ describeWithEnvironment('GetStylesTool', () => {
         cssModel.getMatchedStyles.resolves(matchedStyles);
         const tool = new AiAssistance.GetStyles.GetStylesTool();
         const context = {
-            conversationContext: null,
             getTarget: () => target,
-            getEstablishedOrigin: () => 'https://example.com',
+            getEstablishedOrigin: () => SDK.SecurityOrigin.SecurityOrigin.create('https://example.com'),
         };
         const response = await tool.handler({
             explanation: 'Get element styles',
@@ -60,7 +53,6 @@ describeWithEnvironment('GetStylesTool', () => {
     it('returns error when target is missing', async () => {
         const tool = new AiAssistance.GetStyles.GetStylesTool();
         const context = {
-            conversationContext: null,
             getTarget: () => null,
             getEstablishedOrigin: () => undefined,
         };
@@ -80,17 +72,75 @@ describeWithEnvironment('GetStylesTool', () => {
         sinon.stub(SDK.DOMModel.DeferredDOMNode.prototype, 'resolvePromise').resolves(resolvedNode);
         const tool = new AiAssistance.GetStyles.GetStylesTool();
         const context = {
-            conversationContext: null,
             getTarget: () => target,
-            getEstablishedOrigin: () => 'https://example.com',
+            getEstablishedOrigin: () => SDK.SecurityOrigin.SecurityOrigin.create('https://example.com'),
         };
         const response = await tool.handler({
             explanation: 'Get element styles',
             elements: [42],
             styleProperties: ['color'],
         }, context);
-        assertIsError(response);
-        assert.strictEqual(response.error, 'Error: Node does not belong to the current origin.');
+        assertIsError(response, 'Error: Node does not belong to the current origin.');
+    });
+    it('successfully returns styles for an element in a cross-origin iframe under iframe origin lock', async () => {
+        const { node: resolvedNode, cssModel } = createStubbedDomNodeWithModels({ nodeId: 42 });
+        resolvedNode.ownerDocument = {
+            documentURL: 'https://iframe.example.com',
+        };
+        sinon.stub(SDK.DOMModel.DeferredDOMNode.prototype, 'resolvePromise').resolves(resolvedNode);
+        const computedStyleMap = new Map([['color', 'blue']]);
+        cssModel.getComputedStyle.resolves(computedStyleMap);
+        const matchedPayload = [ruleMatch('button', { color: 'blue' })];
+        const matchedStyles = await getMatchedStyles({ cssModel, node: resolvedNode, matchedPayload, connection });
+        cssModel.getMatchedStyles.resolves(matchedStyles);
+        const tool = new AiAssistance.GetStyles.GetStylesTool();
+        const context = {
+            getTarget: () => target,
+            getEstablishedOrigin: () => SDK.SecurityOrigin.SecurityOrigin.create('https://iframe.example.com'),
+        };
+        const response = await tool.handler({
+            explanation: 'Get element styles',
+            elements: [42],
+            styleProperties: ['color'],
+        }, context);
+        assertIsResult(response);
+        assert.strictEqual(response.result, JSON.stringify({
+            42: {
+                computed: { color: 'blue' },
+                authored: { color: 'blue' },
+            },
+        }, null, 2));
+    });
+    it('returns error if resolved node has no security origin (detached node)', async () => {
+        const detachedNode = sinon.createStubInstance(SDK.DOMModel.DOMNode);
+        detachedNode.securityOrigin.returns(null);
+        sinon.stub(SDK.DOMModel.DeferredDOMNode.prototype, 'resolvePromise').resolves(detachedNode);
+        const tool = new AiAssistance.GetStyles.GetStylesTool();
+        const context = {
+            getTarget: () => target,
+            getEstablishedOrigin: () => SDK.SecurityOrigin.SecurityOrigin.create('https://example.com'),
+        };
+        const response = await tool.handler({
+            explanation: 'Get element styles',
+            elements: [42],
+            styleProperties: ['color'],
+        }, context);
+        assertIsError(response, 'Error: Node does not belong to the current origin.');
+    });
+    it('returns error when origin lock is not established', async () => {
+        const { node: resolvedNode } = createStubbedDomNodeWithModels({ nodeId: 42 });
+        sinon.stub(SDK.DOMModel.DeferredDOMNode.prototype, 'resolvePromise').resolves(resolvedNode);
+        const tool = new AiAssistance.GetStyles.GetStylesTool();
+        const context = {
+            getTarget: () => target,
+            getEstablishedOrigin: () => undefined,
+        };
+        const response = await tool.handler({
+            explanation: 'Get element styles',
+            elements: [42],
+            styleProperties: ['color'],
+        }, context);
+        assertIsError(response, 'Error: Node does not belong to the current origin.');
     });
 });
 //# sourceMappingURL=GetStyles.test.js.map

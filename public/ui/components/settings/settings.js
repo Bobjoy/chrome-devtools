@@ -4,20 +4,20 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/settings/SettingCheckbox.js
+// ../../front_end/ui/components/settings/SettingCheckbox.ts
 var SettingCheckbox_exports = {};
 __export(SettingCheckbox_exports, {
   SettingCheckbox: () => SettingCheckbox
 });
-import "./../tooltips/tooltips.js";
-import "./../../kit/kit.js";
-import * as Host from "./../../../core/host/host.js";
-import * as i18n from "./../../../core/i18n/i18n.js";
-import * as Lit from "./../../lit/lit.js";
-import * as SettingUIRegistration from "./../../settings/settings.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
-import * as Buttons from "./../buttons/buttons.js";
-import * as Input from "./../input/input.js";
+import "../tooltips/tooltips.js";
+import "../../kit/kit.js";
+import * as Host from "../../../core/host/host.js";
+import * as i18n from "../../../core/i18n/i18n.js";
+import * as Lit from "../../lit/lit.js";
+import * as SettingUIRegistration from "../../settings/settings.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
+import * as Buttons from "../buttons/buttons.js";
+import * as Input from "../input/input.js";
 
 // gen/front_end/ui/components/settings/settingCheckbox.css.js
 var settingCheckbox_css_default = `/*
@@ -32,11 +32,11 @@ var settingCheckbox_css_default = `/*
 }
 
 input {
-  height: 12px;
-  width: 12px;
-  min-height: 12px;
-  min-width: 12px;
-  margin: 6px;
+  height: var(--sys-size-6);
+  width: var(--sys-size-6);
+  min-height: var(--sys-size-6);
+  min-width: var(--sys-size-6);
+  margin: var(--sys-size-4);
 }
 
 label {
@@ -47,7 +47,7 @@ label {
 }
 
 p {
-  margin: 6px 0;
+  margin: var(--sys-size-4) 0;
 }
 
 .info-icon {
@@ -66,7 +66,7 @@ p {
 
 /*# sourceURL=${import.meta.resolve("./settingCheckbox.css")} */`;
 
-// gen/front_end/ui/components/settings/SettingCheckbox.js
+// ../../front_end/ui/components/settings/SettingCheckbox.ts
 var { html } = Lit;
 var UIStrings = {
   /**
@@ -104,8 +104,8 @@ var SettingCheckbox = class extends HTMLElement {
       const jsLogContext = `${this.#setting.name}-documentation`;
       const data = {
         iconName: "info",
-        variant: "icon",
-        size: "SMALL",
+        variant: Buttons.Button.Variant.ICON,
+        size: Buttons.Button.Size.SMALL,
         jslogContext: jsLogContext
       };
       const url = learnMore.url;
@@ -161,7 +161,8 @@ var SettingCheckbox = class extends HTMLElement {
     const titleText = uiDescriptor?.title ?? "";
     const icon = this.icon();
     const title = learnMore?.tooltip?.() ?? "";
-    Lit.render(html`
+    Lit.render(
+      html`
       <style>${Input.checkboxStyles}</style>
       <style>${settingCheckbox_css_default}</style>
       <p>
@@ -177,7 +178,10 @@ var SettingCheckbox = class extends HTMLElement {
           ${this.#textOverride || titleText}
         </label>
         ${icon}
-      </p>`, this.#shadow, { host: this });
+      </p>`,
+      this.#shadow,
+      { host: this }
+    );
   }
   #checkboxChanged(e) {
     this.#setting?.set(e.target.checked);

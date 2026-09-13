@@ -4,24 +4,24 @@
 /* eslint-disable @devtools/no-imperative-dom-api */
 import * as Common from '../../core/common/common.js';
 import * as i18n from '../../core/i18n/i18n.js';
-import * as Geometry from '../../models/geometry/geometry.js';
 import * as Trace from '../../models/trace/trace.js';
 import * as ComponentHelpers from '../../ui/components/helpers/helpers.js';
+import * as Geometry from '../../ui/geometry/geometry.js';
 import * as PerfUI from '../../ui/legacy/components/perf_ui/perf_ui.js';
 import * as ThemeSupport from '../../ui/legacy/theme_support/theme_support.js';
 import { buildGroupStyle, buildTrackHeader } from './AppenderUtils.js';
 import * as Utils from './utils/utils.js';
 const UIStrings = {
     /**
-     * @description Text in Timeline Flame Chart Data Provider of the Performance panel
+     * @description Header for the layout shifts track in the timeline flame chart of the Performance panel.
      */
     layoutShifts: 'Layout shifts',
     /**
-     * @description Text in Timeline Flame Chart Data Provider of the Performance panel
+     * @description Title for a layout shift cluster event in the timeline flame chart.
      */
     layoutShiftCluster: 'Layout shift cluster',
     /**
-     * @description Text in Timeline Flame Chart Data Provider of the Performance panel
+     * @description Title for a layout shift event in the timeline flame chart.
      */
     layoutShift: 'Layout shift',
 };
