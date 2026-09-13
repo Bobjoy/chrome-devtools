@@ -6,15 +6,13 @@ import * as i18n from '../../../core/i18n/i18n.js';
 import * as Root from '../../../core/root/root.js';
 import * as SDK from '../../../core/sdk/sdk.js';
 import * as TextUtils from '../../../core/text_utils/text_utils.js';
-import { canResourceContentsBeReadForTrace } from '../AiOrigins.js';
-import { PerformanceTraceContext } from '../contexts/PerformanceTraceContext.js';
 const UIStringsNotTranslate = {
     lookingAtResourceContent: 'Looking at resource content',
 };
 const lockedString = i18n.i18n.lockedString;
 export class GetResourceContentTool {
     name = "getResourceContent" /* ToolName.GET_RESOURCE_CONTENT */;
-    description = 'Returns the content of the resource with the given url. Only use this for text resource types.';
+    description = 'Retrieves the content of the resource with the given url. Only use this for text resource types.';
     parameters = {
         type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
         description: 'Arguments for looking up resource content.',
@@ -35,18 +33,17 @@ export class GetResourceContentTool {
         };
     }
     async handler(params, capabilities) {
-        const conversationContext = capabilities.conversationContext;
-        if (!conversationContext || !(conversationContext instanceof PerformanceTraceContext)) {
+        const performanceTraceContext = capabilities.getPerformanceTraceContext();
+        if (!performanceTraceContext) {
             return { error: 'Performance trace context is not available.' };
         }
-        if (conversationContext.getOrigin().startsWith('imported-trace://')) {
+        if (performanceTraceContext.isImported()) {
             return { error: 'Cannot use this tool on an imported file.' };
         }
-        const allowedOrigin = conversationContext.getOrigin();
-        if (!canResourceContentsBeReadForTrace(params.url, allowedOrigin)) {
+        if (!performanceTraceContext.canAccessResource(params.url)) {
             return { error: 'Resource not found' };
         }
-        const focus = conversationContext.getItem();
+        const focus = performanceTraceContext.getItem();
         const { parsedTrace } = focus;
         let content;
         const url = params.url;

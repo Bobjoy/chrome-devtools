@@ -1,5 +1,4 @@
 import * as Common from '../../../../core/common/common.js';
-import * as Platform from '../../../../core/platform/platform.js';
 import * as TextUtils from '../../../../core/text_utils/text_utils.js';
 import * as Formatter from '../../../../models/formatter/formatter.js';
 import * as CodeMirror from '../../../../third_party/codemirror.next/codemirror.next.js';
@@ -17,18 +16,10 @@ export interface EventTypes {
     [Events.EDITOR_UPDATE]: CodeMirror.ViewUpdate;
     [Events.EDITOR_SCROLL]: void;
 }
-type FormatFn = (lineNo: number, state: CodeMirror.EditorState) => string;
+export type FormatFn = (lineNo: number, state: CodeMirror.EditorState) => string;
 export declare const LINE_NUMBER_FORMATTER: CodeMirror.Facet<FormatFn, FormatFn>;
-declare const SourceFrameImpl_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<EventTypes>;
-    addEventListener<T extends keyof EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<EventTypes, T>;
-    once<T extends keyof EventTypes>(eventType: T): Promise<EventTypes[T]>;
-    removeEventListener<T extends keyof EventTypes>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: keyof EventTypes): boolean;
-    dispatchEventToListeners<T extends keyof EventTypes>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.View.SimpleView;
-export declare class SourceFrameImpl extends SourceFrameImpl_base implements UI.SearchableView.Searchable, UI.SearchableView.Replaceable, Transformer {
+declare const SourceFrameImplBase: Common.ObjectWrapper.EventMixin<EventTypes, typeof UI.View.SimpleView>;
+export declare class SourceFrameImpl extends SourceFrameImplBase implements UI.SearchableView.Searchable, UI.SearchableView.Replaceable, Transformer {
     #private;
     private readonly options;
     private readonly lazyContent;

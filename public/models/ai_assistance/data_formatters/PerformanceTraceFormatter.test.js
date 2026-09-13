@@ -14,9 +14,7 @@ import { createTraceExtensionDataFromPerformanceAPITestInput, getBaseTraceHandle
 import { TraceLoader } from '../../../testing/TraceLoader.js';
 import { AICallTree, AIContext, PerformanceTraceFormatter } from '../ai_assistance.js';
 async function createFormatter(context, name, cruxManager) {
-    const parsedTrace = await TraceLoader.traceEngine(context, name, undefined, {
-        withTimelinePanel: false,
-    });
+    const parsedTrace = await TraceLoader.traceEngine(context, name);
     assert.isOk(parsedTrace.insights);
     const focus = AIContext.AgentFocus.fromParsedTrace(parsedTrace);
     const formatter = new PerformanceTraceFormatter.PerformanceTraceFormatter(focus, null, cruxManager);
@@ -165,7 +163,8 @@ describe('PerformanceTraceFormatter', function () {
     it('formatMainThreadTrackSummary', async function () {
         const { formatter, parsedTrace } = await createFormatter(this, 'yahoo-news.json.gz', cruxManager);
         const min = parsedTrace.data.Meta.traceBounds.min;
-        const max = parsedTrace.data.Meta.traceBounds.min + parsedTrace.data.Meta.traceBounds.range / 2;
+        const max = (parsedTrace.data.Meta.traceBounds.min +
+            Trace.Helpers.Timing.milliToMicro(Trace.Types.Timing.Milli(5000)));
         const bounds = Trace.Helpers.Timing.traceWindowFromMicroSeconds(min, max);
         const output = await formatter.formatMainThreadTrackSummary(bounds);
         snapshotTester.assert(this, output);

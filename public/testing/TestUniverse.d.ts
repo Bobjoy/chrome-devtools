@@ -57,6 +57,7 @@ export declare class TestUniverse implements Foundation.Universe.Universe {
     get automaticFileSystemManager(): Persistence.AutomaticFileSystemManager.AutomaticFileSystemManager;
     get automaticFileSystemWorkspaceBinding(): Persistence.AutomaticFileSystemWorkspaceBinding.AutomaticFileSystemWorkspaceBinding;
     get breakpointManager(): Breakpoints.BreakpointManager.BreakpointManager;
+    get cd4aBridge(): CommentManager.CD4ABridge.CD4ABridge;
     get commentManager(): CommentManager.CommentManager.CommentManager;
     get console(): Common.Console.Console;
     get context(): Root.DevToolsContext.DevToolsContext;
@@ -66,6 +67,7 @@ export declare class TestUniverse implements Foundation.Universe.Universe {
     get debuggerWorkspaceBinding(): Bindings.DebuggerWorkspaceBinding.DebuggerWorkspaceBinding;
     get deviceModeModel(): Emulation.DeviceModeModel.DeviceModeModel;
     get domDebuggerManager(): SDK.DOMDebuggerModel.DOMDebuggerManager;
+    get domIssuesManager(): IssuesManager.DOMIssuesManager.DOMIssuesManager;
     get domModelUndoStack(): SDK.DOMModel.DOMModelUndoStack;
     get emulatedDevicesList(): Emulation.EmulatedDevices.EmulatedDevicesList;
     get eventBreakpointsManager(): SDK.EventBreakpointsModel.EventBreakpointsManager;

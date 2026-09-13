@@ -4,10 +4,11 @@
 import { assert } from 'chai';
 import sinon from 'sinon';
 import * as SDK from '../../../core/sdk/sdk.js';
-import { describeWithEnvironment } from '../../../testing/EnvironmentHelpers.js';
+import { setupLocaleHooks } from '../../../testing/LocaleHelpers.js';
 import { SnapshotTester } from '../../../testing/SnapshotTester.js';
 import * as AiAssistance from '../ai_assistance.js';
-describeWithEnvironment('DOMNodeContext', function () {
+describe('DOMNodeContext', function () {
+    setupLocaleHooks();
     const snapshotTester = new SnapshotTester(this, import.meta);
     let element;
     let target;
@@ -94,6 +95,24 @@ describeWithEnvironment('DOMNodeContext', function () {
         const nodeContext = new AiAssistance.DOMNodeContext.DOMNodeContext(element);
         const result = await nodeContext.describe();
         snapshotTester.assert(this, result);
+    });
+    describe('getOrigin', () => {
+        it('returns the owner document URL origin when attached to a document', () => {
+            const mockDocument = {
+                documentURL: 'https://example.com/page.html',
+            };
+            element.ownerDocument = mockDocument;
+            const nodeContext = new AiAssistance.DOMNodeContext.DOMNodeContext(element);
+            assert.isTrue(nodeContext.getOrigin().isSameOriginWith(SDK.SecurityOrigin.SecurityOrigin.create('https://example.com')));
+        });
+        it('returns a stable opaque origin when detached from a document', () => {
+            element.ownerDocument = null;
+            const nodeContext = new AiAssistance.DOMNodeContext.DOMNodeContext(element);
+            const origin1 = nodeContext.getOrigin();
+            const origin2 = nodeContext.getOrigin();
+            assert.isTrue(origin1.isOpaque());
+            assert.isTrue(origin1.isSameOriginWith(origin2));
+        });
     });
 });
 //# sourceMappingURL=DOMNodeContext.test.js.map

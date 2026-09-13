@@ -4,14 +4,14 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/text_prompt/TextPrompt.js
+// ../../front_end/ui/components/text_prompt/TextPrompt.ts
 var TextPrompt_exports = {};
 __export(TextPrompt_exports, {
   PromptInputEvent: () => PromptInputEvent,
   TextPrompt: () => TextPrompt
 });
-import * as Platform from "./../../../core/platform/platform.js";
-import { html, render } from "./../../lit/lit.js";
+import * as Platform from "../../../core/platform/platform.js";
+import { html, render } from "../../lit/lit.js";
 
 // gen/front_end/ui/components/text_prompt/textPrompt.css.js
 var textPrompt_css_default = `/*
@@ -65,7 +65,7 @@ input {
 
 /*# sourceURL=${import.meta.resolve("./textPrompt.css")} */`;
 
-// gen/front_end/ui/components/text_prompt/TextPrompt.js
+// ../../front_end/ui/components/text_prompt/TextPrompt.ts
 var PromptInputEvent = class _PromptInputEvent extends Event {
   static eventName = "promptinputchanged";
   data;

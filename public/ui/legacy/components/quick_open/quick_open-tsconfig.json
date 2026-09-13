@@ -1,13 +1,14 @@
 {
-  "checkJs": true,
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "checkJs": true,
-    "composite": true,
-    "declaration": true,
+    "checkJs": false,
+    "composite": false,
+    "declaration": false,
+    "disableSourceOfProjectReferenceRedirect": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": false,
     "inlineSources": true,
     "lib": [
       "dom",
@@ -19,21 +20,28 @@
       "ESNext.Array"
     ],
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "outDir": ".",
+    "preserveConstEnums": true,
     "rootDir": "../../../../../../../../front_end/ui/legacy/components/quick_open",
+    "rootDirs": [
+      "../../../../../../../../",
+      "../../../../../"
+    ],
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
-    "tsBuildInfoFile": "quick_open-tsconfig.json.tsbuildinfo",
-    "typeRoots": [],
-    "types": [],
+    "typeRoots": [
+
+    ],
+    "types": [
+
+    ],
     "useUnknownInCatchVariables": false
   },
   "files": [
@@ -43,50 +51,51 @@
     "../../../../../../../../front_end/ui/legacy/components/quick_open/QuickOpen.ts",
     "../../../../../../../../front_end/legacy/legacy-defs.d.ts",
     "../../../../../../../../front_end/global_typings/global_defs.d.ts",
-    "../../../../../../../../node_modules/@types/filesystem/index.d.ts"
+    "../../../../../../../../node_modules/@types/filesystem/index.d.ts",
+    "../../../../../../../../node_modules/@types/filewriter/index.d.ts"
   ],
   "references": [
     {
-      "path": "../../../../core/common/bundle-tsconfig.json"
+      "path": "../../../../core/common/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../core/host/bundle-tsconfig.json"
+      "path": "../../../../core/host/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../core/i18n/bundle-tsconfig.json"
+      "path": "../../../../core/i18n/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../core/platform/bundle-tsconfig.json"
+      "path": "../../../../core/platform/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../core/text_utils/bundle-tsconfig.json"
+      "path": "../../../../core/text_utils/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../models/geometry/bundle-tsconfig.json"
+      "path": "../../../../third_party/diff/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../../third_party/diff/bundle-tsconfig.json"
+      "path": "../../../components/text_prompt/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../components/text_prompt/bundle-tsconfig.json"
+      "path": "../../bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../bundle-tsconfig.json"
+      "path": "../../../components/highlighting/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../components/highlighting/bundle-tsconfig.json"
+      "path": "../../../geometry/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../kit/bundle-tsconfig.json"
+      "path": "../../../kit/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../lit/bundle-tsconfig.json"
+      "path": "../../../lit/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../settings/bundle-tsconfig.json"
+      "path": "../../../settings/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../../../visual_logging/bundle-tsconfig.json"
+      "path": "../../../visual_logging/bundle-tsconfig.ref.json"
     }
   ]
 }

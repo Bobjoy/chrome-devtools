@@ -96,6 +96,10 @@ const UIStrings = {
      */
     gridLanesEditorButton: 'Open `grid-lanes` editor',
     /**
+     * @description Title of the button that opens the CSS position-area editor in the Styles tab of the Elements panel.
+     */
+    positionAreaEditorButton: 'Open `position-area` editor',
+    /**
      * @description A context menu item in the Styles tab of the Elements panel to copy CSS declaration as JavaScript property.
      */
     copyCssDeclarationAsJs: 'Copy declaration as JS',
@@ -136,8 +140,9 @@ const UIStrings = {
 const str_ = i18n.i18n.registerUIStrings('panels/elements/StylePropertyTreeElement.ts', UIStrings);
 const i18nString = i18n.i18n.getLocalizedString.bind(undefined, str_);
 const parentMap = new WeakMap();
+const EnvFunctionRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.EnvFunctionMatch);
 // clang-format off
-export class EnvFunctionRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.EnvFunctionMatch) {
+export class EnvFunctionRenderer extends EnvFunctionRendererBase {
     treeElement;
     matchedStyles;
     computedStyles;
@@ -172,8 +177,9 @@ export class EnvFunctionRenderer extends rendererBase(SDK.CSSPropertyParserMatch
         return [span];
     }
 }
+const FlexGridRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.FlexGridGridLanesMatch);
 // clang-format off
-export class FlexGridRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.FlexGridGridLanesMatch) {
+export class FlexGridRenderer extends FlexGridRendererBase {
     // clang-format on
     #treeElement;
     #stylesContainer;
@@ -232,8 +238,9 @@ export class FlexGridRenderer extends rendererBase(SDK.CSSPropertyParserMatchers
         return [...children, button];
     }
 }
+const CSSWideKeywordRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.CSSWideKeywordMatch);
 // clang-format off
-export class CSSWideKeywordRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.CSSWideKeywordMatch) {
+export class CSSWideKeywordRenderer extends CSSWideKeywordRendererBase {
     // clang-format on
     #treeElement;
     #stylesContainer;
@@ -279,8 +286,9 @@ export function handleVarDefinitionActivate(variable, stylesContainer) {
         stylesContainer.jumpToProperty('initial-value', variable.name, REGISTERED_PROPERTY_SECTION_NAME);
     }
 }
+const VariableRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.VariableMatch);
 // clang-format off
-export class VariableRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.VariableMatch) {
+export class VariableRenderer extends VariableRendererBase {
     // clang-format on
     #stylesContainer;
     #treeElement;
@@ -359,8 +367,9 @@ export class VariableRenderer extends rendererBase(SDK.CSSPropertyParserMatchers
         return [colorSwatch, varSwatch];
     }
 }
+const VariableNameRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.VariableNameMatch);
 // clang-format off
-export class VariableNameRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.VariableNameMatch) {
+export class VariableNameRenderer extends VariableNameRendererBase {
     // clang-format on
     #stylesContainer;
     #treeElement;
@@ -406,8 +415,9 @@ export class VariableNameRenderer extends rendererBase(SDK.CSSPropertyParserMatc
         return [varSwatch];
     }
 }
+const AttributeRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.AttributeMatch);
 // clang-format off
-export class AttributeRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.AttributeMatch) {
+export class AttributeRenderer extends AttributeRendererBase {
     // clang-format on
     #stylesContainer;
     #treeElement;
@@ -498,8 +508,9 @@ export class AttributeRenderer extends rendererBase(SDK.CSSPropertyParserMatcher
         ElementsPanel.instance().highlightNodeAttribute(node, attribute);
     }
 }
+const LinearGradientRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.LinearGradientMatch);
 // clang-format off
-export class LinearGradientRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.LinearGradientMatch) {
+export class LinearGradientRenderer extends LinearGradientRendererBase {
     // clang-format on
     render(match, context) {
         const children = ASTUtils.children(match.node);
@@ -520,8 +531,9 @@ export class LinearGradientRenderer extends rendererBase(SDK.CSSPropertyParserMa
         return nodes;
     }
 }
+const RelativeColorChannelRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.RelativeColorChannelMatch);
 // clang-format off
-export class RelativeColorChannelRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.RelativeColorChannelMatch) {
+export class RelativeColorChannelRenderer extends RelativeColorChannelRendererBase {
     // clang-format on
     #treeElement;
     constructor(treeElement) {
@@ -558,8 +570,9 @@ export class RelativeColorChannelRenderer extends rendererBase(SDK.CSSPropertyPa
         return [span, tooltip];
     }
 }
+const ColorRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.ColorMatch);
 // clang-format off
-export class ColorRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.ColorMatch) {
+export class ColorRenderer extends ColorRendererBase {
     // clang-format on
     #treeElement;
     #stylesContainer;
@@ -687,8 +700,9 @@ export class ColorRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.Co
         swatchIcon.setContrastInfo(contrastInfo);
     }
 }
+const LightDarkColorRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.LightDarkColorMatch);
 // clang-format off
-export class LightDarkColorRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.LightDarkColorMatch) {
+export class LightDarkColorRenderer extends LightDarkColorRendererBase {
     // clang-format on
     #treeElement;
     #stylesContainer;
@@ -770,8 +784,9 @@ export class LightDarkColorRenderer extends rendererBase(SDK.CSSPropertyParserMa
         }
     }
 }
+const ColorMixRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.ColorMixMatch);
 // clang-format off
-export class ColorMixRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.ColorMixMatch) {
+export class ColorMixRenderer extends ColorMixRendererBase {
     // clang-format on
     #stylesContainer;
     #matchedStyles;
@@ -893,8 +908,9 @@ export class ColorMixRenderer extends rendererBase(SDK.CSSPropertyParserMatchers
         return [swatch, contentChild, tooltip];
     }
 }
+const ContrastColorRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.ContrastColorMatch);
 // clang-format off
-export class ContrastColorRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.ContrastColorMatch) {
+export class ContrastColorRenderer extends ContrastColorRendererBase {
     // clang-format on
     #treeElement;
     #stylesContainer;
@@ -926,8 +942,9 @@ export class ContrastColorRenderer extends rendererBase(SDK.CSSPropertyParserMat
         return [colorSwatch, content];
     }
 }
+const AngleRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.AngleMatch);
 // clang-format off
-export class AngleRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.AngleMatch) {
+export class AngleRenderer extends AngleRendererBase {
     // clang-format on
     #treeElement;
     constructor(treeElement) {
@@ -977,8 +994,9 @@ export class AngleRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.An
         return [cssAngle];
     }
 }
+const LinkableNameRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.LinkableNameMatch);
 // clang-format off
-export class LinkableNameRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.LinkableNameMatch) {
+export class LinkableNameRenderer extends LinkableNameRendererBase {
     // clang-format on
     #matchedStyles;
     #stylesContainer;
@@ -1071,8 +1089,9 @@ export class LinkableNameRenderer extends rendererBase(SDK.CSSPropertyParserMatc
         return [swatch];
     }
 }
+const BezierRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.BezierMatch);
 // clang-format off
-export class BezierRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.BezierMatch) {
+export class BezierRenderer extends BezierRendererBase {
     // clang-format on
     #treeElement;
     constructor(treeElement) {
@@ -1103,8 +1122,9 @@ export class BezierRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.B
         return [iconAndTextContainer];
     }
 }
+const AutoBaseRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.AutoBaseMatch);
 // clang-format off
-export class AutoBaseRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.AutoBaseMatch) {
+export class AutoBaseRenderer extends AutoBaseRendererBase {
     #computedStyleExtraFields;
     // clang-format on
     constructor(computedStyle, computedStyleExtraFields) {
@@ -1131,6 +1151,15 @@ export class AutoBaseRenderer extends rendererBase(SDK.CSSPropertyParserMatchers
         return [content];
     }
 }
+export var ShadowPropertyType;
+(function (ShadowPropertyType) {
+    ShadowPropertyType["X"] = "x";
+    ShadowPropertyType["Y"] = "y";
+    ShadowPropertyType["SPREAD"] = "spread";
+    ShadowPropertyType["BLUR"] = "blur";
+    ShadowPropertyType["INSET"] = "inset";
+    ShadowPropertyType["COLOR"] = "color";
+})(ShadowPropertyType || (ShadowPropertyType = {}));
 /**
  * The shadow model is an abstraction over the various shadow properties on the one hand and the order they were defined
  * in on the other, so that modifications through the shadow editor can retain the property order in the authored text.
@@ -1264,8 +1293,9 @@ export class ShadowModel {
         }
     }
 }
+const ShadowRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.ShadowMatch);
 // clang-format off
-export class ShadowRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.ShadowMatch) {
+export class ShadowRenderer extends ShadowRendererBase {
     #treeElement;
     // clang-format on
     constructor(treeElement) {
@@ -1383,8 +1413,9 @@ export class ShadowRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.S
         return result;
     }
 }
+const GridTemplateRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.GridTemplateMatch);
 // clang-format off
-export class GridTemplateRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.GridTemplateMatch) {
+export class GridTemplateRenderer extends GridTemplateRendererBase {
     // clang-format on
     render(match, context) {
         if (match.lines.length <= 1) {
@@ -1430,8 +1461,9 @@ async function resolveValues(stylesContainer, propertyName, match, context, ...v
     return (await stylesContainer.cssModel()?.resolveValues(propertyName, nodeId, ...values)) ??
         (await stylesContainer.cssModel()?.resolveValues(undefined, nodeId, ...values));
 }
+const LengthRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.LengthMatch);
 // clang-format off
-export class LengthRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.LengthMatch) {
+export class LengthRenderer extends LengthRendererBase {
     // clang-format on
     #stylesContainer;
     #treeElement;
@@ -1490,8 +1522,9 @@ export class LengthRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.L
         tooltip.appendChild(document.createTextNode(pixelValue[0]));
     }
 }
+const BaseFunctionRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.BaseFunctionMatch);
 // clang-format off
-export class BaseFunctionRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.BaseFunctionMatch) {
+export class BaseFunctionRenderer extends BaseFunctionRendererBase {
     // clang-format on
     #stylesContainer;
     #matchedStyles;
@@ -1583,8 +1616,9 @@ export class MathFunctionRenderer extends BaseFunctionRenderer {
 export class CustomFunctionRenderer extends BaseFunctionRenderer {
     matchType = SDK.CSSPropertyParserMatchers.CustomFunctionMatch;
 }
+const AnchorFunctionRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.AnchorFunctionMatch);
 // clang-format off
-export class AnchorFunctionRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.AnchorFunctionMatch) {
+export class AnchorFunctionRenderer extends AnchorFunctionRendererBase {
     // clang-format on
     #stylesContainer;
     static async decorateAnchorForAnchorLink(stylesContainer, container, { identifier, needsSpace }) {
@@ -1670,8 +1704,9 @@ export class AnchorFunctionRenderer extends rendererBase(SDK.CSSPropertyParserMa
         return [content];
     }
 }
+const PositionAnchorRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.PositionAnchorMatch);
 // clang-format off
-export class PositionAnchorRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.PositionAnchorMatch) {
+export class PositionAnchorRenderer extends PositionAnchorRendererBase {
     #stylesContainer;
     // clang-format on
     constructor(stylesContainer) {
@@ -1684,8 +1719,75 @@ export class PositionAnchorRenderer extends rendererBase(SDK.CSSPropertyParserMa
         return [content];
     }
 }
+const PositionAreaRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.PositionAreaMatch);
 // clang-format off
-export class PositionTryRenderer extends rendererBase(SDK.CSSPropertyParserMatchers.PositionTryMatch) {
+export class PositionAreaRenderer extends PositionAreaRendererBase {
+    // clang-format on
+    #treeElement;
+    #stylesContainer;
+    constructor(stylesContainer, treeElement) {
+        super();
+        this.#treeElement = treeElement;
+        this.#stylesContainer = stylesContainer;
+    }
+    render(match, context) {
+        const children = Renderer.render(ASTUtils.siblings(ASTUtils.declValue(match.node)), context).nodes;
+        if (!this.#treeElement?.editable() || !InlineEditor.PositionAreaEditor.parsePositionArea(match.text)) {
+            return children;
+        }
+        const valueElement = document.createElement('span');
+        valueElement.append(...children);
+        const button = createIcon('grid-on', 'position-area-swatch-icon');
+        button.title = i18nString(UIStrings.positionAreaEditorButton);
+        button.role = 'button';
+        button.tabIndex = -1;
+        button.setAttribute('jslog', `${VisualLogging.showStyleEditor().track({ click: true }).context('position-area')}`);
+        const treeElement = this.#treeElement;
+        button.onclick = event => {
+            event.consume(true);
+            const popoverHelper = this.#stylesContainer.swatchPopoverHelper();
+            if (popoverHelper.isShowing()) {
+                popoverHelper.hide(true);
+                return;
+            }
+            const editor = new InlineEditor.PositionAreaEditor.PositionAreaEditor();
+            editor.area = InlineEditor.PositionAreaEditor.parsePositionArea(valueElement.textContent ?? '') ?? undefined;
+            const onPositionAreaChanged = (changeEvent) => {
+                valueElement.textContent = InlineEditor.PositionAreaEditor.stringifyPositionArea(changeEvent.data);
+                void treeElement.applyStyleText(treeElement.renderedPropertyText(), false);
+            };
+            editor.addEventListener("positionAreaChanged" /* InlineEditor.PositionAreaEditor.Events.POSITION_AREA_CHANGED */, onPositionAreaChanged);
+            const scrollerElement = button.enclosingNodeOrSelfWithClass('style-panes-wrapper');
+            const onScroll = () => {
+                popoverHelper.hide(true);
+            };
+            if (scrollerElement) {
+                scrollerElement.addEventListener('scroll', onScroll, false);
+            }
+            const originalPropertyText = treeElement.property.propertyText;
+            this.#stylesContainer.setEditingStyle(true);
+            popoverHelper.show(editor, button, commitEdit => {
+                if (scrollerElement) {
+                    scrollerElement.removeEventListener('scroll', onScroll, false);
+                }
+                editor.removeEventListener("positionAreaChanged" /* InlineEditor.PositionAreaEditor.Events.POSITION_AREA_CHANGED */, onPositionAreaChanged);
+                const propertyText = commitEdit ? treeElement.renderedPropertyText() : originalPropertyText || '';
+                void treeElement.applyStyleText(propertyText, true);
+                this.#stylesContainer.setEditingStyle(false);
+            });
+        };
+        button.onmousedown = event => {
+            event.consume();
+        };
+        button.onmouseup = event => {
+            event.consume();
+        };
+        return [button, valueElement];
+    }
+}
+const PositionTryRendererBase = rendererBase(SDK.CSSPropertyParserMatchers.PositionTryMatch);
+// clang-format off
+export class PositionTryRenderer extends PositionTryRendererBase {
     #matchedStyles;
     // clang-format on
     constructor(matchedStyles) {
@@ -1732,6 +1834,7 @@ export function getPropertyRenderers(propertyName, style, stylesContainer, match
         new AnchorFunctionRenderer(stylesContainer),
         new PositionAnchorRenderer(stylesContainer),
         new FlexGridRenderer(stylesContainer, treeElement),
+        new PositionAreaRenderer(stylesContainer, treeElement),
         new EnvFunctionRenderer(treeElement, matchedStyles, computedStyles, computedStyleExtraFields),
         new PositionTryRenderer(matchedStyles),
         new LengthRenderer(stylesContainer, propertyName, treeElement),
@@ -1967,6 +2070,7 @@ export class StylePropertyTreeElement extends UI.TreeOutline.TreeElement {
             return;
         }
         this.#stylesContainer.setUserOperation(true);
+        this.#stylesContainer.suppressResets();
         const success = await this.property.setDisabled(disabled);
         this.#stylesContainer.setUserOperation(false);
         if (!success) {
@@ -2603,6 +2707,11 @@ export class StylePropertyTreeElement extends UI.TreeOutline.TreeElement {
         if (this.parent instanceof StylePropertyTreeElement && this.parent.isShorthand) {
             return;
         }
+        if (this.#lazyRender) {
+            this.#stylesContainer.untrackForLazyRendering(this.listItemElement);
+            this.#lazyRender = false;
+            this.updateTitle();
+        }
         const selectedElement = context.isEditingName ? this.nameElement : this.valueElement;
         if (!selectedElement) {
             return;
@@ -3082,6 +3191,7 @@ export class StylePropertyTreeElement extends UI.TreeOutline.TreeElement {
         }
         const currentNode = this.#stylesContainer.node();
         this.#stylesContainer.setUserOperation(true);
+        this.#stylesContainer.suppressResets();
         styleText += Platform.StringUtilities.findUnclosedCssQuote(styleText);
         styleText += ')'.repeat(Platform.StringUtilities.countUnmatchedLeftParentheses(styleText));
         // Append a ";" if the new text does not end in ";".

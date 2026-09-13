@@ -25,9 +25,9 @@ describe('GetDetailedCallTreeTool', () => {
         assert.strictEqual(displayInfo.title, 'Looking at call tree');
         assert.strictEqual(displayInfo.action, 'getDetailedCallTree(\'event-key-1\')');
     });
-    it('returns error when conversationContext is not available', async () => {
+    it('returns error when PerformanceTraceContext is not available', async () => {
         const context = {
-            conversationContext: null,
+            getPerformanceTraceContext: () => null,
         };
         const tool = new GetDetailedCallTreeTool();
         const result = await tool.handler({ eventKey: 'event-key-1' }, context);
@@ -40,7 +40,7 @@ describe('GetDetailedCallTreeTool', () => {
         tracker.registerFreshRecording(parsedTrace);
         const traceContext = AiAssistance.PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace, universe.targetManager, tracker, universe.debuggerWorkspaceBinding);
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetDetailedCallTreeTool();
         const result = await tool.handler({ eventKey: '' }, capabilities);
@@ -53,7 +53,7 @@ describe('GetDetailedCallTreeTool', () => {
         const focus = traceContext.getItem();
         sinon.stub(focus, 'lookupEvent').returns(null);
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetDetailedCallTreeTool();
         const result = await tool.handler({ eventKey: 'invalid-key' }, capabilities);
@@ -72,7 +72,7 @@ describe('GetDetailedCallTreeTool', () => {
         sinon.stub(focus, 'lookupEvent').withArgs('valid-key').returns(mockEvent);
         sinon.stub(AiAssistance.AICallTree.AICallTree, 'fromEvent').returns(null);
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetDetailedCallTreeTool();
         const result = await tool.handler({ eventKey: 'valid-key' }, capabilities);
@@ -95,7 +95,7 @@ describe('GetDetailedCallTreeTool', () => {
             formatCallTree: sinon.stub().resolves('mock formatted call tree'),
         });
         const capabilities = {
-            conversationContext: traceContext,
+            getPerformanceTraceContext: () => traceContext,
         };
         const tool = new GetDetailedCallTreeTool();
         const result = await tool.handler({ eventKey: 'valid-key' }, capabilities);

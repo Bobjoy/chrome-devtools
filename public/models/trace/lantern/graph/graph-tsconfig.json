@@ -1,13 +1,14 @@
 {
-  "checkJs": true,
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "checkJs": true,
-    "composite": true,
-    "declaration": true,
+    "checkJs": false,
+    "composite": false,
+    "declaration": false,
+    "disableSourceOfProjectReferenceRedirect": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": false,
     "inlineSources": true,
     "lib": [
       "dom",
@@ -19,21 +20,28 @@
       "ESNext.Array"
     ],
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "outDir": ".",
+    "preserveConstEnums": true,
     "rootDir": "../../../../../../../../front_end/models/trace/lantern/graph",
+    "rootDirs": [
+      "../../../../../../../../",
+      "../../../../../"
+    ],
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "ES2023",
-    "tsBuildInfoFile": "graph-tsconfig.json.tsbuildinfo",
-    "typeRoots": [],
-    "types": [],
+    "typeRoots": [
+
+    ],
+    "types": [
+
+    ],
     "useUnknownInCatchVariables": false
   },
   "files": [
@@ -43,14 +51,15 @@
     "../../../../../../../../front_end/models/trace/lantern/graph/PageDependencyGraph.ts",
     "../../../../../../../../front_end/legacy/legacy-defs.d.ts",
     "../../../../../../../../front_end/global_typings/global_defs.d.ts",
-    "../../../../../../../../node_modules/@types/filesystem/index.d.ts"
+    "../../../../../../../../node_modules/@types/filesystem/index.d.ts",
+    "../../../../../../../../node_modules/@types/filewriter/index.d.ts"
   ],
   "references": [
     {
-      "path": "../core/bundle-tsconfig.json"
+      "path": "../core/bundle-tsconfig.ref.json"
     },
     {
-      "path": "../types/bundle-tsconfig.json"
+      "path": "../types/bundle-tsconfig.ref.json"
     }
   ]
 }

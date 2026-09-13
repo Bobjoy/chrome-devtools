@@ -4,13 +4,15 @@
 import * as Common from '../common/common.js';
 import * as Platform from '../platform/platform.js';
 import * as ProtocolClient from '../protocol_client/protocol_client.js';
-import * as Root from '../root/root.js';
 import { SDKModel } from './SDKModel.js';
+import { SecurityOrigin } from './SecurityOrigin.js';
 export class Target extends ProtocolClient.InspectorBackend.TargetBase {
     #targetManager;
     #name;
     #inspectedURL = Platform.DevToolsPath.EmptyUrlString;
     #inspectedURLName = '';
+    /** Caches the parsed security origin for `#inspectedURL`. */
+    #inspectedSecurityOrigin = null;
     #capabilitiesMask;
     #type;
     #parentTarget;
@@ -38,10 +40,7 @@ export class Target extends ProtocolClient.InspectorBackend.TargetBase {
         this.#capabilitiesMask = 0;
         switch (type) {
             case Type.FRAME:
-                this.#capabilitiesMask = 1 /* Capability.BROWSER */ | 8192 /* Capability.STORAGE */ | 2 /* Capability.DOM */ | 4 /* Capability.JS */ | 8 /* Capability.LOG */ | 16 /* Capability.NETWORK */ | 32 /* Capability.TARGET */ | 128 /* Capability.TRACING */ | 256 /* Capability.EMULATION */ | 1024 /* Capability.INPUT */ | 2048 /* Capability.INSPECTOR */ | 32768 /* Capability.AUDITS */ | 65536 /* Capability.WEB_AUTHN */ | 131072 /* Capability.IO */ | 262144 /* Capability.MEDIA */ | 524288 /* Capability.EVENT_BREAKPOINTS */ | 1048576 /* Capability.DOM_STORAGE */;
-                if (Root.Runtime.hostConfig.devToolsWebMCPSupport?.enabled) {
-                    this.#capabilitiesMask |= 2097152 /* Capability.WEB_MCP */;
-                }
+                this.#capabilitiesMask = 1 /* Capability.BROWSER */ | 8192 /* Capability.STORAGE */ | 2 /* Capability.DOM */ | 4 /* Capability.JS */ | 8 /* Capability.LOG */ | 16 /* Capability.NETWORK */ | 32 /* Capability.TARGET */ | 128 /* Capability.TRACING */ | 256 /* Capability.EMULATION */ | 1024 /* Capability.INPUT */ | 2048 /* Capability.INSPECTOR */ | 32768 /* Capability.AUDITS */ | 65536 /* Capability.WEB_AUTHN */ | 131072 /* Capability.IO */ | 262144 /* Capability.MEDIA */ | 524288 /* Capability.EVENT_BREAKPOINTS */ | 1048576 /* Capability.DOM_STORAGE */ | 2097152 /* Capability.WEB_MCP */;
                 if (parentTarget?.type() !== Type.FRAME) {
                     // This matches backend exposing certain capabilities only for the main frame.
                     this.#capabilitiesMask |=
@@ -177,8 +176,22 @@ export class Target extends ProtocolClient.InspectorBackend.TargetBase {
     inspectedURL() {
         return this.#inspectedURL;
     }
+    /**
+     * Returns the security origin for this target's inspected URL.
+     *
+     * The target caches the origin until `setInspectedURL()` changes the URL.
+     * If the URL is empty or invalid, this method returns a unique opaque origin.
+     * An opaque origin does not match any other origin.
+     */
+    inspectedSecurityOrigin() {
+        if (!this.#inspectedSecurityOrigin) {
+            this.#inspectedSecurityOrigin = SecurityOrigin.create(this.#inspectedURL);
+        }
+        return this.#inspectedSecurityOrigin;
+    }
     setInspectedURL(inspectedURL) {
         this.#inspectedURL = inspectedURL;
+        this.#inspectedSecurityOrigin = null;
         const parsedURL = Common.ParsedURL.ParsedURL.fromString(inspectedURL);
         this.#inspectedURLName = parsedURL ? parsedURL.lastPathComponentWithFragment() : '#' + this.#id;
         this.#targetManager.onInspectedURLChange(this);
@@ -250,4 +263,30 @@ export var Type;
     Type["TAB"] = "tab";
     Type["NODE_WORKER"] = "node-worker";
 })(Type || (Type = {}));
+export var Capability;
+(function (Capability) {
+    Capability[Capability["BROWSER"] = 1] = "BROWSER";
+    Capability[Capability["DOM"] = 2] = "DOM";
+    Capability[Capability["JS"] = 4] = "JS";
+    Capability[Capability["LOG"] = 8] = "LOG";
+    Capability[Capability["NETWORK"] = 16] = "NETWORK";
+    Capability[Capability["TARGET"] = 32] = "TARGET";
+    Capability[Capability["SCREEN_CAPTURE"] = 64] = "SCREEN_CAPTURE";
+    Capability[Capability["TRACING"] = 128] = "TRACING";
+    Capability[Capability["EMULATION"] = 256] = "EMULATION";
+    Capability[Capability["SECURITY"] = 512] = "SECURITY";
+    Capability[Capability["INPUT"] = 1024] = "INPUT";
+    Capability[Capability["INSPECTOR"] = 2048] = "INSPECTOR";
+    Capability[Capability["DEVICE_EMULATION"] = 4096] = "DEVICE_EMULATION";
+    Capability[Capability["STORAGE"] = 8192] = "STORAGE";
+    Capability[Capability["SERVICE_WORKER"] = 16384] = "SERVICE_WORKER";
+    Capability[Capability["AUDITS"] = 32768] = "AUDITS";
+    Capability[Capability["WEB_AUTHN"] = 65536] = "WEB_AUTHN";
+    Capability[Capability["IO"] = 131072] = "IO";
+    Capability[Capability["MEDIA"] = 262144] = "MEDIA";
+    Capability[Capability["EVENT_BREAKPOINTS"] = 524288] = "EVENT_BREAKPOINTS";
+    Capability[Capability["DOM_STORAGE"] = 1048576] = "DOM_STORAGE";
+    Capability[Capability["WEB_MCP"] = 2097152] = "WEB_MCP";
+    Capability[Capability["NONE"] = 0] = "NONE";
+})(Capability || (Capability = {}));
 //# sourceMappingURL=Target.js.map

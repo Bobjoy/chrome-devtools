@@ -197,13 +197,15 @@ export class MainImpl {
         };
         this.#universe = new Foundation.Universe.Universe(creationOptions);
         Root.DevToolsContext.setGlobalInstance(this.#universe.context);
+        // Needed to allow CD4A to access the server bridge class.
+        globalThis.universe = this.#universe;
         // Mark 'cache-disabled' as requiring user interaction when multiple CDP clients are attached.
         if (Root.Runtime.Runtime.queryParam('hasOtherClients')) {
             this.#universe.settings.resolve(SDK.SDKSettings.cacheDisabledSettingDescriptor).setRequiresUserAction(true);
         }
         Root.Runtime.experiments.removeAllExperimentsFromLocalStorage();
         await this.requestAndRegisterLocaleData();
-        Host.userMetrics.syncSetting(Common.Settings.Settings.instance().moduleSetting('sync-preferences').get());
+        Host.userMetrics.syncSetting(Common.Settings.Settings.instance().resolve(SettingsUI.MainSettings.syncPreferencesSettingDescriptor).get());
         const veLogging = config.devToolsVeLogging;
         // Used by e2e to put VE Logs into "test mode".
         const veLogsTestMode = Common.Settings.Settings.instance().createSetting('veLogsTestMode', false).get();
@@ -468,6 +470,7 @@ export class MainImpl {
             inspectorView.displaySelectOverrideFolderInfobar(event.data);
         });
         await inspectorView.createToolbars();
+        inspectorView.renderStatusBar();
         Host.InspectorFrontendHost.InspectorFrontendHostInstance.loadCompleted();
         // Initialize elements for the live announcer functionality for a11y.
         UI.ARIAUtils.LiveAnnouncer.initializeAnnouncerElements();
@@ -566,7 +569,7 @@ export class MainImpl {
         }
     }
     #redispatchClipboardEvent(event) {
-        const eventCopy = new CustomEvent('clipboard-' + event.type, { bubbles: true });
+        const eventCopy = new CustomEvent('clipboard-' + event.type, { bubbles: true, composed: true });
         // @ts-expect-error Used in ElementsTreeOutline
         eventCopy['original'] = event;
         const document = event.target && event.target.ownerDocument;
@@ -594,6 +597,9 @@ export class MainImpl {
     #onSuspendStateChanged() {
         const suspended = SDK.TargetManager.TargetManager.instance().allTargetsSuspended();
         UI.InspectorView.InspectorView.instance().onSuspendStateChanged(suspended);
+    }
+    redispatchClipboardEventForTest(event) {
+        this.#redispatchClipboardEvent(event);
     }
     static instanceForTest = null;
 }

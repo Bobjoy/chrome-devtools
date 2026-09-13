@@ -1,5 +1,4 @@
 import * as Common from '../../core/common/common.js';
-import * as Platform from '../../core/platform/platform.js';
 import * as SDK from '../../core/sdk/sdk.js';
 import * as CrUXManager from '../../models/crux-manager/crux-manager.js';
 import * as UI from '../../ui/legacy/legacy.js';
@@ -28,16 +27,8 @@ export interface EventTypes {
  * metric data. Returns null if no RTT data is available or no preset matches.
  */
 export declare function getRecommendedNetworkConditions(roundTripTimeMetricData?: CrUXManager.MetricResponse): SDK.NetworkManager.Conditions | null;
-declare const NetworkThrottlingSelect_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<EventTypes>;
-    addEventListener<T extends Events.CONDITIONS_CHANGED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<EventTypes, T>;
-    once<T extends Events.CONDITIONS_CHANGED>(eventType: T): Promise<EventTypes[T]>;
-    removeEventListener<T extends Events.CONDITIONS_CHANGED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: Events.CONDITIONS_CHANGED): boolean;
-    dispatchEventToListeners<T extends Events.CONDITIONS_CHANGED>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.Widget;
-export declare class NetworkThrottlingSelect extends NetworkThrottlingSelect_base {
+declare const NetworkThrottlingSelectBase: Common.ObjectWrapper.EventMixin<EventTypes, typeof UI.Widget.Widget>;
+export declare class NetworkThrottlingSelect extends NetworkThrottlingSelectBase {
     #private;
     static createForGlobalConditions(element: HTMLElement, title: string): NetworkThrottlingSelect;
     constructor(element?: HTMLElement, options?: {

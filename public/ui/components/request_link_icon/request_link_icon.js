@@ -4,19 +4,19 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/components/request_link_icon/RequestLinkIcon.js
+// ../../front_end/ui/components/request_link_icon/RequestLinkIcon.ts
 var RequestLinkIcon_exports = {};
 __export(RequestLinkIcon_exports, {
   RequestLinkIcon: () => RequestLinkIcon,
   extractShortPath: () => extractShortPath
 });
-import "./../../kit/kit.js";
-import * as Common from "./../../../core/common/common.js";
-import * as i18n from "./../../../core/i18n/i18n.js";
-import * as NetworkForward from "./../../../panels/network/forward/forward.js";
-import * as RenderCoordinator from "./../render_coordinator/render_coordinator.js";
-import * as Lit from "./../../lit/lit.js";
-import * as VisualLogging from "./../../visual_logging/visual_logging.js";
+import "../../kit/kit.js";
+import * as Common from "../../../core/common/common.js";
+import * as i18n from "../../../core/i18n/i18n.js";
+import * as NetworkForward from "../../../panels/network/forward/forward.js";
+import * as RenderCoordinator from "../render_coordinator/render_coordinator.js";
+import * as Lit from "../../lit/lit.js";
+import * as VisualLogging from "../../visual_logging/visual_logging.js";
 
 // gen/front_end/ui/components/request_link_icon/requestLinkIcon.css.js
 var requestLinkIcon_css_default = `/*
@@ -56,8 +56,8 @@ button {
 }
 
 devtools-icon {
-  width: 16px;
-  height: 16px;
+  width: var(--sys-size-8);
+  height: var(--sys-size-8);
   vertical-align: middle;
   color: var(--icon-no-request);
 
@@ -74,7 +74,7 @@ devtools-icon {
 
 /*# sourceURL=${import.meta.resolve("./requestLinkIcon.css")} */`;
 
-// gen/front_end/ui/components/request_link_icon/RequestLinkIcon.js
+// ../../front_end/ui/components/request_link_icon/RequestLinkIcon.ts
 var { html } = Lit;
 var UIStrings = {
   /**
@@ -161,13 +161,16 @@ var RequestLinkIcon = class extends HTMLElement {
       return;
     }
     if (this.#highlightHeader) {
-      const requestLocation = NetworkForward.UIRequestLocation.UIRequestLocation.header(linkedRequest, this.#highlightHeader.section, this.#highlightHeader.name);
+      const requestLocation = NetworkForward.UIRequestLocation.UIRequestLocation.header(
+        linkedRequest,
+        this.#highlightHeader.section,
+        this.#highlightHeader.name
+      );
       void this.#reveal(requestLocation);
     } else {
       const requestLocation = NetworkForward.UIRequestLocation.UIRequestLocation.tab(
         linkedRequest,
-        this.#networkTab ?? "headers-component"
-        /* NetworkForward.UIRequestLocation.UIRequestTabs.HEADERS_COMPONENT */
+        this.#networkTab ?? NetworkForward.UIRequestLocation.UIRequestTabs.HEADERS_COMPONENT
       );
       void this.#reveal(requestLocation);
     }

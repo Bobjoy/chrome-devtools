@@ -2,9 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import * as Platform from '../../../../core/platform/platform.js';
-import * as Geometry from '../../../../models/geometry/geometry.js';
+import * as Geometry from '../../../geometry/geometry.js';
 import * as UI from '../../legacy.js';
-export const CSSAngleRegex = /(?<value>[+-]?\d*\.?\d+)(?<unit>deg|grad|rad|turn)/;
+const CSSAngleRegex = /(?<value>[+-]?\d*\.?\d+)(?<unit>deg|grad|rad|turn)/;
+export var AngleUnit;
+(function (AngleUnit) {
+    AngleUnit["DEG"] = "deg";
+    AngleUnit["GRAD"] = "grad";
+    AngleUnit["RAD"] = "rad";
+    AngleUnit["TURN"] = "turn";
+})(AngleUnit || (AngleUnit = {}));
 export const parseText = (text) => {
     const result = text.match(CSSAngleRegex);
     if (!result?.groups) {

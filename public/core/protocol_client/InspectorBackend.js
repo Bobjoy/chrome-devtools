@@ -83,11 +83,6 @@ export const test = {
      */
     dumpProtocol: null,
     /**
-     * Runs a function when no protocol activity is present.
-     * ProtocolClient.test.deprecatedRunAfterPendingDispatches(() => console.log('done'))
-     */
-    deprecatedRunAfterPendingDispatches: null,
-    /**
      * Sends a raw message over main connection.
      * ProtocolClient.test.sendRawMessage('Page.enable', {}, console.log)
      */
@@ -104,6 +99,11 @@ export const test = {
      * Set to get notified about any messages received over protocol.
      */
     onMessageReceived: null,
+    /**
+     * Runs a function when no protocol activity is present.
+     * ProtocolClient.test.deprecatedRunAfterPendingDispatches(() => console.log('done'))
+     */
+    deprecatedRunAfterPendingDispatches: null,
 };
 export class SessionRouter {
     #connection;
@@ -473,7 +473,7 @@ const IGNORED_ERRORS = new Set([
  * The reasons this is done is so that on the prototypes we can install the implementations
  * of the invoke_enable, etc. methods that the front-end uses.
  */
-class AgentPrototype {
+export class AgentPrototype {
     description = '';
     metadata;
     domain;

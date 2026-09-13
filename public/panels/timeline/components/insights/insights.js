@@ -4,20 +4,20 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/timeline/components/insights/BaseInsightComponent.js
+// ../../front_end/panels/timeline/components/insights/BaseInsightComponent.ts
 var BaseInsightComponent_exports = {};
 __export(BaseInsightComponent_exports, {
   BaseInsightComponent: () => BaseInsightComponent
 });
-import "./../../../../ui/components/markdown_view/markdown_view.js";
-import * as i18n from "./../../../../core/i18n/i18n.js";
-import * as Root from "./../../../../core/root/root.js";
-import * as AIAssistance from "./../../../../models/ai_assistance/ai_assistance.js";
-import * as Badges from "./../../../../models/badges/badges.js";
-import * as Buttons from "./../../../../ui/components/buttons/buttons.js";
-import * as UI from "./../../../../ui/legacy/legacy.js";
-import * as Lit2 from "./../../../../ui/lit/lit.js";
-import * as VisualLogging from "./../../../../ui/visual_logging/visual_logging.js";
+import "../../../../ui/components/markdown_view/markdown_view.js";
+import * as i18n from "../../../../core/i18n/i18n.js";
+import * as Root from "../../../../core/root/root.js";
+import * as AIAssistance from "../../../../models/ai_assistance/ai_assistance.js";
+import * as Badges from "../../../../models/badges/badges.js";
+import * as Buttons from "../../../../ui/components/buttons/buttons.js";
+import * as UI from "../../../../ui/legacy/legacy.js";
+import * as Lit2 from "../../../../ui/lit/lit.js";
+import * as VisualLogging from "../../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/timeline/components/insights/baseInsightComponent.css.js
 var baseInsightComponent_css_default = `/*
@@ -232,16 +232,16 @@ dd.dl-title {
 
 /*# sourceURL=${import.meta.resolve("./baseInsightComponent.css")} */`;
 
-// gen/front_end/panels/timeline/components/insights/Helpers.js
+// ../../front_end/panels/timeline/components/insights/Helpers.ts
 var Helpers_exports = {};
 __export(Helpers_exports, {
   md: () => md,
   shouldRenderForCategory: () => shouldRenderForCategory
 });
-import "./../../../../ui/components/markdown_view/markdown_view.js";
-import * as Trace from "./../../../../models/trace/trace.js";
-import * as Marked from "./../../../../third_party/marked/marked.js";
-import * as Lit from "./../../../../ui/lit/lit.js";
+import "../../../../ui/components/markdown_view/markdown_view.js";
+import * as Trace from "../../../../models/trace/trace.js";
+import * as Marked from "../../../../third_party/marked/marked.js";
+import * as Lit from "../../../../ui/lit/lit.js";
 var { html } = Lit;
 function shouldRenderForCategory(options) {
   return options.activeCategory === Trace.Insights.Types.InsightCategory.ALL || options.activeCategory === options.insightCategory;
@@ -252,7 +252,7 @@ function md(markdown) {
   return html`<devtools-markdown-view .data=${data}></devtools-markdown-view>`;
 }
 
-// gen/front_end/panels/timeline/components/insights/SidebarInsight.js
+// ../../front_end/panels/timeline/components/insights/SidebarInsight.ts
 var SidebarInsight_exports = {};
 __export(SidebarInsight_exports, {
   InsightActivated: () => InsightActivated,
@@ -262,14 +262,14 @@ __export(SidebarInsight_exports, {
   InsightSetZoom: () => InsightSetZoom
 });
 var InsightActivated = class _InsightActivated extends Event {
-  model;
-  insightSetKey;
-  static eventName = "insightactivated";
   constructor(model, insightSetKey) {
     super(_InsightActivated.eventName, { bubbles: true, composed: true });
     this.model = model;
     this.insightSetKey = insightSetKey;
   }
+  model;
+  insightSetKey;
+  static eventName = "insightactivated";
 };
 var InsightDeactivated = class _InsightDeactivated extends Event {
   static eventName = "insightdeactivated";
@@ -278,67 +278,64 @@ var InsightDeactivated = class _InsightDeactivated extends Event {
   }
 };
 var InsightSetHovered = class _InsightSetHovered extends Event {
-  bounds;
-  static eventName = "insightsethovered";
   constructor(bounds) {
     super(_InsightSetHovered.eventName, { bubbles: true, composed: true });
     this.bounds = bounds;
   }
+  bounds;
+  static eventName = "insightsethovered";
 };
 var InsightSetZoom = class _InsightSetZoom extends Event {
-  bounds;
-  static eventName = "insightsetzoom";
   constructor(bounds) {
     super(_InsightSetZoom.eventName, { bubbles: true, composed: true });
     this.bounds = bounds;
   }
+  bounds;
+  static eventName = "insightsetzoom";
 };
 var InsightProvideOverlays = class _InsightProvideOverlays extends Event {
-  overlays;
-  options;
-  static eventName = "insightprovideoverlays";
   constructor(overlays, options) {
     super(_InsightProvideOverlays.eventName, { bubbles: true, composed: true });
     this.overlays = overlays;
     this.options = options;
   }
+  overlays;
+  options;
+  static eventName = "insightprovideoverlays";
 };
 
-// gen/front_end/panels/timeline/components/insights/BaseInsightComponent.js
+// ../../front_end/panels/timeline/components/insights/BaseInsightComponent.ts
 var { html: html2 } = Lit2;
 var UIStrings = {
   /**
-   * @description Text to tell the user the estimated time or size savings for this insight. "&" means "and" - space is limited to prefer abbreviated terms if possible. Text will still fit if not short, it just won't look very good, so using no abbreviations is fine if necessary.
+   * @description Estimated time or size savings for an insight in the Performance panel sidebar.
    * @example {401 ms} PH1
-   * @example {112 kB} PH1
    */
   estimatedSavings: "Est savings: {PH1}",
   /**
-   * @description Text to tell the user the estimated time and size savings for this insight. "&" means "and", "Est" means "Estimated" - space is limited to prefer abbreviated terms if possible. Text will still fit if not short, it just won't look very good, so using no abbreviations is fine if necessary.
+   * @description Estimated time and size savings for an insight in the Performance panel sidebar.
    * @example {401 ms} PH1
    * @example {112 kB} PH2
    */
   estimatedSavingsTimingAndBytes: "Est savings: {PH1} & {PH2}",
   /**
-   * @description Text to tell the user the estimated time savings for this insight that is used for screen readers.
+   * @description Accessible label for the estimated time savings of an insight in the Performance panel sidebar.
    * @example {401 ms} PH1
-   * @example {112 kB} PH1
    */
   estimatedSavingsAriaTiming: "Estimated savings for this insight: {PH1}",
   /**
-   * @description Text to tell the user the estimated size savings for this insight that is used for screen readers. Value is in terms of "transfer size", aka encoded/compressed data length.
-   * @example {401 ms} PH1
+   * @description Accessible label for the estimated size savings of an insight in the Performance panel sidebar.
    * @example {112 kB} PH1
    */
   estimatedSavingsAriaBytes: "Estimated savings for this insight: {PH1} transfer size",
   /**
-   * @description Text to tell the user the estimated time and size savings for this insight that is used for screen readers.
+   * @description Accessible label for both estimated time and size savings of an insight in the Performance panel sidebar.
    * @example {401 ms} PH1
    * @example {112 kB} PH2
    */
   estimatedSavingsTimingAndBytesAria: "Estimated savings for this insight: {PH1} and {PH2} transfer size",
   /**
-   * @description Used for screen-readers as a label on the button to expand an insight to view details
+   * @description Accessible label for the button to expand an insight to view details in the Performance panel sidebar.
    * @example {LCP breakdown} PH1
    */
   viewDetails: "View details for {PH1} insight."
@@ -346,7 +343,19 @@ var UIStrings = {
 var str_ = i18n.i18n.registerUIStrings("panels/timeline/components/insights/BaseInsightComponent.ts", UIStrings);
 var i18nString = i18n.i18n.getLocalizedString.bind(void 0, str_);
 var DEFAULT_VIEW = (input, _output, target) => {
-  const { internalName, model, selected, estimatedSavingsString, estimatedSavingsAriaLabel, showAskAI, dispatchInsightToggle, renderContent, onHeaderKeyDown, onAskAIButtonClick, minimal } = input;
+  const {
+    internalName,
+    model,
+    selected,
+    estimatedSavingsString,
+    estimatedSavingsAriaLabel,
+    showAskAI,
+    dispatchInsightToggle,
+    renderContent,
+    onHeaderKeyDown,
+    onAskAIButtonClick,
+    minimal
+  } = input;
   const containerClasses = Lit2.Directives.classMap({
     insight: true,
     closed: !selected && !minimal,
@@ -371,7 +380,7 @@ var DEFAULT_VIEW = (input, _output, target) => {
         ${showAskAI && !minimal ? html2`
           <div class="ask-ai-btn-wrap">
             <devtools-button class="ask-ai"
-              .variant=${"outlined"}
+              .variant=${Buttons.Button.Variant.OUTLINED}
               .iconName=${iconName}
               data-insights-ask-ai
               jslog=${VisualLogging.action(`timeline.insight-ask-ai.${internalName}`).track({ click: true })}
@@ -390,9 +399,9 @@ var DEFAULT_VIEW = (input, _output, target) => {
     return html2`
       <div class=${containerClasses2} inert>
         <devtools-button .data=${{
-      variant: "icon",
+      variant: Buttons.Button.Variant.ICON,
       iconName: "chevron-down",
-      size: "SMALL"
+      size: Buttons.Button.Size.SMALL
     }}
       ></devtools-button>
       </div>
@@ -555,7 +564,9 @@ var BaseInsightComponent = class extends UI.Widget.Widget {
     }
     if (!overlays) {
       const initialOverlays = this.#minimal ? [] : this.getInitialOverlays();
-      this.element.dispatchEvent(new InsightProvideOverlays(initialOverlays, this.getOverlayOptionsForInitialOverlays()));
+      this.element.dispatchEvent(
+        new InsightProvideOverlays(initialOverlays, this.getOverlayOptionsForInitialOverlays())
+      );
       return;
     }
     this.element.dispatchEvent(new InsightProvideOverlays(overlays, options));
@@ -682,13 +693,13 @@ var BaseInsightComponent = class extends UI.Widget.Widget {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/Cache.js
+// ../../front_end/panels/timeline/components/insights/Cache.ts
 var Cache_exports = {};
 __export(Cache_exports, {
   Cache: () => Cache
 });
 
-// gen/front_end/panels/timeline/components/insights/Table.js
+// ../../front_end/panels/timeline/components/insights/Table.ts
 var Table_exports = {};
 __export(Table_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW3,
@@ -697,33 +708,36 @@ __export(Table_exports, {
   i18nString: () => i18nString2,
   renderOthersLabel: () => renderOthersLabel
 });
-import * as i18n3 from "./../../../../core/i18n/i18n.js";
-import * as UI3 from "./../../../../ui/legacy/legacy.js";
-import * as Lit4 from "./../../../../ui/lit/lit.js";
+import * as i18n3 from "../../../../core/i18n/i18n.js";
+import * as UI3 from "../../../../ui/legacy/legacy.js";
+import * as Lit4 from "../../../../ui/lit/lit.js";
 
-// gen/front_end/panels/timeline/components/insights/EventRef.js
+// ../../front_end/panels/timeline/components/insights/EventRef.ts
 var EventRef_exports = {};
 __export(EventRef_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW2,
   EventReferenceClick: () => EventReferenceClick,
   eventRef: () => eventRef
 });
-import * as Trace2 from "./../../../../models/trace/trace.js";
-import * as UI2 from "./../../../../ui/legacy/legacy.js";
-import * as Lit3 from "./../../../../ui/lit/lit.js";
-import * as Utils from "./../../utils/utils.js";
+import * as Trace2 from "../../../../models/trace/trace.js";
+import * as UI2 from "../../../../ui/legacy/legacy.js";
+import * as Lit3 from "../../../../ui/lit/lit.js";
+import * as Utils from "../../utils/utils.js";
 var { html: html3, Directives: { ifDefined } } = Lit3;
 var { widget } = UI2.Widget;
 var EventReferenceClick = class _EventReferenceClick extends Event {
-  event;
-  static eventName = "eventreferenceclick";
   constructor(event) {
     super(_EventReferenceClick.eventName, { bubbles: true, composed: true });
     this.event = event;
   }
+  event;
+  static eventName = "eventreferenceclick";
 };
 var DEFAULT_VIEW2 = (input, output, target) => {
-  const { text, event } = input;
+  const {
+    text,
+    event
+  } = input;
   Lit3.render(html3`
     <style>${baseInsightComponent_css_default}</style>
     <button type="button" class="timeline-link" @click=${(e) => {
@@ -830,10 +844,10 @@ table th[scope='row'] {
   color: var(--sys-color-primary);
   text-decoration: underline;
   cursor: pointer;
-  outline-offset: 2px;
+  outline-offset: var(--sys-size-2);
   padding: 0;
   margin-left: var(--sys-size-3);
-  white-space: nowrap;;
+  white-space: nowrap;
 }
 
 button.devtools-link {
@@ -841,15 +855,15 @@ button.devtools-link {
   background: none;
   font-family: inherit;
   font-size: inherit;
-  height: 16px;
+  height: var(--sys-size-8);
 }
 
 /*# sourceURL=${import.meta.resolve("./table.css")} */`;
 
-// gen/front_end/panels/timeline/components/insights/Table.js
+// ../../front_end/panels/timeline/components/insights/Table.ts
 var UIStrings2 = {
   /**
-   * @description Table row value representing the remaining items not shown in the table due to size constraints. This row will always represent at least 2 items.
+   * @description Table row label representing the remaining items not shown in the table in the Performance panel sidebar.
    * @example {5} PH1
    */
   others: "{PH1} others"
@@ -874,7 +888,14 @@ function createLimitedRows(arr, aggregator, limit = 10) {
   return items;
 }
 var DEFAULT_VIEW3 = (input, output, target) => {
-  const { interactive, headers, flattenedRows, onHoverRow, onClickRow, onMouseLeave } = input;
+  const {
+    interactive,
+    headers,
+    flattenedRows,
+    onHoverRow,
+    onClickRow,
+    onMouseLeave
+  } = input;
   const numColumns = headers.length;
   function renderRow({ row, depth }) {
     const thStyles = Lit4.Directives.styleMap({
@@ -891,11 +912,13 @@ var DEFAULT_VIEW3 = (input, output, target) => {
     const trStyles = Lit4.Directives.styleMap({
       color: depth ? "var(--sys-color-on-surface-subtle)" : ""
     });
-    const columnEls = row.values.map((value, i) => i === 0 ? html4`<th
+    const columnEls = row.values.map(
+      (value, i) => i === 0 ? html4`<th
               scope="row"
               colspan=${i === row.values.length - 1 ? numColumns - i : 1}
               style=${thStyles}>${value}
-            </th>` : html4`<td>${value}</td>`);
+            </th>` : html4`<td>${value}</td>`
+    );
     return html4`<tr style=${trStyles}>${columnEls}</tr>`;
   }
   const findRowAndEl = (el) => {
@@ -903,12 +926,13 @@ var DEFAULT_VIEW3 = (input, output, target) => {
     const row = flattenedRows[rowEl.sectionRowIndex].row;
     return { row, rowEl };
   };
-  Lit4.render(html4`
+  Lit4.render(
+    html4`
     <style>${table_css_default}</style>
     <table
         class=${Lit4.Directives.classMap({
-    interactive
-  })}
+      interactive
+    })}
         @mouseleave=${interactive ? onMouseLeave : null}>
       <thead>
         <tr>
@@ -917,15 +941,17 @@ var DEFAULT_VIEW3 = (input, output, target) => {
       </thead>
       <tbody
         @mouseover=${interactive ? (e) => {
-    const { row, rowEl } = findRowAndEl(e.target);
-    onHoverRow(row, rowEl);
-  } : null}
+      const { row, rowEl } = findRowAndEl(e.target);
+      onHoverRow(row, rowEl);
+    } : null}
         @click=${interactive ? (e) => {
-    const { row, rowEl } = findRowAndEl(e.target);
-    onClickRow(row, rowEl);
-  } : null}
+      const { row, rowEl } = findRowAndEl(e.target);
+      onClickRow(row, rowEl);
+    } : null}
       >${flattenedRows.map(renderRow)}</tbody>
-    </table>`, target);
+    </table>`,
+    target
+  );
 };
 var Table = class extends UI3.Widget.Widget {
   #view;
@@ -1043,11 +1069,11 @@ var Table = class extends UI3.Widget.Widget {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/Cache.js
-import * as i18n5 from "./../../../../core/i18n/i18n.js";
-import * as Trace3 from "./../../../../models/trace/trace.js";
-import * as UI4 from "./../../../../ui/legacy/legacy.js";
-import * as Lit5 from "./../../../../ui/lit/lit.js";
+// ../../front_end/panels/timeline/components/insights/Cache.ts
+import * as i18n5 from "../../../../core/i18n/i18n.js";
+import * as Trace3 from "../../../../models/trace/trace.js";
+import * as UI4 from "../../../../ui/legacy/legacy.js";
+import * as Lit5 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings3, i18nString: i18nString3, createOverlayForRequest } = Trace3.Insights.Models.Cache;
 var { html: html5 } = Lit5;
 var { widget: widget2 } = UI4.Widget;
@@ -1091,24 +1117,24 @@ var Cache = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/CharacterSet.js
+// ../../front_end/panels/timeline/components/insights/CharacterSet.ts
 var CharacterSet_exports = {};
 __export(CharacterSet_exports, {
   CharacterSet: () => CharacterSet
 });
-import * as UI6 from "./../../../../ui/legacy/legacy.js";
-import * as Lit7 from "./../../../../ui/lit/lit.js";
+import * as UI6 from "../../../../ui/legacy/legacy.js";
+import * as Lit7 from "../../../../ui/lit/lit.js";
 
-// gen/front_end/panels/timeline/components/insights/Checklist.js
+// ../../front_end/panels/timeline/components/insights/Checklist.ts
 var Checklist_exports = {};
 __export(Checklist_exports, {
   Checklist: () => Checklist,
   DEFAULT_VIEW: () => DEFAULT_VIEW4
 });
-import "./../../../../ui/kit/kit.js";
-import * as i18n6 from "./../../../../core/i18n/i18n.js";
-import * as UI5 from "./../../../../ui/legacy/legacy.js";
-import * as Lit6 from "./../../../../ui/lit/lit.js";
+import "../../../../ui/kit/kit.js";
+import * as i18n6 from "../../../../core/i18n/i18n.js";
+import * as UI5 from "../../../../ui/legacy/legacy.js";
+import * as Lit6 from "../../../../ui/lit/lit.js";
 
 // gen/front_end/panels/timeline/components/insights/checklist.css.js
 var checklist_css_default = `/*
@@ -1132,7 +1158,7 @@ ul {
 
     span {
       /* push the text down to align slightly better with the icons */
-      padding-top: 2px;
+      padding-top: var(--sys-size-2);
     }
   }
 }
@@ -1147,16 +1173,16 @@ ul {
 
 /*# sourceURL=${import.meta.resolve("./checklist.css")} */`;
 
-// gen/front_end/panels/timeline/components/insights/Checklist.js
+// ../../front_end/panels/timeline/components/insights/Checklist.ts
 var { html: html6 } = Lit6;
 var UIStrings4 = {
   /**
-   * @description Text for a screen-reader label to tell the user that the icon represents a successful insight check
+   * @description Accessible label indicating that an insight checklist check passed in the Performance panel sidebar.
    * @example {Server response time} PH1
    */
   successAriaLabel: "Insight check passed: {PH1}",
   /**
-   * @description Text for a screen-reader label to tell the user that the icon represents an unsuccessful insight check
+   * @description Accessible label indicating that an insight checklist check failed in the Performance panel sidebar.
    * @example {Server response time} PH1
    */
   failedAriaLabel: "Insight check failed: {PH1}"
@@ -1164,7 +1190,9 @@ var UIStrings4 = {
 var str_3 = i18n6.i18n.registerUIStrings("panels/timeline/components/insights/Checklist.ts", UIStrings4);
 var i18nString4 = i18n6.i18n.getLocalizedString.bind(void 0, str_3);
 var DEFAULT_VIEW4 = (input, output, target) => {
-  const { checklist } = input;
+  const {
+    checklist
+  } = input;
   function getIcon(check) {
     const icon = check.value ? "check-circle" : "clear";
     const ariaLabel = check.value ? i18nString4(UIStrings4.successAriaLabel, { PH1: check.label }) : i18nString4(UIStrings4.failedAriaLabel, { PH1: check.label });
@@ -1208,7 +1236,7 @@ var Checklist = class extends UI5.Widget.Widget {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/CharacterSet.js
+// ../../front_end/panels/timeline/components/insights/CharacterSet.ts
 var { html: html7 } = Lit7;
 var { widget: widget3 } = UI6.Widget;
 var CharacterSet = class extends BaseInsightComponent {
@@ -1227,32 +1255,37 @@ var CharacterSet = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/CLSCulprits.js
+// ../../front_end/panels/timeline/components/insights/CLSCulprits.ts
 var CLSCulprits_exports = {};
 __export(CLSCulprits_exports, {
   CLSCulprits: () => CLSCulprits
 });
-import * as i18n8 from "./../../../../core/i18n/i18n.js";
-import * as Trace4 from "./../../../../models/trace/trace.js";
-import * as Lit9 from "./../../../../ui/lit/lit.js";
+import * as i18n8 from "../../../../core/i18n/i18n.js";
+import * as Trace4 from "../../../../models/trace/trace.js";
+import * as Lit9 from "../../../../ui/lit/lit.js";
 
-// gen/front_end/panels/timeline/components/insights/NodeLink.js
+// ../../front_end/panels/timeline/components/insights/NodeLink.ts
 var NodeLink_exports = {};
 __export(NodeLink_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW5,
   NodeLink: () => NodeLink,
   nodeLink: () => nodeLink
 });
-import * as SDK from "./../../../../core/sdk/sdk.js";
-import * as Buttons2 from "./../../../../ui/components/buttons/buttons.js";
-import * as LegacyComponents from "./../../../../ui/legacy/components/utils/utils.js";
-import * as UI7 from "./../../../../ui/legacy/legacy.js";
-import * as Lit8 from "./../../../../ui/lit/lit.js";
-import * as PanelsCommon from "./../../../common/common.js";
+import * as SDK from "../../../../core/sdk/sdk.js";
+import * as Buttons2 from "../../../../ui/components/buttons/buttons.js";
+import * as LegacyComponents from "../../../../ui/legacy/components/utils/utils.js";
+import * as UI7 from "../../../../ui/legacy/legacy.js";
+import * as Lit8 from "../../../../ui/lit/lit.js";
+import * as PanelsCommon from "../../../common/common.js";
 var { html: html8 } = Lit8;
 var { widget: widget4 } = UI7.Widget;
 var DEFAULT_VIEW5 = (input, output, target) => {
-  const { relatedNodeEl, fallbackUrl, fallbackHtmlSnippet, fallbackText } = input;
+  const {
+    relatedNodeEl,
+    fallbackUrl,
+    fallbackHtmlSnippet,
+    fallbackText
+  } = input;
   let template;
   if (relatedNodeEl) {
     template = html8`<div class='node-link'>${relatedNodeEl}</div>`;
@@ -1347,7 +1380,7 @@ function nodeLink(data) {
   return html8`${widget4(NodeLink, { data })}`;
 }
 
-// gen/front_end/panels/timeline/components/insights/CLSCulprits.js
+// ../../front_end/panels/timeline/components/insights/CLSCulprits.ts
 var { UIStrings: UIStrings5, i18nString: i18nString5 } = Trace4.Insights.Models.CLSCulprits;
 var { html: html9 } = Lit9;
 var CLSCulprits = class extends BaseInsightComponent {
@@ -1373,7 +1406,7 @@ var CLSCulprits = class extends BaseInsightComponent {
         <p class="list-title">${i18nString5(UIStrings5.topCulprits)}:</p>
         <ul class="worst-culprits">
           ${culprits.map((culprit) => {
-      if (culprit.type === 3) {
+      if (culprit.type === Trace4.Insights.Models.CLSCulprits.LayoutShiftType.UNSIZED_IMAGE) {
         return html9`
                 <li>
                   ${culprit.description}
@@ -1409,13 +1442,13 @@ var CLSCulprits = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/DocumentLatency.js
+// ../../front_end/panels/timeline/components/insights/DocumentLatency.ts
 var DocumentLatency_exports = {};
 __export(DocumentLatency_exports, {
   DocumentLatency: () => DocumentLatency
 });
-import * as UI8 from "./../../../../ui/legacy/legacy.js";
-import * as Lit10 from "./../../../../ui/lit/lit.js";
+import * as UI8 from "../../../../ui/legacy/legacy.js";
+import * as Lit10 from "../../../../ui/lit/lit.js";
 var { html: html10 } = Lit10;
 var { widget: widget5 } = UI8.Widget;
 var DocumentLatency = class extends BaseInsightComponent {
@@ -1434,16 +1467,16 @@ var DocumentLatency = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/DOMSize.js
+// ../../front_end/panels/timeline/components/insights/DOMSize.ts
 var DOMSize_exports = {};
 __export(DOMSize_exports, {
   DOMSize: () => DOMSize
 });
-import "./../../../../ui/kit/kit.js";
-import * as i18n9 from "./../../../../core/i18n/i18n.js";
-import * as Trace5 from "./../../../../models/trace/trace.js";
-import * as UI9 from "./../../../../ui/legacy/legacy.js";
-import * as Lit11 from "./../../../../ui/lit/lit.js";
+import "../../../../ui/kit/kit.js";
+import * as i18n9 from "../../../../core/i18n/i18n.js";
+import * as Trace5 from "../../../../models/trace/trace.js";
+import * as UI9 from "../../../../ui/legacy/legacy.js";
+import * as Lit11 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings6, i18nString: i18nString6 } = Trace5.Insights.Models.DOMSize;
 var { html: html11 } = Lit11;
 var { widget: widget6 } = UI9.Widget;
@@ -1537,22 +1570,22 @@ var DOMSize = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/DuplicatedJavaScript.js
+// ../../front_end/panels/timeline/components/insights/DuplicatedJavaScript.ts
 var DuplicatedJavaScript_exports = {};
 __export(DuplicatedJavaScript_exports, {
   DuplicatedJavaScript: () => DuplicatedJavaScript
 });
-import * as i18n10 from "./../../../../core/i18n/i18n.js";
-import * as Trace6 from "./../../../../models/trace/trace.js";
-import * as Buttons3 from "./../../../../ui/components/buttons/buttons.js";
-import * as UI10 from "./../../../../ui/legacy/legacy.js";
-import * as Lit12 from "./../../../../ui/lit/lit.js";
-import * as VisualLogging2 from "./../../../../ui/visual_logging/visual_logging.js";
-import * as Utils2 from "./../../utils/utils.js";
+import * as i18n10 from "../../../../core/i18n/i18n.js";
+import * as Trace6 from "../../../../models/trace/trace.js";
+import * as Buttons3 from "../../../../ui/components/buttons/buttons.js";
+import * as UI10 from "../../../../ui/legacy/legacy.js";
+import * as Lit12 from "../../../../ui/lit/lit.js";
+import * as VisualLogging2 from "../../../../ui/visual_logging/visual_logging.js";
+import * as Utils2 from "../../utils/utils.js";
 
-// gen/front_end/panels/timeline/components/insights/ScriptRef.js
-import * as Platform from "./../../../../core/platform/platform.js";
-import * as TimelineUtils from "./../../utils/utils.js";
+// ../../front_end/panels/timeline/components/insights/ScriptRef.ts
+import * as Platform from "../../../../core/platform/platform.js";
+import * as TimelineUtils from "../../utils/utils.js";
 function scriptRef(script) {
   if (script.request) {
     if (script.inline) {
@@ -1575,7 +1608,7 @@ function scriptRef(script) {
   return `script id: ${script.scriptId}`;
 }
 
-// gen/front_end/panels/timeline/components/insights/DuplicatedJavaScript.js
+// ../../front_end/panels/timeline/components/insights/DuplicatedJavaScript.ts
 var { UIStrings: UIStrings7, i18nString: i18nString7 } = Trace6.Insights.Models.DuplicatedJavaScript;
 var { html: html12 } = Lit12;
 var { widget: widget7 } = UI10.Widget;
@@ -1642,7 +1675,7 @@ var DuplicatedJavaScript = class extends BaseInsightComponent {
     let treemapButton;
     if (this.#shouldShowTreemap()) {
       treemapButton = html12`<devtools-button
-        .variant=${"outlined"}
+        .variant=${Buttons3.Button.Variant.OUTLINED}
         jslog=${VisualLogging2.action(`timeline.treemap.${this.internalName}-insight`).track({
         click: true
       })}
@@ -1664,15 +1697,15 @@ var DuplicatedJavaScript = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/FontDisplay.js
+// ../../front_end/panels/timeline/components/insights/FontDisplay.ts
 var FontDisplay_exports = {};
 __export(FontDisplay_exports, {
   FontDisplay: () => FontDisplay
 });
-import * as i18n11 from "./../../../../core/i18n/i18n.js";
-import * as Trace7 from "./../../../../models/trace/trace.js";
-import * as UI11 from "./../../../../ui/legacy/legacy.js";
-import * as Lit13 from "./../../../../ui/lit/lit.js";
+import * as i18n11 from "../../../../core/i18n/i18n.js";
+import * as Trace7 from "../../../../models/trace/trace.js";
+import * as UI11 from "../../../../ui/legacy/legacy.js";
+import * as Lit13 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings8, i18nString: i18nString8 } = Trace7.Insights.Models.FontDisplay;
 var { html: html13 } = Lit13;
 var { widget: widget8 } = UI11.Widget;
@@ -1736,17 +1769,17 @@ var FontDisplay = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/ForcedReflow.js
+// ../../front_end/panels/timeline/components/insights/ForcedReflow.ts
 var ForcedReflow_exports = {};
 __export(ForcedReflow_exports, {
   ForcedReflow: () => ForcedReflow
 });
-import * as i18n12 from "./../../../../core/i18n/i18n.js";
-import * as Platform2 from "./../../../../core/platform/platform.js";
-import * as Trace8 from "./../../../../models/trace/trace.js";
-import * as LegacyComponents2 from "./../../../../ui/legacy/components/utils/utils.js";
-import * as UI12 from "./../../../../ui/legacy/legacy.js";
-import * as Lit14 from "./../../../../ui/lit/lit.js";
+import * as i18n12 from "../../../../core/i18n/i18n.js";
+import * as Platform2 from "../../../../core/platform/platform.js";
+import * as Trace8 from "../../../../models/trace/trace.js";
+import * as LegacyComponents2 from "../../../../ui/legacy/components/utils/utils.js";
+import * as UI12 from "../../../../ui/legacy/legacy.js";
+import * as Lit14 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings9, i18nString: i18nString9, createOverlayForEvents } = Trace8.Insights.Models.ForcedReflow;
 var { html: html14, nothing: nothing11 } = Lit14;
 var { widget: widget9 } = UI12.Widget;
@@ -1773,11 +1806,17 @@ var ForcedReflow = class extends BaseInsightComponent {
       return html14`<div style=${style}>${i18nString9(UIStrings9.unattributed)}</div>`;
     }
     const linkifier = new LegacyComponents2.Linkifier.Linkifier();
-    const location = linkifier.linkifyScriptLocation(null, callFrame.scriptId, callFrame.url, callFrame.lineNumber, {
-      columnNumber: callFrame.columnNumber,
-      showColumnNumber: true,
-      tabStop: true
-    });
+    const location = linkifier.linkifyScriptLocation(
+      null,
+      callFrame.scriptId,
+      callFrame.url,
+      callFrame.lineNumber,
+      {
+        columnNumber: callFrame.columnNumber,
+        showColumnNumber: true,
+        tabStop: true
+      }
+    );
     if (location instanceof HTMLElement) {
       location.style.maxWidth = "max-content";
       location.style.overflow = "hidden";
@@ -1828,25 +1867,28 @@ var ForcedReflow = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/ImageDelivery.js
+// ../../front_end/panels/timeline/components/insights/ImageDelivery.ts
 var ImageDelivery_exports = {};
 __export(ImageDelivery_exports, {
   ImageDelivery: () => ImageDelivery
 });
-import "./../../../../ui/kit/kit.js";
-import * as Trace9 from "./../../../../models/trace/trace.js";
-import * as UI14 from "./../../../../ui/legacy/legacy.js";
-import * as Lit16 from "./../../../../ui/lit/lit.js";
+import "../../../../ui/kit/kit.js";
+import * as Trace9 from "../../../../models/trace/trace.js";
+import * as UI14 from "../../../../ui/legacy/legacy.js";
+import * as Lit16 from "../../../../ui/lit/lit.js";
 
-// gen/front_end/panels/timeline/components/insights/ImageRef.js
-import * as i18n13 from "./../../../../core/i18n/i18n.js";
-import * as SDK2 from "./../../../../core/sdk/sdk.js";
-import * as UI13 from "./../../../../ui/legacy/legacy.js";
-import * as Lit15 from "./../../../../ui/lit/lit.js";
+// ../../front_end/panels/timeline/components/insights/ImageRef.ts
+import * as i18n13 from "../../../../core/i18n/i18n.js";
+import * as SDK2 from "../../../../core/sdk/sdk.js";
+import * as UI13 from "../../../../ui/legacy/legacy.js";
+import * as Lit15 from "../../../../ui/lit/lit.js";
 var { html: html15 } = Lit15;
 var { widget: widget10 } = UI13.Widget;
 var DEFAULT_VIEW6 = (input, output, target) => {
-  const { request, imageDataUrl } = input;
+  const {
+    request,
+    imageDataUrl
+  } = input;
   const img = imageDataUrl ? html15`<img src=${imageDataUrl} class="element-img"/>` : Lit15.nothing;
   Lit15.render(html15`
     <style>${baseInsightComponent_css_default}</style>
@@ -1912,7 +1954,7 @@ function imageRef(request) {
   return html15`${widget10(ImageRef, { request })}`;
 }
 
-// gen/front_end/panels/timeline/components/insights/ImageDelivery.js
+// ../../front_end/panels/timeline/components/insights/ImageDelivery.ts
 var { UIStrings: UIStrings10, i18nString: i18nString10, createOverlayForRequest: createOverlayForRequest2 } = Trace9.Insights.Models.ImageDelivery;
 var { html: html16 } = Lit16;
 var { widget: widget11 } = UI14.Widget;
@@ -1957,16 +1999,16 @@ var ImageDelivery = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/INPBreakdown.js
+// ../../front_end/panels/timeline/components/insights/INPBreakdown.ts
 var INPBreakdown_exports = {};
 __export(INPBreakdown_exports, {
   INPBreakdown: () => INPBreakdown
 });
-import * as i18n14 from "./../../../../core/i18n/i18n.js";
-import * as Platform3 from "./../../../../core/platform/platform.js";
-import * as Trace10 from "./../../../../models/trace/trace.js";
-import * as UI15 from "./../../../../ui/legacy/legacy.js";
-import * as Lit17 from "./../../../../ui/lit/lit.js";
+import * as i18n14 from "../../../../core/i18n/i18n.js";
+import * as Platform3 from "../../../../core/platform/platform.js";
+import * as Trace10 from "../../../../models/trace/trace.js";
+import * as UI15 from "../../../../ui/legacy/legacy.js";
+import * as Lit17 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings11, i18nString: i18nString11, createOverlaysForSubpart } = Trace10.Insights.Models.INPBreakdown;
 var { html: html17 } = Lit17;
 var { widget: widget12 } = UI15.Widget;
@@ -2007,15 +2049,15 @@ var INPBreakdown = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/LCPBreakdown.js
+// ../../front_end/panels/timeline/components/insights/LCPBreakdown.ts
 var LCPBreakdown_exports = {};
 __export(LCPBreakdown_exports, {
   LCPBreakdown: () => LCPBreakdown
 });
-import * as i18n15 from "./../../../../core/i18n/i18n.js";
-import * as Trace11 from "./../../../../models/trace/trace.js";
-import * as UI16 from "./../../../../ui/legacy/legacy.js";
-import * as Lit18 from "./../../../../ui/lit/lit.js";
+import * as i18n15 from "../../../../core/i18n/i18n.js";
+import * as Trace11 from "../../../../models/trace/trace.js";
+import * as UI16 from "../../../../ui/legacy/legacy.js";
+import * as Lit18 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings12, i18nString: i18nString12 } = Trace11.Insights.Models.LCPBreakdown;
 var { html: html18 } = Lit18;
 var { widget: widget13 } = UI16.Widget;
@@ -2112,16 +2154,16 @@ var LCPBreakdown = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/LCPDiscovery.js
+// ../../front_end/panels/timeline/components/insights/LCPDiscovery.ts
 var LCPDiscovery_exports = {};
 __export(LCPDiscovery_exports, {
   LCPDiscovery: () => LCPDiscovery
 });
-import * as i18n16 from "./../../../../core/i18n/i18n.js";
-import * as Trace12 from "./../../../../models/trace/trace.js";
-import * as uiI18n from "./../../../../ui/i18n/i18n.js";
-import * as UI17 from "./../../../../ui/legacy/legacy.js";
-import * as Lit19 from "./../../../../ui/lit/lit.js";
+import * as i18n16 from "../../../../core/i18n/i18n.js";
+import * as Trace12 from "../../../../models/trace/trace.js";
+import * as uiI18n from "../../../../ui/i18n/i18n.js";
+import * as UI17 from "../../../../ui/legacy/legacy.js";
+import * as Lit19 from "../../../../ui/lit/lit.js";
 var { widget: widget14 } = UI17.Widget;
 var { UIStrings: UIStrings13, i18nString: i18nString13, getImageData } = Trace12.Insights.Models.LCPDiscovery;
 var { html: html19 } = Lit19;
@@ -2184,18 +2226,18 @@ var LCPDiscovery = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/LegacyJavaScript.js
+// ../../front_end/panels/timeline/components/insights/LegacyJavaScript.ts
 var LegacyJavaScript_exports = {};
 __export(LegacyJavaScript_exports, {
   LegacyJavaScript: () => LegacyJavaScript
 });
-import * as Common from "./../../../../core/common/common.js";
-import * as i18n18 from "./../../../../core/i18n/i18n.js";
-import * as SDK3 from "./../../../../core/sdk/sdk.js";
-import * as Bindings from "./../../../../models/bindings/bindings.js";
-import * as Trace13 from "./../../../../models/trace/trace.js";
-import * as UI18 from "./../../../../ui/legacy/legacy.js";
-import * as Lit20 from "./../../../../ui/lit/lit.js";
+import * as Common from "../../../../core/common/common.js";
+import * as i18n18 from "../../../../core/i18n/i18n.js";
+import * as SDK3 from "../../../../core/sdk/sdk.js";
+import * as Bindings from "../../../../models/bindings/bindings.js";
+import * as Trace13 from "../../../../models/trace/trace.js";
+import * as UI18 from "../../../../ui/legacy/legacy.js";
+import * as Lit20 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings14, i18nString: i18nString14 } = Trace13.Insights.Models.LegacyJavaScript;
 var { html: html20 } = Lit20;
 var { widget: widget15 } = UI18.Widget;
@@ -2244,7 +2286,10 @@ var LegacyJavaScript = class extends BaseInsightComponent {
         overlays,
         subRows: result.matches.map((match) => {
           return {
-            values: [html20`<span @click=${() => this.#revealLocation(script, match)} title=${`${script.url}:${match.line}:${match.column}`}>${match.name}</span>`]
+            values: [html20`<span @click=${() => this.#revealLocation(
+              script,
+              match
+            )} title=${`${script.url}:${match.line}:${match.column}`}>${match.name}</span>`]
           };
         })
       };
@@ -2263,14 +2308,14 @@ var LegacyJavaScript = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/ModernHTTP.js
+// ../../front_end/panels/timeline/components/insights/ModernHTTP.ts
 var ModernHTTP_exports = {};
 __export(ModernHTTP_exports, {
   ModernHTTP: () => ModernHTTP
 });
-import * as Trace14 from "./../../../../models/trace/trace.js";
-import * as UI19 from "./../../../../ui/legacy/legacy.js";
-import * as Lit21 from "./../../../../ui/lit/lit.js";
+import * as Trace14 from "../../../../models/trace/trace.js";
+import * as UI19 from "../../../../ui/legacy/legacy.js";
+import * as Lit21 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings15, i18nString: i18nString15, createOverlayForRequest: createOverlayForRequest3 } = Trace14.Insights.Models.ModernHTTP;
 var { html: html21 } = Lit21;
 var { widget: widget16 } = UI19.Widget;
@@ -2315,17 +2360,17 @@ var ModernHTTP = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/NetworkDependencyTree.js
+// ../../front_end/panels/timeline/components/insights/NetworkDependencyTree.ts
 var NetworkDependencyTree_exports = {};
 __export(NetworkDependencyTree_exports, {
   MAX_CHAINS_TO_SHOW: () => MAX_CHAINS_TO_SHOW,
   NetworkDependencyTree: () => NetworkDependencyTree
 });
-import "./../../../../ui/kit/kit.js";
-import * as i18n19 from "./../../../../core/i18n/i18n.js";
-import * as Trace15 from "./../../../../models/trace/trace.js";
-import * as UI20 from "./../../../../ui/legacy/legacy.js";
-import * as Lit22 from "./../../../../ui/lit/lit.js";
+import "../../../../ui/kit/kit.js";
+import * as i18n19 from "../../../../core/i18n/i18n.js";
+import * as Trace15 from "../../../../models/trace/trace.js";
+import * as UI20 from "../../../../ui/legacy/legacy.js";
+import * as Lit22 from "../../../../ui/lit/lit.js";
 
 // gen/front_end/panels/timeline/components/insights/networkDependencyTreeInsight.css.js
 var networkDependencyTreeInsight_css_default = `/*
@@ -2354,7 +2399,7 @@ var networkDependencyTreeInsight_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./networkDependencyTreeInsight.css")} */`;
 
-// gen/front_end/panels/timeline/components/insights/NetworkDependencyTree.js
+// ../../front_end/panels/timeline/components/insights/NetworkDependencyTree.ts
 var { UIStrings: UIStrings16, i18nString: i18nString16 } = Trace15.Insights.Models.NetworkDependencyTree;
 var { html: html22 } = Lit22;
 var { widget: widget17 } = UI20.Widget;
@@ -2553,9 +2598,11 @@ var NetworkDependencyTree = class extends BaseInsightComponent {
         </div>
       `;
     }
-    const rows = this.model.preconnectCandidates.map((candidate) => ({
-      values: [candidate.origin, i18n19.TimeUtilities.millisToString(candidate.wastedMs)]
-    }));
+    const rows = this.model.preconnectCandidates.map(
+      (candidate) => ({
+        values: [candidate.origin, i18n19.TimeUtilities.millisToString(candidate.wastedMs)]
+      })
+    );
     return html22`
       <div class="insight-section">
         ${estSavingTableTitle}
@@ -2578,15 +2625,15 @@ var NetworkDependencyTree = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/RenderBlocking.js
+// ../../front_end/panels/timeline/components/insights/RenderBlocking.ts
 var RenderBlocking_exports = {};
 __export(RenderBlocking_exports, {
   RenderBlocking: () => RenderBlocking
 });
-import * as i18n20 from "./../../../../core/i18n/i18n.js";
-import * as Trace16 from "./../../../../models/trace/trace.js";
-import * as UI21 from "./../../../../ui/legacy/legacy.js";
-import * as Lit23 from "./../../../../ui/lit/lit.js";
+import * as i18n20 from "../../../../core/i18n/i18n.js";
+import * as Trace16 from "../../../../models/trace/trace.js";
+import * as UI21 from "../../../../ui/legacy/legacy.js";
+import * as Lit23 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings17, i18nString: i18nString17, createOverlayForRequest: createOverlayForRequest4 } = Trace16.Insights.Models.RenderBlocking;
 var { html: html23 } = Lit23;
 var { widget: widget18 } = UI21.Widget;
@@ -2636,18 +2683,18 @@ var RenderBlocking = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/SlowCSSSelector.js
+// ../../front_end/panels/timeline/components/insights/SlowCSSSelector.ts
 var SlowCSSSelector_exports = {};
 __export(SlowCSSSelector_exports, {
   SlowCSSSelector: () => SlowCSSSelector
 });
-import "./../../../../ui/components/linkifier/linkifier.js";
-import * as i18n21 from "./../../../../core/i18n/i18n.js";
-import * as Platform4 from "./../../../../core/platform/platform.js";
-import * as SDK4 from "./../../../../core/sdk/sdk.js";
-import * as Trace17 from "./../../../../models/trace/trace.js";
-import * as UI22 from "./../../../../ui/legacy/legacy.js";
-import * as Lit24 from "./../../../../ui/lit/lit.js";
+import "../../../../ui/components/linkifier/linkifier.js";
+import * as i18n21 from "../../../../core/i18n/i18n.js";
+import * as Platform4 from "../../../../core/platform/platform.js";
+import * as SDK4 from "../../../../core/sdk/sdk.js";
+import * as Trace17 from "../../../../models/trace/trace.js";
+import * as UI22 from "../../../../ui/legacy/legacy.js";
+import * as Lit24 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings18, i18nString: i18nString18 } = Trace17.Insights.Models.SlowCSSSelector;
 var { html: html24 } = Lit24;
 var { widget: widget19 } = UI22.Widget;
@@ -2668,7 +2715,9 @@ var SlowCSSSelector = class extends BaseInsightComponent {
     const key = JSON.stringify({ selectorText: selector.selector, styleSheetId: selector.style_sheet_id });
     let ranges = this.#selectorLocations.get(key);
     if (!ranges) {
-      const result = await cssModel.agent.invoke_getLocationForSelector({ selectorText: selector.selector, styleSheetId: selector.style_sheet_id });
+      const result = await cssModel.agent.invoke_getLocationForSelector(
+        { selectorText: selector.selector, styleSheetId: selector.style_sheet_id }
+      );
       if (result.getError() || !result.ranges) {
         return void 0;
       }
@@ -2765,15 +2814,15 @@ var SlowCSSSelector = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/ThirdParties.js
+// ../../front_end/panels/timeline/components/insights/ThirdParties.ts
 var ThirdParties_exports = {};
 __export(ThirdParties_exports, {
   ThirdParties: () => ThirdParties
 });
-import * as i18n22 from "./../../../../core/i18n/i18n.js";
-import * as Trace18 from "./../../../../models/trace/trace.js";
-import * as UI23 from "./../../../../ui/legacy/legacy.js";
-import * as Lit25 from "./../../../../ui/lit/lit.js";
+import * as i18n22 from "../../../../core/i18n/i18n.js";
+import * as Trace18 from "../../../../models/trace/trace.js";
+import * as UI23 from "../../../../ui/legacy/legacy.js";
+import * as Lit25 from "../../../../ui/lit/lit.js";
 var { UIStrings: UIStrings19, i18nString: i18nString19, createOverlaysForSummary } = Trace18.Insights.Models.ThirdParties;
 var { html: html25 } = Lit25;
 var { widget: widget20 } = UI23.Widget;
@@ -2855,15 +2904,15 @@ var ThirdParties = class extends BaseInsightComponent {
   }
 };
 
-// gen/front_end/panels/timeline/components/insights/types.js
+// ../../front_end/panels/timeline/components/insights/types.ts
 var types_exports = {};
 
-// gen/front_end/panels/timeline/components/insights/Viewport.js
+// ../../front_end/panels/timeline/components/insights/Viewport.ts
 var Viewport_exports = {};
 __export(Viewport_exports, {
   Viewport: () => Viewport
 });
-import * as Lit26 from "./../../../../ui/lit/lit.js";
+import * as Lit26 from "../../../../ui/lit/lit.js";
 var { html: html26 } = Lit26;
 var Viewport = class extends BaseInsightComponent {
   internalName = "viewport";

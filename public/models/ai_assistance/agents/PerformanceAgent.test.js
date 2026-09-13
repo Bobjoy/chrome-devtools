@@ -8,10 +8,11 @@ import * as Host from '../../../core/host/host.js';
 import * as SDK from '../../../core/sdk/sdk.js';
 import * as TextUtils from '../../../core/text_utils/text_utils.js';
 import * as Tracing from '../../../services/tracing/tracing.js';
-import { createNetworkRequest, mockAidaClient } from '../../../testing/AiAssistanceHelpers.js';
+import { mockAidaClient } from '../../../testing/AiAssistanceHelpers.js';
 import { deinitializeGlobalVars, restoreUserAgentForTesting, setUserAgentForTesting, updateHostConfig, } from '../../../testing/EnvironmentHelpers.js';
 import { getInsightOrError } from '../../../testing/InsightHelpers.js';
 import { setupLocaleHooks } from '../../../testing/LocaleHelpers.js';
+import { createNetworkRequest } from '../../../testing/NetworkRequestHelpers.js';
 import { setupSettingsHooks } from '../../../testing/SettingsHelpers.js';
 import { SnapshotTester } from '../../../testing/SnapshotTester.js';
 import { TestUniverse } from '../../../testing/TestUniverse.js';
@@ -36,6 +37,9 @@ function deleteAllWidgetData(responses) {
         }
     }
 }
+async function loadTrace(context, name, config) {
+    return await TraceLoader.traceEngine(context, name, config ? { config } : undefined);
+}
 describe('PerformanceAgent', function () {
     setupLocaleHooks();
     setupSettingsHooks();
@@ -55,7 +59,7 @@ describe('PerformanceAgent', function () {
         sinon.stub(Bindings.DebuggerWorkspaceBinding.DebuggerWorkspaceBinding, 'instance')
             .returns(universe.debuggerWorkspaceBinding);
     });
-    afterEach(async () => {
+    after(async () => {
         await deinitializeGlobalVars();
     });
     describe('buildRequest', () => {
@@ -123,7 +127,7 @@ describe('PerformanceAgent', function () {
         });
         describe('run', function () {
             it('generates an answer', async function () {
-                const parsedTrace = await TraceLoader.traceEngine(this, 'web-dev-outermost-frames.json.gz');
+                const parsedTrace = await loadTrace(this, 'web-dev-outermost-frames.json.gz');
                 // A basic Layout.
                 const layoutEvt = allThreadEntriesInTrace(parsedTrace).find(event => event.ts === 465457096322);
                 assert.exists(layoutEvt);
@@ -153,7 +157,7 @@ describe('PerformanceAgent', function () {
                 ]);
             });
             it('yields TIMELINE_RANGE_SUMMARY and BOTTOM_UP_TREE widgets for call tree focus on initialization', async function () {
-                const parsedTrace = await TraceLoader.traceEngine(this, 'web-dev-outermost-frames.json.gz');
+                const parsedTrace = await loadTrace(this, 'web-dev-outermost-frames.json.gz');
                 const events = allThreadEntriesInTrace(parsedTrace);
                 const layoutEvt = events.find(event => event.ts === 465457096322);
                 assert.exists(layoutEvt);
@@ -251,10 +255,10 @@ describe('PerformanceAgent', function () {
         universe.createTarget();
     });
     it('uses the mainFrameURL as the origin if it is valid', async function () {
-        const parsedTrace = await TraceLoader.traceEngine(this, 'web-dev-with-commit.json.gz');
+        const parsedTrace = await loadTrace(this, 'web-dev-with-commit.json.gz');
         Tracing.FreshRecording.Tracker.instance().registerFreshRecording(parsedTrace);
         const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
-        assert.strictEqual(context.getOrigin(), 'https://web.dev');
+        assert.isTrue(context.getOrigin().isSameOriginWith(SDK.SecurityOrigin.SecurityOrigin.create('https://web.dev')));
     });
     it('falls back to the min and max bounds if the URL is invalid', () => {
         const parsedTrace = {
@@ -268,7 +272,7 @@ describe('PerformanceAgent', function () {
         };
         Tracing.FreshRecording.Tracker.instance().registerFreshRecording(parsedTrace);
         const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
-        assert.strictEqual(context.getOrigin(), 'trace-100-200');
+        assert.isTrue(context.getOrigin().isOpaque());
     });
     it('outputs the right title for the selected insight', async () => {
         const context = PerformanceTraceContext.PerformanceTraceContext.fromInsight(FAKE_PARSED_TRACE, FAKE_LCP_MODEL);
@@ -313,7 +317,7 @@ code
             });
         });
         it('translates eventKey: URLs in link destinations', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             const agent = createAgentForConversation();
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
             // Run once to initialize context
@@ -324,7 +328,7 @@ code
             assert.deepEqual(response2, { answer: 'The LCP image [https://www.diy.com/](#r-14746) is a background image' });
         });
         it('translates plain eventKeys in link destinations', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             const agent = createAgentForConversation();
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
             await agent.run('', { selected: context }).next();
@@ -340,7 +344,7 @@ code
             assert.deepEqual(response, { answer: 'The LCP image [https://www.diy.com/](#valid-event-key) is a background image' });
         });
         it('translates eventKey: URLs with spaces between bracket and parenthesis', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             const agent = createAgentForConversation();
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
             await agent.run('', { selected: context }).next();
@@ -352,7 +356,7 @@ code
     });
     describe('handleContextDetails', () => {
         it('outputs the right context for the initial query from the user', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const context = PerformanceTraceContext.PerformanceTraceContext.fromInsight(parsedTrace, FAKE_LCP_MODEL);
             const agent = createAgentForConversation({
@@ -408,7 +412,7 @@ code
     });
     describe('function calls', () => {
         it('can call getNetworkTrackSummary', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -457,7 +461,7 @@ code
         it('can call getResourceContent and yields SOURCE_CODE widget', async function () {
             // Stub recordingIsFresh to return true to make it a "fresh recording"
             sinon.stub(Tracing.FreshRecording.Tracker.instance(), 'recordingIsFresh').returns(true);
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -484,7 +488,7 @@ code
         it('blocks getResourceContent for cross-origin URLs', async function () {
             // Stub recordingIsFresh to return true to make it a "fresh recording"
             sinon.stub(Tracing.FreshRecording.Tracker.instance(), 'recordingIsFresh').returns(true);
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -507,7 +511,7 @@ code
         it('blocks getResourceContent for file URLs', async function () {
             // Stub recordingIsFresh to return true to make it a "fresh recording"
             sinon.stub(Tracing.FreshRecording.Tracker.instance(), 'recordingIsFresh').returns(true);
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -516,7 +520,7 @@ code
                 aidaClient: mockAidaClient([[{ explanation: '', functionCalls: [{ name: 'getResourceContent', args: { url } }] }], [{ explanation: 'done' }]]),
             });
             const context = PerformanceTraceContext.PerformanceTraceContext.fromInsight(parsedTrace, lcpBreakdown);
-            sinon.stub(context, 'getOrigin').returns('file://');
+            sinon.stub(context, 'getOrigin').returns(SDK.SecurityOrigin.SecurityOrigin.create('file://'));
             // Mock script in trace with file URL
             parsedTrace.data.Scripts.scripts.push({
                 url,
@@ -531,7 +535,7 @@ code
         it('blocks getResourceContent for imported traces', async function () {
             // Stub recordingIsFresh to return false to make it an "imported trace"
             sinon.stub(Tracing.FreshRecording.Tracker.instance(), 'recordingIsFresh').returns(false);
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -549,7 +553,7 @@ code
         it('can call getFunctionCode and yields SOURCE_CODE widget', async function () {
             // Stub recordingIsFresh to return true to allow the tool to be declared.
             sinon.stub(Tracing.FreshRecording.Tracker.instance(), 'recordingIsFresh').returns(true);
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -583,7 +587,7 @@ code
             assert.strictEqual(widget.data.code, 'function test() {}');
         });
         it('cannot resolve function code if the trace is not fresh', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -602,8 +606,32 @@ code
             assert.exists(actionResponse);
             assert.strictEqual(actionResponse.output, 'Cannot use this tool on an imported file.');
         });
+        it('returns error from getFunctionCode when script URL is cross-origin or file://', async function () {
+            sinon.stub(Tracing.FreshRecording.Tracker.instance(), 'recordingIsFresh').returns(true);
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
+            assert.isOk(parsedTrace.insights);
+            const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
+            const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
+            const agent = createAgentForConversation({
+                aidaClient: mockAidaClient([
+                    [{
+                            explanation: '',
+                            functionCalls: [{
+                                    name: 'getFunctionCode',
+                                    args: { scriptUrl: 'file:///etc/passwd', line: 10, column: 5 },
+                                }],
+                        }],
+                    [{ explanation: 'done' }],
+                ]),
+            });
+            const context = PerformanceTraceContext.PerformanceTraceContext.fromInsight(parsedTrace, lcpBreakdown);
+            const responses = await Array.fromAsync(agent.run('test', { selected: context }));
+            const actionResponse = responses.find(response => response.type === "action" /* AiAgent.ResponseType.ACTION */);
+            assert.exists(actionResponse);
+            assert.strictEqual(actionResponse.output, 'Resource not found');
+        });
         it('can call getMainThreadTrackSummaryByLabel', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -640,7 +668,7 @@ code
             assert.strictEqual(action.type, 'action');
         });
         it('can call getEventByKey and yields TIMELINE_EVENT_SUMMARY widget', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -663,7 +691,7 @@ code
             assert.strictEqual(widget.data.parsedTrace, parsedTrace);
         });
         it('can call selectEventByKey and yields TIMELINE_EVENT_SUMMARY widget', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -698,7 +726,7 @@ code
             Common.Revealer.RevealerRegistry.removeInstance();
         });
         it('will not send facts from a previous insight if the context changes', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -727,7 +755,7 @@ code
             assert.strictEqual(agent.currentFacts().size, 8); // back to 8.
         });
         it('will cache function calls as facts', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -758,7 +786,7 @@ code
             ]);
         });
         it('will clear cache on error', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -773,7 +801,7 @@ code
                     // Run 3: after error, we try again.
                     [{ explanation: 'done' }],
                 ]),
-                allowedOrigin: () => originBlocked ? { blocked: true } : { origin: 'https://google.com' },
+                allowedOrigin: () => originBlocked ? { blocked: true } : { origin: SDK.SecurityOrigin.SecurityOrigin.create('https://google.com') },
             });
             const context = PerformanceTraceContext.PerformanceTraceContext.fromInsight(parsedTrace, lcpBreakdown);
             // Run 1: Succeeds.
@@ -793,7 +821,7 @@ code
             assert.strictEqual(agent.currentFacts().size, initialFactsCount);
         });
         it('yields multiple DOM tree widgets within a single response for the same node', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpDiscovery = getInsightOrError('LCPDiscovery', parsedTrace.insights, firstNav);
@@ -846,7 +874,7 @@ code
             assert.strictEqual(actions[1].widgets[0].name, 'DOM_TREE');
         });
         it('does NOT deduplicate DOM tree widgets across different responses for the same node', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpDiscovery = getInsightOrError('LCPDiscovery', parsedTrace.insights, firstNav);
@@ -906,7 +934,7 @@ code
             assert.lengthOf(secondActions[0].widgets, 2);
         });
         it('populates imageContent for DOM_TREE widget if lcpRequest is present', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpDiscovery = getInsightOrError('LCPDiscovery', parsedTrace.insights, firstNav);
@@ -945,12 +973,10 @@ code
                     4,
                     { takeSnapshot: sinon.stub().resolves({ root: { nodeName: 'IMG' } }) },
                 ]]));
-            const mockRequest = createNetworkRequest();
-            sinon.stub(mockRequest, 'contentType').returns({
-                isImage: () => true,
+            const mockRequest = createNetworkRequest({
+                resourceType: Common.ResourceType.resourceTypes.Image,
+                contentData: new TextUtils.ContentData.ContentData('base64', true, 'image/jpeg'),
             });
-            sinon.stub(mockRequest, 'requestContentData')
-                .resolves(new TextUtils.ContentData.ContentData('base64', true, 'image/jpeg'));
             // eslint-disable-next-line @devtools/no-instance-of-migrated-singletons
             sinon.stub(Logs.NetworkLog.NetworkLog.instance(), 'requestByManagerAndId').returns(mockRequest);
             const responses = await Array.fromAsync(agent.run('test', { selected: context }));
@@ -969,7 +995,7 @@ code
             let insightSet;
             let context;
             beforeEach(async function () {
-                parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+                parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
                 assert.isOk(parsedTrace.insights);
                 const [nav] = parsedTrace.data.Meta.mainFrameNavigations;
                 const lcpDiscovery = getInsightOrError('LCPDiscovery', parsedTrace.insights, nav);
@@ -1483,7 +1509,7 @@ code
             });
         });
         it('yields a BOTTOM_UP_TREE widget when getDetailedCallTree is called', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'web-dev-outermost-frames.json.gz');
+            const parsedTrace = await loadTrace(this, 'web-dev-outermost-frames.json.gz');
             const events = allThreadEntriesInTrace(parsedTrace);
             const layoutEvt = events.find(event => event.ts === 465457096322);
             assert.exists(layoutEvt);
@@ -1683,7 +1709,7 @@ code
             };
             Tracing.FreshRecording.Tracker.instance().registerFreshRecording(parsedTrace);
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
-            assert.strictEqual(context.getOrigin(), 'https://example.com');
+            assert.isTrue(context.getOrigin().isSameOriginWith(SDK.SecurityOrigin.SecurityOrigin.create('https://example.com')));
         });
         it('returns imported-trace origin for non-fresh (imported) recordings', () => {
             const parsedTrace = {
@@ -1698,9 +1724,9 @@ code
             };
             // Do not register as fresh
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
-            assert.strictEqual(context.getOrigin(), 'imported-trace://example.com');
+            assert.isTrue(context.getOrigin().isSameOriginWith(SDK.SecurityOrigin.SecurityOrigin.create('imported-trace://example.com')));
         });
-        it('handles invalid URLs by prefixing the fallback URL', () => {
+        it('handles invalid URLs by returning an opaque origin', () => {
             const parsedTrace = {
                 insights: new Map(),
                 metadata: {},
@@ -1712,7 +1738,7 @@ code
                 },
             };
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
-            assert.strictEqual(context.getOrigin(), 'imported-trace://trace-100-200');
+            assert.isTrue(context.getOrigin().isOpaque());
         });
     });
     describe('getEventByKey', () => {
@@ -1956,7 +1982,7 @@ code
     // triggering unexpected behavior when performing dynamic lookups on model objects.
     describe('Prototype pollution guards', () => {
         it('blocks getMainThreadTrackSummaryByLabel for prototype properties', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -1976,7 +2002,7 @@ code
             assert.strictEqual(action.output, 'Invalid label: toString');
         });
         it('blocks getInsightDetails for prototype properties', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-images.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-images.json.gz');
             assert.isOk(parsedTrace.insights);
             const [firstNav] = parsedTrace.data.Meta.mainFrameNavigations;
             const lcpBreakdown = getInsightOrError('LCPBreakdown', parsedTrace.insights, firstNav);
@@ -1999,7 +2025,7 @@ code
     });
     describe('getLabelName', () => {
         it('returns correct names for static labels', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
             assert.strictEqual(context.getLabelName('nav-to-lcp'), 'navigation to LCP');
             assert.strictEqual(context.getLabelName('lcp-ttfb'), 'LCP to TTFB');
@@ -2008,7 +2034,7 @@ code
             assert.strictEqual(context.getLabelName('NO_NAVIGATION'), 'the period before the first navigation');
         });
         it('returns correct name for navigation labels', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
             const insightSet = Array.from(parsedTrace.insights.values())[0];
             const navId = insightSet.id;
@@ -2016,20 +2042,20 @@ code
             assert.strictEqual(context.getLabelName(navId), `navigation to ${insightSet.url.href}`);
         });
         it('returns correct name for insight labels', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
             assert.strictEqual(context.getLabelName('LCPBreakdown'), 'LCP breakdown insight');
             assert.strictEqual(context.getLabelName('CLSCulprits'), 'Layout shift culprits insight');
         });
         it('returns the label itself for unknown labels', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
             assert.strictEqual(context.getLabelName('unknown-label'), 'unknown-label');
         });
         // Guard against prototype pollution: 'toString' is a prototype property
         // and should not be resolved as a valid model, returning the fallback label name.
         it('returns the label itself for prototype properties', async function () {
-            const parsedTrace = await TraceLoader.traceEngine(this, 'lcp-discovery-delay.json.gz');
+            const parsedTrace = await loadTrace(this, 'lcp-discovery-delay.json.gz');
             const context = PerformanceTraceContext.PerformanceTraceContext.fromParsedTrace(parsedTrace);
             assert.strictEqual(context.getLabelName('toString'), 'toString');
         });

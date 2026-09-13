@@ -1,5 +1,5 @@
-// gen/front_end/panels/console_counters/console_counters-meta.prebundle.js
-import * as UI from "./../../ui/legacy/legacy.js";
+// ../../front_end/panels/console_counters/console_counters-meta.ts
+import * as UI from "../../ui/legacy/legacy.js";
 var loadedConsoleCountersModule;
 async function loadConsoleCountersModule() {
   if (!loadedConsoleCountersModule) {
@@ -13,6 +13,6 @@ UI.Toolbar.registerToolbarItem({
     return ConsoleCounters.WarningErrorCounter.WarningErrorCounter.instance();
   },
   order: 1,
-  location: "main-toolbar-right"
+  location: UI.Toolbar.ToolbarItemLocation.MAIN_TOOLBAR_RIGHT
 });
 //# sourceMappingURL=console_counters-meta.js.map

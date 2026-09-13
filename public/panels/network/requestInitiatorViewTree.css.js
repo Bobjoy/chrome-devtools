@@ -13,22 +13,24 @@ export default `/*
   user-select: text;
 
   & .fill {
-    right: -6px; /* Same as the margin in .request-initiator-view but negative. */
+    right: calc(-1 * var(--sys-size-4)); /* Same as the margin in .request-initiator-view but negative. */
   }
 }
 
 .request-initiator-view-section-title {
   font-weight: bold;
-  padding: 4px;
+  padding: var(--sys-size-3);
 }
 
 .console-origin-label {
   color: var(--sys-color-token-subtle);
-  padding: 2px 4px 2px 20px;
+  padding: var(--sys-size-2) var(--sys-size-3) var(--sys-size-2) var(--sys-size-9);
 }
 
 .request-initiator-view-section-title:focus-visible {
   background-color: var(--sys-color-state-focus-highlight);
+  outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
+  outline-offset: calc(-1 * var(--sys-size-2));
 }
 
 @media (forced-colors: active) {

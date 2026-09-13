@@ -4,43 +4,45 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/legacy/components/quick_open/CommandMenu.js
+// ../../front_end/ui/legacy/components/quick_open/CommandMenu.ts
 var CommandMenu_exports = {};
 __export(CommandMenu_exports, {
   Command: () => Command,
   CommandMenu: () => CommandMenu,
   CommandMenuProvider: () => CommandMenuProvider,
+  PanelOrDrawer: () => PanelOrDrawer,
   ShowActionDelegate: () => ShowActionDelegate2
 });
-import "./../../../kit/kit.js";
-import "./../../../components/highlighting/highlighting.js";
-import * as Common2 from "./../../../../core/common/common.js";
-import * as Host from "./../../../../core/host/host.js";
-import * as i18n5 from "./../../../../core/i18n/i18n.js";
-import * as Platform2 from "./../../../../core/platform/platform.js";
-import * as Diff3 from "./../../../../third_party/diff/diff.js";
-import { html, nothing as nothing2 } from "./../../../lit/lit.js";
-import * as SettingsUI from "./../../../settings/settings.js";
-import * as UI2 from "./../../legacy.js";
+import "../../../kit/kit.js";
+import "../../../components/highlighting/highlighting.js";
+import * as Common2 from "../../../../core/common/common.js";
+import * as Host from "../../../../core/host/host.js";
+import * as i18n5 from "../../../../core/i18n/i18n.js";
+import * as Platform2 from "../../../../core/platform/platform.js";
+import * as Diff3 from "../../../../third_party/diff/diff.js";
+import { html, nothing as nothing2 } from "../../../lit/lit.js";
+import * as SettingsUI from "../../../settings/settings.js";
+import * as UI2 from "../../legacy.js";
 
-// gen/front_end/ui/legacy/components/quick_open/FilteredListWidget.js
+// ../../front_end/ui/legacy/components/quick_open/FilteredListWidget.ts
 var FilteredListWidget_exports = {};
 __export(FilteredListWidget_exports, {
+  Events: () => Events,
   FilteredListWidget: () => FilteredListWidget,
   Provider: () => Provider,
   getRegisteredProviders: () => getRegisteredProviders,
   registerProvider: () => registerProvider
 });
-import * as Common from "./../../../../core/common/common.js";
-import * as i18n from "./../../../../core/i18n/i18n.js";
-import * as Platform from "./../../../../core/platform/platform.js";
-import * as TextUtils from "./../../../../core/text_utils/text_utils.js";
-import * as Geometry from "./../../../../models/geometry/geometry.js";
-import * as Diff from "./../../../../third_party/diff/diff.js";
-import * as TextPrompt from "./../../../components/text_prompt/text_prompt.js";
-import { nothing, render } from "./../../../lit/lit.js";
-import * as VisualLogging from "./../../../visual_logging/visual_logging.js";
-import * as UI from "./../../legacy.js";
+import * as Common from "../../../../core/common/common.js";
+import * as i18n from "../../../../core/i18n/i18n.js";
+import * as Platform from "../../../../core/platform/platform.js";
+import * as TextUtils from "../../../../core/text_utils/text_utils.js";
+import * as Diff from "../../../../third_party/diff/diff.js";
+import * as TextPrompt from "../../../components/text_prompt/text_prompt.js";
+import * as Geometry from "../../../geometry/geometry.js";
+import { nothing, render } from "../../../lit/lit.js";
+import * as VisualLogging from "../../../visual_logging/visual_logging.js";
+import * as UI from "../../legacy.js";
 
 // gen/front_end/ui/legacy/components/quick_open/filteredListWidget.css.js
 var filteredListWidget_css_default = `/*
@@ -53,7 +55,7 @@ var filteredListWidget_css_default = `/*
   display: flex;
   flex-direction: column;
   flex: auto;
-  border: 1px solid transparent;
+  border: var(--sys-size-1) solid transparent;
 }
 
 .hbox {
@@ -155,14 +157,14 @@ devtools-text-prompt {
 }
 
 .filtered-list-widget-item .deprecated-tag {
-  font-size: 11px;
+  font-size: var(--sys-typescale-body5-size);
   color: var(--sys-color-token-subtle);
 }
 
 .not-found-text {
   height: 34px;
   line-height: 34px;
-  padding-left: 8px;
+  padding-left: var(--sys-size-5);
   font-style: italic;
   color: var(--sys-color-state-disabled);
   background: var(--sys-color-state-disabled-container);
@@ -199,7 +201,7 @@ devtools-text-prompt {
 
 /*# sourceURL=${import.meta.resolve("./filteredListWidget.css")} */`;
 
-// gen/front_end/ui/legacy/components/quick_open/FilteredListWidget.js
+// ../../front_end/ui/legacy/components/quick_open/FilteredListWidget.ts
 var UIStrings = {
   /**
    * @description Accessible name for the input prompt in the quick open dialog.
@@ -227,7 +229,10 @@ var UIStrings = {
 };
 var str_ = i18n.i18n.registerUIStrings("ui/legacy/components/quick_open/FilteredListWidget.ts", UIStrings);
 var i18nString = i18n.i18n.getLocalizedString.bind(void 0, str_);
-var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+var FilteredListWidgetBase = Common.ObjectWrapper.eventMixin(
+  UI.Widget.VBox
+);
+var FilteredListWidget = class extends FilteredListWidgetBase {
   promptHistory;
   scoringTimer;
   filterTimer;
@@ -261,7 +266,11 @@ var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget
     const hbox = this.contentElement.createChild("div", "hbox");
     this.inputBoxElement = new TextPrompt.TextPrompt.TextPrompt();
     this.inputBoxElement.data = { ariaLabel: i18nString(UIStrings.quickOpenPrompt), prefix: "", suggestion: "" };
-    this.inputBoxElement.addEventListener(TextPrompt.TextPrompt.PromptInputEvent.eventName, this.onInput.bind(this), false);
+    this.inputBoxElement.addEventListener(
+      TextPrompt.TextPrompt.PromptInputEvent.eventName,
+      this.onInput.bind(this),
+      false
+    );
     this.inputBoxElement.setAttribute("jslog", `${VisualLogging.textField().track({
       change: true,
       keydown: "ArrowUp|ArrowDown|PageUp|PageDown|Enter|Tab|>|@|:|?|!"
@@ -280,11 +289,7 @@ var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget
     this.itemElementsContainer.addEventListener("mousemove", this.onMouseMove.bind(this), false);
     UI.ARIAUtils.markAsListBox(this.itemElementsContainer);
     UI.ARIAUtils.setControls(this.inputBoxElement, this.itemElementsContainer);
-    UI.ARIAUtils.setAutocomplete(
-      this.inputBoxElement,
-      "list"
-      /* UI.ARIAUtils.AutocompleteInteractionModel.LIST */
-    );
+    UI.ARIAUtils.setAutocomplete(this.inputBoxElement, UI.ARIAUtils.AutocompleteInteractionModel.LIST);
     this.notFoundElement = this.bottomElementsContainer.createChild("div", "not-found-text");
     this.notFoundElement.classList.add("hidden");
     this.setDefaultFocusedElement(this.inputBoxElement);
@@ -322,8 +327,9 @@ var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget
   setCommandSuggestion(suggestion) {
     this.inputBoxElement.setSuggestion(suggestion);
   }
-  setHintElement(hint) {
+  setHintElement(hint, accessibleName) {
     this.hintElement.textContent = hint;
+    UI.ARIAUtils.setLabel(this.hintElement, accessibleName);
   }
   showAsDialog(dialogTitle) {
     if (!dialogTitle) {
@@ -332,23 +338,14 @@ var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget
     this.dialog = new UI.Dialog.Dialog("quick-open");
     UI.ARIAUtils.setLabel(this.dialog.contentElement, dialogTitle);
     this.dialog.setMaxContentSize(new Geometry.Size(576, 320));
-    this.dialog.setSizeBehavior(
-      "SetExactWidthMaxHeight"
-      /* UI.GlassPane.SizeBehavior.SET_EXACT_WIDTH_MAX_HEIGHT */
-    );
+    this.dialog.setSizeBehavior(UI.GlassPane.SizeBehavior.SET_EXACT_WIDTH_MAX_HEIGHT);
     this.dialog.setContentPosition(null, 22);
     this.dialog.contentElement.style.setProperty("border-radius", "var(--sys-shape-corner-medium)");
     this.dialog.contentElement.style.setProperty("box-shadow", "var(--sys-elevation-level3)");
     this.show(this.dialog.contentElement);
     UI.ARIAUtils.setExpanded(this.contentElement, true);
-    void this.dialog.once(
-      "hidden"
-      /* UI.Dialog.Events.HIDDEN */
-    ).then(() => {
-      this.dispatchEventToListeners(
-        "hidden"
-        /* Events.HIDDEN */
-      );
+    void this.dialog.once(UI.Dialog.Events.HIDDEN).then(() => {
+      this.dispatchEventToListeners("hidden" /* HIDDEN */);
     });
     this.dialog.show();
   }
@@ -438,7 +435,10 @@ var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget
     wrapperElement.className = "filtered-list-widget-item";
     if (this.provider) {
       render(this.provider.renderItem(item2, this.cleanValue()), wrapperElement);
-      wrapperElement.setAttribute("jslog", `${VisualLogging.item(this.provider.jslogContextAt(item2)).track({ click: true, resize: true })}`);
+      wrapperElement.setAttribute(
+        "jslog",
+        `${VisualLogging.item(this.provider.jslogContextAt(item2)).track({ click: true, resize: true })}`
+      );
     }
     UI.ARIAUtils.markAsOption(wrapperElement);
     return wrapperElement;
@@ -479,7 +479,9 @@ var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget
     const children = selectedElement.querySelectorAll("*");
     const text = Array.from(children).filter((e) => !e.children.length).map((e) => e.classList.contains("new-badge") ? i18nString(UIStrings.newFeature) : e.textContent).join();
     if (text) {
-      UI.ARIAUtils.LiveAnnouncer.alert(i18nString(UIStrings.sItemSOfS, { PH1: text, PH2: this.list.selectedIndex() + 1, PH3: this.items.length }));
+      UI.ARIAUtils.LiveAnnouncer.alert(
+        i18nString(UIStrings.sItemSOfS, { PH1: text, PH2: this.list.selectedIndex() + 1, PH3: this.items.length })
+      );
     }
   }
   setQuery(query) {
@@ -651,16 +653,16 @@ var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget
         }
         handled = this.tabKeyPressed();
         break;
-      case "ArrowUp":
+      case Platform.KeyboardUtilities.ArrowKey.UP:
         handled = this.list.selectPreviousItem(true, false);
         break;
-      case "ArrowDown":
+      case Platform.KeyboardUtilities.ArrowKey.DOWN:
         handled = this.list.selectNextItem(true, false);
         break;
-      case "PageUp":
+      case Platform.KeyboardUtilities.PageKey.UP:
         handled = this.list.selectItemPreviousPage(false);
         break;
-      case "PageDown":
+      case Platform.KeyboardUtilities.PageKey.DOWN:
         handled = this.list.selectItemNextPage(false);
         break;
     }
@@ -668,7 +670,9 @@ var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget
       keyboardEvent.consume(true);
       const text = this.list.elementAtIndex(this.list.selectedIndex())?.textContent;
       if (text) {
-        UI.ARIAUtils.LiveAnnouncer.alert(i18nString(UIStrings.sItemSOfS, { PH1: text, PH2: this.list.selectedIndex() + 1, PH3: this.items.length }));
+        UI.ARIAUtils.LiveAnnouncer.alert(
+          i18nString(UIStrings.sItemSOfS, { PH1: text, PH2: this.list.selectedIndex() + 1, PH3: this.items.length })
+        );
       }
     }
   }
@@ -688,6 +692,10 @@ var FilteredListWidget = class extends Common.ObjectWrapper.eventMixin(UI.Widget
     }
   }
 };
+var Events = /* @__PURE__ */ ((Events2) => {
+  Events2["HIDDEN"] = "hidden";
+  return Events2;
+})(Events || {});
 var Provider = class {
   refreshCallback;
   jslogContext = "";
@@ -737,19 +745,23 @@ function getRegisteredProviders() {
   return registeredProviders;
 }
 
-// gen/front_end/ui/legacy/components/quick_open/QuickOpen.js
+// ../../front_end/ui/legacy/components/quick_open/QuickOpen.ts
 var QuickOpen_exports = {};
 __export(QuickOpen_exports, {
   QuickOpenImpl: () => QuickOpenImpl,
   ShowActionDelegate: () => ShowActionDelegate,
   history: () => history
 });
-import * as i18n3 from "./../../../../core/i18n/i18n.js";
+import * as i18n3 from "../../../../core/i18n/i18n.js";
 var UIStrings2 = {
   /**
    * @description Hint text displayed below the quick open input prompt.
    */
-  typeToSeeAvailableCommands: "Type ? to see available commands"
+  typeToSeeAvailableCommands: "Type ? to see available commands",
+  /**
+   * @description Accessible text for the hint displayed below the quick open input prompt.
+   */
+  typeQuestionMarkToSeeAvailableCommands: "Type question mark to see available commands"
 };
 var str_2 = i18n3.i18n.registerUIStrings("ui/legacy/components/quick_open/QuickOpen.ts", UIStrings2);
 var i18nString2 = i18n3.i18n.getLocalizedString.bind(void 0, str_2);
@@ -767,7 +779,10 @@ var QuickOpenImpl = class {
     const quickOpen = new this();
     const filteredListWidget = new FilteredListWidget(null, history, quickOpen.queryChanged.bind(quickOpen));
     quickOpen.filteredListWidget = filteredListWidget;
-    filteredListWidget.setHintElement(i18nString2(UIStrings2.typeToSeeAvailableCommands));
+    filteredListWidget.setHintElement(
+      i18nString2(UIStrings2.typeToSeeAvailableCommands),
+      i18nString2(UIStrings2.typeQuestionMarkToSeeAvailableCommands)
+    );
     filteredListWidget.showAsDialog();
     filteredListWidget.setQuery(query);
   }
@@ -830,7 +845,7 @@ var ShowActionDelegate = class {
   }
 };
 
-// gen/front_end/ui/legacy/components/quick_open/CommandMenu.js
+// ../../front_end/ui/legacy/components/quick_open/CommandMenu.ts
 var UIStrings3 = {
   /**
    * @description Warning message displayed when a setting change requires reloading DevTools.
@@ -870,7 +885,18 @@ var CommandMenu = class _CommandMenu {
     return commandMenuInstance;
   }
   static createCommand(options) {
-    const { category, keys, title, shortcut, jslogContext, executeHandler, availableHandler, userActionCode, isPanelOrDrawer, featurePromotionId } = options;
+    const {
+      category,
+      keys,
+      title,
+      shortcut,
+      jslogContext,
+      executeHandler,
+      availableHandler,
+      userActionCode,
+      isPanelOrDrawer,
+      featurePromotionId
+    } = options;
     let handler = executeHandler;
     if (userActionCode) {
       const actionCode = userActionCode;
@@ -879,7 +905,17 @@ var CommandMenu = class _CommandMenu {
         executeHandler();
       };
     }
-    return new Command(category, title, keys, shortcut, jslogContext, handler, availableHandler, isPanelOrDrawer, featurePromotionId);
+    return new Command(
+      category,
+      title,
+      keys,
+      shortcut,
+      jslogContext,
+      handler,
+      availableHandler,
+      isPanelOrDrawer,
+      featurePromotionId
+    );
   }
   static createSettingCommand(setting, title, value, settingUI) {
     const ui = settingUI ?? SettingsUI.SettingUIRegistration.maybeResolve(setting.descriptor());
@@ -901,7 +937,9 @@ var CommandMenu = class _CommandMenu {
           Host.userMetrics.actionTaken(Host.UserMetrics.Action.ToggleEmulateFocusedPageFromCommandMenu);
         }
         if (reloadRequired) {
-          UI2.InspectorView.InspectorView.instance().displayReloadRequiredWarning(i18nString3(UIStrings3.settingsChangedReloadDevTools));
+          UI2.InspectorView.InspectorView.instance().displayReloadRequiredWarning(
+            i18nString3(UIStrings3.settingsChangedReloadDevTools)
+          );
         }
       },
       availableHandler: () => setting.get() !== value
@@ -914,8 +952,8 @@ var CommandMenu = class _CommandMenu {
       throw new Error(`Creating '${action.title()}' action command failed. Action has no category.`);
     }
     let panelOrDrawer = void 0;
-    if (category === "DRAWER") {
-      panelOrDrawer = "DRAWER";
+    if (category === UI2.ActionRegistration.ActionCategory.DRAWER) {
+      panelOrDrawer = "DRAWER" /* DRAWER */;
     }
     const shortcut = UI2.ShortcutRegistry.ShortcutRegistry.instance().shortcutTitleForAction(action.id()) || "";
     return _CommandMenu.createCommand({
@@ -935,10 +973,10 @@ var CommandMenu = class _CommandMenu {
       throw new Error(`Creating '${title}' reveal view command failed. Reveal view has no category.`);
     }
     let panelOrDrawer = void 0;
-    if (category === "PANEL") {
-      panelOrDrawer = "PANEL";
-    } else if (category === "DRAWER") {
-      panelOrDrawer = "DRAWER";
+    if (category === UI2.ViewManager.ViewLocationCategory.PANEL) {
+      panelOrDrawer = "PANEL" /* PANEL */;
+    } else if (category === UI2.ViewManager.ViewLocationCategory.DRAWER) {
+      panelOrDrawer = "DRAWER" /* DRAWER */;
     }
     const executeHandler = () => {
       if (id === "issues-pane") {
@@ -996,7 +1034,9 @@ var CommandMenu = class _CommandMenu {
       }
       let setting;
       if ("isAvailable" in registeredSettingUI.descriptor) {
-        const settingResult = Common2.Settings.Settings.instance().maybeResolve(registeredSettingUI.descriptor);
+        const settingResult = Common2.Settings.Settings.instance().maybeResolve(
+          registeredSettingUI.descriptor
+        );
         if (!("setting" in settingResult)) {
           continue;
         }
@@ -1013,6 +1053,11 @@ var CommandMenu = class _CommandMenu {
     return this.#commands;
   }
 };
+var PanelOrDrawer = /* @__PURE__ */ ((PanelOrDrawer2) => {
+  PanelOrDrawer2["PANEL"] = "PANEL";
+  PanelOrDrawer2["DRAWER"] = "DRAWER";
+  return PanelOrDrawer2;
+})(PanelOrDrawer || {});
 var CommandMenuProvider = class extends Provider {
   commands;
   constructor(commandsForTest = []) {
@@ -1061,9 +1106,9 @@ var CommandMenuProvider = class extends Provider {
       score = Number.MAX_VALUE;
       return score;
     }
-    if (command.isPanelOrDrawer === "PANEL") {
+    if (command.isPanelOrDrawer === "PANEL" /* PANEL */) {
       score += 2;
-    } else if (command.isPanelOrDrawer === "DRAWER") {
+    } else if (command.isPanelOrDrawer === "DRAWER" /* DRAWER */) {
       score += 1;
     }
     return score;
@@ -1163,13 +1208,13 @@ registerProvider({
   jslogContext: "command"
 });
 
-// gen/front_end/ui/legacy/components/quick_open/HelpQuickOpen.js
+// ../../front_end/ui/legacy/components/quick_open/HelpQuickOpen.ts
 var HelpQuickOpen_exports = {};
 __export(HelpQuickOpen_exports, {
   HelpQuickOpen: () => HelpQuickOpen
 });
-import "./../../../kit/kit.js";
-import { html as html2 } from "./../../../lit/lit.js";
+import "../../../kit/kit.js";
+import { html as html2 } from "../../../lit/lit.js";
 var HelpQuickOpen = class extends Provider {
   providers;
   constructor() {

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 // Generated from javascript_natives/helpers.js
-// clang-format off
 export const NativeFunctions = [
     {
         name: "eval",
@@ -6805,6 +6804,10 @@ export const NativeFunctions = [
         signatures: [["provokeMode"]]
     },
     {
+        name: "drawingBufferToneMapping",
+        signatures: [["?toneMapping"]]
+    },
+    {
         name: "texElementImage2D",
         signatures: [["target", "internalformat", "element", "?config"]]
     },
@@ -6998,7 +7001,7 @@ export const NativeFunctions = [
     },
     {
         name: "install",
-        signatures: [["?install_url", "?manifest_id"], ["params"]],
+        signatures: [["?params"]],
         receivers: ["Navigator"]
     },
     {
@@ -7274,7 +7277,7 @@ export const NativeFunctions = [
     },
     {
         name: "RTCDTMFToneChangeEvent",
-        signatures: [["type", "eventInitDict"]]
+        signatures: [["type", "?eventInitDict"]]
     },
     {
         name: "RTCEncodedAudioFrame",
@@ -7286,7 +7289,7 @@ export const NativeFunctions = [
     },
     {
         name: "RTCEncodedVideoFrame",
-        signatures: [["originalFrame", "?options"]]
+        signatures: [["init"], ["originalFrame", "?options"]]
     },
     {
         name: "RTCError",
@@ -7899,6 +7902,10 @@ export const NativeFunctions = [
     {
         name: "receiveFeatureReport",
         signatures: [["reportId"]]
+    },
+    {
+        name: "playHaptics",
+        signatures: [["effect", "?intensity"]]
     },
     {
         name: "addStroke",
@@ -8558,7 +8565,21 @@ export const NativeFunctions = [
     },
     {
         name: "getElementTransform",
-        signatures: [["element", "draw_transform"]]
+        signatures: [["element", "draw_transform"]],
+        receivers: ["OffscreenCanvas"]
+    },
+    {
+        name: "getElementTransform",
+        signatures: [["element", "?draw_transform"]],
+        receivers: ["HTMLCanvasElement"]
+    },
+    {
+        name: "updateElementGeometry",
+        signatures: [["element", "?options"]]
+    },
+    {
+        name: "clearElementGeometry",
+        signatures: [["element"]]
     },
     {
         name: "NavigateEvent",
@@ -8706,6 +8727,10 @@ export const NativeFunctions = [
     },
     {
         name: "CanvasPaintEvent",
+        signatures: [["type", "?eventInitDict"]]
+    },
+    {
+        name: "ElementGeometryUpdateEvent",
         signatures: [["type", "?eventInitDict"]]
     },
     {
@@ -9119,10 +9144,6 @@ export const NativeFunctions = [
     {
         name: "prependHTMLUnsafe",
         signatures: [["html", "?options"]]
-    },
-    {
-        name: "setCanvasTransform",
-        signatures: [["?matrix"]]
     },
     {
         name: "matchContainer",

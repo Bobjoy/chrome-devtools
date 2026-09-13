@@ -12,7 +12,7 @@ export default `/*
 .indexed-db-data-view .data-view-toolbar {
   position: relative;
   background-color: var(--sys-color-cdt-base-container);
-  border-bottom: 1px solid var(--sys-color-divider);
+  border-bottom: var(--sys-size-1) solid var(--sys-color-divider);
 }
 
 .indexed-db-data-view devtools-data-grid {
@@ -29,26 +29,12 @@ export default `/*
 }
 
 :host-context(.indexed-db-data-view) .data-grid .data-container tr:nth-last-child(2) td {
-  border-bottom: 1px solid var(--sys-color-divider);
+  border-bottom: var(--sys-size-1) solid var(--sys-color-divider);
 }
 
 :host-context(.indexed-db-data-view) .data-grid:focus .data-container tr.selected {
   background-color: var(--sys-color-tonal-container);
   color: inherit;
-}
-
-:host-context(.indexed-db-data-view) .section,
-:host-context(.indexed-db-data-view) .section > .header,
-:host-context(.indexed-db-data-view) .section > .header .title {
-  margin: 0;
-  min-height: inherit;
-  line-height: inherit;
-}
-
-:host-context(.indexed-db-data-view) .data-grid .data-container td .section .header .title {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 }
 
 .indexed-db-key-path {
@@ -80,7 +66,7 @@ export default `/*
   line-height: 27px;
   padding-left: 5px;
   background-color: var(--sys-color-cdt-base-container);
-  border-top: 1px solid var(--sys-color-divider);
+  border-top: var(--sys-size-1) solid var(--sys-color-divider);
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -97,15 +83,15 @@ export default `/*
 .stale-data-warning {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 0 4px;
+  gap: var(--sys-size-3);
+  padding: 0 var(--sys-size-3);
 }
 
 .stale-data-warning .warning-icon {
   --icon-color: var(--icon-warning);
 
-  width: 20px;
-  height: 20px;
+  width: var(--sys-size-9);
+  height: var(--sys-size-9);
 }
 
 .data-grid-container {

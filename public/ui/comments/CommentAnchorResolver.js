@@ -3,7 +3,16 @@
 // found in the LICENSE file.
 import * as CodeMirror from '../../third_party/codemirror.next/codemirror.next.js';
 import * as VisualLogging from '../../ui/visual_logging/visual_logging.js';
-const IGNORED_MINOR_CONTROLS = new Set([
+const DISALLOWED_COMMENT_TARGETS = new Set([
+    // Top-level containers & layout structures
+    VisualLogging.VisualElements.Panel,
+    VisualLogging.VisualElements.Drawer,
+    VisualLogging.VisualElements.Pane,
+    VisualLogging.VisualElements.Tree,
+    VisualLogging.VisualElements.PanelTabHeader,
+    VisualLogging.VisualElements.Resizer,
+    VisualLogging.VisualElements.Menu,
+    // Minor controls and toolbars
     VisualLogging.VisualElements.Action,
     VisualLogging.VisualElements.Toggle,
     VisualLogging.VisualElements.Close,
@@ -37,6 +46,68 @@ export function closestAcrossShadow(element, selector) {
  */
 function isCodeMirrorEditor(element) {
     return element.classList.contains('cm-editor');
+}
+/**
+ * Resolves the file path attribute for a CodeMirror editor element.
+ *
+ * @param element The editor element to check.
+ * @returns The file path string or undefined if not found.
+ */
+export function getEditorFilePath(element) {
+    return element.getAttribute('data-file-path') ?? undefined;
+}
+/**
+ * Determines whether an anchor is backed by a tracked DOM element.
+ *
+ * Canvas-rendered anchors (such as Performance panel timeline entries) do not have
+ * individual DOM nodes and manage their own overlays in canvas coordinates.
+ * These anchors return false and bypass DOM-level node caching, rematching,
+ * and IntersectionObserver tracking.
+ *
+ * @param anchor The comment anchor signature to check.
+ * @returns True if the anchor corresponds to a DOM-tracked element; otherwise false.
+ */
+export function isDomTrackedAnchor(anchor) {
+    return !anchor.timeline;
+}
+const customAnchorResolvers = new Set();
+/**
+ * Registers a custom anchor resolver. Usually called when a view becomes visible
+ * (e.g. inside `wasShown()`).
+ *
+ * @param resolver The custom anchor resolver to register.
+ */
+export function registerCustomAnchorResolver(resolver) {
+    customAnchorResolvers.add(resolver);
+}
+/**
+ * Unregisters a custom anchor resolver. Usually called when a view hides
+ * (e.g. inside `willHide()`).
+ *
+ * @param resolver The custom anchor resolver to unregister.
+ */
+export function unregisterCustomAnchorResolver(resolver) {
+    customAnchorResolvers.delete(resolver);
+}
+/**
+ * Clears all registered custom anchor resolvers. Test-only helper.
+ */
+export function clearCustomAnchorResolversForTest() {
+    customAnchorResolvers.clear();
+}
+/**
+ * Finds the first registered custom anchor resolver that matches the given element.
+ *
+ * @param element The element to check.
+ * @returns The matching resolver, or null if no resolver matches.
+ */
+export function getCustomAnchorResolverForElement(element) {
+    for (const resolver of customAnchorResolvers) {
+        if (resolver.matches(element)) {
+            return resolver;
+        }
+    }
+    return null;
 }
 /**
  * Checks whether an element contains non-empty text content (after trimming whitespace),
@@ -139,14 +210,23 @@ function resolveCodeMirrorLineInfo(element) {
  * 3. Checks for domain IDs (`data-network-request-id` or `data-backend-node-id`) across shadow boundaries,
  *    returning the owning domain element.
  * 4. Escalates minor controls / sub-elements up to semantic containers (e.g., TableRow, TreeItem).
- * 5. Falls back to the nearest visual logging element if no semantic container is found.
+ * 5. Falls back to the nearest visual logging element if no semantic container is found,
+ *    excluding top-level containers and minor controls.
  *
  * @param element The source DOM element to resolve.
  * @returns The resolved semantic anchor Element, or null if unresolvable/empty/excluded.
  */
-export function resolveCommentAnchorElement(element) {
+export function resolveCommentAnchorElement(element, options) {
     if (isTabTitle(element)) {
         return null;
+    }
+    const customResolver = getCustomAnchorResolverForElement(element);
+    if (customResolver) {
+        const result = customResolver.resolve(element, options);
+        if (!result) {
+            return null;
+        }
+        return result.anchorElement ?? element;
     }
     // CodeMirror internal lines, gutters, and content live inside .cm-editor.
     // We only allow commenting on non-empty lines within the editor; the whole editor
@@ -173,7 +253,7 @@ export function resolveCommentAnchorElement(element) {
                     config.ve === VisualLogging.VisualElements.TreeItem) {
                     return isNonEmptyItem(target) ? target : null;
                 }
-                if (!fallbackCandidate && !IGNORED_MINOR_CONTROLS.has(config.ve)) {
+                if (!fallbackCandidate && !DISALLOWED_COMMENT_TARGETS.has(config.ve)) {
                     fallbackCandidate = target;
                 }
             }
@@ -279,8 +359,13 @@ function checkCodeMirrorLineMatch(editor, editorLineNumber, textSignature) {
  * @param root Optional root Document or Element to search within for sibling index calculation.
  * @returns The resolved CommentAnchorSignature, or null if unresolvable.
  */
-export function resolveCommentAnchor(element, root = element.ownerDocument || document) {
-    const target = resolveCommentAnchorElement(element);
+export function resolveCommentAnchor(element, root = element.ownerDocument || document, options) {
+    const customResolver = getCustomAnchorResolverForElement(element);
+    if (customResolver) {
+        const result = customResolver.resolve(element, options);
+        return result ? result.anchor : null;
+    }
+    const target = resolveCommentAnchorElement(element, options);
     if (!target) {
         return null;
     }
@@ -300,7 +385,7 @@ export function resolveCommentAnchor(element, root = element.ownerDocument || do
             return null;
         }
         textSignature = lineInfo.textSignature;
-        const filePath = target.getAttribute('data-file-path') ?? undefined;
+        const filePath = getEditorFilePath(target);
         editor = { lineNumber: lineInfo.lineNumber, filePath };
     }
     else {
@@ -314,13 +399,15 @@ export function resolveCommentAnchor(element, root = element.ownerDocument || do
     const networkRequestId = target.getAttribute('data-network-request-id') ?? undefined;
     const backendNodeIdStr = target.getAttribute('data-backend-node-id');
     const backendNodeId = backendNodeIdStr ? Number(backendNodeIdStr) : undefined;
+    const targetId = target.getAttribute('data-target-id') ?? undefined;
+    const node = (backendNodeId !== undefined && targetId !== undefined) ? { backendNodeId, targetId } : undefined;
     return {
         vePath,
         textSignature,
         parentTextSignature,
         siblingIndex,
         networkRequestId,
-        backendNodeId,
+        node,
         editor,
     };
 }
@@ -395,14 +482,14 @@ export function rematchCommentAnchor(comment, root = document, cachedJslogElemen
     if (anchor.networkRequestId) {
         return deepQuerySelector(root, `[data-network-request-id="${CSS.escape(anchor.networkRequestId)}"]`);
     }
-    if (anchor.backendNodeId !== undefined) {
-        return deepQuerySelector(root, `[data-backend-node-id="${CSS.escape(String(anchor.backendNodeId))}"]`);
+    if (anchor.node) {
+        return deepQuerySelector(root, `[data-backend-node-id="${CSS.escape(String(anchor.node.backendNodeId))}"][data-target-id="${CSS.escape(anchor.node.targetId)}"]`);
     }
     if (anchor.editor) {
         const { lineNumber, filePath } = anchor.editor;
         const cmEditors = deepQuerySelectorAll(root, '.cm-editor');
         const matchingEditors = cmEditors.filter(cmEditor => {
-            if (filePath !== undefined && cmEditor.getAttribute('data-file-path') !== filePath) {
+            if (filePath !== undefined && getEditorFilePath(cmEditor) !== filePath) {
                 return false;
             }
             return VisualLogging.getVePath(cmEditor) === anchor.vePath;
@@ -458,6 +545,78 @@ export function rematchCommentAnchor(comment, root = document, cachedJslogElemen
     }
     // Step 3: Single-Element Canonicalization (return the first matching node in document order)
     return candidateList[0] || null;
+}
+function isClippingOverflow(overflow) {
+    return overflow === 'hidden' || overflow === 'auto' || overflow === 'scroll' || overflow === 'clip';
+}
+/**
+ * Computes the visible viewport-relative bounding box of an element after clipping against
+ * all ancestor scroll/overflow containers and viewport boundaries across shadow DOM roots.
+ *
+ * @param element The source DOM element.
+ * @param targetRect Optional explicit bounding box (e.g. for sub-lines or custom targets).
+ * @returns The clipped viewport-relative rectangle or null if the element is completely clipped out of view or invisible.
+ */
+export function computeVisibleRect(element, targetRect) {
+    if (!element.isConnected) {
+        return null;
+    }
+    if (!element.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true, contentVisibilityAuto: true })) {
+        return null;
+    }
+    const rect = targetRect ?? element.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) {
+        return null;
+    }
+    let visibleLeft = rect.left;
+    let visibleRight = rect.right;
+    let visibleTop = rect.top;
+    let visibleBottom = rect.bottom;
+    const doc = element.ownerDocument || document;
+    const win = doc.defaultView || window;
+    const viewportWidth = win.innerWidth || doc.documentElement.clientWidth;
+    const viewportHeight = win.innerHeight || doc.documentElement.clientHeight;
+    visibleLeft = Math.max(visibleLeft, 0);
+    visibleTop = Math.max(visibleTop, 0);
+    visibleRight = Math.min(visibleRight, viewportWidth);
+    visibleBottom = Math.min(visibleBottom, viewportHeight);
+    if (visibleLeft >= visibleRight || visibleTop >= visibleBottom) {
+        return null;
+    }
+    let current = element.parentElementOrShadowHost();
+    while (current && current !== doc.documentElement && current !== doc.body) {
+        const style = win.getComputedStyle(current);
+        const clipsX = isClippingOverflow(style.overflowX);
+        const clipsY = isClippingOverflow(style.overflowY);
+        if (clipsX || clipsY) {
+            const parentRect = current.getBoundingClientRect();
+            if (clipsX) {
+                visibleLeft = Math.max(visibleLeft, parentRect.left);
+                visibleRight = Math.min(visibleRight, parentRect.right);
+            }
+            if (clipsY) {
+                visibleTop = Math.max(visibleTop, parentRect.top);
+                visibleBottom = Math.min(visibleBottom, parentRect.bottom);
+            }
+            if (visibleLeft >= visibleRight || visibleTop >= visibleBottom) {
+                return null;
+            }
+        }
+        current = current.parentElementOrShadowHost();
+    }
+    const width = visibleRight - visibleLeft;
+    const height = visibleBottom - visibleTop;
+    if (width <= 0 || height <= 0) {
+        return null;
+    }
+    return {
+        left: visibleLeft,
+        top: visibleTop,
+        right: visibleRight,
+        bottom: visibleBottom,
+        width,
+        height,
+    };
 }
 /**
  * Checks whether an element is connected to the DOM, visible according to `checkVisibility()`,

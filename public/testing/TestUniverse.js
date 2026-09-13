@@ -85,6 +85,10 @@ export class TestUniverse {
             () => new Breakpoints.BreakpointManager.BreakpointManager(this.targetManager, this.workspace, this.debuggerWorkspaceBinding, this.settings),
         ],
         [
+            CommentManager.CD4ABridge.CD4ABridge,
+            () => new CommentManager.CD4ABridge.CD4ABridge(this.commentManager, this.targetManager, this.networkLog),
+        ],
+        [
             CommentManager.CommentManager.CommentManager,
             () => new CommentManager.CommentManager.CommentManager(),
         ],
@@ -112,8 +116,12 @@ export class TestUniverse {
             () => new CrUXManager.CrUXManager(this.targetManager, this.settings),
         ],
         [
+            IssuesManager.DOMIssuesManager.DOMIssuesManager,
+            () => new IssuesManager.DOMIssuesManager.DOMIssuesManager(this.issuesManager, this.targetManager),
+        ],
+        [
             Emulation.DeviceModeModel.DeviceModeModel,
-            () => new Emulation.DeviceModeModel.DeviceModeModel(this.targetManager, this.settings, this.multitargetNetworkManager, this.fileManager),
+            () => new Emulation.DeviceModeModel.DeviceModeModel(this.targetManager, this.settings, this.multitargetNetworkManager),
         ],
         [
             Emulation.EmulatedDevices.EmulatedDevicesList,
@@ -282,6 +290,9 @@ export class TestUniverse {
     }
     // eslint-disable-next-line @devtools/enforce-test-universe-return-types
     dispose() {
+        if (this.#context.has(CommentManager.CD4ABridge.CD4ABridge)) {
+            this.cd4aBridge.dispose();
+        }
         if (this.#context.has(Persistence.IsolatedFileSystemManager.IsolatedFileSystemManager)) {
             this.isolatedFileSystemManager.dispose();
         }
@@ -313,6 +324,9 @@ export class TestUniverse {
     get breakpointManager() {
         return this.get(Breakpoints.BreakpointManager.BreakpointManager);
     }
+    get cd4aBridge() {
+        return this.get(CommentManager.CD4ABridge.CD4ABridge);
+    }
     get commentManager() {
         return this.get(CommentManager.CommentManager.CommentManager);
     }
@@ -340,6 +354,9 @@ export class TestUniverse {
     }
     get domDebuggerManager() {
         return this.get(SDK.DOMDebuggerModel.DOMDebuggerManager);
+    }
+    get domIssuesManager() {
+        return this.get(IssuesManager.DOMIssuesManager.DOMIssuesManager);
     }
     get domModelUndoStack() {
         return this.get(SDK.DOMModel.DOMModelUndoStack);

@@ -4,7 +4,7 @@
 import * as Common from '../../core/common/common.js';
 import * as i18n from '../../core/i18n/i18n.js';
 import * as Platform from '../../core/platform/platform.js';
-import * as Geometry from '../../models/geometry/geometry.js';
+import * as Geometry from '../../ui/geometry/geometry.js';
 import * as uiI18n from '../../ui/i18n/i18n.js';
 import { Link } from '../../ui/kit/kit.js';
 import * as UI from '../../ui/legacy/legacy.js';
@@ -68,15 +68,14 @@ export const DEFAULT_VIEW = (input, output, target) => {
         header: i18nString(UIStrings.noLayerInformation),
         text: i18nString(UIStrings.layerExplanation),
     })}</div>` : Lit.nothing}
-    ${input.error === 'webgl-disabled' ? html `<div>${widget(UI.EmptyWidget.EmptyWidget, {
+    ${input.error === 'webgl-disabled' ? html `<div><devtools-widget ${widget(UI.EmptyWidget.EmptyWidget, {
         header: i18nString(UIStrings.cantDisplayLayers),
         text: i18nString(UIStrings.webglSupportIsDisabledInYour),
-        extraElements: [
-            uiI18n.getFormatLocalizedString(str_, UIStrings.checkSForPossibleReasons, {
-                PH1: Link.create('chrome://gpu', undefined, undefined, 'about-gpu', 0, true),
-            }),
-        ],
-    })}</div>` : Lit.nothing}
+    })}>
+      ${uiI18n.getFormatLocalizedString(str_, UIStrings.checkSForPossibleReasons, {
+        PH1: Link.create('chrome://gpu', undefined, undefined, 'about-gpu', 0, true),
+    })}
+    </devtools-widget></div>` : Lit.nothing}
     <canvas
       tabindex="0"
       jslog=${VisualLogging.canvas('layers').track({
@@ -98,7 +97,8 @@ export const DEFAULT_VIEW = (input, output, target) => {
     })}></canvas>`, target, { container: { attributes: { jslog: `${VisualLogging.pane('layers-3d-view')}` } } });
     // clang-format onn
 };
-export class Layers3DView extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+const Layers3DViewBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class Layers3DView extends Layers3DViewBase {
     layerViewHost;
     transformController;
     lastSelection;
@@ -797,6 +797,17 @@ export var OutlineType;
     OutlineType["Selected"] = "selected";
     /* eslint-enable @typescript-eslint/naming-convention */
 })(OutlineType || (OutlineType = {}));
+export var Events;
+(function (Events) {
+    Events["PAINT_PROFILER_REQUESTED"] = "PaintProfilerRequested";
+    Events["SCALE_CHANGED"] = "ScaleChanged";
+})(Events || (Events = {}));
+export var ChromeTexture;
+(function (ChromeTexture) {
+    ChromeTexture[ChromeTexture["LEFT"] = 0] = "LEFT";
+    ChromeTexture[ChromeTexture["MIDDLE"] = 1] = "MIDDLE";
+    ChromeTexture[ChromeTexture["RIGHT"] = 2] = "RIGHT";
+})(ChromeTexture || (ChromeTexture = {}));
 export const FragmentShader = '' +
     'precision mediump float;\n' +
     'varying vec4 vColor;\n' +

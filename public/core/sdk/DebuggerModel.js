@@ -110,6 +110,12 @@ export function sortAndMergeRanges(locationRanges) {
     merged.push(prev);
     return merged;
 }
+export var StepMode;
+(function (StepMode) {
+    StepMode["STEP_INTO"] = "StepInto";
+    StepMode["STEP_OUT"] = "StepOut";
+    StepMode["STEP_OVER"] = "StepOver";
+})(StepMode || (StepMode = {}));
 export const WASM_SYMBOLS_PRIORITY = [
     "ExternalDWARF" /* Protocol.Debugger.DebugSymbolsType.ExternalDWARF */,
     "EmbeddedDWARF" /* Protocol.Debugger.DebugSymbolsType.EmbeddedDWARF */,
@@ -1141,8 +1147,11 @@ export class Scope {
     icon() {
         return undefined;
     }
+    empty() {
+        return Boolean(this.#payload.empty);
+    }
     extraProperties() {
-        if (this.#ordinal !== 0 || this.#type !== "local" /* Protocol.Debugger.ScopeType.Local */ || this.#callFrame.script.isWasm()) {
+        if (this !== this.#callFrame.localScope() || this.#callFrame.script.isWasm()) {
             return [];
         }
         const extraProperties = [];
@@ -1204,6 +1213,12 @@ export class DebuggerPausedDetails {
     }
 }
 SDKModel.register(DebuggerModel, { capabilities: 4 /* Capability.JS */, autostart: true });
+export var BreakpointType;
+(function (BreakpointType) {
+    BreakpointType["LOGPOINT"] = "LOGPOINT";
+    BreakpointType["CONDITIONAL_BREAKPOINT"] = "CONDITIONAL_BREAKPOINT";
+    BreakpointType["REGULAR_BREAKPOINT"] = "REGULAR_BREAKPOINT";
+})(BreakpointType || (BreakpointType = {}));
 export const LOGPOINT_SOURCE_URL = 'debugger://logpoint';
 export const COND_BREAKPOINT_SOURCE_URL = 'debugger://breakpoint';
 //# sourceMappingURL=DebuggerModel.js.map

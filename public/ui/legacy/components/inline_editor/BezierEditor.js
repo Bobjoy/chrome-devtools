@@ -10,7 +10,8 @@ import { AnimationTimingModel } from './AnimationTimingModel.js';
 import { AnimationTimingUI, PresetUI } from './AnimationTimingUI.js';
 import bezierEditorStyles from './bezierEditor.css.js';
 const PREVIEW_ANIMATION_DEBOUNCE_DELAY = 300;
-export class BezierEditor extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox) {
+const BezierEditorBase = Common.ObjectWrapper.eventMixin(UI.Widget.VBox);
+export class BezierEditor extends BezierEditorBase {
     model;
     previewElement;
     previewOnion;
@@ -195,6 +196,10 @@ export class BezierEditor extends Common.ObjectWrapper.eventMixin(UI.Widget.VBox
         }
     }
 }
+export var Events;
+(function (Events) {
+    Events["BEZIER_CHANGED"] = "BezierChanged";
+})(Events || (Events = {}));
 export const Presets = [
     [
         { name: 'linear', value: 'linear' },

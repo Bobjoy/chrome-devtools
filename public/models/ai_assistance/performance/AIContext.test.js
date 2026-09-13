@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import { assert } from 'chai';
-import { describeWithEnvironment } from '../../../testing/EnvironmentHelpers.js';
 import { TraceLoader } from '../../../testing/TraceLoader.js';
 import * as AiAssistance from '../ai_assistance.js';
-describeWithEnvironment('AgentFocus', function () {
+describe('AgentFocus', function () {
     it('lookupEvent catches all errors and returns null for invalid event keys', async function () {
         const parsedTrace = await TraceLoader.traceEngine(this, 'cls-single-frame.json.gz');
         const focus = AiAssistance.AIContext.AgentFocus.fromParsedTrace(parsedTrace);

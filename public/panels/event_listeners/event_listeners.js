@@ -4,13 +4,13 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/event_listeners/EventListenersUtils.js
+// ../../front_end/panels/event_listeners/EventListenersUtils.ts
 var EventListenersUtils_exports = {};
 __export(EventListenersUtils_exports, {
   frameworkEventListeners: () => frameworkEventListeners
 });
-import * as Common from "./../../core/common/common.js";
-import * as SDK from "./../../core/sdk/sdk.js";
+import * as Common from "../../core/common/common.js";
+import * as SDK from "../../core/sdk/sdk.js";
 async function frameworkEventListeners(object) {
   const domDebuggerModel = object.runtimeModel().target().model(SDK.DOMDebuggerModel.DOMDebuggerModel);
   if (!domDebuggerModel) {
@@ -57,7 +57,12 @@ async function frameworkEventListeners(object) {
       let location = null;
       let removeFunctionObject = null;
       const promises = [];
-      promises.push(listenerObject.callFunctionJSON(truncatePageEventListener, void 0).then(storeTruncatedListener));
+      promises.push(
+        listenerObject.callFunctionJSON(
+          truncatePageEventListener,
+          void 0
+        ).then(storeTruncatedListener)
+      );
       function truncatePageEventListener() {
         return { type: this.type, useCapture: this.useCapture, passive: this.passive, once: this.once };
       }
@@ -78,7 +83,9 @@ async function frameworkEventListeners(object) {
           once = truncatedListener.once;
         }
       }
-      promises.push(listenerObject.callFunction(handlerFunction).then(assertCallFunctionResult).then(storeOriginalHandler).then(toTargetFunction).then(storeFunctionWithDetails));
+      promises.push(
+        listenerObject.callFunction(handlerFunction).then(assertCallFunctionResult).then(storeOriginalHandler).then(toTargetFunction).then(storeFunctionWithDetails)
+      );
       function handlerFunction() {
         return this.handler || null;
       }
@@ -93,7 +100,9 @@ async function frameworkEventListeners(object) {
       function storeFunctionDetails(functionDetails) {
         location = functionDetails ? functionDetails.location : null;
       }
-      promises.push(listenerObject.callFunction(getRemoveFunction).then(assertCallFunctionResult).then(storeRemoveFunction));
+      promises.push(
+        listenerObject.callFunction(getRemoveFunction).then(assertCallFunctionResult).then(storeRemoveFunction)
+      );
       function getRemoveFunction() {
         return this.remove || null;
       }
@@ -122,8 +131,7 @@ async function frameworkEventListeners(object) {
           originalHandler,
           location,
           removeFunctionObject,
-          "FrameworkUser"
-          /* SDK.DOMDebuggerModel.EventListener.Origin.FRAMEWORK_USER */
+          SDK.DOMDebuggerModel.EventListener.Origin.FRAMEWORK_USER
         );
       }
     }
@@ -353,18 +361,18 @@ async function frameworkEventListeners(object) {
   }
 }
 
-// gen/front_end/panels/event_listeners/EventListenersView.js
+// ../../front_end/panels/event_listeners/EventListenersView.ts
 var EventListenersView_exports = {};
 __export(EventListenersView_exports, {
   EventListenersTreeElement: () => EventListenersTreeElement,
   EventListenersView: () => EventListenersView,
   ObjectEventListenerBar: () => ObjectEventListenerBar
 });
-import * as Common2 from "./../../core/common/common.js";
-import * as i18n from "./../../core/i18n/i18n.js";
-import * as SDK2 from "./../../core/sdk/sdk.js";
-import * as Buttons from "./../../ui/components/buttons/buttons.js";
-import * as ObjectUI from "./../../ui/legacy/components/object_ui/object_ui.js";
+import * as Common2 from "../../core/common/common.js";
+import * as i18n from "../../core/i18n/i18n.js";
+import * as SDK2 from "../../core/sdk/sdk.js";
+import * as Buttons from "../../ui/components/buttons/buttons.js";
+import * as ObjectUI from "../../ui/legacy/components/object_ui/object_ui.js";
 
 // gen/front_end/ui/legacy/components/object_ui/objectValue.css.js
 var objectValue_css_default = `/*
@@ -475,11 +483,11 @@ var objectValue_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./objectValue.css")} */`;
 
-// gen/front_end/panels/event_listeners/EventListenersView.js
-import * as Components from "./../../ui/legacy/components/utils/utils.js";
-import * as UI from "./../../ui/legacy/legacy.js";
-import { render } from "./../../ui/lit/lit.js";
-import * as VisualLogging from "./../../ui/visual_logging/visual_logging.js";
+// ../../front_end/panels/event_listeners/EventListenersView.ts
+import * as Components from "../../ui/legacy/components/utils/utils.js";
+import * as UI from "../../ui/legacy/legacy.js";
+import { render } from "../../ui/lit/lit.js";
+import * as VisualLogging from "../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/event_listeners/eventListenersView.css.js
 var eventListenersView_css_default = `/*
@@ -537,7 +545,7 @@ var eventListenersView_css_default = `/*
   color: var(--sys-color-primary);
   background-color: var(--sys-color-cdt-base-container);
   border-radius: 7px;
-  border: 1px solid var(--sys-color-tonal-outline);
+  border: var(--sys-size-1) solid var(--sys-color-tonal-outline);
   margin-left: 5px;
   display: block;
   flex-shrink: 0;
@@ -562,7 +570,7 @@ var eventListenersView_css_default = `/*
   justify-content: center;
 }
 
-.sources.panel .empty-view-scroller {
+.sources.panel .placeholder > .empty-widget-container {
   display: none;
 }
 
@@ -603,7 +611,7 @@ var eventListenersView_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./eventListenersView.css")} */`;
 
-// gen/front_end/panels/event_listeners/EventListenersView.js
+// ../../front_end/panels/event_listeners/EventListenersView.ts
 var UIStrings = {
   /**
    * @description Empty holder text content in Event Listeners view of the Event Listeners sidebar in the Sources panel.
@@ -636,7 +644,7 @@ var UIStrings = {
 };
 var str_ = i18n.i18n.registerUIStrings("panels/event_listeners/EventListenersView.ts", UIStrings);
 var i18nString = i18n.i18n.getLocalizedString.bind(void 0, str_);
-var EventListenersView = class extends UI.Widget.VBox {
+var EventListenersView = class _EventListenersView extends UI.Widget.VBox {
   changeCallback = () => {
   };
   enableDefaultTreeFocus = false;
@@ -651,7 +659,10 @@ var EventListenersView = class extends UI.Widget.VBox {
     this.registerRequiredCSS(eventListenersView_css_default);
     this.emptyHolder = this.element.createChild("div", "placeholder hidden");
     this.emptyHolder.createChild("span", "gray-info-message").textContent = i18nString(UIStrings.noEventListeners);
-    const emptyWidget = new UI.EmptyWidget.EmptyWidget(i18nString(UIStrings.noEventListeners), i18nString(UIStrings.eventListenersExplanation));
+    const emptyWidget = new UI.EmptyWidget.EmptyWidget(
+      i18nString(UIStrings.noEventListeners),
+      i18nString(UIStrings.eventListenersExplanation)
+    );
     emptyWidget.show(this.emptyHolder);
     this.treeOutline = new UI.TreeOutline.TreeOutlineInShadow();
     this.treeOutline.setComparator(EventListenersTreeElement.comparator);
@@ -677,77 +688,56 @@ var EventListenersView = class extends UI.Widget.VBox {
       this.showFrameworkListeners(this.filter.showFramework, this.filter.showPassive, this.filter.showBlocking);
     }
   }
+  static async #loadListeners(objects) {
+    return Map.groupBy(
+      (await Promise.all(objects.map(this.#loadListenersForObject))).flat(),
+      ({ listener }) => listener.type()
+    );
+  }
+  static async #loadListenersForObject(object) {
+    const domDebuggerModel = object.runtimeModel().target().model(SDK2.DOMDebuggerModel.DOMDebuggerModel);
+    const [eventListeners, frameworkEventListenersObject] = await Promise.all([domDebuggerModel?.eventListeners(object), frameworkEventListeners(object)]);
+    if (!eventListeners) {
+      return [];
+    }
+    const isInternal = await frameworkEventListenersObject.internalHandlers?.object().callFunctionJSON(
+      isInternalEventListener,
+      eventListeners.map((listener) => SDK2.RemoteObject.RemoteObject.toCallArgument(listener.handler()))
+    );
+    if (isInternal) {
+      for (let i = 0; i < eventListeners.length; ++i) {
+        if (isInternal[i]) {
+          eventListeners[i].markAsFramework();
+        }
+      }
+    }
+    return [eventListeners, frameworkEventListenersObject.eventListeners].flatMap(
+      (listeners) => listeners.map((listener) => ({ object, listener }))
+    );
+    function isInternalEventListener() {
+      const isInternal2 = [];
+      const internalHandlersSet = new Set(this);
+      for (const handler of arguments) {
+        isInternal2.push(internalHandlersSet.has(handler));
+      }
+      return isInternal2;
+    }
+  }
   async addObjects(objects) {
     const eventTypes = this.treeOutline.rootElement().children();
     for (const eventType of eventTypes) {
       eventType.removeChildren();
     }
     this.#linkifier.reset();
-    await Promise.all(objects.map((obj) => obj ? this.addObject(obj) : Promise.resolve()));
+    const listeners = await _EventListenersView.#loadListeners(objects.filter((o) => !!o));
+    for (const [type, groupedListeners] of listeners) {
+      const treeItem = this.getOrCreateTreeElementForType(type);
+      for (const { object, listener } of groupedListeners) {
+        treeItem.addObjectEventListener(listener, object);
+      }
+    }
     this.addEmptyHolderIfNeeded();
     this.eventListenersArrivedForTest();
-  }
-  addObject(object) {
-    let eventListeners;
-    let frameworkEventListenersObject = null;
-    const promises = [];
-    const domDebuggerModel = object.runtimeModel().target().model(SDK2.DOMDebuggerModel.DOMDebuggerModel);
-    if (domDebuggerModel) {
-      promises.push(domDebuggerModel.eventListeners(object).then(storeEventListeners));
-    }
-    promises.push(frameworkEventListeners(object).then(storeFrameworkEventListenersObject));
-    return Promise.all(promises).then(markInternalEventListeners).then(addEventListeners.bind(this));
-    function storeEventListeners(result) {
-      eventListeners = result;
-    }
-    function storeFrameworkEventListenersObject(result) {
-      frameworkEventListenersObject = result;
-    }
-    async function markInternalEventListeners() {
-      if (!frameworkEventListenersObject) {
-        return;
-      }
-      if (!frameworkEventListenersObject.internalHandlers) {
-        return;
-      }
-      return await frameworkEventListenersObject.internalHandlers.object().callFunctionJSON(isInternalEventListener, eventListeners.map(handlerArgument)).then(setIsInternal);
-      function handlerArgument(listener) {
-        return SDK2.RemoteObject.RemoteObject.toCallArgument(listener.handler());
-      }
-      function isInternalEventListener() {
-        const isInternal = [];
-        const internalHandlersSet = new Set(this);
-        for (const handler of arguments) {
-          isInternal.push(internalHandlersSet.has(handler));
-        }
-        return isInternal;
-      }
-      function setIsInternal(isInternal) {
-        if (!isInternal) {
-          return;
-        }
-        for (let i = 0; i < eventListeners.length; ++i) {
-          if (isInternal[i]) {
-            eventListeners[i].markAsFramework();
-          }
-        }
-      }
-    }
-    function addEventListeners() {
-      this.addObjectEventListeners(object, eventListeners);
-      if (frameworkEventListenersObject) {
-        this.addObjectEventListeners(object, frameworkEventListenersObject.eventListeners);
-      }
-    }
-  }
-  addObjectEventListeners(object, eventListeners) {
-    if (!eventListeners) {
-      return;
-    }
-    for (const eventListener of eventListeners) {
-      const treeItem = this.getOrCreateTreeElementForType(eventListener.type());
-      treeItem.addObjectEventListener(eventListener, object);
-    }
   }
   showFrameworkListeners(showFramework, showPassive, showBlocking) {
     const eventTypes = this.treeOutline.rootElement().children();
@@ -757,10 +747,10 @@ var EventListenersView = class extends UI.Widget.VBox {
         const objectListenerElement = listenerElement;
         const listenerOrigin = objectListenerElement.eventListener().origin();
         let hidden = false;
-        if (listenerOrigin === "FrameworkUser" && !showFramework) {
+        if (listenerOrigin === SDK2.DOMDebuggerModel.EventListener.Origin.FRAMEWORK_USER && !showFramework) {
           hidden = true;
         }
-        if (listenerOrigin === "Framework" && showFramework) {
+        if (listenerOrigin === SDK2.DOMDebuggerModel.EventListener.Origin.FRAMEWORK && showFramework) {
           hidden = true;
         }
         if (!showPassive && objectListenerElement.eventListener().passive()) {
@@ -848,25 +838,47 @@ var ObjectEventListenerBar = class extends UI.TreeOutline.TreeElement {
     const properties = [];
     const eventListener = this.#eventListener;
     const runtimeModel = eventListener.domDebuggerModel().runtimeModel();
-    properties.push(new ObjectUI.ObjectPropertiesSection.ObjectTreeNode(runtimeModel.createRemotePropertyFromPrimitiveValue("useCapture", eventListener.useCapture()), void 0, {
-      readOnly: false,
-      propertiesMode: 1
-    }));
-    properties.push(new ObjectUI.ObjectPropertiesSection.ObjectTreeNode(runtimeModel.createRemotePropertyFromPrimitiveValue("passive", eventListener.passive()), void 0, {
-      readOnly: false,
-      propertiesMode: 1
-    }));
-    properties.push(new ObjectUI.ObjectPropertiesSection.ObjectTreeNode(runtimeModel.createRemotePropertyFromPrimitiveValue("once", eventListener.once()), void 0, {
-      readOnly: false,
-      propertiesMode: 1
-    }));
-    if (typeof eventListener.handler() !== "undefined") {
-      properties.push(new ObjectUI.ObjectPropertiesSection.ObjectTreeNode(new SDK2.RemoteObject.RemoteObjectProperty("handler", eventListener.handler()), void 0, {
+    properties.push(new ObjectUI.ObjectPropertiesSection.ObjectTreeNode(
+      runtimeModel.createRemotePropertyFromPrimitiveValue("useCapture", eventListener.useCapture()),
+      void 0,
+      {
         readOnly: false,
-        propertiesMode: 1
-      }));
+        propertiesMode: ObjectUI.ObjectPropertiesSection.ObjectPropertiesMode.OWN_AND_INTERNAL_AND_INHERITED
+      }
+    ));
+    properties.push(new ObjectUI.ObjectPropertiesSection.ObjectTreeNode(
+      runtimeModel.createRemotePropertyFromPrimitiveValue("passive", eventListener.passive()),
+      void 0,
+      {
+        readOnly: false,
+        propertiesMode: ObjectUI.ObjectPropertiesSection.ObjectPropertiesMode.OWN_AND_INTERNAL_AND_INHERITED
+      }
+    ));
+    properties.push(new ObjectUI.ObjectPropertiesSection.ObjectTreeNode(
+      runtimeModel.createRemotePropertyFromPrimitiveValue("once", eventListener.once()),
+      void 0,
+      {
+        readOnly: false,
+        propertiesMode: ObjectUI.ObjectPropertiesSection.ObjectPropertiesMode.OWN_AND_INTERNAL_AND_INHERITED
+      }
+    ));
+    if (typeof eventListener.handler() !== "undefined") {
+      properties.push(new ObjectUI.ObjectPropertiesSection.ObjectTreeNode(
+        new SDK2.RemoteObject.RemoteObjectProperty("handler", eventListener.handler()),
+        void 0,
+        {
+          readOnly: false,
+          propertiesMode: ObjectUI.ObjectPropertiesSection.ObjectPropertiesMode.OWN_AND_INTERNAL_AND_INHERITED
+        }
+      ));
     }
-    ObjectUI.ObjectPropertiesSection.ObjectPropertyTreeElement.populateWithProperties(this, { properties }, true, true, void 0);
+    ObjectUI.ObjectPropertiesSection.ObjectPropertyTreeElement.populateWithProperties(
+      this,
+      { properties },
+      true,
+      true,
+      void 0
+    );
   }
   setTitle(object, linkifier) {
     const title = this.listItemElement.createChild("span", "event-listener-details");
@@ -893,8 +905,8 @@ var ObjectEventListenerBar = class extends UI.TreeOutline.TreeElement {
     if (this.#eventListener.canRemove()) {
       const deleteButton = new Buttons.Button.Button();
       deleteButton.data = {
-        variant: "icon",
-        size: "MICRO",
+        variant: Buttons.Button.Variant.ICON,
+        size: Buttons.Button.Size.MICRO,
         iconName: "bin",
         jslogContext: "delete-event-listener"
       };
@@ -917,7 +929,12 @@ var ObjectEventListenerBar = class extends UI.TreeOutline.TreeElement {
       title.appendChild(passiveButton);
     }
     const subtitle = title.createChild("span", "event-listener-tree-subtitle");
-    const linkElement = linkifier.linkifyRawLocation(this.#eventListener.location(), this.#eventListener.sourceURL(), void 0, { tabStop: true });
+    const linkElement = linkifier.linkifyRawLocation(
+      this.#eventListener.location(),
+      this.#eventListener.sourceURL(),
+      void 0,
+      { tabStop: true }
+    );
     subtitle.appendChild(linkElement);
     this.listItemElement.addEventListener("contextmenu", (event) => {
       const menu = new UI.ContextMenu.ContextMenu(event);
@@ -925,9 +942,17 @@ var ObjectEventListenerBar = class extends UI.TreeOutline.TreeElement {
         menu.appendApplicableItems(linkElement);
       }
       if (object.subtype === "node") {
-        menu.defaultSection().appendItem(i18nString(UIStrings.openInElementsPanel), () => Common2.Revealer.reveal(object), { jslogContext: "reveal-in-elements" });
+        menu.defaultSection().appendItem(
+          i18nString(UIStrings.openInElementsPanel),
+          () => Common2.Revealer.reveal(object),
+          { jslogContext: "reveal-in-elements" }
+        );
       }
-      menu.defaultSection().appendItem(i18nString(UIStrings.deleteEventListener), this.removeListener.bind(this), { disabled: !this.#eventListener.canRemove(), jslogContext: "delete-event-listener" });
+      menu.defaultSection().appendItem(
+        i18nString(UIStrings.deleteEventListener),
+        this.removeListener.bind(this),
+        { disabled: !this.#eventListener.canRemove(), jslogContext: "delete-event-listener" }
+      );
       menu.defaultSection().appendCheckboxItem(i18nString(UIStrings.passive), this.togglePassiveListener.bind(this), {
         checked: this.#eventListener.passive(),
         disabled: !this.#eventListener.canTogglePassive(),

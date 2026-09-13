@@ -3,12 +3,13 @@
 // found in the LICENSE file.
 import { assert } from 'chai';
 import { mockAidaClient } from '../../testing/AiAssistanceHelpers.js';
-import { describeWithEnvironment, } from '../../testing/EnvironmentHelpers.js';
+import { setupLocaleHooks } from '../../testing/LocaleHelpers.js';
 import { allThreadEntriesInTrace } from '../../testing/TraceHelpers.js';
 import { TraceLoader } from '../../testing/TraceLoader.js';
 import * as Trace from '../trace/trace.js';
 import { AICallTree, PerformanceAnnotations } from './ai_assistance.js';
-describeWithEnvironment('PerformanceAnnotations', () => {
+describe('PerformanceAnnotations', () => {
+    setupLocaleHooks();
     it('generates a label from the response', async function () {
         const annotationsGenerator = new PerformanceAnnotations.PerformanceAnnotations({
             aidaClient: mockAidaClient([[{

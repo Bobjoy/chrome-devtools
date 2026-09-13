@@ -2,6 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import * as Common from '../../core/common/common.js';
+export var Events;
+(function (Events) {
+    Events["COMMENT_THREADS_CHANGED"] = "CommentThreadsChanged";
+    Events["COMMENT_MODE_CHANGED"] = "CommentModeChanged";
+})(Events || (Events = {}));
 /**
  * Headless model managing comment thread data, CRUD operations, and comment mode.
  */
@@ -20,17 +25,22 @@ export class CommentManager extends Common.ObjectWrapper.ObjectWrapper {
         return this.#commentMode;
     }
     createCommentThread(anchor, text, author = 'DEVELOPER', changes) {
-        const id = `comment-${this.#nextId++}`;
+        const index = this.#nextId++;
+        const id = `comment-${index}`;
+        const comments = text ? [{
+                author,
+                text,
+                timestamp: Date.now(),
+            }] :
+            [];
         const thread = {
             id,
             anchor,
-            comments: [{
-                    author,
-                    text,
-                    timestamp: Date.now(),
-                }],
+            comments,
             status: 'ACTIVE',
+            transmitted: false,
             changes,
+            index,
         };
         this.#commentThreads.set(id, thread);
         this.dispatchEventToListeners("CommentThreadsChanged" /* Events.COMMENT_THREADS_CHANGED */, this.getCommentThreads());
@@ -41,6 +51,33 @@ export class CommentManager extends Common.ObjectWrapper.ObjectWrapper {
     }
     getCommentThreads() {
         return Array.from(this.#commentThreads.values());
+    }
+    takeComments() {
+        const threads = [];
+        for (const thread of this.#commentThreads.values()) {
+            if (!thread.transmitted) {
+                thread.transmitted = true;
+                threads.push(thread);
+            }
+        }
+        return threads;
+    }
+    resolveCommentThread(threadId, replyText) {
+        const thread = this.#commentThreads.get(threadId);
+        if (!thread) {
+            return false;
+        }
+        if (replyText && replyText.trim().length > 0) {
+            const comment = {
+                author: 'AGENT',
+                text: replyText.trim(),
+                timestamp: Date.now(),
+            };
+            thread.comments.push(comment);
+        }
+        thread.status = 'RESOLVED';
+        this.dispatchEventToListeners("CommentThreadsChanged" /* Events.COMMENT_THREADS_CHANGED */, this.getCommentThreads());
+        return true;
     }
     removeCommentThread(id) {
         if (!this.#commentThreads.has(id)) {

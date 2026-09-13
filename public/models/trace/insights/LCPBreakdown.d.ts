@@ -1,4 +1,5 @@
 import type * as Common from '../../../core/common/common.js';
+import * as i18n from '../../../core/i18n/i18n.js';
 import * as Handlers from '../handlers/handlers.js';
 import * as Types from '../types/types.js';
 import { type InsightModel, type InsightSetContext } from './types.js';
@@ -45,7 +46,7 @@ export declare const UIStrings: {
      */
     readonly noLcp: 'No LCP detected';
 };
-export declare const i18nString: (id: string, values?: import("../../../core/i18n/i18nTypes.js").Values | undefined) => Common.UIString.LocalizedString;
+export declare const i18nString: i18n.LocalizeString;
 /** A TraceWindow plus its UIString. **/
 export type Subpart = Types.Timing.TraceWindowMicro & {
     label: Common.UIString.LocalizedString;

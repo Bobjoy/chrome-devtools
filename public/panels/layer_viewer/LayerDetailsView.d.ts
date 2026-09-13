@@ -11,16 +11,8 @@ export interface ViewInput {
 }
 export type ViewOutput = undefined;
 export declare const DEFAULT_VIEW: (input: ViewInput, _output: ViewOutput, target: DocumentFragment) => void;
-declare const LayerDetailsView_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<EventTypes>;
-    addEventListener<T extends Events.PAINT_PROFILER_REQUESTED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<EventTypes, T>;
-    once<T extends Events.PAINT_PROFILER_REQUESTED>(eventType: T): Promise<EventTypes[T]>;
-    removeEventListener<T extends Events.PAINT_PROFILER_REQUESTED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: Events.PAINT_PROFILER_REQUESTED): boolean;
-    dispatchEventToListeners<T extends Events.PAINT_PROFILER_REQUESTED>(eventType: import("../../core/platform/TypescriptUtilities.js").NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.Widget<ShadowRoot>;
-export declare class LayerDetailsView extends LayerDetailsView_base implements LayerView {
+declare const LayerDetailsViewBase: Common.ObjectWrapper.EventMixin<EventTypes, typeof UI.Widget.Widget<ShadowRoot>>;
+export declare class LayerDetailsView extends LayerDetailsViewBase implements LayerView {
     private readonly layerViewHost;
     private layerSnapshotMap;
     private selection;

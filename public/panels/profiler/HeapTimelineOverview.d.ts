@@ -1,18 +1,9 @@
 import * as Common from '../../core/common/common.js';
-import * as Platform from '../../core/platform/platform.js';
 import type * as NetworkTimeCalculator from '../../models/network_time_calculator/network_time_calculator.js';
 import * as PerfUI from '../../ui/legacy/components/perf_ui/perf_ui.js';
 import * as UI from '../../ui/legacy/legacy.js';
-declare const HeapTimelineOverview_base: (new (...args: any[]) => {
-    __events: Common.ObjectWrapper.ObjectWrapper<EventTypes>;
-    addEventListener<T extends Events.IDS_RANGE_CHANGED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): Common.EventTarget.EventDescriptor<EventTypes, T>;
-    once<T extends Events.IDS_RANGE_CHANGED>(eventType: T): Promise<EventTypes[T]>;
-    removeEventListener<T extends Events.IDS_RANGE_CHANGED>(eventType: T, listener: (arg0: Common.EventTarget.EventTargetEvent<EventTypes[T], any>) => void, thisObject?: Object): void;
-    hasEventListeners(eventType: Events.IDS_RANGE_CHANGED): boolean;
-    dispatchEventToListeners<T extends Events.IDS_RANGE_CHANGED>(eventType: Platform.TypeScriptUtilities.NoUnion<T>, ...eventData: Common.EventTarget.EventPayloadToRestParameters<EventTypes, T>): void;
-    dispatchDOMEvent?(event: Event): void;
-}) & typeof UI.Widget.VBox;
-export declare class HeapTimelineOverview extends HeapTimelineOverview_base {
+declare const HeapTimelineOverviewBase: Common.ObjectWrapper.EventMixin<EventTypes, typeof UI.Widget.VBox>;
+export declare class HeapTimelineOverview extends HeapTimelineOverviewBase {
     readonly overviewCalculator: OverviewCalculator;
     overviewContainer: HTMLElement;
     overviewGrid: PerfUI.OverviewGrid.OverviewGrid;

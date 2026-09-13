@@ -7,9 +7,6 @@ import * as i18n from '../../core/i18n/i18n.js';
 import * as Platform from '../../core/platform/platform.js';
 import * as Root from '../../core/root/root.js';
 import * as SDK from '../../core/sdk/sdk.js';
-import * as TextUtils from '../../core/text_utils/text_utils.js';
-import * as Geometry from '../geometry/geometry.js';
-import * as Workspace from '../workspace/workspace.js';
 import { Horizontal, HorizontalSpanned, Vertical, VerticalSpanned, } from './EmulatedDevices.js';
 const UIStrings = {
     /**
@@ -111,20 +108,19 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
     #targetManager;
     #settings;
     #multitargetNetworkManager;
-    #fileManager;
-    constructor(targetManager, settings, multitargetNetworkManager, fileManager) {
+    #lastScreenshotBlobUrl = null;
+    constructor(targetManager, settings, multitargetNetworkManager) {
         super();
         this.#targetManager = targetManager;
         this.#settings = settings;
         this.#multitargetNetworkManager = multitargetNetworkManager;
-        this.#fileManager = fileManager;
         this.#screenRect = new Rect(0, 0, 1, 1);
         this.#visiblePageRect = new Rect(0, 0, 1, 1);
-        this.#availableSize = new Geometry.Size(1, 1);
-        this.#preferredSize = new Geometry.Size(1, 1);
+        this.#availableSize = new Platform.Size(1, 1);
+        this.#preferredSize = new Platform.Size(1, 1);
         this.#initialized = false;
         this.#autoFitScaleOnInitialize = false;
-        this.#appliedDeviceSize = new Geometry.Size(1, 1);
+        this.#appliedDeviceSize = new Platform.Size(1, 1);
         this.#appliedDeviceScaleFactor = globalThis.devicePixelRatio;
         this.#appliedUserAgentType = "Desktop" /* UA.DESKTOP */;
         this.#scaleSetting = this.#settings.createSetting('emulation.device-scale', 1);
@@ -174,9 +170,7 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
             // eslint-disable-next-line @devtools/no-instance-of-migrated-singletons
             Common.Settings.Settings.instance(), 
             // eslint-disable-next-line @devtools/no-instance-of-migrated-singletons
-            SDK.NetworkManager.MultitargetNetworkManager.instance(), 
-            // eslint-disable-next-line @devtools/no-instance-of-migrated-singletons
-            Workspace.FileManager.FileManager.instance()));
+            SDK.NetworkManager.MultitargetNetworkManager.instance()));
         }
         return Root.DevToolsContext.globalInstance().get(DeviceModeModel);
     }
@@ -203,6 +197,7 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
     }
     dispose() {
         this.#targetManager.unobserveModels(SDK.EmulationModel.EmulationModel, this);
+        this.#revokeLastScreenshotBlobUrl();
     }
     static widthValidator(value) {
         let valid = false;
@@ -310,6 +305,9 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
         }
         if (type !== Type.None) {
             Host.userMetrics.actionTaken(Host.UserMetrics.Action.DeviceModeEnabled);
+        }
+        else {
+            this.#revokeLastScreenshotBlobUrl();
         }
         this.calculateAndEmulate(resetPageScaleFactor);
     }
@@ -424,7 +422,7 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
             const resourceTreeModel = emulationModel.target().model(SDK.ResourceTreeModel.ResourceTreeModel);
             if (resourceTreeModel) {
                 resourceTreeModel.addEventListener(SDK.ResourceTreeModel.Events.FrameResized, this.onFrameChange, this);
-                resourceTreeModel.addEventListener(SDK.ResourceTreeModel.Events.FrameNavigated, this.onFrameChange, this);
+                resourceTreeModel.addEventListener(SDK.ResourceTreeModel.Events.FrameNavigated, this.onFrameNavigated, this);
             }
         }
         else {
@@ -434,8 +432,14 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
     modelRemoved(emulationModel) {
         if (this.#emulationModel === emulationModel) {
             emulationModel.removeEventListener("ScreenOrientationLockChanged" /* SDK.EmulationModel.EmulationModelEvents.SCREEN_ORIENTATION_LOCK_CHANGED */, this.onScreenOrientationLockChanged, this);
+            const resourceTreeModel = emulationModel.target().model(SDK.ResourceTreeModel.ResourceTreeModel);
+            if (resourceTreeModel) {
+                resourceTreeModel.removeEventListener(SDK.ResourceTreeModel.Events.FrameResized, this.onFrameChange, this);
+                resourceTreeModel.removeEventListener(SDK.ResourceTreeModel.Events.FrameNavigated, this.onFrameNavigated, this);
+            }
             this.#emulationModel = null;
             this.#screenOrientationLocked = false;
+            this.#revokeLastScreenshotBlobUrl();
             this.dispatchEventToListeners("Updated" /* Events.UPDATED */);
         }
     }
@@ -448,6 +452,12 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
             return;
         }
         this.showDeviceOverlaysIfApplicable(overlayModel);
+    }
+    onFrameNavigated(event) {
+        if (event.data.isMainFrame()) {
+            this.#revokeLastScreenshotBlobUrl();
+        }
+        this.onFrameChange();
     }
     onScreenOrientationLockChanged(event) {
         this.#screenOrientationLocked = event.data.locked;
@@ -554,7 +564,7 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
             else {
                 this.#appliedUserAgentType = this.#device.touch() ? "Desktop (touch)" /* UA.DESKTOP_TOUCH */ : "Desktop" /* UA.DESKTOP */;
             }
-            this.applyDeviceMetrics(new Geometry.Size(orientation.width, orientation.height), this.#scaleSetting.get(), this.#device.deviceScaleFactor, mobile, this.getScreenOrientationType(), resetPageScaleFactor);
+            this.applyDeviceMetrics(new Platform.Size(orientation.width, orientation.height), this.#scaleSetting.get(), this.#device.deviceScaleFactor, mobile, this.getScreenOrientationType(), resetPageScaleFactor);
             this.applyUserAgent(this.#device.userAgent, this.#device.userAgentMetadata);
             this.applyTouch(this.#device.touch(), mobile);
         }
@@ -577,7 +587,7 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
             const defaultDeviceScaleFactor = mobile ? defaultMobileScaleFactor : 0;
             this.#fitScale = this.calculateFitScale(this.#widthSetting.get(), this.#heightSetting.get());
             this.#appliedUserAgentType = this.#uaSetting.get();
-            this.applyDeviceMetrics(new Geometry.Size(screenWidth, screenHeight), this.#scaleSetting.get(), this.#deviceScaleFactorSetting.get() || defaultDeviceScaleFactor, mobile, screenHeight >= screenWidth ? "portraitPrimary" /* Protocol.Emulation.ScreenOrientationType.PortraitPrimary */ : "landscapePrimary" /* Protocol.Emulation.ScreenOrientationType.LandscapePrimary */, resetPageScaleFactor);
+            this.applyDeviceMetrics(new Platform.Size(screenWidth, screenHeight), this.#scaleSetting.get(), this.#deviceScaleFactorSetting.get() || defaultDeviceScaleFactor, mobile, screenHeight >= screenWidth ? "portraitPrimary" /* Protocol.Emulation.ScreenOrientationType.PortraitPrimary */ : "landscapePrimary" /* Protocol.Emulation.ScreenOrientationType.LandscapePrimary */, resetPageScaleFactor);
             this.applyUserAgent(mobile ? DeviceModeModel.defaultMobileUserAgent() : '', mobile ? DeviceModeModel.defaultMobileUserAgentMetadata() : null);
             this.applyTouch(this.#uaSetting.get() === "Desktop (touch)" /* UA.DESKTOP_TOUCH */ || this.#uaSetting.get() === "Mobile" /* UA.MOBILE */, this.#uaSetting.get() === "Mobile" /* UA.MOBILE */);
         }
@@ -801,48 +811,30 @@ export class DeviceModeModel extends Common.ObjectWrapper.ObjectWrapper {
     }
     async saveScreenshot(canvas) {
         const url = this.inspectedURL();
-        let baseName = '';
+        let fileName = '';
         if (url) {
-            const parsedURL = Common.ParsedURL.ParsedURL.fromString(url);
-            if (parsedURL) {
-                const host = parsedURL.host;
-                const path = parsedURL.path.replace(/^\/+/, '').replace(/\/+$/, '');
-                baseName = host;
-                if (path) {
-                    baseName += '-' + path.replaceAll('/', '-');
-                }
-                baseName = baseName.replace(/[^a-z0-9._-]/gi, '_');
-            }
+            const withoutFragment = Platform.StringUtilities.removeURLFragment(url);
+            fileName = Platform.StringUtilities.trimURL(withoutFragment);
         }
-        if (!baseName) {
-            baseName = 'screenshot';
-        }
-        let suffix = '';
         const device = this.device();
         if (device && this.type() === Type.Device) {
-            suffix += `(${device.title})`;
+            fileName += `(${device.title})`;
         }
-        suffix += '.png';
-        // The Windows save dialog / Chrome wrapper limits the suggested filename
-        // to 63 characters (due to a 64-byte null-terminated buffer).
-        // Capping the total filename length at 63 avoids truncation of the extension.
-        const maxBaseNameLength = Math.max(0, 63 - suffix.length);
-        baseName = Platform.StringUtilities.truncateToCodeUnitLength(baseName, maxBaseNameLength);
-        let fileName = baseName + suffix;
-        if (fileName.length > 63) {
-            fileName = Platform.StringUtilities.truncateToCodeUnitLength(fileName, 59) + '.png';
-        }
+        this.#revokeLastScreenshotBlobUrl();
+        /* eslint-disable-next-line @devtools/no-imperative-dom-api */
+        const link = document.createElement('a');
+        link.download = fileName + '.png';
         const blob = await canvas.convertToBlob({ type: 'image/png' });
-        const dataUrl = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
-        const base64 = dataUrl.slice(dataUrl.indexOf(',') + 1);
-        const contentData = new TextUtils.ContentData.ContentData(base64, /* isBase64=*/ true, 'image/png');
-        await this.#fileManager.save(fileName, contentData, /* forceSaveAs=*/ true);
-        this.#fileManager.close(fileName);
+        const blobUrl = URL.createObjectURL(blob);
+        this.#lastScreenshotBlobUrl = blobUrl;
+        link.href = blobUrl;
+        link.click();
+    }
+    #revokeLastScreenshotBlobUrl() {
+        if (this.#lastScreenshotBlobUrl) {
+            URL.revokeObjectURL(this.#lastScreenshotBlobUrl);
+            this.#lastScreenshotBlobUrl = null;
+        }
     }
     applyTouch(touchEnabled, mobile) {
         this.#touchEnabled = touchEnabled;
@@ -1014,6 +1006,10 @@ export class Rect {
         return new Rect(this.left + origin.left, this.top + origin.top, this.width, this.height);
     }
 }
+export var Events;
+(function (Events) {
+    Events["UPDATED"] = "Updated";
+})(Events || (Events = {}));
 export var Type;
 (function (Type) {
     /* eslint-disable @typescript-eslint/naming-convention -- Used by web_tests. */
@@ -1022,6 +1018,15 @@ export var Type;
     Type["Device"] = "Device";
     /* eslint-enable @typescript-eslint/naming-convention */
 })(Type || (Type = {}));
+export var UA;
+(function (UA) {
+    // TODO(crbug.com/1136655): This enum is used for both display and code functionality.
+    // we should refactor this so localization of these strings only happens for user display.
+    UA["MOBILE"] = "Mobile";
+    UA["MOBILE_NO_TOUCH"] = "Mobile (no touch)";
+    UA["DESKTOP"] = "Desktop";
+    UA["DESKTOP_TOUCH"] = "Desktop (touch)";
+})(UA || (UA = {}));
 export const MinDeviceSize = 50;
 export const MaxDeviceSize = 9999;
 export const MinDeviceScaleFactor = 0;

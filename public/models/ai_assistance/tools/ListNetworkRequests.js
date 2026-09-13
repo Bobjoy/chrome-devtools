@@ -4,9 +4,8 @@
 import * as Host from '../../../core/host/host.js';
 import * as i18n from '../../../core/i18n/i18n.js';
 import * as Logs from '../../logs/logs.js';
-import { isOpaqueOrigin } from '../AiOrigins.js';
-import { getRequestContextOrigin } from '../contexts/RequestContext.js';
 import { formatBytesToKb, seconds } from '../data_formatters/UnitFormatters.js';
+import { isOriginAllowedByLock, } from './Tool.js';
 const UIStringsNotTranslate = {
     listingNetworkRequests: 'Listing network requests',
 };
@@ -17,7 +16,7 @@ const lockedString = i18n.i18n.lockedString;
  */
 export class ListNetworkRequestsTool {
     name = "listNetworkRequests" /* ToolName.LIST_NETWORK_REQUESTS */;
-    description = 'Gives a list of network requests including URL, status code, and duration.';
+    description = 'Lists recorded network requests for the active origin, including request ID, URL, HTTP status code, duration, and transfer size.';
     #networkLog;
     constructor(networkLog) {
         this.#networkLog = networkLog;
@@ -43,9 +42,8 @@ export class ListNetworkRequestsTool {
         const requests = [];
         // A conversation is locked to an origin once the first query is made.
         // We only allow inspecting requests matching the conversation's established origin.
-        const origin = context.getEstablishedOrigin();
-        // Opaque origins are never allowed to be used as context.
-        if (origin && isOpaqueOrigin(origin)) {
+        const establishedOrigin = context.getEstablishedOrigin();
+        if (!establishedOrigin || establishedOrigin.isOpaque()) {
             return {
                 error: 'Opaque origin not allowed',
             };
@@ -55,12 +53,8 @@ export class ListNetworkRequestsTool {
         let hasCrossOriginRequest = false;
         const requestsToShow = [];
         for (const request of networkLog.requests()) {
-            // To prevent cross-origin prompt injection attacks, HAR-imported requests
-            // are assigned a virtual origin (e.g., `imported-har://${domain}`) rather than
-            // sharing the origin of live pages.
-            const requestOrigin = getRequestContextOrigin(request);
-            // If the conversation is locked to an origin, skip requests from other origins.
-            if (origin && requestOrigin !== origin) {
+            // If the request's initiator origin does not match the locked origin, skip it.
+            if (!isOriginAllowedByLock(establishedOrigin, request.initiatorSecurityOrigin())) {
                 hasCrossOriginRequest = true;
                 continue;
             }
@@ -74,11 +68,19 @@ export class ListNetworkRequestsTool {
             requestsToShow.push(request);
         }
         if (requests.length === 0) {
+            if (hasCrossOriginRequest) {
+                return {
+                    error: `No requests showing with origin ${establishedOrigin.siteId()}. Tell the user to start a new chat`,
+                };
+            }
             return {
-                // If there were requests but they were filtered out due to the origin lock,
-                // we ask the user to start a new chat so they can select a request from the other origin.
-                error: hasCrossOriginRequest ? `No requests showing with origin ${origin}. Tell the user to start a new chat` :
-                    'No requests recorded by DevTools',
+                result: JSON.stringify([]),
+                widgets: [{
+                        name: 'NETWORK_REQUESTS_LIST',
+                        data: {
+                            requests: [],
+                        },
+                    }],
             };
         }
         return {

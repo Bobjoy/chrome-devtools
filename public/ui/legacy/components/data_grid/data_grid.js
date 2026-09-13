@@ -4,9 +4,10 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/ui/legacy/components/data_grid/DataGrid.js
+// ../../front_end/ui/legacy/components/data_grid/DataGrid.ts
 var DataGrid_exports = {};
 __export(DataGrid_exports, {
+  Align: () => Align,
   CenterResizerOverBorderAdjustment: () => CenterResizerOverBorderAdjustment,
   ColumnResizePadding: () => ColumnResizePadding,
   CornerWidth: () => CornerWidth,
@@ -14,15 +15,18 @@ __export(DataGrid_exports, {
   DataGridImpl: () => DataGridImpl,
   DataGridNode: () => DataGridNode,
   DataGridWidget: () => DataGridWidget,
+  DataType: () => DataType,
+  Events: () => Events,
   Order: () => Order,
+  ResizeMethod: () => ResizeMethod,
   dataGridStyles: () => dataGrid_css_default
 });
-import * as Common from "./../../../../core/common/common.js";
-import * as Host from "./../../../../core/host/host.js";
-import * as i18n from "./../../../../core/i18n/i18n.js";
-import * as Platform2 from "./../../../../core/platform/platform.js";
-import * as VisualLogging from "./../../../visual_logging/visual_logging.js";
-import * as UI from "./../../legacy.js";
+import * as Common from "../../../../core/common/common.js";
+import * as Host from "../../../../core/host/host.js";
+import * as i18n from "../../../../core/i18n/i18n.js";
+import * as Platform2 from "../../../../core/platform/platform.js";
+import * as VisualLogging from "../../../visual_logging/visual_logging.js";
+import * as UI from "../../legacy.js";
 
 // gen/front_end/ui/legacy/components/data_grid/dataGrid.css.js
 var dataGrid_css_default = `/*
@@ -33,13 +37,13 @@ var dataGrid_css_default = `/*
 
 .data-grid {
   position: relative;
-  border: 1px solid var(--sys-color-divider) !important; /* stylelint-disable-line declaration-no-important */
+  border: var(--sys-size-1) solid var(--sys-color-divider) !important; /* stylelint-disable-line declaration-no-important */
   /* See: crbug.com/1152736 for color variable migration. */
   line-height: 120%;
 
   :focus-visible {
-    outline: 2px solid var(--sys-color-state-focus-ring);
-    outline-offset: -2px;
+    outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
+    outline-offset: calc(-1 * var(--sys-size-2));
   }
 }
 
@@ -67,8 +71,8 @@ var dataGrid_css_default = `/*
 }
 
 .data-grid .aria-live-label {
-  width: 1px;
-  height: 1px;
+  width: var(--sys-size-1);
+  height: var(--sys-size-1);
   overflow: hidden;
 }
 
@@ -77,7 +81,7 @@ var dataGrid_css_default = `/*
 }
 
 .data-grid .corner {
-  width: 14px;
+  width: var(--sys-size-7);
   padding-right: 0;
   padding-left: 0;
   border-left: 0 none transparent !important; /* stylelint-disable-line declaration-no-important */
@@ -110,7 +114,7 @@ var dataGrid_css_default = `/*
 
 .data-grid tbody tr {
   display: none;
-  height: 20px;
+  height: var(--sys-size-9);
 
   &:has(td.show-more) {
     height: var(--sys-size-13);
@@ -133,8 +137,8 @@ var dataGrid_css_default = `/*
   overflow: hidden;
   line-height: 18px;
   height: 18px;
-  border-left: 1px solid var(--sys-color-divider);
-  padding: 1px 4px;
+  border-left: var(--sys-size-1) solid var(--sys-color-divider);
+  padding: var(--sys-size-1) var(--sys-size-3);
 }
 
 .data-grid.auto-row-height tbody tr {
@@ -161,7 +165,7 @@ var dataGrid_css_default = `/*
 }
 
 .data-grid th {
-  border-bottom: 1px solid var(--sys-color-divider);
+  border-bottom: var(--sys-size-1) solid var(--sys-color-divider);
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
@@ -182,7 +186,7 @@ var dataGrid_css_default = `/*
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  min-width: 8px;
+  min-width: var(--sys-size-5);
 }
 
 .data-grid td.editing > div {
@@ -204,18 +208,18 @@ var dataGrid_css_default = `/*
 .data-grid th .sort-order-icon-container {
   min-width: 0;
   position: absolute;
-  top: 1px;
+  top: var(--sys-size-1);
   right: 0;
-  bottom: 1px;
+  bottom: var(--sys-size-1);
   display: flex;
   align-items: center;
 }
 
 .data-grid th .sort-order-icon {
-  margin-right: 4px;
-  margin-bottom: -2px;
-  width: 14px;
-  height: 14px;
+  margin-right: var(--sys-size-3);
+  margin-bottom: calc(-1 * var(--sys-size-2));
+  width: var(--sys-size-7);
+  height: var(--sys-size-7);
   display: none;
   background-color: var(--icon-default);
 }
@@ -232,7 +236,7 @@ var dataGrid_css_default = `/*
 
 .data-grid th.sort-ascending,
 .data-grid th.sort-descending {
-  padding-right: 14px;
+  padding-right: var(--sys-size-7);
 }
 
 .data-grid th.sortable:hover,
@@ -254,9 +258,9 @@ var dataGrid_css_default = `/*
   user-select: none;
   mask-image: var(--image-file-triangle-right);
   float: left;
-  width: 14px;
-  height: 14px;
-  margin-right: 2px;
+  width: var(--sys-size-7);
+  height: var(--sys-size-7);
+  margin-right: var(--sys-size-2);
   content: "";
   position: relative;
   top: 3px;
@@ -295,8 +299,8 @@ var dataGrid_css_default = `/*
 }
 
 .data-grid.no-selection:focus-visible {
-  outline: 2px solid var(--sys-color-state-focus-ring);
-  outline-offset: -2px;
+  outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
+  outline-offset: calc(-1 * var(--sys-size-2));
 }
 
 .data-grid:focus tbody tr.selected {
@@ -437,86 +441,84 @@ var dataGrid_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./dataGrid.css")} */`;
 
-// gen/front_end/ui/legacy/components/data_grid/DataGrid.js
+// ../../front_end/ui/legacy/components/data_grid/DataGrid.ts
 var UIStrings = {
   /**
-   * @description Accessible text label for expandible nodes in datagrids
+   * @description Accessible text label for expanded rows in a datagrid. Lowercase because it is inserted into the middle of another sentence.
    */
   expanded: "expanded",
   /**
-   * @description accessible name for expandible nodes in datagrids
+   * @description Accessible text label for collapsed rows in a datagrid. Lowercase because it is inserted into the middle of another sentence.
    */
   collapsed: "collapsed",
   /**
-   * @description Accessible text for datagrid
+   * @description Accessible text for a row in a datagrid announced by screen readers.
    * @example {Coverage grid} PH1
    * @example {expanded} PH2
    */
-  sRowS: "{PH1} Row {PH2}",
+  sRowS: "{PH1} row {PH2}",
   /**
-   * @description Number of rows in a grid
+   * @description Accessible text indicating the number of rows in a datagrid. Lowercase because it is inserted into the middle of another sentence.
    * @example {1} PH1
    */
-  rowsS: "Rows: {PH1}",
+  rowsS: "rows: {PH1}",
   /**
-   * @description Default Accessible Text for a Datagrid. This text is read to the user by a
-   * screenreader when they navigate to a table structure. The placeholders tell the user something
-   * brief about the table contents i.e. the topic and how much data is in it.
+   * @description Accessible text for a datagrid announced by screen readers when focusing the table without a selected row.
    * @example {Network} PH1
-   * @example {Rows: 27} PH2
+   * @example {rows: 27} PH2
    */
-  sSUseTheUpAndDownArrowKeysTo: "{PH1} {PH2}, use the up and down arrow keys to navigate and interact with the rows of the table; Use browse mode to read cell by cell.",
+  sSUseTheUpAndDownArrowKeysTo: "{PH1} {PH2}, use the up and down arrow keys to navigate and interact with the rows of the table; use browse mode to read cell by cell.",
   /**
-   * @description A context menu item in the Data Grid of a data grid
+   * @description Context menu item label to sort the rows of a datagrid by a column.
    */
   sortByString: "Sort by",
   /**
-   * @description A context menu item in data grids to reset the columns to their default weight
+   * @description Context menu item label in a datagrid to reset column widths to their default values.
    */
   resetColumns: "Reset columns",
   /**
-   * @description A context menu item in data grids to list header options.
+   * @description Context menu submenu label in a datagrid containing column header options.
    */
   headerOptions: "Header options",
   /**
-   * @description Text to refresh the page
+   * @description Context menu item label in a datagrid to refresh the table contents.
    */
   refresh: "Refresh",
   /**
-   * @description A context menu item in the Data Grid of a data grid
+   * @description Context menu item label in a datagrid to add a new row.
    */
   addNew: "Add new",
   /**
-   * @description A context menu item in the Data Grid of a data grid
+   * @description Context menu item label in a datagrid to edit a specific column value in a row.
    * @example {pattern} PH1
    */
   editS: 'Edit "{PH1}"',
   /**
-   * @description Text to delete something
+   * @description Context menu item label in a datagrid to delete a selected row.
    */
   delete: "Delete",
   /**
-   * @description Depth of a node in the datagrid
+   * @description Accessible text indicating the depth level of a row in a hierarchical datagrid.
    * @example {1} PH1
    */
-  levelS: "level {PH1}",
+  levelS: "Level {PH1}",
   /**
-   * @description Text exposed to screen readers on checked items.
+   * @description Accessible text announced by screen readers for checked boolean cells in a datagrid.
    */
-  checked: "checked",
+  checked: "Checked",
   /**
-   * @description Accessible text indicating an empty row is created.
+   * @description Accessible text announced by screen readers when a new editable empty row is added to a datagrid.
    */
-  emptyRowCreated: "An empty table row has been created. You may double click or use context menu to edit.",
+  emptyRowCreated: "An empty table row was added. Double-click or use the context menu to edit.",
   /**
-   * @description Text for screen reader to announce when focusing on a sortable column in data grid.
+   * @description Accessible text announced by screen readers when focusing on a sortable column header in a datagrid.
    * @example {ascending} PH1
    */
-  enterToSort: "Column sort state: {PH1}. Press enter to apply sorting filter",
+  enterToSort: "Column sort state: {PH1}. Press enter to sort.",
   /**
-   * @description Label for sortable column headers.
+   * @description Accessible label for sortable column headers in a datagrid.
    */
-  sortableColumn: "Sortable column. Press enter to apply sorting filter"
+  sortableColumn: "Sortable column. Press enter to sort."
 };
 var str_ = i18n.i18n.registerUIStrings("ui/legacy/components/data_grid/DataGrid.ts", UIStrings);
 var i18nString = i18n.i18n.getLocalizedString.bind(void 0, str_);
@@ -617,7 +619,7 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
     this.resizers = [];
     this.columnWidthsInitialized = false;
     this.cornerWidth = CornerWidth;
-    this.resizeMethod = "nearest";
+    this.resizeMethod = "nearest" /* NEAREST */;
     this.headerContextMenuCallback = null;
     this.rowContextMenuCallback = null;
     this.tableContextMenuCallback = null;
@@ -655,7 +657,7 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
     if (parentElement) {
       gridNode = this.elementToDataGridNode.get(parentElement);
     }
-    if (column.dataType === "Boolean") {
+    if (column.dataType === "Boolean" /* BOOLEAN */) {
       _DataGridImpl.setElementBoolean(element, Boolean(value), gridNode);
     } else if (value !== null) {
       _DataGridImpl.setElementText(element, value, Boolean(column.longText), gridNode);
@@ -768,7 +770,10 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
       this.disclosureColumnId = columnId;
     }
     const cell = document.createElement("th");
-    cell.setAttribute("jslog", `${VisualLogging.tableHeader().track({ click: column.sortable, resize: true }).context(Platform2.StringUtilities.toKebabCase(columnId))}`);
+    cell.setAttribute(
+      "jslog",
+      `${VisualLogging.tableHeader().track({ click: column.sortable, resize: true }).context(Platform2.StringUtilities.toKebabCase(columnId))}`
+    );
     cell.className = columnId + "-column";
     cell.setAttribute("tabindex", "0");
     cell.setAttribute("role", "columnheader");
@@ -857,10 +862,7 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
     this.topFillerRow.style.height = topPx;
     this.bottomFillerRow.style.height = bottomPx;
     if (!isConstructorTime) {
-      this.dispatchEventToListeners(
-        "PaddingChanged"
-        /* Events.PADDING_CHANGED */
-      );
+      this.dispatchEventToListeners("PaddingChanged" /* PADDING_CHANGED */);
     }
   }
   setRootNode(rootNode) {
@@ -913,7 +915,7 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
       element.textContent = elementLongText;
     }
     const column = this.visibleColumnsArray[cellIndex];
-    if (column.dataType === "Boolean") {
+    if (column.dataType === "Boolean" /* BOOLEAN */) {
       const checkboxElement = UI.UIUtils.CheckboxLabel.create(void 0, node.data[column.id]);
       UI.ARIAUtils.setLabel(checkboxElement, column.title || "");
       let hasChanged = false;
@@ -928,7 +930,13 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
         if (event.key === "Tab") {
           event.consume(true);
           hasChanged = true;
-          return this.editingCommitted(element, checkboxElement.checked, initialValue, void 0, event.shiftKey ? "backward" : "forward");
+          return this.editingCommitted(
+            element,
+            checkboxElement.checked,
+            initialValue,
+            void 0,
+            event.shiftKey ? "backward" : "forward"
+          );
         }
         if (event.key === " ") {
           event.consume(true);
@@ -1092,16 +1100,16 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
     return nodeToColumnIdMap.get(this.sortColumnCell) || null;
   }
   sortOrder() {
-    if (!this.sortColumnCell || this.sortColumnCell.classList.contains(Order.Ascending)) {
-      return Order.Ascending;
+    if (!this.sortColumnCell || this.sortColumnCell.classList.contains("sort-ascending" /* Ascending */)) {
+      return "sort-ascending" /* Ascending */;
     }
-    if (this.sortColumnCell.classList.contains(Order.Descending)) {
-      return Order.Descending;
+    if (this.sortColumnCell.classList.contains("sort-descending" /* Descending */)) {
+      return "sort-descending" /* Descending */;
     }
     return null;
   }
   isSortOrderAscending() {
-    return !this.sortColumnCell || this.sortColumnCell.classList.contains(Order.Ascending);
+    return !this.sortColumnCell || this.sortColumnCell.classList.contains("sort-ascending" /* Ascending */);
   }
   autoSizeWidths(widths, minPercent, maxPercent) {
     if (minPercent) {
@@ -1340,7 +1348,13 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
         resizer = document.createElement("div");
         elementToIndexMap.set(resizer, i);
         resizer.classList.add("data-grid-resizer");
-        UI.UIUtils.installDragHandle(resizer, this.startResizerDragging.bind(this), this.resizerDragging.bind(this), this.endResizerDragging.bind(this), "col-resize");
+        UI.UIUtils.installDragHandle(
+          resizer,
+          this.startResizerDragging.bind(this),
+          this.resizerDragging.bind(this),
+          this.endResizerDragging.bind(this),
+          "col-resize"
+        );
         this.element.appendChild(resizer);
         resizers.push(resizer);
       }
@@ -1444,7 +1458,7 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
         }
         this.startEditing(selectedNodeElement.children[this.nextEditableColumn(-1)]);
       } else {
-        this.dispatchEventToListeners("OpenedNode", this.selectedNode);
+        this.dispatchEventToListeners("OpenedNode" /* OPENED_NODE */, this.selectedNode);
       }
     }
     if (nextSelectedNode) {
@@ -1537,12 +1551,12 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
     if (!nodeToColumnIdMap.has(cell) || !cell.classList.contains("sortable")) {
       return;
     }
-    let sortOrder = Order.Ascending;
+    let sortOrder = "sort-ascending" /* Ascending */;
     if (cell === this.sortColumnCell && this.isSortOrderAscending()) {
-      sortOrder = Order.Descending;
+      sortOrder = "sort-descending" /* Descending */;
     }
     if (this.sortColumnCell) {
-      this.sortColumnCell.classList.remove(Order.Ascending, Order.Descending);
+      this.sortColumnCell.classList.remove("sort-ascending" /* Ascending */, "sort-descending" /* Descending */);
       this.sortColumnCell.removeAttribute("aria-sort");
     }
     this.sortColumnCell = cell;
@@ -1550,14 +1564,11 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
     const ariaLabel = this.isSortOrderAscending() ? "ascending" : "descending";
     cell.setAttribute("aria-sort", ariaLabel);
     UI.ARIAUtils.LiveAnnouncer.alert(i18nString(UIStrings.enterToSort, { PH1: ariaLabel || "" }));
-    this.dispatchEventToListeners(
-      "SortingChanged"
-      /* Events.SORTING_CHANGED */
-    );
+    this.dispatchEventToListeners("SortingChanged" /* SORTING_CHANGED */);
   }
   markColumnAsSortedBy(columnId, sortOrder) {
     if (this.sortColumnCell) {
-      this.sortColumnCell.classList.remove(Order.Ascending, Order.Descending);
+      this.sortColumnCell.classList.remove("sort-ascending" /* Ascending */, "sort-descending" /* Descending */);
     }
     this.sortColumnCell = this.dataTableHeaders[columnId];
     this.sortColumnCell.classList.add(sortOrder);
@@ -1585,7 +1596,7 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
       }
     } else {
       gridNode.select();
-      this.dispatchEventToListeners("OpenedNode", gridNode);
+      this.dispatchEventToListeners("OpenedNode" /* OPENED_NODE */, gridNode);
     }
   }
   setTableContextMenuCallback(callback) {
@@ -1609,22 +1620,32 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
     const sortableVisibleColumns = this.visibleColumnsArray.filter((column) => {
       return column.sortable && column.title;
     });
-    const sortableHiddenColumns = this.columnsArray.filter((column) => sortableVisibleColumns.indexOf(column) === -1 && column.allowInSortByEvenWhenHidden);
+    const sortableHiddenColumns = this.columnsArray.filter(
+      (column) => sortableVisibleColumns.indexOf(column) === -1 && column.allowInSortByEvenWhenHidden
+    );
     const sortableColumns = [...sortableVisibleColumns, ...sortableHiddenColumns];
     if (sortableColumns.length > 0) {
       const sortMenu = contextMenu.defaultSection().appendSubMenuItem(i18nString(UIStrings.sortByString), false, "sort-by");
       for (const column of sortableColumns) {
         const headerCell = this.dataTableHeaders[column.id];
-        sortMenu.defaultSection().appendItem(column.title, this.sortByColumnHeaderCell.bind(this, headerCell), {
-          jslogContext: Platform2.StringUtilities.toKebabCase(column.id)
-        });
+        sortMenu.defaultSection().appendItem(
+          column.title,
+          this.sortByColumnHeaderCell.bind(this, headerCell),
+          {
+            jslogContext: Platform2.StringUtilities.toKebabCase(column.id)
+          }
+        );
       }
     }
     if (target.isSelfOrDescendant(this.#dataTableHead)) {
       if (this.headerContextMenuCallback) {
         this.headerContextMenuCallback(contextMenu);
       }
-      contextMenu.defaultSection().appendItem(i18nString(UIStrings.resetColumns), this.resetColumnWeights.bind(this), { jslogContext: "reset-columns" });
+      contextMenu.defaultSection().appendItem(
+        i18nString(UIStrings.resetColumns),
+        this.resetColumnWeights.bind(this),
+        { jslogContext: "reset-columns" }
+      );
       void contextMenu.show();
       return;
     }
@@ -1632,7 +1653,11 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
     if (this.headerContextMenuCallback) {
       this.headerContextMenuCallback(headerSubMenu);
     }
-    headerSubMenu.defaultSection().appendItem(i18nString(UIStrings.resetColumns), this.resetColumnWeights.bind(this), { jslogContext: "reset-columns" });
+    headerSubMenu.defaultSection().appendItem(
+      i18nString(UIStrings.resetColumns),
+      this.resetColumnWeights.bind(this),
+      { jslogContext: "reset-columns" }
+    );
     const isContextMenuKey = event.button === 0;
     const gridNode = isContextMenuKey ? this.selectedNode : this.dataGridNodeFromNode(target);
     const selectedNodeElement = this.selectedNode?.existingElement();
@@ -1646,31 +1671,51 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
       }
     }
     if (this.refreshCallback && (!gridNode || gridNode !== this.creationNode)) {
-      contextMenu.defaultSection().appendItem(i18nString(UIStrings.refresh), this.refreshCallback.bind(this), { jslogContext: "refresh" });
+      contextMenu.defaultSection().appendItem(
+        i18nString(UIStrings.refresh),
+        this.refreshCallback.bind(this),
+        { jslogContext: "refresh" }
+      );
     }
     if (gridNode && gridNode.selectable && !gridNode.isEventWithinDisclosureTriangle(event)) {
       if (this.editCallback) {
         if (gridNode === this.creationNode) {
           const firstEditColumnIndex = this.nextEditableColumn(-1);
           const tableCellElement = gridNode.element().children[firstEditColumnIndex];
-          contextMenu.defaultSection().appendItem(i18nString(UIStrings.addNew), this.startEditing.bind(this, tableCellElement), { jslogContext: "add-new" });
+          contextMenu.defaultSection().appendItem(
+            i18nString(UIStrings.addNew),
+            this.startEditing.bind(this, tableCellElement),
+            { jslogContext: "add-new" }
+          );
         } else if (isContextMenuKey) {
           const firstEditColumnIndex = this.nextEditableColumn(-1);
           if (firstEditColumnIndex > -1) {
             const firstColumn = this.visibleColumnsArray[firstEditColumnIndex];
             if (firstColumn && this.isColumnEditable(firstColumn.id)) {
-              contextMenu.defaultSection().appendItem(i18nString(UIStrings.editS, { PH1: String(firstColumn.title) }), this.startEditingColumnOfDataGridNode.bind(this, gridNode, firstEditColumnIndex), { jslogContext: "edit" });
+              contextMenu.defaultSection().appendItem(
+                i18nString(UIStrings.editS, { PH1: String(firstColumn.title) }),
+                this.startEditingColumnOfDataGridNode.bind(this, gridNode, firstEditColumnIndex),
+                { jslogContext: "edit" }
+              );
             }
           }
         } else {
           const columnId = this.columnIdFromNode(target);
           if (columnId && this.isColumnEditable(columnId)) {
-            contextMenu.defaultSection().appendItem(i18nString(UIStrings.editS, { PH1: String(this.columns[columnId].title) }), this.startEditing.bind(this, target), { jslogContext: "edit" });
+            contextMenu.defaultSection().appendItem(
+              i18nString(UIStrings.editS, { PH1: String(this.columns[columnId].title) }),
+              this.startEditing.bind(this, target),
+              { jslogContext: "edit" }
+            );
           }
         }
       }
       if (this.deleteCallback && gridNode !== this.creationNode) {
-        contextMenu.defaultSection().appendItem(i18nString(UIStrings.delete), this.deleteCallback.bind(this, gridNode), { jslogContext: "delete" });
+        contextMenu.defaultSection().appendItem(
+          i18nString(UIStrings.delete),
+          this.deleteCallback.bind(this, gridNode),
+          { jslogContext: "delete" }
+        );
       }
       if (this.rowContextMenuCallback) {
         this.rowContextMenuCallback(contextMenu, gridNode);
@@ -1721,9 +1766,9 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
     for (let i = 0; i < leftCellIndex; i++) {
       leftEdgeOfPreviousColumn += this.getPreferredWidth(i);
     }
-    if (this.resizeMethod === "last") {
+    if (this.resizeMethod === "last" /* LAST */) {
       rightCellIndex = this.resizers.length;
-    } else if (this.resizeMethod === "first") {
+    } else if (this.resizeMethod === "first" /* FIRST */) {
       leftEdgeOfPreviousColumn += this.getPreferredWidth(leftCellIndex) - this.getPreferredWidth(0);
       leftCellIndex = 0;
     }
@@ -1799,13 +1844,40 @@ var DataGridImpl = class _DataGridImpl extends Common.ObjectWrapper.ObjectWrappe
   }
 };
 var CornerWidth = 14;
-var Order;
-(function(Order2) {
+var Events = /* @__PURE__ */ ((Events3) => {
+  Events3["SELECTED_NODE"] = "SelectedNode";
+  Events3["DESELECTED_NODE"] = "DeselectedNode";
+  Events3["OPENED_NODE"] = "OpenedNode";
+  Events3["SORTING_CHANGED"] = "SortingChanged";
+  Events3["PADDING_CHANGED"] = "PaddingChanged";
+  Events3["EXPANDED_NODE"] = "ExpandedNode";
+  Events3["COLLAPSED_NODE"] = "CollapsedNode";
+  return Events3;
+})(Events || {});
+var Order = /* @__PURE__ */ ((Order2) => {
   Order2["Ascending"] = "sort-ascending";
   Order2["Descending"] = "sort-descending";
-})(Order || (Order = {}));
+  return Order2;
+})(Order || {});
+var Align = /* @__PURE__ */ ((Align2) => {
+  Align2["CENTER"] = "center";
+  Align2["RIGHT"] = "right";
+  return Align2;
+})(Align || {});
+var DataType = /* @__PURE__ */ ((DataType2) => {
+  DataType2["STRING"] = "String";
+  DataType2["BOOLEAN"] = "Boolean";
+  DataType2["NUMBER"] = "Number";
+  return DataType2;
+})(DataType || {});
 var ColumnResizePadding = 30;
 var CenterResizerOverBorderAdjustment = 3;
+var ResizeMethod = /* @__PURE__ */ ((ResizeMethod2) => {
+  ResizeMethod2["NEAREST"] = "nearest";
+  ResizeMethod2["FIRST"] = "first";
+  ResizeMethod2["LAST"] = "last";
+  return ResizeMethod2;
+})(ResizeMethod || {});
 var DataGridNode = class {
   elementInternal = null;
   expandedInternal = false;
@@ -1897,7 +1969,7 @@ var DataGridNode = class {
     for (let i = 0; i < columnsArray.length; ++i) {
       const column = columnsArray[i];
       const cell = element.appendChild(this.createCell(column.id));
-      if (column.dataType === "Boolean" && this.data[column.id] === true) {
+      if (column.dataType === "Boolean" /* BOOLEAN */ && this.data[column.id] === true) {
         this.setCellAccessibleName(i18nString(UIStrings.checked), cell, column.id);
       }
       accessibleTextArray.push(`${column.title}: ${this.cellAccessibleTextMap.get(column.id) || cell.textContent}`);
@@ -2068,12 +2140,15 @@ var DataGridNode = class {
     nodeToColumnIdMap.set(cell, columnId);
     if (this.dataGrid) {
       const editableCell = this.dataGrid.isColumnEditable(columnId);
-      cell.setAttribute("jslog", `${VisualLogging.tableCell().track({
-        click: true,
-        keydown: editableCell ? "Enter|Space|Escape" : false,
-        dblclick: editableCell,
-        change: editableCell
-      }).context(Platform2.StringUtilities.toKebabCase(columnId))}`);
+      cell.setAttribute(
+        "jslog",
+        `${VisualLogging.tableCell().track({
+          click: true,
+          keydown: editableCell ? "Enter|Space|Escape" : false,
+          dblclick: editableCell,
+          change: editableCell
+        }).context(Platform2.StringUtilities.toKebabCase(columnId))}`
+      );
       const alignment = this.dataGrid.columns[columnId].align;
       if (alignment) {
         cell.classList.add(alignment);
@@ -2233,7 +2308,7 @@ var DataGridNode = class {
     for (let i = 0; i < this.children.length; ++i) {
       this.children[i].revealed = false;
     }
-    this.dataGrid?.dispatchEventToListeners("CollapsedNode", this);
+    this.dataGrid?.dispatchEventToListeners("CollapsedNode" /* COLLAPSED_NODE */, this);
   }
   collapseRecursively() {
     let item = this;
@@ -2281,7 +2356,7 @@ var DataGridNode = class {
       this.dataGrid.announceSelectedGridNode();
     }
     this.expandedInternal = true;
-    this.dataGrid?.dispatchEventToListeners("ExpandedNode", this);
+    this.dataGrid?.dispatchEventToListeners("ExpandedNode" /* EXPANDED_NODE */, this);
   }
   expandRecursively() {
     let item = this;
@@ -2319,7 +2394,7 @@ var DataGridNode = class {
       this.dataGrid.announceSelectedGridNode();
     }
     if (!supressSelectedEvent) {
-      this.dataGrid.dispatchEventToListeners("SelectedNode", this);
+      this.dataGrid.dispatchEventToListeners("SelectedNode" /* SELECTED_NODE */, this);
     }
   }
   revealAndSelect() {
@@ -2340,10 +2415,7 @@ var DataGridNode = class {
       this.dataGrid.setHasSelection(false);
     }
     if (!supressDeselectedEvent) {
-      this.dataGrid.dispatchEventToListeners(
-        "DeselectedNode"
-        /* Events.DESELECTED_NODE */
-      );
+      this.dataGrid.dispatchEventToListeners("DeselectedNode" /* DESELECTED_NODE */);
     }
   }
   traverseNextNode(skipHidden, stayWithin, dontPopulate, info) {
@@ -2487,17 +2559,21 @@ var DataGridWidget = class extends UI.Widget.VBox {
   }
 };
 
-// gen/front_end/ui/legacy/components/data_grid/ViewportDataGrid.js
+// ../../front_end/ui/legacy/components/data_grid/ViewportDataGrid.ts
 var ViewportDataGrid_exports = {};
 __export(ViewportDataGrid_exports, {
+  Events: () => Events2,
   ViewportDataGrid: () => ViewportDataGrid,
   ViewportDataGridNode: () => ViewportDataGridNode
 });
-import * as Common2 from "./../../../../core/common/common.js";
-import * as Platform3 from "./../../../../core/platform/platform.js";
-import * as RenderCoordinator from "./../../../components/render_coordinator/render_coordinator.js";
+import * as Common2 from "../../../../core/common/common.js";
+import * as Platform3 from "../../../../core/platform/platform.js";
+import * as RenderCoordinator from "../../../components/render_coordinator/render_coordinator.js";
 var nextId = 0;
-var ViewportDataGrid = class extends Common2.ObjectWrapper.eventMixin(DataGridImpl) {
+var ViewportDataGridBase = Common2.ObjectWrapper.eventMixin(
+  DataGridImpl
+);
+var ViewportDataGrid = class extends ViewportDataGridBase {
   onScrollBound;
   visibleNodes;
   /**
@@ -2599,7 +2675,10 @@ var ViewportDataGrid = class extends Common2.ObjectWrapper.eventMixin(DataGridIm
   testNodeWithFilter(node, filter) {
     let rowMatchesFilter = false;
     const { key, text, negative, regex } = filter;
-    const dataToTest = this.getStringifiedCellValues(node.data, key ? new Set(key.split(",")) : new Set(this.visibleColumnsArray.map((column) => column.id)));
+    const dataToTest = this.getStringifiedCellValues(
+      node.data,
+      key ? new Set(key.split(",")) : new Set(this.visibleColumnsArray.map((column) => column.id))
+    );
     if (regex) {
       rowMatchesFilter = regex.test(dataToTest);
     } else if (text) {
@@ -2716,10 +2795,7 @@ var ViewportDataGrid = class extends Common2.ObjectWrapper.eventMixin(DataGridIm
       this.updateWidths();
     }
     this.visibleNodes = visibleNodes;
-    this.dispatchEventToListeners(
-      "ViewportCalculated"
-      /* Events.VIEWPORT_CALCULATED */
-    );
+    this.dispatchEventToListeners("ViewportCalculated" /* VIEWPORT_CALCULATED */);
   }
   revealViewportNode(node) {
     const nodes = this.filteredNodes();
@@ -2746,6 +2822,10 @@ var ViewportDataGrid = class extends Common2.ObjectWrapper.eventMixin(DataGridIm
     return this.rootNode().flatChildren().filter(this.testNodeWithFilters.bind(this));
   }
 };
+var Events2 = /* @__PURE__ */ ((Events3) => {
+  Events3["VIEWPORT_CALCULATED"] = "ViewportCalculated";
+  return Events3;
+})(Events2 || {});
 var ViewportDataGridNode = class extends DataGridNode {
   stale;
   flatNodes;
@@ -2891,7 +2971,7 @@ var ViewportDataGridNode = class extends DataGridNode {
       this.dataGrid.announceSelectedGridNode();
     }
     this.dataGrid.scheduleUpdateStructure();
-    this.dataGrid?.dispatchEventToListeners("CollapsedNode", this);
+    this.dataGrid?.dispatchEventToListeners("CollapsedNode" /* COLLAPSED_NODE */, this);
   }
   expand() {
     if (this.expanded) {
@@ -2937,13 +3017,13 @@ var ViewportDataGridNode = class extends DataGridNode {
   }
 };
 
-// gen/front_end/ui/legacy/components/data_grid/SortableDataGrid.js
+// ../../front_end/ui/legacy/components/data_grid/SortableDataGrid.ts
 var SortableDataGrid_exports = {};
 __export(SortableDataGrid_exports, {
   SortableDataGrid: () => SortableDataGrid,
   SortableDataGridNode: () => SortableDataGridNode
 });
-import * as Platform4 from "./../../../../core/platform/platform.js";
+import * as Platform4 from "../../../../core/platform/platform.js";
 var SortableDataGrid = class _SortableDataGrid extends ViewportDataGrid {
   sortingFunction;
   constructor(dataGridParameters) {
@@ -3005,7 +3085,7 @@ var SortableDataGrid = class _SortableDataGrid extends ViewportDataGrid {
     for (let i = 0; i < length; ++i) {
       rootNode.appendChild(nodes[i]);
     }
-    dataGrid.addEventListener("SortingChanged", sortDataGrid);
+    dataGrid.addEventListener("SortingChanged" /* SORTING_CHANGED */, sortDataGrid);
     function sortDataGrid() {
       const nodes2 = dataGrid.rootNode().children;
       const sortColumnId = dataGrid.sortColumnId();
@@ -3082,7 +3162,14 @@ var SortableDataGridNode = class extends ViewportDataGridNode {
   insertChildOrdered(node) {
     const dataGrid = this.dataGrid;
     if (dataGrid) {
-      this.insertChild(node, Platform4.ArrayUtilities.upperBound(this.children, node, dataGrid.sortingFunction));
+      this.insertChild(
+        node,
+        Platform4.ArrayUtilities.upperBound(
+          this.children,
+          node,
+          dataGrid.sortingFunction
+        )
+      );
     }
   }
   sortChildren() {
@@ -3106,30 +3193,26 @@ var SortableDataGridNode = class extends ViewportDataGridNode {
   }
 };
 
-// gen/front_end/ui/legacy/components/data_grid/ShowMoreDataGridNode.js
+// ../../front_end/ui/legacy/components/data_grid/ShowMoreDataGridNode.ts
 var ShowMoreDataGridNode_exports = {};
 __export(ShowMoreDataGridNode_exports, {
   ShowMoreDataGridNode: () => ShowMoreDataGridNode
 });
-import * as i18n3 from "./../../../../core/i18n/i18n.js";
-import * as UI2 from "./../../legacy.js";
+import * as i18n3 from "../../../../core/i18n/i18n.js";
+import * as UI2 from "../../legacy.js";
 var UIStrings2 = {
   /**
-   * @description Shown in a table when there are too many results to show directly. The user can
-   * click this button to show more results. This will result in the UI showing X more results before
-   * the current position.
+   * @description Button label in a datagrid to show more rows before the current position.
    * @example {5} PH1
    */
   showDBefore: "Show {PH1} before",
   /**
-   * @description Shown in a table when there are too many results to show directly. The user can
-   * click this button to show more results. This will result in the UI showing X more results after
-   * the current position.
+   * @description Button label in a datagrid to show more rows after the current position.
    * @example {5} PH1
    */
   showDAfter: "Show {PH1} after",
   /**
-   * @description In a data grid, for a list of items with omitted items, display all omitted items
+   * @description Button label in a datagrid to show all remaining hidden rows.
    * @example {50} PH1
    */
   showAllD: "Show all {PH1}"
@@ -3214,9 +3297,9 @@ var ShowMoreDataGridNode = class extends DataGridNode {
   }
 };
 
-// gen/front_end/ui/legacy/components/data_grid/DataGridElement.js
-import * as Lit from "./../../../lit/lit.js";
-import * as UI3 from "./../../legacy.js";
+// ../../front_end/ui/legacy/components/data_grid/DataGridElement.ts
+import * as Lit from "../../../lit/lit.js";
+import * as UI3 from "../../legacy.js";
 var DUMMY_COLUMN_ID = "dummy";
 var elementToNode = /* @__PURE__ */ new WeakMap();
 var DataGridElement = class extends UI3.UIUtils.HTMLElementWithLightDOMTemplate {
@@ -3287,12 +3370,27 @@ var DataGridElement = class extends UI3.UIUtils.HTMLElementWithLightDOMTemplate 
     this.#dataGrid.element.style.flex = "auto";
     this.#shadowRoot = UI3.UIUtils.createShadowRootWithCoreStyles(this, { delegatesFocus: true, cssFile: dataGrid_css_default });
     this.#shadowRoot.appendChild(this.#dataGrid.element);
-    this.#dataGrid.addEventListener("SelectedNode", (e) => e.data.configElement.dispatchEvent(new CustomEvent("select")));
-    this.#dataGrid.addEventListener("DeselectedNode", () => this.dispatchEvent(new CustomEvent("deselect")));
-    this.#dataGrid.addEventListener("OpenedNode", (e) => e.data.configElement.dispatchEvent(new CustomEvent("open")));
-    this.#dataGrid.addEventListener("ExpandedNode", (e) => e.data.configElement.dispatchEvent(new CustomEvent("expand")));
-    this.#dataGrid.addEventListener("CollapsedNode", (e) => e.data.configElement.dispatchEvent(new CustomEvent("collapse")));
-    this.#dataGrid.addEventListener("SortingChanged", () => this.dispatchEvent(new CustomEvent("sort", {
+    this.#dataGrid.addEventListener(
+      "SelectedNode" /* SELECTED_NODE */,
+      (e) => e.data.configElement.dispatchEvent(new CustomEvent("select"))
+    );
+    this.#dataGrid.addEventListener(
+      "DeselectedNode" /* DESELECTED_NODE */,
+      () => this.dispatchEvent(new CustomEvent("deselect"))
+    );
+    this.#dataGrid.addEventListener(
+      "OpenedNode" /* OPENED_NODE */,
+      (e) => e.data.configElement.dispatchEvent(new CustomEvent("open"))
+    );
+    this.#dataGrid.addEventListener(
+      "ExpandedNode" /* EXPANDED_NODE */,
+      (e) => e.data.configElement.dispatchEvent(new CustomEvent("expand"))
+    );
+    this.#dataGrid.addEventListener(
+      "CollapsedNode" /* COLLAPSED_NODE */,
+      (e) => e.data.configElement.dispatchEvent(new CustomEvent("collapse"))
+    );
+    this.#dataGrid.addEventListener("SortingChanged" /* SORTING_CHANGED */, () => this.dispatchEvent(new CustomEvent("sort", {
       detail: { columnId: this.#dataGrid.sortColumnId(), ascending: this.#dataGrid.isSortOrderAscending() }
     })));
     this.#dataGrid.setRowContextMenuCallback((menu, node) => {
@@ -3301,19 +3399,25 @@ var DataGridElement = class extends UI3.UIUtils.HTMLElementWithLightDOMTemplate 
     this.#dataGrid.setHeaderContextMenuCallback((menu) => {
       for (const column of this.#columns) {
         if (this.#hideableColumns.has(column.id)) {
-          menu.defaultSection().appendCheckboxItem(this.#dataGrid.columns[column.id].title, () => {
-            if (this.#hiddenColumns.has(column.id)) {
-              this.#hiddenColumns.delete(column.id);
-            } else {
-              this.#hiddenColumns.add(column.id);
-            }
-            this.#dataGrid.setColumnsVisibility(new Set(this.#columns.map(({ id }) => id).filter((column2) => !this.#hiddenColumns.has(column2))));
-            if (this.#columnsVisibilitySetting) {
-              const settingValue = this.#columnsVisibilitySetting.get();
-              settingValue[column.id] = { visible: !this.#hiddenColumns.has(column.id) };
-              this.#columnsVisibilitySetting.set(settingValue);
-            }
-          }, { checked: !this.#hiddenColumns.has(column.id) });
+          menu.defaultSection().appendCheckboxItem(
+            this.#dataGrid.columns[column.id].title,
+            () => {
+              if (this.#hiddenColumns.has(column.id)) {
+                this.#hiddenColumns.delete(column.id);
+              } else {
+                this.#hiddenColumns.add(column.id);
+              }
+              this.#dataGrid.setColumnsVisibility(
+                new Set(this.#columns.map(({ id }) => id).filter((column2) => !this.#hiddenColumns.has(column2)))
+              );
+              if (this.#columnsVisibilitySetting) {
+                const settingValue = this.#columnsVisibilitySetting.get();
+                settingValue[column.id] = { visible: !this.#hiddenColumns.has(column.id) };
+                this.#columnsVisibilitySetting.set(settingValue);
+              }
+            },
+            { checked: !this.#hiddenColumns.has(column.id) }
+          );
         }
       }
     });
@@ -3444,17 +3548,17 @@ var DataGridElement = class extends UI3.UIUtils.HTMLElementWithLightDOMTemplate 
       const width = column.getAttribute("width") ?? void 0;
       const fixedWidth = column.hasAttribute("fixed");
       let align = column.getAttribute("align") ?? void 0;
-      if (align !== "center" && align !== "right") {
+      if (align !== "center" /* CENTER */ && align !== "right" /* RIGHT */) {
         align = void 0;
       }
       const typeAttr = column.getAttribute("type");
-      const dataType = typeAttr === "boolean" ? "Boolean" : typeAttr === "numeric" ? "Number" : "String";
+      const dataType = typeAttr === "boolean" ? "Boolean" /* BOOLEAN */ : typeAttr === "numeric" ? "Number" /* NUMBER */ : "String" /* STRING */;
       const weight = parseFloat(column.getAttribute("weight") || "") ?? void 0;
       const editable = column.hasAttribute("editable");
       if (editable) {
         hasEditableColumn = true;
       }
-      const sort = column.getAttribute("sort") === "descending" ? Order.Descending : column.getAttribute("sort") === "ascending" ? Order.Ascending : void 0;
+      const sort = column.getAttribute("sort") === "descending" ? "sort-descending" /* Descending */ : column.getAttribute("sort") === "ascending" ? "sort-ascending" /* Ascending */ : void 0;
       const disclosure = hasBooleanAttribute(column, "disclosure");
       const columnDescriptor = {
         id,
@@ -3614,10 +3718,7 @@ var DataGridElement = class extends UI3.UIUtils.HTMLElementWithLightDOMTemplate 
     this.#sortingChangedScheduled = true;
     queueMicrotask(() => {
       this.#sortingChangedScheduled = false;
-      this.#dataGrid.dispatchEventToListeners(
-        "SortingChanged"
-        /* DataGridEvents.SORTING_CHANGED */
-      );
+      this.#dataGrid.dispatchEventToListeners("SortingChanged" /* SORTING_CHANGED */);
     });
   }
   deselectRow() {
@@ -3707,7 +3808,7 @@ function nodeMixin(base) {
           continue;
         }
         const column = this.#dataGridElement.columns[i];
-        if (column.dataType === "Boolean") {
+        if (column.dataType === "Boolean" /* BOOLEAN */) {
           this.data[column.id] = hasBooleanAttribute(cell, "data-value") || cell.textContent === "true";
         } else {
           this.data[column.id] = cell.dataset.value ?? cell.textContent ?? "";
@@ -3745,7 +3846,11 @@ function nodeMixin(base) {
       }
     }
     #onRowMouseEvent(event) {
-      const targetInConfigRow = UI3.UIUtils.HTMLElementWithLightDOMTemplate.findCorrespondingElement(event.target, event.currentTarget, this.#configElement);
+      const targetInConfigRow = UI3.UIUtils.HTMLElementWithLightDOMTemplate.findCorrespondingElement(
+        event.target,
+        event.currentTarget,
+        this.#configElement
+      );
       if (!targetInConfigRow) {
         throw new Error("Cell click event target not found in the data grid");
       }
@@ -3766,7 +3871,7 @@ function nodeMixin(base) {
     }
     createCell(columnId) {
       const index = this.#dataGridElement.columns.findIndex(({ id }) => id === columnId);
-      if (this.#dataGridElement.columns[index].dataType === "Boolean") {
+      if (this.#dataGridElement.columns[index].dataType === "Boolean" /* BOOLEAN */) {
         const cell2 = super.createCell(columnId);
         cell2.setAttribute("part", `${columnId}-column`);
         return cell2;
@@ -3869,7 +3974,7 @@ function removeNode(node) {
   node.remove();
 }
 
-// gen/front_end/ui/legacy/components/data_grid/DataGridExporter.js
+// ../../front_end/ui/legacy/components/data_grid/DataGridExporter.ts
 var DataGridExporter_exports = {};
 __export(DataGridExporter_exports, {
   exportToCSV: () => exportToCSV,

@@ -1,4 +1,4 @@
-// gen/front_end/third_party/puppeteer/package/lib/third_party/rxjs/rxjs.js
+// ../../front_end/third_party/puppeteer/package/lib/third_party/rxjs/rxjs.js
 var extendStatics = function(d, b2) {
   extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b22) {
     d2.__proto__ = b22;
@@ -241,7 +241,7 @@ function arrRemove(arr, item) {
     0 <= index && arr.splice(index, 1);
   }
 }
-var Subscription = function() {
+var Subscription = (function() {
   function Subscription2(initialTeardown) {
     this.initialTeardown = initialTeardown;
     this.closed = false;
@@ -354,13 +354,13 @@ var Subscription = function() {
       teardown._removeParent(this);
     }
   };
-  Subscription2.EMPTY = function() {
+  Subscription2.EMPTY = (function() {
     var empty = new Subscription2();
     empty.closed = true;
     return empty;
-  }();
+  })();
   return Subscription2;
-}();
+})();
 var EMPTY_SUBSCRIPTION = Subscription.EMPTY;
 function isSubscription(value) {
   return value instanceof Subscription || value && "closed" in value && isFunction(value.remove) && isFunction(value.add) && isFunction(value.unsubscribe);
@@ -409,9 +409,9 @@ function reportUnhandledError(err) {
 }
 function noop() {
 }
-var COMPLETE_NOTIFICATION = function() {
+var COMPLETE_NOTIFICATION = (function() {
   return createNotification("C", void 0, void 0);
-}();
+})();
 function errorNotification(error) {
   return createNotification("E", void 0, error);
 }
@@ -450,7 +450,7 @@ function captureError(err) {
     context.error = err;
   }
 }
-var Subscriber = function(_super) {
+var Subscriber = (function(_super) {
   __extends(Subscriber2, _super);
   function Subscriber2(destination) {
     var _this = _super.call(this) || this;
@@ -516,12 +516,12 @@ var Subscriber = function(_super) {
     }
   };
   return Subscriber2;
-}(Subscription);
+})(Subscription);
 var _bind = Function.prototype.bind;
 function bind(fn, thisArg) {
   return _bind.call(fn, thisArg);
 }
-var ConsumerObserver = function() {
+var ConsumerObserver = (function() {
   function ConsumerObserver2(partialObserver) {
     this.partialObserver = partialObserver;
   }
@@ -558,8 +558,8 @@ var ConsumerObserver = function() {
     }
   };
   return ConsumerObserver2;
-}();
-var SafeSubscriber = function(_super) {
+})();
+var SafeSubscriber = (function(_super) {
   __extends(SafeSubscriber2, _super);
   function SafeSubscriber2(observerOrNext, error, complete) {
     var _this = _super.call(this) || this;
@@ -590,7 +590,7 @@ var SafeSubscriber = function(_super) {
     return _this;
   }
   return SafeSubscriber2;
-}(Subscriber);
+})(Subscriber);
 function handleUnhandledError(error) {
   if (config.useDeprecatedSynchronousErrorHandling) {
     captureError(error);
@@ -613,9 +613,9 @@ var EMPTY_OBSERVER = {
   error: defaultErrorHandler,
   complete: noop
 };
-var observable = function() {
+var observable = (function() {
   return typeof Symbol === "function" && Symbol.observable || "@@observable";
-}();
+})();
 function identity(x2) {
   return x2;
 }
@@ -639,7 +639,7 @@ function pipeFromArray(fns) {
     }, input);
   };
 }
-var Observable = function() {
+var Observable = (function() {
   function Observable2(subscribe) {
     if (subscribe) {
       this._subscribe = subscribe;
@@ -718,7 +718,7 @@ var Observable = function() {
     return new Observable2(subscribe);
   };
   return Observable2;
-}();
+})();
 function getPromiseCtor(promiseCtor) {
   var _a;
   return (_a = promiseCtor !== null && promiseCtor !== void 0 ? promiseCtor : config.Promise) !== null && _a !== void 0 ? _a : Promise;
@@ -749,7 +749,7 @@ function operate(init) {
 function createOperatorSubscriber(destination, onNext, onComplete, onError, onFinalize) {
   return new OperatorSubscriber(destination, onNext, onComplete, onError, onFinalize);
 }
-var OperatorSubscriber = function(_super) {
+var OperatorSubscriber = (function(_super) {
   __extends(OperatorSubscriber2, _super);
   function OperatorSubscriber2(destination, onNext, onComplete, onError, onFinalize, shouldUnsubscribe) {
     var _this = _super.call(this, destination) || this;
@@ -791,7 +791,7 @@ var OperatorSubscriber = function(_super) {
     }
   };
   return OperatorSubscriber2;
-}(Subscriber);
+})(Subscriber);
 var ObjectUnsubscribedError = createErrorClass(function(_super) {
   return function ObjectUnsubscribedErrorImpl() {
     _super(this);
@@ -799,7 +799,7 @@ var ObjectUnsubscribedError = createErrorClass(function(_super) {
     this.message = "object unsubscribed";
   };
 });
-var Subject = function(_super) {
+var Subject = (function(_super) {
   __extends(Subject2, _super);
   function Subject2() {
     var _this = _super.call(this) || this;
@@ -925,8 +925,8 @@ var Subject = function(_super) {
     return new AnonymousSubject(destination, source2);
   };
   return Subject2;
-}(Observable);
-var AnonymousSubject = function(_super) {
+})(Observable);
+var AnonymousSubject = (function(_super) {
   __extends(AnonymousSubject2, _super);
   function AnonymousSubject2(destination, source2) {
     var _this = _super.call(this) || this;
@@ -951,14 +951,14 @@ var AnonymousSubject = function(_super) {
     return (_b = (_a = this.source) === null || _a === void 0 ? void 0 : _a.subscribe(subscriber)) !== null && _b !== void 0 ? _b : EMPTY_SUBSCRIPTION;
   };
   return AnonymousSubject2;
-}(Subject);
+})(Subject);
 var dateTimestampProvider = {
   now: function() {
     return (dateTimestampProvider.delegate || Date).now();
   },
   delegate: void 0
 };
-var ReplaySubject = function(_super) {
+var ReplaySubject = (function(_super) {
   __extends(ReplaySubject2, _super);
   function ReplaySubject2(_bufferSize, _windowTime, _timestampProvider) {
     if (_bufferSize === void 0) {
@@ -1016,8 +1016,8 @@ var ReplaySubject = function(_super) {
     }
   };
   return ReplaySubject2;
-}(Subject);
-var Action = function(_super) {
+})(Subject);
+var Action = (function(_super) {
   __extends(Action2, _super);
   function Action2(scheduler, work) {
     return _super.call(this) || this;
@@ -1029,7 +1029,7 @@ var Action = function(_super) {
     return this;
   };
   return Action2;
-}(Subscription);
+})(Subscription);
 var intervalProvider = {
   setInterval: function(handler, timeout2) {
     var args = [];
@@ -1048,7 +1048,7 @@ var intervalProvider = {
   },
   delegate: void 0
 };
-var AsyncAction = function(_super) {
+var AsyncAction = (function(_super) {
   __extends(AsyncAction2, _super);
   function AsyncAction2(scheduler, work) {
     var _this = _super.call(this, scheduler, work) || this;
@@ -1135,8 +1135,8 @@ var AsyncAction = function(_super) {
     }
   };
   return AsyncAction2;
-}(Action);
-var Scheduler = function() {
+})(Action);
+var Scheduler = (function() {
   function Scheduler2(schedulerActionCtor, now) {
     if (now === void 0) {
       now = Scheduler2.now;
@@ -1152,8 +1152,8 @@ var Scheduler = function() {
   };
   Scheduler2.now = dateTimestampProvider.now;
   return Scheduler2;
-}();
-var AsyncScheduler = function(_super) {
+})();
+var AsyncScheduler = (function(_super) {
   __extends(AsyncScheduler2, _super);
   function AsyncScheduler2(SchedulerAction, now) {
     if (now === void 0) {
@@ -1186,7 +1186,7 @@ var AsyncScheduler = function(_super) {
     }
   };
   return AsyncScheduler2;
-}(Scheduler);
+})(Scheduler);
 var asyncScheduler = new AsyncScheduler(AsyncAction);
 var async = asyncScheduler;
 var EMPTY = new Observable(function(subscriber) {
@@ -1204,9 +1204,9 @@ function popScheduler(args) {
 function popNumber(args, defaultValue) {
   return typeof last(args) === "number" ? args.pop() : defaultValue;
 }
-var isArrayLike = function(x2) {
+var isArrayLike = (function(x2) {
   return x2 && typeof x2.length === "number" && typeof x2 !== "function";
-};
+});
 function isPromise(value) {
   return isFunction(value === null || value === void 0 ? void 0 : value.then);
 }
@@ -1609,7 +1609,6 @@ function mapOneOrManyArgs(fn) {
     return callOrApply(fn, args);
   });
 }
-var isArray2 = Array.isArray;
 var objectProto = Object.prototype;
 function mergeInternals(source2, subscriber, project, concurrent, onBeforeNext, expand, innerSubScheduler, additionalFinalizer) {
   var buffer = [];
@@ -2105,7 +2104,7 @@ function tap(observerOrNext, error, complete) {
   }) : identity;
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/environment.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/environment.js
 var isNode = !!(typeof process !== "undefined" && process.version);
 var environment = {
   value: {
@@ -2115,9 +2114,9 @@ var environment = {
         throw new Error("ScreenRecorder is not available in this environment");
       }
     },
-    readFile: () => {
+    readFile: (() => {
       throw new Error("readFile is not available in this environment");
-    },
+    }),
     writeFile: () => {
       throw new Error("writeFile is not available in this environment");
     },
@@ -2133,7 +2132,7 @@ var environment = {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/Debug.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/Debug.js
 var DEBUG_PREFIXES = {
   cdpSend: "puppeteer:protocol:SEND \u25BA",
   cdpReceive: "puppeteer:protocol:RECV \u25C0",
@@ -2143,7 +2142,7 @@ var DEBUG_PREFIXES = {
   ffmpeg: "puppeteer:ffmpeg"
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/third_party/mitt/mitt.js
+// ../../front_end/third_party/puppeteer/package/lib/third_party/mitt/mitt.js
 function mitt_default(n) {
   return { all: n = n || /* @__PURE__ */ new Map(), on: function(t, e) {
     var i = n.get(t);
@@ -2161,9 +2160,9 @@ function mitt_default(n) {
   } };
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/disposable.js
-Symbol.dispose ??= Symbol("dispose");
-Symbol.asyncDispose ??= Symbol("asyncDispose");
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/disposable.js
+Symbol.dispose ??= /* @__PURE__ */ Symbol("dispose");
+Symbol.asyncDispose ??= /* @__PURE__ */ Symbol("asyncDispose");
 var disposeSymbol = Symbol.dispose;
 var asyncDisposeSymbol = Symbol.asyncDispose;
 var DisposableStackPolyfill = class _DisposableStackPolyfill {
@@ -2465,7 +2464,7 @@ var SuppressedErrorPolyfill = class extends Error {
 };
 var SuppressedError2 = globalThis.SuppressedError ?? SuppressedErrorPolyfill;
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/EventEmitter.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/EventEmitter.js
 var EventEmitter = class {
   #emitter;
   #handlers = /* @__PURE__ */ new Map();
@@ -2578,14 +2577,14 @@ var EventEmitter = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/assert.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/assert.js
 var assert = (value, message) => {
   if (!value) {
     throw new Error(message);
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/encoding.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/encoding.js
 function stringToTypedArray(string, base64Encoded = false) {
   if (base64Encoded) {
     if ("fromBase64" in Uint8Array) {
@@ -2627,10 +2626,10 @@ function mergeUint8Arrays(items) {
   return result;
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/version.js
-var packageVersion = "25.8.0";
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/version.js
+var packageVersion = "25.10.0";
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/Errors.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/Errors.js
 var PuppeteerError = class extends Error {
   /**
    * @internal
@@ -2681,7 +2680,7 @@ var TargetCloseError = class extends ProtocolError {
 var ConnectionClosedError = class extends ProtocolError {
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/PDFOptions.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/PDFOptions.js
 var paperFormats = {
   letter: {
     cm: { width: 21.59, height: 27.94 },
@@ -2729,9 +2728,9 @@ var paperFormats = {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/util.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/util.js
 var DEFAULT_VIEWPORT = Object.freeze({ width: 800, height: 600 });
-var SOURCE_URL = Symbol("Source URL for Puppeteer evaluation scripts");
+var SOURCE_URL = /* @__PURE__ */ Symbol("Source URL for Puppeteer evaluation scripts");
 var PuppeteerURL = class _PuppeteerURL {
   static INTERNAL_URL = "pptr:internal";
   static fromCallSite(functionName, site) {
@@ -2985,7 +2984,7 @@ function filterAsync(predicate) {
   });
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/Browser.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/Browser.js
 var WEB_PERMISSION_TO_PROTOCOL_PERMISSION = /* @__PURE__ */ new Map([
   ["accelerometer", "sensors"],
   ["ambient-light-sensor", "sensors"],
@@ -3150,12 +3149,12 @@ var Browser = class extends EventEmitter {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/CDPSession.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/CDPSession.js
 var CDPSessionEvent;
 (function(CDPSessionEvent2) {
-  CDPSessionEvent2.Disconnected = Symbol("CDPSession.Disconnected");
-  CDPSessionEvent2.Swapped = Symbol("CDPSession.Swapped");
-  CDPSessionEvent2.Ready = Symbol("CDPSession.Ready");
+  CDPSessionEvent2.Disconnected = /* @__PURE__ */ Symbol("CDPSession.Disconnected");
+  CDPSessionEvent2.Swapped = /* @__PURE__ */ Symbol("CDPSession.Swapped");
+  CDPSessionEvent2.Ready = /* @__PURE__ */ Symbol("CDPSession.Ready");
   CDPSessionEvent2.SessionAttached = "sessionattached";
   CDPSessionEvent2.SessionDetached = "sessiondetached";
 })(CDPSessionEvent || (CDPSessionEvent = {}));
@@ -3176,7 +3175,7 @@ var CDPSession = class extends EventEmitter {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/Deferred.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/Deferred.js
 var Deferred = class _Deferred {
   static create(opts) {
     return new _Deferred(opts);
@@ -3262,7 +3261,7 @@ var Deferred = class _Deferred {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/Mutex.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/Mutex.js
 var MutexGuard = class {
   #mutex;
   #onRelease;
@@ -3300,7 +3299,7 @@ var Mutex = class _Mutex {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/BrowserContext.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/BrowserContext.js
 var BrowserContext = class extends EventEmitter {
   #logger;
   /**
@@ -3447,7 +3446,7 @@ var BrowserContext = class extends EventEmitter {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/TimeoutSettings.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/TimeoutSettings.js
 var DEFAULT_TIMEOUT = 3e4;
 var TimeoutSettings = class {
   #defaultTimeout;
@@ -3479,7 +3478,7 @@ var TimeoutSettings = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/decorators.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/decorators.js
 var __addDisposableResource = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -3507,7 +3506,7 @@ var __addDisposableResource = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -3534,7 +3533,7 @@ var __disposeResources = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -3638,7 +3637,7 @@ function guarded(getKey = function() {
   };
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/locators/locators.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/locators/locators.js
 var __addDisposableResource2 = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -3666,7 +3665,7 @@ var __addDisposableResource2 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources2 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources2 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -3693,7 +3692,7 @@ var __disposeResources2 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -4390,7 +4389,7 @@ var RaceLocator = class _RaceLocator extends Locator {
 };
 var RETRY_DELAY = 100;
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/Page.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/Page.js
 var __runInitializers = function(thisArg, initializers, value) {
   var useValue = arguments.length > 2;
   for (var i = 0; i < initializers.length; i++) {
@@ -4457,7 +4456,7 @@ var __addDisposableResource3 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources3 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources3 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -4484,7 +4483,7 @@ var __disposeResources3 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -5149,7 +5148,7 @@ var Page = (() => {
      *
      * ```ts
      * import {KnownDevices} from 'puppeteer';
-     * const iPhone = KnownDevices['iPhone 15 Pro'];
+     * const iPhone = KnownDevices['iPhone 17 Pro'];
      *
      * const browser = await puppeteer.launch();
      * const page = await browser.newPage();
@@ -5226,7 +5225,7 @@ var Page = (() => {
       await environment.value.writeFile(path, typedArray);
     }
     /**
-     * Captures a screencast of this {@link Page | page}.
+     * Captures a screencast of this {@link Page | page}. Works in Chrome 153+.
      *
      * @example
      * Recording a {@link Page | page}:
@@ -5256,7 +5255,7 @@ var Page = (() => {
      *
      * @param options - Configures screencast behavior.
      *
-     * @experimental
+     * @deprecated Use {@link Page.record} instead.
      *
      * @remarks
      *
@@ -5320,6 +5319,75 @@ var Page = (() => {
       }
       return recorder;
     }
+    /**
+     * Records this {@link Page | page} using the Chrome DevTools Protocol
+     * {@link https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-startScreenRecording | Page.startScreenRecording}
+     * API.
+     *
+     * Outputs mp4 video stream.
+     *
+     * @example
+     * Recording a {@link Page | page}:
+     *
+     * ```ts
+     * import puppeteer from 'puppeteer';
+     *
+     * // Launch a browser
+     * const browser = await puppeteer.launch();
+     *
+     * // Create a new page
+     * const page = await browser.newPage();
+     *
+     * // Go to your site.
+     * await page.goto('https://www.example.com');
+     *
+     * // Start recording.
+     * const recorder = await page.record({path: 'recording.mp4'});
+     *
+     * // Do something.
+     *
+     * // Stop recording.
+     * await recorder.stop();
+     *
+     * await browser.close();
+     * ```
+     *
+     * @param options - Configures recording behavior.
+     *
+     * @experimental
+     */
+    async record(options = {}) {
+      if (options.maxWidth !== void 0 && options.maxWidth <= 0) {
+        throw new Error("`maxWidth` must be greater than 0.");
+      }
+      if (options.maxHeight !== void 0 && options.maxHeight <= 0) {
+        throw new Error("`maxHeight` must be greater than 0.");
+      }
+      if (options.frameRate !== void 0 && options.frameRate <= 0) {
+        throw new Error("`frameRate` must be greater than 0.");
+      }
+      if (options.fps !== void 0 && options.fps <= 0) {
+        throw new Error("`fps` must be greater than 0.");
+      }
+      if (options.path && environment.value.path) {
+        await environment.value.mkdir(environment.value.path.dirname(options.path), { recursive: options.overwrite ?? true });
+      }
+      const stream = options.path ? environment.value.createWriteStream(options.path, {
+        encoding: "binary",
+        overwrite: options.overwrite
+      }) : void 0;
+      const recording = this.createScreenRecording(options);
+      try {
+        await recording._start();
+      } catch (error) {
+        void recording.stop();
+        throw error;
+      }
+      if (stream) {
+        recording.pipe(stream);
+      }
+      return recording;
+    }
     #screencastSessionCount = 0;
     #startScreencastPromise;
     /**
@@ -5328,12 +5396,14 @@ var Page = (() => {
     async _startScreencast() {
       ++this.#screencastSessionCount;
       if (!this.#startScreencastPromise) {
-        this.#startScreencastPromise = this.mainFrame().client.send("Page.startScreencast", { format: "png" }).then(() => {
-          return new Promise((resolve) => {
-            return this.mainFrame().client.once("Page.screencastFrame", () => {
-              return resolve();
-            });
+        const client = this.mainFrame().client;
+        const firstFrame = new Promise((resolve) => {
+          return client.once("Page.screencastFrame", () => {
+            return resolve();
           });
+        });
+        this.#startScreencastPromise = client.send("Page.startScreencast", { format: "png" }).then(() => {
+          return firstFrame;
         });
       }
       await this.#startScreencastPromise;
@@ -5863,7 +5933,7 @@ function roundRectangle(clip) {
   return { ...clip, x: x2, y, width, height };
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/WebWorker.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/WebWorker.js
 var WebWorkerEvent;
 (function(WebWorkerEvent2) {
   WebWorkerEvent2["Console"] = "console";
@@ -5954,7 +6024,7 @@ var WebWorker = class extends EventEmitter {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/ConsoleMessage.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/ConsoleMessage.js
 var ConsoleMessage = class {
   #type;
   #text;
@@ -6023,7 +6093,7 @@ var ConsoleMessage = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/FileChooser.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/FileChooser.js
 var FileChooser = class {
   #element;
   #multiple;
@@ -6069,17 +6139,17 @@ var FileChooser = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/NetworkManagerEvents.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/NetworkManagerEvents.js
 var NetworkManagerEvent;
 (function(NetworkManagerEvent2) {
-  NetworkManagerEvent2.Request = Symbol("NetworkManager.Request");
-  NetworkManagerEvent2.RequestServedFromCache = Symbol("NetworkManager.RequestServedFromCache");
-  NetworkManagerEvent2.Response = Symbol("NetworkManager.Response");
-  NetworkManagerEvent2.RequestFailed = Symbol("NetworkManager.RequestFailed");
-  NetworkManagerEvent2.RequestFinished = Symbol("NetworkManager.RequestFinished");
+  NetworkManagerEvent2.Request = /* @__PURE__ */ Symbol("NetworkManager.Request");
+  NetworkManagerEvent2.RequestServedFromCache = /* @__PURE__ */ Symbol("NetworkManager.RequestServedFromCache");
+  NetworkManagerEvent2.Response = /* @__PURE__ */ Symbol("NetworkManager.Response");
+  NetworkManagerEvent2.RequestFailed = /* @__PURE__ */ Symbol("NetworkManager.RequestFailed");
+  NetworkManagerEvent2.RequestFinished = /* @__PURE__ */ Symbol("NetworkManager.RequestFinished");
 })(NetworkManagerEvent || (NetworkManagerEvent = {}));
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/ErrorLike.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/ErrorLike.js
 function isErrorLike(obj) {
   return typeof obj === "object" && obj !== null && "name" in obj && "message" in obj;
 }
@@ -6096,7 +6166,7 @@ function createProtocolErrorMessage(object) {
   return message;
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/JSHandle.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/JSHandle.js
 var __runInitializers2 = function(thisArg, initializers, value) {
   var useValue = arguments.length > 2;
   for (var i = 0; i < initializers.length; i++) {
@@ -6163,7 +6233,7 @@ var __addDisposableResource4 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources4 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources4 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -6190,7 +6260,7 @@ var __disposeResources4 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -6305,7 +6375,7 @@ var JSHandle = (() => {
   return JSHandle2 = _classThis;
 })();
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Binding.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Binding.js
 var __addDisposableResource5 = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -6333,7 +6403,7 @@ var __addDisposableResource5 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources5 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources5 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -6360,7 +6430,7 @@ var __disposeResources5 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -6452,7 +6522,7 @@ var Binding = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/BluetoothEmulation.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/BluetoothEmulation.js
 var CdpBluetoothEmulation = class {
   #connection;
   constructor(connection) {
@@ -6473,7 +6543,7 @@ var CdpBluetoothEmulation = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/CallbackRegistry.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/CallbackRegistry.js
 var CallbackRegistry = class {
   #callbacks = /* @__PURE__ */ new Map();
   #idGenerator;
@@ -6591,7 +6661,7 @@ var Callback = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/CdpSession.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/CdpSession.js
 var CdpCDPSession = class extends CDPSession {
   #sessionId;
   #targetType;
@@ -6715,7 +6785,7 @@ var CdpCDPSession = class extends CDPSession {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/incremental-id-generator.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/incremental-id-generator.js
 function createIncrementalIdGenerator() {
   let id = 0;
   return () => {
@@ -6726,7 +6796,7 @@ function createIncrementalIdGenerator() {
   };
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Connection.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Connection.js
 var Connection = class extends EventEmitter {
   #url;
   #transport;
@@ -6970,7 +7040,7 @@ function isTargetClosedError(error) {
   return error instanceof TargetCloseError;
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Coverage.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Coverage.js
 var Coverage = class {
   #jsCoverage;
   #cssCoverage;
@@ -7275,7 +7345,7 @@ function convertToDisjointRanges(nestedRanges) {
   });
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/Dialog.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/Dialog.js
 var Dialog = class {
   #type;
   #message;
@@ -7344,7 +7414,7 @@ var Dialog = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Dialog.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Dialog.js
 var CdpDialog = class extends Dialog {
   #client;
   constructor(client, type, message, defaultValue = "") {
@@ -7364,7 +7434,7 @@ var CdpDialog = class extends Dialog {
   };
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/EmulationManager.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/EmulationManager.js
 var __runInitializers3 = function(thisArg, initializers, value) {
   var useValue = arguments.length > 2;
   for (var i = 0; i < initializers.length; i++) {
@@ -7853,7 +7923,7 @@ var EmulationManager = (() => {
   };
 })();
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/AsyncIterableUtil.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/AsyncIterableUtil.js
 var AsyncIterableUtil = class {
   static async *map(iterable, map2) {
     for await (const value of iterable) {
@@ -7880,10 +7950,10 @@ var AsyncIterableUtil = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/ElementHandleSymbol.js
-var _isElementHandle = Symbol("_isElementHandle");
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/ElementHandleSymbol.js
+var _isElementHandle = /* @__PURE__ */ Symbol("_isElementHandle");
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/Function.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/Function.js
 var createdFunctions = /* @__PURE__ */ new Map();
 var createFunction = (functionValue) => {
   let fn = createdFunctions.get(functionValue);
@@ -7924,7 +7994,7 @@ var interpolateFunction = (fn, replacements) => {
   return createFunction(value);
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/HandleIterator.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/HandleIterator.js
 var __addDisposableResource6 = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -7952,7 +8022,7 @@ var __addDisposableResource6 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources6 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources6 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -7979,7 +8049,7 @@ var __disposeResources6 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -8034,9 +8104,9 @@ async function* transposeIterableHandle(handle) {
   const env_3 = { stack: [], error: void 0, hasError: false };
   try {
     const generatorHandle = __addDisposableResource6(env_3, await handle.evaluateHandle((iterable) => {
-      return async function* () {
+      return (async function* () {
         yield* iterable;
-      }();
+      })();
     }), false);
     yield* transposeIteratorHandle(generatorHandle);
   } catch (e_3) {
@@ -8047,7 +8117,7 @@ async function* transposeIterableHandle(handle) {
   }
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/LazyArg.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/LazyArg.js
 var LazyArg = class _LazyArg {
   static create = (get) => {
     return new _LazyArg(get);
@@ -8061,7 +8131,7 @@ var LazyArg = class _LazyArg {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/QueryHandler.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/QueryHandler.js
 var __addDisposableResource7 = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -8089,7 +8159,7 @@ var __addDisposableResource7 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources7 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources7 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -8116,7 +8186,7 @@ var __disposeResources7 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -8270,7 +8340,7 @@ var QueryHandler = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/AriaQueryHandler.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/AriaQueryHandler.js
 var isKnownAttribute = (attribute) => {
   return ["name", "role"].includes(attribute);
 };
@@ -8303,7 +8373,7 @@ var ARIAQueryHandler = class extends QueryHandler {
   };
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/CSSQueryHandler.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/CSSQueryHandler.js
 var CSSQueryHandler = class extends QueryHandler {
   static querySelector = (element, selector, { cssQuerySelector }) => {
     return cssQuerySelector(element, selector);
@@ -8313,10 +8383,10 @@ var CSSQueryHandler = class extends QueryHandler {
   };
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/generated/injected.js
-var source = '"use strict";var N=Object.defineProperty;var B=Object.getOwnPropertyDescriptor;var Y=Object.getOwnPropertyNames;var G=Object.prototype.hasOwnProperty;var l=(t,e)=>{for(var r in e)N(t,r,{get:e[r],enumerable:!0})},J=(t,e,r,o)=>{if(e&&typeof e=="object"||typeof e=="function")for(let n of Y(e))!G.call(t,n)&&n!==r&&N(t,n,{get:()=>e[n],enumerable:!(o=B(e,n))||o.enumerable});return t};var z=t=>J(N({},"__esModule",{value:!0}),t);var ye={};l(ye,{default:()=>pe});module.exports=z(ye);var b=class extends Error{constructor(e,r){super(e,r),this.name=this.constructor.name}get[Symbol.toStringTag](){return this.constructor.name}},p=class extends b{};var c=class t{static create(e){return new t(e)}static async race(e){let r=new Set;try{let o=e.map(n=>n instanceof t?(n.#n&&r.add(n),n.valueOrThrow()):n);return await Promise.race(o)}finally{for(let o of r)o.reject(new Error("Timeout cleared"))}}#e=!1;#r=!1;#o;#t;#a=new Promise(e=>{this.#t=e});#n;#i;constructor(e){e&&e.timeout>0&&(this.#i=new p(e.message),this.#n=setTimeout(()=>{this.reject(this.#i)},e.timeout))}#l(e){clearTimeout(this.#n),this.#o=e,this.#t()}resolve(e){this.#r||this.#e||(this.#e=!0,this.#l(e))}reject(e){this.#r||this.#e||(this.#r=!0,this.#l(e))}resolved(){return this.#e}finished(){return this.#e||this.#r}value(){return this.#o}#s;valueOrThrow(){return this.#s||(this.#s=(async()=>{if(await this.#a,this.#r)throw this.#o;return this.#o})()),this.#s}};var W=new Map,j=t=>{let e=W.get(t);return e||(e=new Function(`return ${t}`)(),W.set(t,e),e)};var v={};l(v,{ariaQuerySelector:()=>K,ariaQuerySelectorAll:()=>x});var K=(t,e)=>globalThis.__ariaQuerySelector(t,e),x=async function*(t,e){yield*await globalThis.__ariaQuerySelectorAll(t,e)};var E={};l(E,{cssQuerySelector:()=>Z,cssQuerySelectorAll:()=>ee});var Z=(t,e)=>t.querySelector(e),ee=function(t,e){return t.querySelectorAll(e)};var A={};l(A,{CustomQuerySelectorRegistry:()=>y,customQuerySelectors:()=>P});var y=class{#e=new Map;register(e,r){if(!r.queryOne&&r.queryAll){let o=r.queryAll;r.queryOne=(n,i)=>{for(let s of o(n,i))return s;return null}}else if(r.queryOne&&!r.queryAll){let o=r.queryOne;r.queryAll=(n,i)=>{let s=o(n,i);return s?[s]:[]}}else if(!r.queryOne||!r.queryAll)throw new Error("At least one query method must be defined.");this.#e.set(e,{querySelector:r.queryOne,querySelectorAll:r.queryAll})}unregister(e){this.#e.delete(e)}get(e){return this.#e.get(e)}clear(){this.#e.clear()}},P=new y;var R={};l(R,{pierceQuerySelector:()=>te,pierceQuerySelectorAll:()=>re});var te=(t,e)=>{let r=null,o=n=>{let i=document.createTreeWalker(n,NodeFilter.SHOW_ELEMENT);do{let s=i.currentNode;s.shadowRoot&&o(s.shadowRoot),!(s instanceof ShadowRoot)&&s!==n&&!r&&s.matches(e)&&(r=s)}while(!r&&i.nextNode())};return t instanceof Document&&(t=t.documentElement),o(t),r},re=(t,e)=>{let r=[],o=n=>{let i=document.createTreeWalker(n,NodeFilter.SHOW_ELEMENT);do{let s=i.currentNode;s.shadowRoot&&o(s.shadowRoot),!(s instanceof ShadowRoot)&&s!==n&&s.matches(e)&&r.push(s)}while(i.nextNode())};return t instanceof Document&&(t=t.documentElement),o(t),r};var u=(t,e)=>{if(!t)throw new Error(e)};var w=class{#e;#r;#o;#t;constructor(e,r){this.#e=e,this.#r=r}async start(){let e=this.#t=c.create(),r=await this.#e();if(r){e.resolve(r);return}this.#o=new MutationObserver(async()=>{let o=await this.#e();o&&(e.resolve(o),await this.stop())}),this.#o.observe(this.#r,{childList:!0,subtree:!0,attributes:!0})}async stop(){u(this.#t,"Polling never started."),this.#t.finished()||this.#t.reject(new Error("Polling stopped")),this.#o&&(this.#o.disconnect(),this.#o=void 0)}result(){return u(this.#t,"Polling never started."),this.#t.valueOrThrow()}},T=class{#e;#r;constructor(e){this.#e=e}async start(){let e=this.#r=c.create(),r=await this.#e();if(r){e.resolve(r);return}let o=async()=>{if(e.finished())return;let n=await this.#e();if(!n){window.requestAnimationFrame(o);return}e.resolve(n),await this.stop()};window.requestAnimationFrame(o)}async stop(){u(this.#r,"Polling never started."),this.#r.finished()||this.#r.reject(new Error("Polling stopped"))}result(){return u(this.#r,"Polling never started."),this.#r.valueOrThrow()}},S=class{#e;#r;#o;#t;constructor(e,r){this.#e=e,this.#r=r}async start(){let e=this.#t=c.create(),r=await this.#e();if(r){e.resolve(r);return}this.#o=setInterval(async()=>{let o=await this.#e();o&&(e.resolve(o),await this.stop())},this.#r)}async stop(){u(this.#t,"Polling never started."),this.#t.finished()||this.#t.reject(new Error("Polling stopped")),this.#o&&(clearInterval(this.#o),this.#o=void 0)}result(){return u(this.#t,"Polling never started."),this.#t.valueOrThrow()}};var L={};l(L,{PCombinator:()=>U,pQuerySelector:()=>me,pQuerySelectorAll:()=>X});var a=class{static async*map(e,r){for await(let o of e)yield await r(o)}static async*flatMap(e,r){for await(let o of e)yield*r(o)}static async collect(e){let r=[];for await(let o of e)r.push(o);return r}static async first(e){for await(let r of e)return r}};var O={};l(O,{textQuerySelectorAll:()=>m});var oe=new Set(["checkbox","image","radio"]),ne=t=>t instanceof HTMLSelectElement||t instanceof HTMLTextAreaElement||t instanceof HTMLInputElement&&!oe.has(t.type),se=new Set(["SCRIPT","STYLE"]),f=t=>!se.has(t.nodeName)&&!document.head?.contains(t),C=new WeakMap,V=t=>{for(;t;)C.delete(t),t instanceof ShadowRoot?t=t.host:t=t.parentNode},F=new WeakSet,I,ie=()=>{let t=globalThis.MutationObserver;if(!t)throw new Error("MutationObserver is not available in this environment.");return I||(I=new t(e=>{for(let r of e)V(r.target)})),I},d=t=>{let e=C.get(t);if(e||(e={full:"",immediate:[]},!f(t)))return e;let r="";if(ne(t))e.full=t.value,e.immediate.push(t.value),t.addEventListener("input",o=>{V(o.target)},{once:!0,capture:!0});else{for(let o=t.firstChild;o;o=o.nextSibling){if(o.nodeType===Node.TEXT_NODE){e.full+=o.nodeValue??"",r+=o.nodeValue??"";continue}r&&e.immediate.push(r),r="",o.nodeType===Node.ELEMENT_NODE&&(e.full+=d(o).full)}r&&e.immediate.push(r),t instanceof Element&&t.shadowRoot&&(e.full+=d(t.shadowRoot).full),F.has(t)||(ie().observe(t,{childList:!0,characterData:!0,subtree:!0}),F.add(t))}return C.set(t,e),e};var m=function*(t,e){let r=!1;for(let o of t.childNodes)if(o instanceof Element&&f(o)){let n;o.shadowRoot?n=m(o.shadowRoot,e):n=m(o,e);for(let i of n)yield i,r=!0}r||t instanceof Element&&f(t)&&d(t).full.includes(e)&&(yield t)};var M={};l(M,{checkVisibility:()=>ae,pierce:()=>g,pierceAll:()=>k});var le=["hidden","collapse"],ae=(t,e)=>{if(!t)return e===!1;if(e===void 0)return t;let r=t.nodeType===Node.TEXT_NODE?t.parentElement:t;if(!r)return e===!1;let o=window.getComputedStyle(r),n=o&&!le.includes(o.visibility)&&!ce(r);return e===n?t:!1};function ce(t){let e=t.getBoundingClientRect();return e.width===0||e.height===0}var ue=t=>"shadowRoot"in t&&t.shadowRoot instanceof ShadowRoot;function*g(t){ue(t)?yield t.shadowRoot:yield t}function*k(t){t=g(t).next().value,yield t;let e=[document.createTreeWalker(t,NodeFilter.SHOW_ELEMENT)];for(let r of e){let o;for(;o=r.nextNode();)o.shadowRoot&&(yield o.shadowRoot,e.push(document.createTreeWalker(o.shadowRoot,NodeFilter.SHOW_ELEMENT)))}}var D={};l(D,{xpathQuerySelectorAll:()=>q});var q=function*(t,e,r=-1){let n=(t.ownerDocument||document).evaluate(e,t,null,XPathResult.ORDERED_NODE_ITERATOR_TYPE),i=[],s;for(;(s=n.iterateNext())&&(i.push(s),!(r&&i.length===r)););for(let h=0;h<i.length;h++)s=i[h],yield s,i[h]=null};var de=/[-\\w\\P{ASCII}*]/u,U=(r=>(r.Descendent=">>>",r.Child=">>>>",r))(U||{}),H=t=>"querySelectorAll"in t,Q=class{#e;#r=[];#o=void 0;elements;constructor(e,r){this.elements=[e],this.#e=r,this.#t()}async run(){for(typeof this.#o=="string"&&this.#o.trimStart()===":scope"&&this.#t();this.#o!==void 0;this.#t()){let e=this.#o;typeof e=="string"?e[0]&&de.test(e[0])?this.elements=a.flatMap(this.elements,async function*(r){H(r)&&(yield*r.querySelectorAll(e))}):this.elements=a.flatMap(this.elements,async function*(r){if(!r.parentElement){if(!H(r))return;yield*r.querySelectorAll(e);return}let o=0;for(let n of r.parentElement.children)if(++o,n===r)break;yield*r.parentElement.querySelectorAll(`:scope>:nth-child(${o})${e}`)}):this.elements=a.flatMap(this.elements,async function*(r){switch(e.name){case"text":yield*m(r,e.value);break;case"xpath":yield*q(r,e.value);break;case"aria":yield*x(r,e.value);break;default:let o=P.get(e.name);if(!o)throw new Error(`Unknown selector type: ${e.name}`);yield*o.querySelectorAll(r,e.value)}})}}#t(){if(this.#r.length!==0){this.#o=this.#r.shift();return}if(this.#e.length===0){this.#o=void 0;return}let e=this.#e.shift();switch(e){case">>>>":{this.elements=a.flatMap(this.elements,g),this.#t();break}case">>>":{this.elements=a.flatMap(this.elements,k),this.#t();break}default:this.#r=e,this.#t();break}}},_=class{#e=new WeakMap;calculate(e,r=[]){if(e===null)return r;e instanceof ShadowRoot&&(e=e.host);let o=this.#e.get(e);if(o)return[...o,...r];let n=0;for(let s=e.previousSibling;s;s=s.previousSibling)++n;let i=this.calculate(e.parentNode,[n]);return this.#e.set(e,i),[...i,...r]}},$=(t,e)=>{if(t.length+e.length===0)return 0;let[r=-1,...o]=t,[n=-1,...i]=e;return r===n?$(o,i):r<n?-1:1},fe=async function*(t){let e=new Set;for await(let o of t)e.add(o);let r=new _;yield*[...e.values()].map(o=>[o,r.calculate(o)]).sort(([,o],[,n])=>$(o,n)).map(([o])=>o)},X=function(t,e){let r=JSON.parse(e);if(r.some(o=>{let n=0;return o.some(i=>(typeof i=="string"?++n:n=0,n>1))}))throw new Error("Multiple deep combinators found in sequence.");return fe(a.flatMap(r,o=>{let n=new Q(t,o);return n.run(),n.elements}))},me=async function(t,e){for await(let r of X(t,e))return r;return null};var he=Object.freeze({...v,...A,...R,...L,...O,...M,...D,...E,Deferred:c,createFunction:j,createTextContent:d,IntervalPoller:S,isSuitableNodeForTextMatching:f,MutationPoller:w,RAFPoller:T}),pe=he;\n';
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/generated/injected.js
+var source = '"use strict";var g=Object.defineProperty;var X=Object.getOwnPropertyDescriptor;var Y=Object.getOwnPropertyNames;var G=Object.prototype.hasOwnProperty;var l=(t,e)=>{for(var r in e)g(t,r,{get:e[r],enumerable:!0})},J=(t,e,r,o)=>{if(e&&typeof e=="object"||typeof e=="function")for(let n of Y(e))!G.call(t,n)&&n!==r&&g(t,n,{get:()=>e[n],enumerable:!(o=X(e,n))||o.enumerable});return t};var z=t=>J(g({},"__esModule",{value:!0}),t);var Se={};l(Se,{default:()=>Te});module.exports=z(Se);var b=class extends Error{constructor(e,r){super(e,r),this.name=this.constructor.name}get[Symbol.toStringTag](){return this.constructor.name}},p=class extends b{};var c=class t{static create(e){return new t(e)}static async race(e){let r=new Set;try{let o=e.map(n=>n instanceof t?(n.#s&&r.add(n),n.valueOrThrow()):n);return await Promise.race(o)}finally{for(let o of r)o.reject(new Error("Timeout cleared"))}}#e=!1;#r=!1;#t;#o;#n=new Promise(e=>{this.#o=e});#s;#l;constructor(e){e&&e.timeout>0&&(this.#l=new p(e.message),this.#s=setTimeout(()=>{this.reject(this.#l)},e.timeout))}#i(e){clearTimeout(this.#s),this.#t=e,this.#o()}resolve(e){this.#r||this.#e||(this.#e=!0,this.#i(e))}reject(e){this.#r||this.#e||(this.#r=!0,this.#i(e))}resolved(){return this.#e}finished(){return this.#e||this.#r}value(){return this.#t}#a;valueOrThrow(){return this.#a||(this.#a=(async()=>{if(await this.#n,this.#r)throw this.#t;return this.#t})()),this.#a}};var W=new Map,F=t=>{let e=W.get(t);return e||(e=new Function(`return ${t}`)(),W.set(t,e),e)};var E={};l(E,{ariaQuerySelector:()=>K,ariaQuerySelectorAll:()=>x});var K=(t,e)=>globalThis.__ariaQuerySelector(t,e),x=async function*(t,e){yield*await globalThis.__ariaQuerySelectorAll(t,e)};var v={};l(v,{cssQuerySelector:()=>Z,cssQuerySelectorAll:()=>ee});var Z=(t,e)=>t.querySelector(e),ee=function(t,e){return t.querySelectorAll(e)};var A={};l(A,{CustomQuerySelectorRegistry:()=>y,customQuerySelectors:()=>P});var y=class{#e=new Map;register(e,r){if(!r.queryOne&&r.queryAll){let o=r.queryAll;r.queryOne=(n,i)=>{for(let s of o(n,i))return s;return null}}else if(r.queryOne&&!r.queryAll){let o=r.queryOne;r.queryAll=(n,i)=>{let s=o(n,i);return s?[s]:[]}}else if(!r.queryOne||!r.queryAll)throw new Error("At least one query method must be defined.");this.#e.set(e,{querySelector:r.queryOne,querySelectorAll:r.queryAll})}unregister(e){this.#e.delete(e)}get(e){return this.#e.get(e)}clear(){this.#e.clear()}},P=new y;var R={};l(R,{pierceQuerySelector:()=>te,pierceQuerySelectorAll:()=>re});var te=(t,e)=>{let r=null,o=n=>{let i=document.createTreeWalker(n,NodeFilter.SHOW_ELEMENT);do{let s=i.currentNode;s.shadowRoot&&o(s.shadowRoot),!(s instanceof ShadowRoot)&&s!==n&&!r&&s.matches(e)&&(r=s)}while(!r&&i.nextNode())};return t instanceof Document&&(t=t.documentElement),o(t),r},re=(t,e)=>{let r=[],o=n=>{let i=document.createTreeWalker(n,NodeFilter.SHOW_ELEMENT);do{let s=i.currentNode;s.shadowRoot&&o(s.shadowRoot),!(s instanceof ShadowRoot)&&s!==n&&s.matches(e)&&r.push(s)}while(i.nextNode())};return t instanceof Document&&(t=t.documentElement),o(t),r};var u=(t,e)=>{if(!t)throw new Error(e)};var oe={childList:!0,subtree:!0,attributes:!0};function ne(t){return t.nodeType===Node.ELEMENT_NODE||t.nodeType===Node.DOCUMENT_FRAGMENT_NODE}function se(t){return t.parentNode??t.host??null}function ie(t,e){let r=t,o;for(;o=se(r);){if(e.has(o))return!0;r=o}return!1}var w=class{#e;#r;#t;#o=new WeakSet;#n;constructor(e,r){this.#e=e,this.#r=r}async start(){let e=this.#n=c.create(),r=await this.#e();if(r){e.resolve(r);return}this.#o=new WeakSet,this.#t=new MutationObserver(async o=>{this.#l(o);let n=await this.#e();n&&(e.resolve(n),await this.stop())}),this.#s(this.#r)}#s(e){!this.#t||this.#o.has(e)||(this.#o.add(e),this.#t.observe(e,oe),this.#i(e))}#l(e){let r=new Set;for(let o of e)for(let n of o.addedNodes)ne(n)&&r.add(n);for(let o of r)ie(o,r)||this.#i(o)}#i(e){let r=document.createTreeWalker(e,NodeFilter.SHOW_ELEMENT);do{let{shadowRoot:o}=r.currentNode;o&&this.#s(o)}while(r.nextNode())}async stop(){u(this.#n,"Polling never started."),this.#n.finished()||this.#n.reject(new Error("Polling stopped")),this.#t&&(this.#t.disconnect(),this.#t=void 0)}result(){return u(this.#n,"Polling never started."),this.#n.valueOrThrow()}},N=class{#e;#r;constructor(e){this.#e=e}async start(){let e=this.#r=c.create(),r=await this.#e();if(r){e.resolve(r);return}let o=async()=>{if(e.finished())return;let n=await this.#e();if(!n){window.requestAnimationFrame(o);return}e.resolve(n),await this.stop()};window.requestAnimationFrame(o)}async stop(){u(this.#r,"Polling never started."),this.#r.finished()||this.#r.reject(new Error("Polling stopped"))}result(){return u(this.#r,"Polling never started."),this.#r.valueOrThrow()}},T=class{#e;#r;#t;#o;constructor(e,r){this.#e=e,this.#r=r}async start(){let e=this.#o=c.create(),r=await this.#e();if(r){e.resolve(r);return}this.#t=setInterval(async()=>{let o=await this.#e();o&&(e.resolve(o),await this.stop())},this.#r)}async stop(){u(this.#o,"Polling never started."),this.#o.finished()||this.#o.reject(new Error("Polling stopped")),this.#t&&(clearInterval(this.#t),this.#t=void 0)}result(){return u(this.#o,"Polling never started."),this.#o.valueOrThrow()}};var L={};l(L,{PCombinator:()=>V,pQuerySelector:()=>we,pQuerySelectorAll:()=>B});var a=class{static async*map(e,r){for await(let o of e)yield await r(o)}static async*flatMap(e,r){for await(let o of e)yield*r(o)}static async collect(e){let r=[];for await(let o of e)r.push(o);return r}static async first(e){for await(let r of e)return r}};var C={};l(C,{textQuerySelectorAll:()=>m});var le=new Set(["checkbox","image","radio"]),ae=t=>t instanceof HTMLSelectElement||t instanceof HTMLTextAreaElement||t instanceof HTMLInputElement&&!le.has(t.type),ce=new Set(["SCRIPT","STYLE"]),f=t=>!ce.has(t.nodeName)&&!document.head?.contains(t),O=new WeakMap,H=t=>{for(;t;)O.delete(t),t instanceof ShadowRoot?t=t.host:t=t.parentNode},j=new WeakSet,I,ue=()=>{let t=globalThis.MutationObserver;if(!t)throw new Error("MutationObserver is not available in this environment.");return I||(I=new t(e=>{for(let r of e)H(r.target)})),I},d=t=>{let e=O.get(t);if(e||(e={full:"",immediate:[]},!f(t)))return e;let r="";if(ae(t))e.full=t.value,e.immediate.push(t.value),t.addEventListener("input",o=>{H(o.target)},{once:!0,capture:!0});else{for(let o=t.firstChild;o;o=o.nextSibling){if(o.nodeType===Node.TEXT_NODE){e.full+=o.nodeValue??"",r+=o.nodeValue??"";continue}r&&e.immediate.push(r),r="",o.nodeType===Node.ELEMENT_NODE&&(e.full+=d(o).full)}r&&e.immediate.push(r),t instanceof Element&&t.shadowRoot&&(e.full+=d(t.shadowRoot).full),j.has(t)||(ue().observe(t,{childList:!0,characterData:!0,subtree:!0}),j.add(t))}return O.set(t,e),e};var m=function*(t,e){let r=!1;for(let o of t.childNodes)if(o instanceof Element&&f(o)){let n;o.shadowRoot?n=m(o.shadowRoot,e):n=m(o,e);for(let i of n)yield i,r=!0}r||t instanceof Element&&f(t)&&d(t).full.includes(e)&&(yield t)};var k={};l(k,{checkVisibility:()=>fe,pierce:()=>S,pierceAll:()=>M});var de=["hidden","collapse"],fe=(t,e)=>{if(!t)return e===!1;if(e===void 0)return t;let r=t.nodeType===Node.TEXT_NODE?t.parentElement:t;if(!r)return e===!1;let o=window.getComputedStyle(r),n=o&&!de.includes(o.visibility)&&!me(r);return e===n?t:!1};function me(t){let e=t.getBoundingClientRect();return e.width===0||e.height===0}var he=t=>"shadowRoot"in t&&t.shadowRoot instanceof ShadowRoot;function*S(t){he(t)?yield t.shadowRoot:yield t}function*M(t){t=S(t).next().value,yield t;let e=[document.createTreeWalker(t,NodeFilter.SHOW_ELEMENT)];for(let r of e){let o;for(;o=r.nextNode();)o.shadowRoot&&(yield o.shadowRoot,e.push(document.createTreeWalker(o.shadowRoot,NodeFilter.SHOW_ELEMENT)))}}var _={};l(_,{xpathQuerySelectorAll:()=>D});var D=function*(t,e,r=-1){let n=(t.ownerDocument||document).evaluate(e,t,null,XPathResult.ORDERED_NODE_ITERATOR_TYPE),i=[],s;for(;(s=n.iterateNext())&&(i.push(s),!(r&&i.length===r)););for(let h=0;h<i.length;h++)s=i[h],yield s,i[h]=null};var pe=/[-\\w\\P{ASCII}*]/u,V=(r=>(r.Descendent=">>>",r.Child=">>>>",r))(V||{}),U=t=>"querySelectorAll"in t,q=class{#e;#r=[];#t=void 0;elements;constructor(e,r){this.elements=[e],this.#e=r,this.#o()}async run(){for(typeof this.#t=="string"&&this.#t.trimStart()===":scope"&&this.#o();this.#t!==void 0;this.#o()){let e=this.#t;typeof e=="string"?e[0]&&pe.test(e[0])?this.elements=a.flatMap(this.elements,async function*(r){U(r)&&(yield*r.querySelectorAll(e))}):this.elements=a.flatMap(this.elements,async function*(r){if(!r.parentElement){if(!U(r))return;yield*r.querySelectorAll(e);return}let o=0;for(let n of r.parentElement.children)if(++o,n===r)break;yield*r.parentElement.querySelectorAll(`:scope>:nth-child(${o})${e}`)}):this.elements=a.flatMap(this.elements,async function*(r){switch(e.name){case"text":yield*m(r,e.value);break;case"xpath":yield*D(r,e.value);break;case"aria":yield*x(r,e.value);break;default:let o=P.get(e.name);if(!o)throw new Error(`Unknown selector type: ${e.name}`);yield*o.querySelectorAll(r,e.value)}})}}#o(){if(this.#r.length!==0){this.#t=this.#r.shift();return}if(this.#e.length===0){this.#t=void 0;return}let e=this.#e.shift();switch(e){case">>>>":{this.elements=a.flatMap(this.elements,S),this.#o();break}case">>>":{this.elements=a.flatMap(this.elements,M),this.#o();break}default:this.#r=e,this.#o();break}}},Q=class{#e=new WeakMap;calculate(e,r=[]){if(e===null)return r;e instanceof ShadowRoot&&(e=e.host);let o=this.#e.get(e);if(o)return[...o,...r];let n=0;for(let s=e.previousSibling;s;s=s.previousSibling)++n;let i=this.calculate(e.parentNode,[n]);return this.#e.set(e,i),[...i,...r]}},$=(t,e)=>{if(t.length+e.length===0)return 0;let[r=-1,...o]=t,[n=-1,...i]=e;return r===n?$(o,i):r<n?-1:1},ye=async function*(t){let e=new Set;for await(let o of t)e.add(o);let r=new Q;yield*[...e.values()].map(o=>[o,r.calculate(o)]).sort(([,o],[,n])=>$(o,n)).map(([o])=>o)},B=function(t,e){let r=JSON.parse(e);if(r.some(o=>{let n=0;return o.some(i=>(typeof i=="string"?++n:n=0,n>1))}))throw new Error("Multiple deep combinators found in sequence.");return ye(a.flatMap(r,o=>{let n=new q(t,o);return n.run(),n.elements}))},we=async function(t,e){for await(let r of B(t,e))return r;return null};var Ne=Object.freeze({...E,...A,...R,...L,...C,...k,..._,...v,Deferred:c,createFunction:F,createTextContent:d,IntervalPoller:T,isSuitableNodeForTextMatching:f,MutationPoller:w,RAFPoller:N}),Te=Ne;\n';
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/ScriptInjector.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/ScriptInjector.js
 var ScriptInjector = class {
   #updated = false;
   #amendments = /* @__PURE__ */ new Set();
@@ -8354,7 +8424,7 @@ var ScriptInjector = class {
 };
 var scriptInjector = new ScriptInjector();
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/CustomQueryHandler.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/CustomQueryHandler.js
 var CustomQueryHandlerRegistry = class {
   #handlers = /* @__PURE__ */ new Map();
   get(name) {
@@ -8437,7 +8507,7 @@ var CustomQueryHandlerRegistry = class {
 };
 var customQueryHandlers = new CustomQueryHandlerRegistry();
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/PierceQueryHandler.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/PierceQueryHandler.js
 var PierceQueryHandler = class extends QueryHandler {
   static querySelector = (element, selector, { pierceQuerySelector }) => {
     return pierceQuerySelector(element, selector);
@@ -8447,7 +8517,7 @@ var PierceQueryHandler = class extends QueryHandler {
   };
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/PQueryHandler.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/PQueryHandler.js
 var PQueryHandler = class extends QueryHandler {
   static querySelectorAll = (element, selector, { pQuerySelectorAll }) => {
     return pQuerySelectorAll(element, selector);
@@ -8457,7 +8527,7 @@ var PQueryHandler = class extends QueryHandler {
   };
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/third_party/parsel-js/parsel-js.js
+// ../../front_end/third_party/puppeteer/package/lib/third_party/parsel-js/parsel-js.js
 var TOKENS = {
   attribute: /\[\s*(?:(?<namespace>\*|[-\w\P{ASCII}]*)\|)?(?<name>[-\w\P{ASCII}]+)\s*(?:(?<operator>\W?=)\s*(?<value>.+?)\s*(\s(?<caseSensitive>[iIsS]))?\s*)?\]/gu,
   id: /#(?<name>[-\w\P{ASCII}]+)/gu,
@@ -8625,7 +8695,7 @@ function stringify(listOrNode) {
   }
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/PSelectorParser.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/PSelectorParser.js
 TOKENS["nesting"] = /&/g;
 TOKENS["combinator"] = /\s*(>>>>?|[\s>+~])\s*/g;
 var ESCAPE_REGEXP = /\\[\s\S]/g;
@@ -8723,14 +8793,14 @@ function parsePSelectors(selector) {
   return [selectors, isPureCSS, hasPseudoClasses, hasAria];
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/TextQueryHandler.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/TextQueryHandler.js
 var TextQueryHandler = class extends QueryHandler {
   static querySelectorAll = (element, selector, { textQuerySelectorAll }) => {
     return textQuerySelectorAll(element, selector);
   };
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/XPathQueryHandler.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/XPathQueryHandler.js
 var XPathQueryHandler = class extends QueryHandler {
   static querySelectorAll = (element, selector, { xpathQuerySelectorAll }) => {
     return xpathQuerySelectorAll(element, selector);
@@ -8743,7 +8813,7 @@ var XPathQueryHandler = class extends QueryHandler {
   };
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/GetQueryHandler.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/GetQueryHandler.js
 var BUILTIN_QUERY_HANDLERS = {
   aria: ARIAQueryHandler,
   pierce: PierceQueryHandler,
@@ -8795,7 +8865,7 @@ function getQueryHandlerAndSelector(selector) {
   }
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/Frame.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/Frame.js
 var __runInitializers4 = function(thisArg, initializers, value) {
   var useValue = arguments.length > 2;
   for (var i = 0; i < initializers.length; i++) {
@@ -8862,7 +8932,7 @@ var __addDisposableResource8 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources8 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources8 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -8889,18 +8959,18 @@ var __disposeResources8 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
 var FrameEvent;
 (function(FrameEvent2) {
-  FrameEvent2.FrameNavigated = Symbol("Frame.FrameNavigated");
-  FrameEvent2.FrameSwapped = Symbol("Frame.FrameSwapped");
-  FrameEvent2.LifecycleEvent = Symbol("Frame.LifecycleEvent");
-  FrameEvent2.FrameNavigatedWithinDocument = Symbol("Frame.FrameNavigatedWithinDocument");
-  FrameEvent2.FrameDetached = Symbol("Frame.FrameDetached");
-  FrameEvent2.FrameSwappedByActivation = Symbol("Frame.FrameSwappedByActivation");
+  FrameEvent2.FrameNavigated = /* @__PURE__ */ Symbol("Frame.FrameNavigated");
+  FrameEvent2.FrameSwapped = /* @__PURE__ */ Symbol("Frame.FrameSwapped");
+  FrameEvent2.LifecycleEvent = /* @__PURE__ */ Symbol("Frame.LifecycleEvent");
+  FrameEvent2.FrameNavigatedWithinDocument = /* @__PURE__ */ Symbol("Frame.FrameNavigatedWithinDocument");
+  FrameEvent2.FrameDetached = /* @__PURE__ */ Symbol("Frame.FrameDetached");
+  FrameEvent2.FrameSwappedByActivation = /* @__PURE__ */ Symbol("Frame.FrameSwappedByActivation");
 })(FrameEvent || (FrameEvent = {}));
 var throwIfDetached = throwIfDisposed((frame) => {
   return `Attempted to use detached Frame '${frame._id}'.`;
@@ -9600,7 +9670,7 @@ var Frame = (() => {
   };
 })();
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/CdpIssue.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/CdpIssue.js
 var CdpIssue = class {
   #code;
   #details;
@@ -9616,7 +9686,7 @@ var CdpIssue = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/CdpPreloadScript.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/CdpPreloadScript.js
 var CdpPreloadScript = class {
   /**
    * This is the ID of the preload script returned by
@@ -9648,7 +9718,7 @@ var CdpPreloadScript = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/DeviceRequestPrompt.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/DeviceRequestPrompt.js
 var DeviceRequestPrompt = class {
   /**
    * Current list of selectable devices.
@@ -9656,7 +9726,7 @@ var DeviceRequestPrompt = class {
   devices = [];
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/DeviceRequestPrompt.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/DeviceRequestPrompt.js
 var CdpDeviceRequestPrompt = class extends DeviceRequestPrompt {
   #client;
   #timeoutSettings;
@@ -9788,7 +9858,7 @@ var CdpDeviceRequestPromptManager = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/ElementHandle.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/ElementHandle.js
 var __runInitializers5 = function(thisArg, initializers, value) {
   var useValue = arguments.length > 2;
   for (var i = 0; i < initializers.length; i++) {
@@ -9855,7 +9925,7 @@ var __addDisposableResource9 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources9 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources9 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -9882,7 +9952,7 @@ var __disposeResources9 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -11101,7 +11171,7 @@ function intersectBoundingBox(box, width, height) {
   box.y = Math.max(box.y, 0);
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/utils.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/utils.js
 function createConsoleMessage(event, values, targetId) {
   const textTokens = [];
   for (const arg of values) {
@@ -11289,7 +11359,7 @@ function convertConsoleMessageLevel(method) {
   }
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/JSHandle.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/JSHandle.js
 var CdpJSHandle = class extends JSHandle {
   #disposed = false;
   #remoteObject;
@@ -11373,7 +11443,7 @@ async function releaseObject(client, remoteObject, logger) {
   });
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/ElementHandle.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/ElementHandle.js
 var __runInitializers6 = function(thisArg, initializers, value) {
   var useValue = arguments.length > 2;
   for (var i = 0; i < initializers.length; i++) {
@@ -11555,7 +11625,7 @@ var CdpElementHandle = (() => {
   };
 })();
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/ExecutionContext.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/ExecutionContext.js
 var __addDisposableResource10 = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -11583,7 +11653,7 @@ var __addDisposableResource10 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources10 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources10 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -11610,7 +11680,7 @@ var __disposeResources10 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -11629,12 +11699,12 @@ var ExecutionContext = class _ExecutionContext extends EventEmitter {
   static getOrCreateAriaQuerySelectorAllBinding(logger) {
     return this.#ariaQuerySelectorAllBinding ??= new Binding(
       "__ariaQuerySelectorAll",
-      async (element, selector) => {
+      (async (element, selector) => {
         const results = ARIAQueryHandler.queryAll(element, selector);
         return await element.realm.evaluateHandle((...elements) => {
           return elements;
         }, ...await AsyncIterableUtil.collect(results));
-      },
+      }),
       "",
       // custom init
       logger
@@ -11994,7 +12064,7 @@ var rewriteError2 = (error) => {
   throw error;
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Accessibility.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Accessibility.js
 var __addDisposableResource11 = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -12022,7 +12092,7 @@ var __addDisposableResource11 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources11 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources11 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -12049,7 +12119,7 @@ var __disposeResources11 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -12532,20 +12602,20 @@ var AXNode = class _AXNode {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/FrameManagerEvents.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/FrameManagerEvents.js
 var FrameManagerEvent;
 (function(FrameManagerEvent2) {
-  FrameManagerEvent2.FrameAttached = Symbol("FrameManager.FrameAttached");
-  FrameManagerEvent2.FrameNavigated = Symbol("FrameManager.FrameNavigated");
-  FrameManagerEvent2.FrameDetached = Symbol("FrameManager.FrameDetached");
-  FrameManagerEvent2.FrameSwapped = Symbol("FrameManager.FrameSwapped");
-  FrameManagerEvent2.LifecycleEvent = Symbol("FrameManager.LifecycleEvent");
-  FrameManagerEvent2.FrameNavigatedWithinDocument = Symbol("FrameManager.FrameNavigatedWithinDocument");
-  FrameManagerEvent2.ConsoleApiCalled = Symbol("FrameManager.ConsoleApiCalled");
-  FrameManagerEvent2.BindingCalled = Symbol("FrameManager.BindingCalled");
+  FrameManagerEvent2.FrameAttached = /* @__PURE__ */ Symbol("FrameManager.FrameAttached");
+  FrameManagerEvent2.FrameNavigated = /* @__PURE__ */ Symbol("FrameManager.FrameNavigated");
+  FrameManagerEvent2.FrameDetached = /* @__PURE__ */ Symbol("FrameManager.FrameDetached");
+  FrameManagerEvent2.FrameSwapped = /* @__PURE__ */ Symbol("FrameManager.FrameSwapped");
+  FrameManagerEvent2.LifecycleEvent = /* @__PURE__ */ Symbol("FrameManager.LifecycleEvent");
+  FrameManagerEvent2.FrameNavigatedWithinDocument = /* @__PURE__ */ Symbol("FrameManager.FrameNavigatedWithinDocument");
+  FrameManagerEvent2.ConsoleApiCalled = /* @__PURE__ */ Symbol("FrameManager.ConsoleApiCalled");
+  FrameManagerEvent2.BindingCalled = /* @__PURE__ */ Symbol("FrameManager.BindingCalled");
 })(FrameManagerEvent || (FrameManagerEvent = {}));
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/WaitTask.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/WaitTask.js
 var WaitTask = class {
   #world;
   #polling;
@@ -12715,7 +12785,7 @@ var TaskManager = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/Realm.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/Realm.js
 var Realm = class {
   /** @internal */
   timeoutSettings;
@@ -12777,11 +12847,11 @@ var Realm = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/IsolatedWorlds.js
-var MAIN_WORLD = Symbol("mainWorld");
-var PUPPETEER_WORLD = Symbol("puppeteerWorld");
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/IsolatedWorlds.js
+var MAIN_WORLD = /* @__PURE__ */ Symbol("mainWorld");
+var PUPPETEER_WORLD = /* @__PURE__ */ Symbol("puppeteerWorld");
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/Target.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/Target.js
 var TargetType;
 (function(TargetType2) {
   TargetType2["PAGE"] = "page";
@@ -12816,7 +12886,7 @@ var Target = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/WebWorker.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/WebWorker.js
 var CdpWebWorker = class extends WebWorker {
   #world;
   #client;
@@ -12916,7 +12986,7 @@ var CdpWebWorker = class extends WebWorker {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/IsolatedWorld.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/IsolatedWorld.js
 var IsolatedWorld = class extends Realm {
   #context;
   #emitter = new EventEmitter();
@@ -13073,7 +13143,7 @@ var IsolatedWorld = class extends Realm {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/LifecycleWatcher.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/LifecycleWatcher.js
 var puppeteerToProtocolLifecycle = /* @__PURE__ */ new Map([
   ["load", "load"],
   ["domcontentloaded", "DOMContentLoaded"],
@@ -13226,7 +13296,7 @@ var LifecycleWatcher = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Frame.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Frame.js
 var __runInitializers7 = function(thisArg, initializers, value) {
   var useValue = arguments.length > 2;
   for (var i = 0; i < initializers.length; i++) {
@@ -13445,6 +13515,15 @@ var CdpFrame = (() => {
         throw error;
       }
     }
+    /**
+     * @internal
+     */
+    async setFrameContent(content) {
+      await this.#client.send("Page.setDocumentContent", {
+        frameId: this._id,
+        html: content
+      });
+    }
     url() {
       return this.#url;
     }
@@ -13564,7 +13643,7 @@ function referrerPolicyToProtocol(referrerPolicy) {
   });
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/FrameTree.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/FrameTree.js
 var FrameTree = class {
   #frames = /* @__PURE__ */ new Map();
   // frameID -> parentFrameID
@@ -13639,7 +13718,7 @@ var FrameTree = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/HTTPRequest.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/HTTPRequest.js
 var HTTPRequest = class {
   /**
    * @internal
@@ -14031,7 +14110,7 @@ function handleError(error, logger) {
   logger?.(DEBUG_PREFIXES.error)?.(error);
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/HTTPRequest.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/HTTPRequest.js
 var CdpHTTPRequest = class extends HTTPRequest {
   id;
   #client;
@@ -14208,7 +14287,7 @@ var CdpHTTPRequest = class extends HTTPRequest {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/HTTPResponse.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/HTTPResponse.js
 var HTTPResponse = class {
   /**
    * @internal
@@ -14254,7 +14333,7 @@ var HTTPResponse = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/SecurityDetails.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/SecurityDetails.js
 var SecurityDetails = class {
   #subjectName;
   #issuer;
@@ -14313,7 +14392,7 @@ var SecurityDetails = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/util/httpUtils.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/util/httpUtils.js
 function normalizeHeaderValue(name, value) {
   if (!value.includes("\n")) {
     return value;
@@ -14323,7 +14402,7 @@ function normalizeHeaderValue(name, value) {
   }).filter(Boolean).join(name === "set-cookie" ? "\n " : ", ");
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/HTTPResponse.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/HTTPResponse.js
 var CdpHTTPResponse = class extends HTTPResponse {
   #request;
   #contentPromise = null;
@@ -14432,7 +14511,7 @@ var CdpHTTPResponse = class extends HTTPResponse {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/NetworkEventManager.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/NetworkEventManager.js
 var NetworkEventManager = class {
   /**
    * There are four possible orders of events:
@@ -14584,7 +14663,7 @@ var NetworkEventManager = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/NetworkManager.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/NetworkManager.js
 var NetworkManager = class extends EventEmitter {
   #frameManager;
   #networkEventManager = new NetworkEventManager();
@@ -15097,7 +15176,7 @@ var NetworkManager = class extends EventEmitter {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/FrameManager.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/FrameManager.js
 var __addDisposableResource12 = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -15125,7 +15204,7 @@ var __addDisposableResource12 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources12 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources12 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -15152,7 +15231,7 @@ var __disposeResources12 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -15612,7 +15691,7 @@ var FrameManager = class extends EventEmitter {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/Input.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/Input.js
 var Keyboard = class {
   /**
    * @internal
@@ -15698,7 +15777,7 @@ var Touchscreen = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/common/USKeyboardLayout.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/common/USKeyboardLayout.js
 var _keyDefinitions = {
   "0": { keyCode: 48, key: "0", code: "Digit0" },
   "1": { keyCode: 49, key: "1", code: "Digit1" },
@@ -16085,7 +16164,7 @@ var _keyDefinitions = {
   VolumeUp: { keyCode: 183, key: "VolumeUp", code: "VolumeUp", location: 4 }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Input.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Input.js
 var CdpKeyboard = class extends Keyboard {
   #client;
   #pressedKeys = /* @__PURE__ */ new Set();
@@ -16551,7 +16630,215 @@ var CdpTouchscreen = class extends Touchscreen {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Tracing.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/ScreenRecording.js
+var ScreenRecording = class extends ReadableStream {
+  /**
+   * @internal
+   */
+  page;
+  /**
+   * @internal
+   */
+  options;
+  /**
+   * @internal
+   */
+  logger;
+  /**
+   * @internal
+   */
+  controller;
+  /**
+   * @internal
+   */
+  destinations = /* @__PURE__ */ new Set();
+  /**
+   * @internal
+   */
+  stopped = false;
+  /**
+   * @internal
+   */
+  constructor(page, options = {}, logger) {
+    let controller;
+    super({
+      start(c) {
+        controller = c;
+      }
+    });
+    this.controller = controller;
+    this.page = page;
+    this.options = options;
+    this.logger = logger;
+  }
+  pipe(destination) {
+    if ("getWriter" in destination && typeof destination.getWriter === "function") {
+      return this.pipeTo(destination);
+    }
+    const dest = destination;
+    this.destinations.add(dest);
+    dest.once?.("unpipe", () => {
+      this.destinations.delete(dest);
+    });
+    dest.once?.("error", () => {
+      this.destinations.delete(dest);
+    });
+    dest.once?.("close", () => {
+      this.destinations.delete(dest);
+    });
+    dest.once?.("finish", () => {
+      this.destinations.delete(dest);
+    });
+    return dest;
+  }
+  /**
+   * @internal
+   */
+  async closeDestinations() {
+    try {
+      this.controller.close();
+    } catch {
+    }
+    for (const dest of this.destinations) {
+      dest.end();
+    }
+    const destinationPromises = Array.from(this.destinations).map((dest) => {
+      return new Promise((resolve) => {
+        if (dest.writableFinished || dest.closed || dest.destroyed) {
+          resolve(void 0);
+        } else {
+          dest.once?.("finish", resolve);
+          dest.once?.("close", resolve);
+          dest.once?.("error", resolve);
+        }
+      });
+    });
+    await Promise.all(destinationPromises);
+  }
+  async [asyncDisposeSymbol]() {
+    await this.stop();
+  }
+};
+
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/ScreenRecording.js
+var __runInitializers8 = function(thisArg, initializers, value) {
+  var useValue = arguments.length > 2;
+  for (var i = 0; i < initializers.length; i++) {
+    value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+  }
+  return useValue ? value : void 0;
+};
+var __esDecorate8 = function(ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+  function accept(f) {
+    if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected");
+    return f;
+  }
+  var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+  var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+  var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+  var _2, done = false;
+  for (var i = decorators.length - 1; i >= 0; i--) {
+    var context2 = {};
+    for (var p in contextIn) context2[p] = p === "access" ? {} : contextIn[p];
+    for (var p in contextIn.access) context2.access[p] = contextIn.access[p];
+    context2.addInitializer = function(f) {
+      if (done) throw new TypeError("Cannot add initializers after decoration has completed");
+      extraInitializers.push(accept(f || null));
+    };
+    var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context2);
+    if (kind === "accessor") {
+      if (result === void 0) continue;
+      if (result === null || typeof result !== "object") throw new TypeError("Object expected");
+      if (_2 = accept(result.get)) descriptor.get = _2;
+      if (_2 = accept(result.set)) descriptor.set = _2;
+      if (_2 = accept(result.init)) initializers.unshift(_2);
+    } else if (_2 = accept(result)) {
+      if (kind === "field") initializers.unshift(_2);
+      else descriptor[key] = _2;
+    }
+  }
+  if (target) Object.defineProperty(target, contextIn.name, descriptor);
+  done = true;
+};
+var CdpScreenRecording = (() => {
+  let _classSuper = ScreenRecording;
+  let _instanceExtraInitializers = [];
+  let _stop_decorators;
+  return class CdpScreenRecording extends _classSuper {
+    static {
+      const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(_classSuper[Symbol.metadata] ?? null) : void 0;
+      _stop_decorators = [guarded()];
+      __esDecorate8(this, null, _stop_decorators, { kind: "method", name: "stop", static: false, private: false, access: { has: (obj) => "stop" in obj, get: (obj) => obj.stop }, metadata: _metadata }, null, _instanceExtraInitializers);
+      if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+    }
+    #streamHandle = __runInitializers8(this, _instanceExtraInitializers);
+    /**
+     * @internal
+     */
+    constructor(page, options = {}, logger) {
+      super(page, options, logger);
+      const { client } = this.page.mainFrame();
+      client?.once?.(CDPSessionEvent.Disconnected, () => {
+        void this.stop().catch((err) => {
+          this.logger(DEBUG_PREFIXES.error)?.(err);
+        });
+      });
+    }
+    /**
+     * @internal
+     */
+    async _start() {
+      const { client } = this.page.mainFrame();
+      const frameRate = this.options.frameRate ?? this.options.fps;
+      const result = await client.send("Page.startScreenRecording", {
+        audio: this.options.audio,
+        maxWidth: this.options.maxWidth,
+        maxHeight: this.options.maxHeight,
+        frameRate
+      });
+      this.#streamHandle = result.stream;
+    }
+    /**
+     * Stops the screen recording.
+     *
+     * @public
+     */
+    async stop() {
+      if (this.stopped) {
+        return;
+      }
+      this.stopped = true;
+      try {
+        const { client } = this.page.mainFrame();
+        await client.send("Page.stopScreenRecording").catch((err) => {
+          this.logger(DEBUG_PREFIXES.error)?.(err);
+        });
+        if (!this.#streamHandle) {
+          throw new Error("Screen recording stream handle is missing.");
+        }
+        let eof = false;
+        while (!eof) {
+          const { data, base64Encoded, eof: isEof } = await client.send("IO.read", { handle: this.#streamHandle });
+          eof = isEof;
+          if (data) {
+            const buffer = stringToTypedArray(data, base64Encoded ?? false);
+            this.controller.enqueue(buffer);
+            for (const dest of this.destinations) {
+              dest.write(buffer);
+            }
+          }
+        }
+        await client.send("IO.close", { handle: this.#streamHandle }).catch((err) => {
+          this.logger(DEBUG_PREFIXES.error)?.(err);
+        });
+      } finally {
+        await this.closeDestinations();
+      }
+    }
+  };
+})();
+
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Tracing.js
 var Tracing = class {
   #client;
   #recording = false;
@@ -16641,7 +16928,7 @@ var Tracing = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/WebMCP.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/WebMCP.js
 var WebMCPTool = class extends EventEmitter {
   #webmcp;
   #backendNodeId;
@@ -16713,16 +17000,25 @@ var WebMCPTool = class extends EventEmitter {
   /**
    * Executes tool with input parameters, matching tool's `inputSchema`.
    */
-  async execute(input = {}) {
+  async execute(input = {}, options = {}) {
     const { invocationId } = await this.#webmcp.invokeTool(this, input);
     return await new Promise((resolve) => {
+      const onAbort = () => {
+        void this.#webmcp.cancelInvocation(invocationId);
+      };
       const handler = (event) => {
         if (event.id === invocationId) {
+          options.signal?.removeEventListener("abort", onAbort);
           this.#webmcp.off("toolresponded", handler);
           resolve(event);
         }
       };
       this.#webmcp.on("toolresponded", handler);
+      if (options.signal?.aborted) {
+        onAbort();
+      } else {
+        options.signal?.addEventListener("abort", onAbort, { once: true });
+      }
     });
   }
 };
@@ -16862,6 +17158,16 @@ var WebMCP = class extends EventEmitter {
     });
   }
   /**
+   * @internal
+   */
+  async cancelInvocation(invocationId) {
+    return await this.#client.send("WebMCP.cancelInvocation", {
+      invocationId
+    }).catch((err) => {
+      this.#logger?.(DEBUG_PREFIXES.error)?.(err);
+    });
+  }
+  /**
    * Gets all WebMCP tools defined by the page.
    */
   tools() {
@@ -16887,7 +17193,7 @@ var WebMCP = class extends EventEmitter {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Page.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Page.js
 var __addDisposableResource13 = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -16915,7 +17221,7 @@ var __addDisposableResource13 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources13 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources13 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -16942,7 +17248,7 @@ var __disposeResources13 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -17818,6 +18124,12 @@ var CdpPage = class _CdpPage extends Page {
   extensionRealms() {
     return this.mainFrame().extensionRealms();
   }
+  /**
+   * @internal
+   */
+  createScreenRecording(options) {
+    return new CdpScreenRecording(this, options, this.logger);
+  }
 };
 var supportedMetrics = /* @__PURE__ */ new Set([
   "Timestamp",
@@ -17860,7 +18172,7 @@ function convertCookiesPartitionKeyFromPuppeteerToCdp(partitionKey) {
   };
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/BrowserContext.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/BrowserContext.js
 var __addDisposableResource14 = function(env, value, async2) {
   if (value !== null && value !== void 0) {
     if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -17888,7 +18200,7 @@ var __addDisposableResource14 = function(env, value, async2) {
   }
   return value;
 };
-var __disposeResources14 = /* @__PURE__ */ function(SuppressedError3) {
+var __disposeResources14 = /* @__PURE__ */ (function(SuppressedError3) {
   return function(env) {
     function fail(e) {
       env.error = env.hasError ? new SuppressedError3(e, env.error, "An error was suppressed during disposal.") : e;
@@ -17915,7 +18227,7 @@ var __disposeResources14 = /* @__PURE__ */ function(SuppressedError3) {
     }
     return next();
   };
-}(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
+})(typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message) {
   var e = new Error(message);
   return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
@@ -18037,7 +18349,7 @@ var CdpBrowserContext = class extends BrowserContext {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/api/Extension.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/api/Extension.js
 var Extension = class {
   #id;
   #version;
@@ -18099,7 +18411,7 @@ var Extension = class {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Extension.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Extension.js
 var CdpExtension = class extends Extension {
   // needed to access the CDPSession to trigger an extension action.
   #browser;
@@ -18165,7 +18477,7 @@ var CdpExtension = class extends Extension {
   }
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Target.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Target.js
 var InitializationStatus;
 (function(InitializationStatus2) {
   InitializationStatus2["SUCCESS"] = "success";
@@ -18396,7 +18708,7 @@ var WorkerTarget = class extends CdpTarget {
 var OtherTarget = class extends CdpTarget {
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/third_party/urlpattern-polyfill/urlpattern-polyfill.js
+// ../../front_end/third_party/puppeteer/package/lib/third_party/urlpattern-polyfill/urlpattern-polyfill.js
 var Pe = Object.defineProperty;
 var a = (e, t) => Pe(e, "name", { value: t, configurable: true });
 var P = class {
@@ -19176,7 +19488,7 @@ if (!globalThis.URLPattern) {
   globalThis.URLPattern = Y;
 }
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/TargetManager.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/TargetManager.js
 function isPageTargetBecomingPrimary(target, newTargetInfo) {
   return Boolean(target._subtype()) && !newTargetInfo.subtype;
 }
@@ -19551,7 +19863,7 @@ var TargetManager = class extends EventEmitter {
   };
 };
 
-// gen/front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Browser.js
+// ../../front_end/third_party/puppeteer/package/lib/puppeteer/cdp/Browser.js
 function isDevToolsPageTarget(url) {
   return url.startsWith("devtools://devtools/bundled/devtools_app.html");
 }

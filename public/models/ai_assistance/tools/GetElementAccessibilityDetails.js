@@ -4,14 +4,14 @@
 import * as Host from '../../../core/host/host.js';
 import * as i18n from '../../../core/i18n/i18n.js';
 import * as SDK from '../../../core/sdk/sdk.js';
-import { DOMNodeContext } from '../contexts/DOMNodeContext.js';
+import { isOriginAllowedByLock, } from './Tool.js';
 /**
  * A tool that retrieves fine-grained accessibility properties (role, name, ARIA properties, focus state)
  * for a resolved element backend node ID. It also returns a DOM snapshot of the element's subtree.
  */
 export class GetElementAccessibilityDetailsTool {
     name = "getElementAccessibilityDetails" /* ToolName.GET_ELEMENT_ACCESSIBILITY_DETAILS */;
-    description = 'Get detailed accessibility information for an element on the inspected page by its backend node ID.';
+    description = 'Retrieves detailed accessibility properties (computed role, accessible name, name source, ARIA attributes, ignored state) and a DOM tree snapshot for an element by backend node ID.';
     parameters = {
         type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
         description: 'Arguments for getting element accessibility details.',
@@ -45,9 +45,6 @@ export class GetElementAccessibilityDetailsTool {
      */
     async handler(params, context) {
         const establishedOrigin = context.getEstablishedOrigin();
-        if (!establishedOrigin) {
-            return { error: 'Error: Origin lock is not established.' };
-        }
         const target = context.getTarget();
         if (!target) {
             return { error: 'Error: Inspected target not found.' };
@@ -60,12 +57,13 @@ export class GetElementAccessibilityDetailsTool {
         if (!resolved) {
             return { error: 'Error: Could not resolve element by ID.' };
         }
-        const nodeContext = new DOMNodeContext(resolved);
         // Security check: Ensure the element matches the active conversation's origin lock.
-        if (!nodeContext.isOriginAllowed(establishedOrigin)) {
-            return { error: 'Error: Node does not belong to the locked origin.' };
+        // Because getTarget() returns the primary page target to support resolving elements
+        // across frames, origin validation must be enforced directly on the resolved node.
+        if (!isOriginAllowedByLock(establishedOrigin, resolved.securityOrigin())) {
+            return { error: 'Error: Node does not belong to the current origin.' };
         }
-        const axModel = target.model(SDK.AccessibilityModel.AccessibilityModel);
+        const axModel = resolved.domModel().target().model(SDK.AccessibilityModel.AccessibilityModel);
         if (!axModel) {
             return { error: 'Error: Accessibility model not found.' };
         }
@@ -76,16 +74,26 @@ export class GetElementAccessibilityDetailsTool {
         if (!axNode) {
             return { error: 'Error: AX node details not found.' };
         }
-        const properties = {
+        const result = {
             role: axNode.role()?.value,
             name: axNode.name()?.value,
+            nameSource: axNode.name()?.sources?.[0]?.type,
             properties: axNode.properties()?.map(p => ({ name: p.name, value: p.value?.value })) ?? [],
+            ariaAttributes: resolved.attributes()
+                .filter(attr => attr.name.startsWith('aria-') || attr.name === 'role')
+                .reduce((acc, attr) => {
+                acc[attr.name] = attr.value;
+                return acc;
+            }, {}),
+            isIgnored: axNode.ignored(),
+            ignoredReasons: axNode.ignoredReasons()?.map(p => ({ name: p.name, value: p.value?.value })) ?? [],
+            backendNodeId: resolved.backendNodeId(),
         };
         // Take a snapshot of the resolved node's DOM structure. This is required
         // by the DOM_TREE UI widget to render the element's local tree in the AI response panel.
         const snapshot = await resolved.takeSnapshot();
         return {
-            result: JSON.stringify(properties, null, 2),
+            result: JSON.stringify(result, null, 2),
             widgets: [{
                     name: 'DOM_TREE',
                     data: {

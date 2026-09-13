@@ -15,13 +15,14 @@ import { KeyboardShortcut, Keys } from './KeyboardShortcut.js';
 import { Widget, WidgetFocusRestorer } from './Widget.js';
 const UIStrings = {
     /**
-     * @description Text to close the dialog
+     * @description Tooltip text and accessible label for the close button in a dialog.
      */
     close: 'Close',
 };
 const str_ = i18n.i18n.registerUIStrings('ui/legacy/Dialog.ts', UIStrings);
 const i18nString = i18n.i18n.getLocalizedString.bind(undefined, str_);
-export class Dialog extends Common.ObjectWrapper.eventMixin(GlassPane) {
+const DialogBase = Common.ObjectWrapper.eventMixin(GlassPane);
+export class Dialog extends DialogBase {
     tabIndexBehavior = "DisableAllTabIndex" /* OutsideTabIndexBehavior.DISABLE_ALL_OUTSIDE_TAB_INDEX */;
     tabIndexMap = new Map();
     focusRestorer = null;
@@ -205,7 +206,18 @@ export class Dialog extends Common.ObjectWrapper.eventMixin(GlassPane) {
     }
     static dialogs = [];
 }
-export class DialogWidget extends Common.ObjectWrapper.eventMixin(Widget) {
+export var Events;
+(function (Events) {
+    Events["HIDDEN"] = "hidden";
+})(Events || (Events = {}));
+export var OutsideTabIndexBehavior;
+(function (OutsideTabIndexBehavior) {
+    OutsideTabIndexBehavior["DISABLE_ALL_OUTSIDE_TAB_INDEX"] = "DisableAllTabIndex";
+    OutsideTabIndexBehavior["PRESERVE_MAIN_VIEW_TAB_INDEX"] = "PreserveMainViewTabIndex";
+    OutsideTabIndexBehavior["PRESERVE_TAB_INDEX"] = "PreserveTabIndex";
+})(OutsideTabIndexBehavior || (OutsideTabIndexBehavior = {}));
+const DialogWidgetBase = Common.ObjectWrapper.eventMixin(Widget);
+export class DialogWidget extends DialogWidgetBase {
     #open = false;
     #jslogContext = '';
     #dialogStack = false;

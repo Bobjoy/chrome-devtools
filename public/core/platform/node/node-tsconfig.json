@@ -1,13 +1,14 @@
 {
-  "checkJs": true,
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
-    "checkJs": true,
-    "composite": true,
-    "declaration": true,
+    "checkJs": false,
+    "composite": false,
+    "declaration": false,
+    "disableSourceOfProjectReferenceRedirect": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
+    "incremental": false,
     "inlineSources": true,
     "lib": [
       "ES2023",
@@ -17,19 +18,22 @@
       "ESNext.Array"
     ],
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
     "outDir": ".",
+    "preserveConstEnums": true,
     "rootDir": "../../../../../../../front_end/core/platform/node",
+    "rootDirs": [
+      "../../../../../../../",
+      "../../../../"
+    ],
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "es2023",
-    "tsBuildInfoFile": "node-tsconfig.json.tsbuildinfo",
     "typeRoots": [
       "../../../../../../../node_modules/@types",
       "../../../../../../../node_modules"
@@ -44,11 +48,12 @@
     "../../../../../../../front_end/core/platform/node/HostRuntime.ts",
     "../../../../../../../front_end/legacy/legacy-defs.d.ts",
     "../../../../../../../front_end/global_typings/global_defs.d.ts",
-    "../../../../../../../node_modules/@types/filesystem/index.d.ts"
+    "../../../../../../../node_modules/@types/filesystem/index.d.ts",
+    "../../../../../../../node_modules/@types/filewriter/index.d.ts"
   ],
   "references": [
     {
-      "path": "../api/bundle-tsconfig.json"
+      "path": "../api/bundle-tsconfig.ref.json"
     }
   ]
 }

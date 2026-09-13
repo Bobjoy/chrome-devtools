@@ -1,3 +1,4 @@
+import * as i18n from '../../../core/i18n/i18n.js';
 import type * as Handlers from '../handlers/handlers.js';
 import * as Types from '../types/types.js';
 import { type InsightModel, type InsightSetContext } from './types.js';
@@ -43,7 +44,7 @@ export declare const UIStrings: {
      */
     readonly topSelectorMatchAttempt: 'Top selector match attempt';
 };
-export declare const i18nString: (id: string, values?: import("../../../core/i18n/i18nTypes.js").Values | undefined) => import("../../../core/platform/UIString.js").LocalizedString;
+export declare const i18nString: i18n.LocalizeString;
 export type SlowCSSSelectorInsightModel = InsightModel<typeof UIStrings, {
     totalElapsedMs: Types.Timing.Milli;
     totalMatchAttempts: number;

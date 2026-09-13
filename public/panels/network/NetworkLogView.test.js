@@ -17,8 +17,10 @@ import { expectCalled } from '../../testing/ExpectStubCall.js';
 import { stubFileManager } from '../../testing/FileManagerHelpers.js';
 import { MockCDPConnection } from '../../testing/MockCDPConnection.js';
 import { dispatchEvent } from '../../testing/MockConnection.js';
+import { createNetworkRequest } from '../../testing/NetworkRequestHelpers.js';
 import { activate } from '../../testing/ResourceTreeHelpers.js';
 import * as RenderCoordinator from '../../ui/components/render_coordinator/render_coordinator.js';
+import * as DataGrid from '../../ui/legacy/components/data_grid/data_grid.js';
 import * as UI from '../../ui/legacy/legacy.js';
 import * as Network from './network.js';
 const { urlString } = Platform.DevToolsPath;
@@ -932,6 +934,26 @@ Invoke-WebRequest -UseBasicParsing -Uri "https://url-header-and-content-overridd
         const customResponseHeaderItem = responseHeadersSubMenu.defaultSection().items.find((item) => item.buildDescriptor().label === customResponseTitle);
         assert.exists(customResponseHeaderItem, 'Custom response header item should be in the "Response headers" submenu');
     });
+    it('sorts requests by the value of a custom response header column', async () => {
+        const columnSettings = Common.Settings.Settings.instance().createSetting('network-log-columns', {});
+        columnSettings.set({
+            'response-header-age': { visible: true, title: 'Age' },
+        });
+        const r1 = createNetworkRequest(urlString `https://a.com/`, { target });
+        const r2 = createNetworkRequest(urlString `https://b.com/`, { target });
+        const r3 = createNetworkRequest(urlString `https://c.com/`, { target });
+        r1.responseHeaders = [{ name: 'age', value: '30' }];
+        r2.responseHeaders = [{ name: 'age', value: '10' }];
+        r3.responseHeaders = [{ name: 'age', value: '20' }];
+        networkLogView = createNetworkLogView();
+        renderElementIntoDOM(networkLogView);
+        const columns = networkLogView.columns();
+        const dataGrid = columns.dataGrid();
+        dataGrid.markColumnAsSortedBy('response-header-age', DataGrid.DataGrid.Order.Ascending);
+        columns.sortByCurrentColumn();
+        const rootNode = dataGrid.rootNode();
+        assert.deepEqual(rootNode.children.map(n => n.request()?.url()), [urlString `https://b.com/`, urlString `https://c.com/`, urlString `https://a.com/`]);
+    });
     describe('Request blocking and throttling', () => {
         beforeEach(() => {
             Common.Settings.Settings.instance().createSetting('network-blocked-urls', []).set([]);
@@ -1032,9 +1054,7 @@ Invoke-WebRequest -UseBasicParsing -Uri "https://url-header-and-content-overridd
         connection.setSuccessHandler('Network.emulateNetworkConditionsByRule', params => params.matchedNetworkConditions.length > 0 ? { ruleIds: [ruleId] } : { ruleIds: [] });
         SDK.NetworkManager.MultitargetNetworkManager.instance({ forceNew: true });
         networkLogView = createNetworkLogView();
-        const container = renderElementIntoDOM(document.createElement('div'), { includeCommonStyles: true });
-        networkLogView.markAsRoot();
-        networkLogView.show(container);
+        renderElementIntoDOM(networkLogView, { includeCommonStyles: true, width: 400, height: 100 });
         networkLogView.columns().switchViewMode(true);
         networkLogView.setRecording(true);
         const ruleId = 'rule-id';
@@ -1075,12 +1095,10 @@ Invoke-WebRequest -UseBasicParsing -Uri "https://url-header-and-content-overridd
         assert.exists(networkManager);
         networkLog.modelAdded(networkManager);
         networkManager.dispatchEventToListeners(SDK.NetworkManager.Events.LoadingFinished, request);
-        networkLogView.element.style.height = '100px';
-        networkLogView.element.style.width = '400px';
         networkLogView.columns().dataGrid().updateInstantly();
         await assertScreenshot('network-log/throttled-request.png');
         await RenderCoordinator.done();
-        const icons = Array.from(container.querySelectorAll('devtools-icon'));
+        const icons = Array.from(networkLogView.element.querySelectorAll('devtools-icon'));
         assert.deepEqual(icons.map(e => e.title), ['Other (throttled to 3G)', 'Request was throttled (3G)']);
         const appliedConditions = SDK.NetworkManager.MultitargetNetworkManager.instance().appliedRequestConditions(request);
         assert.exists(appliedConditions);
@@ -1349,7 +1367,7 @@ describeWithEnvironment('NetworkLogView', () => {
         const progressBarContainer = document.createElement('div');
         const setting = Common.Settings.Settings.instance().createSetting('network-log-large-rows', false);
         const networkLogView = new Network.NetworkLogView.NetworkLogView(filterBar, progressBarContainer, setting);
-        const request = SDK.NetworkRequest.NetworkRequest.create('requestId', Platform.DevToolsPath.urlString `https://www.example.com/script.js`, Platform.DevToolsPath.urlString ``, null, null, null);
+        const request = createNetworkRequest({ url: 'https://www.example.com/script.js' });
         const event = new Event('contextmenu');
         sinon.stub(event, 'target').value(document);
         const contextMenu = new UI.ContextMenu.ContextMenu(event);
@@ -1380,14 +1398,16 @@ describeWithEnvironment('NetworkLogView', () => {
     });
 });
 function testPlaceholderText(networkLogView, expectedHeaderText, expectedDescriptionText) {
-    const emptyWidget = networkLogView.element.querySelector('.empty-state');
+    const emptyWidgetHost = networkLogView.element.querySelector('.network-status-pane');
+    const emptyWidget = emptyWidgetHost?.shadowRoot;
     const header = emptyWidget?.querySelector('.empty-state-header')?.textContent;
     const description = emptyWidget?.querySelector('.empty-state-description > span')?.textContent;
     assert.deepEqual(header, expectedHeaderText);
     assert.deepEqual(description, expectedDescriptionText);
 }
 function testPlaceholderButton(networkLogView, expectedButtonText, actionId) {
-    const button = networkLogView.element.querySelector('.empty-state devtools-button');
+    const emptyWidgetHost = networkLogView.element.querySelector('.network-status-pane');
+    const button = emptyWidgetHost?.querySelector('devtools-button');
     assert.exists(button);
     assert.deepEqual(button.textContent, expectedButtonText);
     const action = UI.ActionRegistry.ActionRegistry.instance().getAction(actionId);

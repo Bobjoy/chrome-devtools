@@ -1,12 +1,13 @@
 {
-    "compilerOptions": {
-        "composite": true,
-        "outDir": "."
-    },
-    "files": [
-        "accessibilityNode.css.js",
-        "accessibilityProperties.css.js",
-        "accessibilitySidebarView.css.js",
-        "axBreadcrumbs.css.js"
-    ]
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "."
+  },
+  "files": [
+    "accessibilityAnnouncementRecordingListView.css.js",
+    "accessibilityNode.css.js",
+    "accessibilityProperties.css.js",
+    "accessibilitySidebarView.css.js",
+    "axBreadcrumbs.css.js"
+  ]
 }

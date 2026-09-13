@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import { assert } from 'chai';
+import * as SDK from '../../../core/sdk/sdk.js';
 import { SnapshotTester } from '../../../testing/SnapshotTester.js';
 import * as AiAssistance from '../ai_assistance.js';
 describe('AccessibilityContext', function () {
@@ -31,9 +32,9 @@ describe('AccessibilityContext', function () {
         },
         categoryGroups: {},
     };
-    it('should return URL, item, and title correctly', () => {
+    it('should return origin, item, and title correctly', () => {
         const context = new AiAssistance.AccessibilityContext.AccessibilityContext(mockReport);
-        assert.strictEqual(context.getURL(), 'https://example.com');
+        assert.isTrue(context.getOrigin().isSameOriginWith(SDK.SecurityOrigin.SecurityOrigin.create('https://example.com')));
         assert.strictEqual(context.getItem(), mockReport);
         assert.strictEqual(context.getTitle(), 'Lighthouse report: https://example.com');
     });
@@ -48,6 +49,18 @@ describe('AccessibilityContext', function () {
         const details = await context.getUserFacingDetails();
         assert.exists(details);
         snapshotTester.assert(this, JSON.stringify(details, null, 2));
+    });
+    it('should return LIGHTHOUSE_REPORT widget in getWidgets', async () => {
+        const context = new AiAssistance.AccessibilityContext.AccessibilityContext(mockReport);
+        const widgets = await context.getWidgets();
+        assert.deepEqual(widgets, [
+            {
+                name: 'LIGHTHOUSE_REPORT',
+                data: {
+                    report: mockReport,
+                },
+            },
+        ]);
     });
 });
 //# sourceMappingURL=AccessibilityContext.test.js.map

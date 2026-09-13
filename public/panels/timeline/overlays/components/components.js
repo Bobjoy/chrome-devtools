@@ -4,18 +4,18 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/timeline/overlays/components/EntriesLinkOverlay.js
+// ../../front_end/panels/timeline/overlays/components/EntriesLinkOverlay.ts
 var EntriesLinkOverlay_exports = {};
 __export(EntriesLinkOverlay_exports, {
   EntriesLinkOverlay: () => EntriesLinkOverlay,
   EntryLinkStartCreating: () => EntryLinkStartCreating
 });
-import "./../../../../ui/kit/kit.js";
-import * as i18n from "./../../../../core/i18n/i18n.js";
-import * as Trace from "./../../../../models/trace/trace.js";
-import * as ThemeSupport from "./../../../../ui/legacy/theme_support/theme_support.js";
-import { html, render } from "./../../../../ui/lit/lit.js";
-import * as VisualLogging from "./../../../../ui/visual_logging/visual_logging.js";
+import "../../../../ui/kit/kit.js";
+import * as i18n from "../../../../core/i18n/i18n.js";
+import * as Trace from "../../../../models/trace/trace.js";
+import * as ThemeSupport from "../../../../ui/legacy/theme_support/theme_support.js";
+import { html, render } from "../../../../ui/lit/lit.js";
+import * as VisualLogging from "../../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/timeline/overlays/components/entriesLinkOverlay.css.js
 var entriesLinkOverlay_css_default = `/*
@@ -34,7 +34,7 @@ var entriesLinkOverlay_css_default = `/*
   pointer-events: none;
   position: absolute;
   display: block;
-  border: 2px solid var(--color-text-primary);
+  border: var(--sys-size-2) solid var(--color-text-primary);
   box-sizing: border-box;
 
   &.cut-off-top {
@@ -55,24 +55,24 @@ var entriesLinkOverlay_css_default = `/*
 }
 
 .entry-is-not-source {
-  border: 2px dashed var(--color-text-primary);
+  border: var(--sys-size-2) dashed var(--color-text-primary);
 }
 
 .create-link-icon {
   pointer-events: auto;
   cursor: pointer;
   color: var(--sys-color-on-surface);
-  width: 16px;
-  height: 16px;
+  width: var(--sys-size-8);
+  height: var(--sys-size-8);
   position: absolute;
 }
 
 /*# sourceURL=${import.meta.resolve("./entriesLinkOverlay.css")} */`;
 
-// gen/front_end/panels/timeline/overlays/components/EntriesLinkOverlay.js
+// ../../front_end/panels/timeline/overlays/components/EntriesLinkOverlay.ts
 var UIStrings = {
   /**
-   * @description Accessible label used to explain to a user that they are viewing an arrow representing a link between two entries.
+   * @description Accessible label for the connector container in the entries link overlay of the Performance panel.
    */
   diagram: "Links between entries"
 };
@@ -202,7 +202,7 @@ var EntriesLinkOverlay = class extends HTMLElement {
       console.error("one of the required Entries Link elements is missing.");
       return;
     }
-    if (this.#linkState === "creation_not_started") {
+    if (this.#linkState === Trace.Types.File.EntriesLinkState.CREATION_NOT_STARTED) {
       this.#entryFromCirleConnector.setAttribute("visibility", "hidden");
       this.#entryToCircleConnector.setAttribute("visibility", "hidden");
       this.#connector.style.display = "none";
@@ -298,7 +298,7 @@ var EntriesLinkOverlay = class extends HTMLElement {
       console.error("creating element is missing.");
       return;
     }
-    if (this.#linkState !== "creation_not_started") {
+    if (this.#linkState !== Trace.Types.File.EntriesLinkState.CREATION_NOT_STARTED) {
       createLinkIcon.style.display = "none";
       return;
     }
@@ -306,7 +306,7 @@ var EntriesLinkOverlay = class extends HTMLElement {
     createLinkIcon.style.top = `${this.#coordinateFrom.y}px`;
   }
   #startCreatingConnection() {
-    this.#linkState = "pending_to_event";
+    this.#linkState = Trace.Types.File.EntriesLinkState.PENDING_TO_EVENT;
     this.dispatchEvent(new EntryLinkStartCreating());
   }
   /*
@@ -321,7 +321,8 @@ var EntriesLinkOverlay = class extends HTMLElement {
   */
   #render() {
     const arrowColor = ThemeSupport.ThemeSupport.instance().getComputedValue("--color-text-primary");
-    render(html`
+    render(
+      html`
           <style>${entriesLinkOverlay_css_default}</style>
           <svg class="connectorContainer" width="100%" height="100%" role="region" aria-label=${i18nString(UIStrings.diagram)}>
             <defs>
@@ -380,7 +381,10 @@ var EntriesLinkOverlay = class extends HTMLElement {
               name='arrow-right-circle'>
             </devtools-icon>
           </div>
-        `, this.#shadow, { host: this });
+        `,
+      this.#shadow,
+      { host: this }
+    );
   }
 };
 var CONNECTOR_CIRCLE_RADIUS = 2;
@@ -388,7 +392,7 @@ var CONNECTOR_CIRCLE_STROKE_WIDTH = 1;
 var DASHED_STROKE_AMOUNT = 4;
 customElements.define("devtools-entries-link-overlay", EntriesLinkOverlay);
 
-// gen/front_end/panels/timeline/overlays/components/EntryLabelOverlay.js
+// ../../front_end/panels/timeline/overlays/components/EntryLabelOverlay.ts
 var EntryLabelOverlay_exports = {};
 __export(EntryLabelOverlay_exports, {
   EntryLabelChangeEvent: () => EntryLabelChangeEvent,
@@ -396,23 +400,23 @@ __export(EntryLabelOverlay_exports, {
   EntryLabelRemoveEvent: () => EntryLabelRemoveEvent,
   LabelAnnotationsConsentDialogVisibilityChange: () => LabelAnnotationsConsentDialogVisibilityChange
 });
-import "./../../../../ui/kit/kit.js";
-import "./../../../../ui/components/tooltips/tooltips.js";
-import "./../../../../ui/components/spinners/spinners.js";
-import * as Common from "./../../../../core/common/common.js";
-import * as Host from "./../../../../core/host/host.js";
-import * as i18n3 from "./../../../../core/i18n/i18n.js";
-import * as Platform from "./../../../../core/platform/platform.js";
-import * as Root from "./../../../../core/root/root.js";
-import * as AiAssistanceModels from "./../../../../models/ai_assistance/ai_assistance.js";
-import * as Buttons from "./../../../../ui/components/buttons/buttons.js";
-import * as Dialogs from "./../../../../ui/components/dialogs/dialogs.js";
-import * as ComponentHelpers from "./../../../../ui/components/helpers/helpers.js";
-import * as UIHelpers from "./../../../../ui/helpers/helpers.js";
-import * as UI from "./../../../../ui/legacy/legacy.js";
-import * as ThemeSupport3 from "./../../../../ui/legacy/theme_support/theme_support.js";
-import * as Lit from "./../../../../ui/lit/lit.js";
-import * as VisualLogging2 from "./../../../../ui/visual_logging/visual_logging.js";
+import "../../../../ui/kit/kit.js";
+import "../../../../ui/components/tooltips/tooltips.js";
+import "../../../../ui/components/spinners/spinners.js";
+import * as Common from "../../../../core/common/common.js";
+import * as Host from "../../../../core/host/host.js";
+import * as i18n3 from "../../../../core/i18n/i18n.js";
+import * as Platform from "../../../../core/platform/platform.js";
+import * as Root from "../../../../core/root/root.js";
+import * as AiAssistanceModels from "../../../../models/ai_assistance/ai_assistance.js";
+import * as Buttons from "../../../../ui/components/buttons/buttons.js";
+import * as Dialogs from "../../../../ui/components/dialogs/dialogs.js";
+import * as ComponentHelpers from "../../../../ui/components/helpers/helpers.js";
+import * as UIHelpers from "../../../../ui/helpers/helpers.js";
+import * as UI from "../../../../ui/legacy/legacy.js";
+import * as ThemeSupport3 from "../../../../ui/legacy/theme_support/theme_support.js";
+import * as Lit from "../../../../ui/lit/lit.js";
+import * as VisualLogging2 from "../../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/timeline/overlays/components/entryLabelOverlay.css.js
 var entryLabelOverlay_css_default = `/*
@@ -503,7 +507,7 @@ var entryLabelOverlay_css_default = `/*
   align-items: center;
   gap: var(--sys-size-4);
   padding: var(--sys-size-3) var(--sys-size-5);
-  border: 1px solid var(--color-primary);
+  border: var(--sys-size-1) solid var(--color-primary);
   border-radius: var(--sys-shape-corner-large);
 
   &.enabled {
@@ -534,7 +538,7 @@ var entryLabelOverlay_css_default = `/*
   font-family: var(--default-font-family);
   font-size: var(--sys-typescale-body2-size);
   font-weight: var(--ref-typeface-weight-medium);
-  outline: 2px solid var(--color-background);
+  outline: var(--sys-size-2) solid var(--color-background);
 }
 
 
@@ -549,7 +553,7 @@ var entryLabelOverlay_css_default = `/*
 .input-field.fake-focus-state {
   background-color: var(--color-background);
   color: var(--color-background-inverted);
-  outline: 2px solid var(--color-background-inverted);
+  outline: var(--sys-size-2) solid var(--color-background-inverted);
 }
 
 .connectorContainer {
@@ -558,7 +562,7 @@ var entryLabelOverlay_css_default = `/*
 
 .entry-highlight-wrapper {
   box-sizing: border-box;
-  border: 2px solid var(--sys-color-on-surface);
+  border: var(--sys-size-2) solid var(--sys-color-on-surface);
 
   &.cut-off-top {
     border-top: none;
@@ -597,31 +601,31 @@ var entryLabelOverlay_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./entryLabelOverlay.css")} */`;
 
-// gen/front_end/panels/timeline/overlays/components/EntryLabelOverlay.js
+// ../../front_end/panels/timeline/overlays/components/EntryLabelOverlay.ts
 var { html: html2, Directives: Directives2 } = Lit;
 var UIStrings2 = {
   /**
-   * @description Accessible label used to explain to a user that they are viewing an entry label.
+   * @description Accessible label for the entry label overlay in the Performance panel.
    */
   entryLabel: "Entry label",
   /**
-   * @description Accessible label used to prompt the user to input text into the field.
+   * @description Accessible label prompting the user to enter text in an empty entry label field in the Performance panel.
    */
   inputTextPrompt: "Enter an annotation label",
   /**
-   * @description Text displayed on a button that generates an AI label.
+   * @description Button label for generating an AI-powered entry label in the Performance panel.
    */
   generateLabelButton: "Generate label",
   /**
-   * @description Label used for screenreaders on the FRE dialog
+   * @description Accessible label for the first-run consent dialog for AI annotation suggestions in the Performance panel.
    */
   freDialog: "Get AI-powered annotation suggestions dialog",
   /**
-   * @description Screen-reader text for a tooltip link for navigating to "AI innovations" settings where the user can learn more about auto-annotations.
+   * @description Accessible label for the tooltip link that opens AI settings in the Performance panel.
    */
   learnMoreAriaLabel: "Learn more about auto annotations in settings",
   /**
-   * @description Screen-reader text for a tooltip icon.
+   * @description Tooltip text and accessible label for the information button of the AI entry label feature in the Performance panel.
    */
   moreInfoAriaLabel: "More information about this feature"
 };
@@ -691,20 +695,20 @@ var EntryLabelRemoveEvent = class _EntryLabelRemoveEvent extends Event {
   }
 };
 var EntryLabelChangeEvent = class _EntryLabelChangeEvent extends Event {
-  newLabel;
-  static eventName = "entrylabelchangeevent";
   constructor(newLabel) {
     super(_EntryLabelChangeEvent.eventName);
     this.newLabel = newLabel;
   }
+  newLabel;
+  static eventName = "entrylabelchangeevent";
 };
 var LabelAnnotationsConsentDialogVisibilityChange = class _LabelAnnotationsConsentDialogVisibilityChange extends Event {
-  isVisible;
-  static eventName = "labelannotationsconsentdialogvisiblitychange";
   constructor(isVisible) {
     super(_LabelAnnotationsConsentDialogVisibilityChange.eventName, { bubbles: true, composed: true });
     this.isVisible = isVisible;
   }
+  isVisible;
+  static eventName = "labelannotationsconsentdialogvisiblitychange";
 };
 var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
   // The label is angled on the left from the centre of the entry it belongs to.
@@ -750,7 +754,7 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
    * consented, hopefully!
    */
   #inAIConsentDialogFlow = false;
-  #currAIButtonState = "hidden";
+  #currAIButtonState = "hidden" /* HIDDEN */;
   /**
    * The entry label overlay consists of 3 parts - the label part with the label string inside,
    * the line connecting the label to the entry, and a black box around an entry to highlight the entry with a label.
@@ -871,7 +875,10 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
       console.error("Some entry label elements are missing.");
       return;
     }
-    this.#connectorLineContainer.setAttribute("width", (_EntryLabelOverlay.LABEL_AND_CONNECTOR_SHIFT_LENGTH * 2).toString());
+    this.#connectorLineContainer.setAttribute(
+      "width",
+      (_EntryLabelOverlay.LABEL_AND_CONNECTOR_SHIFT_LENGTH * 2).toString()
+    );
     this.#connectorLineContainer.setAttribute("height", _EntryLabelOverlay.LABEL_CONNECTOR_HEIGHT.toString());
     connector.setAttribute("x1", "0");
     connector.setAttribute("y1", "0");
@@ -975,7 +982,7 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
         return;
       }
       try {
-        this.#currAIButtonState = "generating_label";
+        this.#currAIButtonState = "generating_label" /* GENERATING_LABEL */;
         UI.ARIAUtils.LiveAnnouncer.alert(UIStringsNotTranslate.generatingLabel);
         this.#render();
         this.#focusInputBox();
@@ -987,7 +994,7 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
         this.#setAIButtonRenderState();
         this.#render();
       } catch {
-        this.#currAIButtonState = "generation_failed";
+        this.#currAIButtonState = "generation_failed" /* GENERATION_FAILED */;
         void ComponentHelpers.ScheduledRender.scheduleRender(this, this.#render);
       }
     } else {
@@ -1036,13 +1043,13 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
     const dataToGenerateLabelAvailable = this.#callTree !== null;
     const labelIsEmpty = this.#label?.length <= 0;
     if (!hasAiExperiment || aiDisabledByEnterprisePolicy || !dataToGenerateLabelAvailable || !labelIsEmpty) {
-      this.#currAIButtonState = "hidden";
+      this.#currAIButtonState = "hidden" /* HIDDEN */;
     } else {
       const aiAvailable = Root.Runtime.hostConfig.aidaAvailability?.enabled && !Root.Runtime.hostConfig.aidaAvailability?.blockedByAge && !Root.Runtime.hostConfig.aidaAvailability?.blockedByGeo && navigator.onLine;
       if (aiAvailable) {
-        this.#currAIButtonState = "enabled";
+        this.#currAIButtonState = "enabled" /* ENABLED */;
       } else {
-        this.#currAIButtonState = "disabled";
+        this.#currAIButtonState = "disabled" /* DISABLED */;
       }
     }
   }
@@ -1076,7 +1083,7 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
     `;
   }
   #renderAiButton() {
-    if (this.#currAIButtonState === "generation_failed") {
+    if (this.#currAIButtonState === "generation_failed" /* GENERATION_FAILED */) {
       return html2`
         <span
           class="ai-label-error">
@@ -1112,7 +1119,7 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
           class="pen-icon"
           .title=${i18nString2(UIStrings2.moreInfoAriaLabel)}
           .iconName=${"info"}
-          .variant=${"icon"}
+          .variant=${Buttons.Button.Variant.ICON}
           ></devtools-button>
         ${this.#renderAITooltip({
       textContent: this.#noLogging ? lockedString(UIStringsNotTranslate.generateLabelSecurityDisclaimerLoggingOff) : lockedString(UIStringsNotTranslate.generateLabelSecurityDisclaimer),
@@ -1168,7 +1175,8 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
       // Once the consent flow is closed, we restore focus and maintain the appearance.
       "fake-focus-state": this.#inAIConsentDialogFlow
     });
-    Lit.render(html2`
+    Lit.render(
+      html2`
         <style>${entryLabelOverlay_css_default}</style>
         <span class="label-parts-wrapper" role="region" aria-label=${i18nString2(UIStrings2.entryLabel)}
           @focusout=${this.#handleFocusOutEvent}
@@ -1179,11 +1187,11 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
               class=${inputFieldClasses}
               role="textbox"
               @focus=${() => {
-      this.setLabelEditabilityAndRemoveEmptyLabel(true);
-    }}
+        this.setLabelEditabilityAndRemoveEmptyLabel(true);
+      }}
               @dblclick=${() => {
-      this.setLabelEditabilityAndRemoveEmptyLabel(true);
-    }}
+        this.setLabelEditabilityAndRemoveEmptyLabel(true);
+      }}
               @keydown=${this.#handleLabelInputKeyDown}
               @paste=${this.#handleLabelInputPaste}
               @input=${this.#handleLabelInputKeyUp}
@@ -1201,41 +1209,44 @@ var EntryLabelOverlay = class _EntryLabelOverlay extends HTMLElement {
               </button>
             ` : Lit.nothing}
             ${(() => {
-      switch (this.#currAIButtonState) {
-        case "hidden":
-          return Lit.nothing;
-        case "enabled":
-          return this.#renderAiButton();
-        case "generating_label":
-          return this.#renderGeneratingLabelAiButton();
-        case "generation_failed":
-          return this.#renderAiButton();
-        case "disabled":
-          return this.#renderDisabledAiButton();
-      }
-    })()}
+        switch (this.#currAIButtonState) {
+          case "hidden" /* HIDDEN */:
+            return Lit.nothing;
+          case "enabled" /* ENABLED */:
+            return this.#renderAiButton();
+          case "generating_label" /* GENERATING_LABEL */:
+            return this.#renderGeneratingLabelAiButton();
+          case "generation_failed" /* GENERATION_FAILED */:
+            return this.#renderAiButton();
+          case "disabled" /* DISABLED */:
+            return this.#renderDisabledAiButton();
+        }
+      })()}
           </span>
           <svg class="connectorContainer">
             <line/>
             <circle/>
           </svg>
           <div class="entry-highlight-wrapper"></div>
-        </span>`, this.#shadow, { host: this });
+        </span>`,
+      this.#shadow,
+      { host: this }
+    );
   }
 };
 customElements.define("devtools-entry-label-overlay", EntryLabelOverlay);
 
-// gen/front_end/panels/timeline/overlays/components/TimeRangeOverlay.js
+// ../../front_end/panels/timeline/overlays/components/TimeRangeOverlay.ts
 var TimeRangeOverlay_exports = {};
 __export(TimeRangeOverlay_exports, {
   TimeRangeLabelChangeEvent: () => TimeRangeLabelChangeEvent,
   TimeRangeOverlay: () => TimeRangeOverlay,
   TimeRangeRemoveEvent: () => TimeRangeRemoveEvent
 });
-import * as i18n5 from "./../../../../core/i18n/i18n.js";
-import * as Platform2 from "./../../../../core/platform/platform.js";
-import { html as html3, render as render3 } from "./../../../../ui/lit/lit.js";
-import * as VisualLogging3 from "./../../../../ui/visual_logging/visual_logging.js";
+import * as i18n5 from "../../../../core/i18n/i18n.js";
+import * as Platform2 from "../../../../core/platform/platform.js";
+import { html as html3, render as render3 } from "../../../../ui/lit/lit.js";
+import * as VisualLogging3 from "../../../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/timeline/overlays/components/timeRangeOverlay.css.js
 var timeRangeOverlay_css_default = `/*
@@ -1260,7 +1271,7 @@ var timeRangeOverlay_css_default = `/*
     rgb(255 125 210 / 15%) 85%
   );
   border-color: var(--ref-palette-pink55);
-  border-width: 0 1px 5px;
+  border-width: 0 var(--sys-size-1) 5px;
   border-style: solid;
   pointer-events: none;
 }
@@ -1322,7 +1333,7 @@ var timeRangeOverlay_css_default = `/*
 
 .label-text[contenteditable='true'] {
   outline: none;
-  box-shadow: 0 0 0 1px var(--ref-palette-pink55);
+  box-shadow: 0 0 0 var(--sys-size-1) var(--ref-palette-pink55);
 }
 
 .label-text[contenteditable='false'] {
@@ -1331,22 +1342,22 @@ var timeRangeOverlay_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./timeRangeOverlay.css")} */`;
 
-// gen/front_end/panels/timeline/overlays/components/TimeRangeOverlay.js
+// ../../front_end/panels/timeline/overlays/components/TimeRangeOverlay.ts
 var UIStrings3 = {
   /**
-   * @description Accessible label used to explain to a user that they are viewing an entry label.
+   * @description Accessible label for the time range overlay in the Performance panel.
    */
   timeRange: "Time range"
 };
 var str_3 = i18n5.i18n.registerUIStrings("panels/timeline/overlays/components/TimeRangeOverlay.ts", UIStrings3);
 var i18nString3 = i18n5.i18n.getLocalizedString.bind(void 0, str_3);
 var TimeRangeLabelChangeEvent = class _TimeRangeLabelChangeEvent extends Event {
-  newLabel;
-  static eventName = "timerangelabelchange";
   constructor(newLabel) {
     super(_TimeRangeLabelChangeEvent.eventName);
     this.newLabel = newLabel;
   }
+  newLabel;
+  static eventName = "timerangelabelchange";
 };
 var TimeRangeRemoveEvent = class _TimeRangeRemoveEvent extends Event {
   static eventName = "timerangeremoveevent";
@@ -1501,7 +1512,8 @@ var TimeRangeOverlay = class extends HTMLElement {
   }
   #render() {
     const durationText = this.#duration ? i18n5.TimeUtilities.formatMicroSecondsTime(this.#duration) : "";
-    render3(html3`
+    render3(
+      html3`
           <style>${timeRangeOverlay_css_default}</style>
           <span class="range-container" role="region" aria-label=${i18nString3(UIStrings3.timeRange)}>
             <span
@@ -1516,21 +1528,24 @@ var TimeRangeOverlay = class extends HTMLElement {
             ></span>
             <span class="duration">${durationText}</span>
           </span>
-          `, this.#shadow, { host: this });
+          `,
+      this.#shadow,
+      { host: this }
+    );
     this.updateLabelPositioning();
   }
 };
 customElements.define("devtools-time-range-overlay", TimeRangeOverlay);
 
-// gen/front_end/panels/timeline/overlays/components/TimespanBreakdownOverlay.js
+// ../../front_end/panels/timeline/overlays/components/TimespanBreakdownOverlay.ts
 var TimespanBreakdownOverlay_exports = {};
 __export(TimespanBreakdownOverlay_exports, {
   DEFAULT_VIEW: () => DEFAULT_VIEW,
   TimespanBreakdownOverlay: () => TimespanBreakdownOverlay
 });
-import * as i18n7 from "./../../../../core/i18n/i18n.js";
-import * as UI2 from "./../../../../ui/legacy/legacy.js";
-import { Directives as Directives3, html as html4, nothing as nothing2, render as render4 } from "./../../../../ui/lit/lit.js";
+import * as i18n7 from "../../../../core/i18n/i18n.js";
+import * as UI2 from "../../../../ui/legacy/legacy.js";
+import { Directives as Directives3, html as html4, nothing as nothing2, render as render4 } from "../../../../ui/lit/lit.js";
 
 // gen/front_end/panels/timeline/overlays/components/timespanBreakdownOverlay.css.js
 var timespanBreakdownOverlay_css_default = `/*
@@ -1544,7 +1559,7 @@ var timespanBreakdownOverlay_css_default = `/*
     pointer-events: auto;
     border: solid;
     border-color: var(--sys-color-on-surface);
-    border-width: 4px 1px 0;
+    border-width: var(--sys-size-3) var(--sys-size-1) 0;
     align-content: flex-start;
     text-align: center;
     overflow: hidden;
@@ -1556,7 +1571,7 @@ var timespanBreakdownOverlay_css_default = `/*
 
     .is-below & {
       border-top-width: 0;
-      border-bottom-width: 4px;
+      border-bottom-width: var(--sys-size-3);
       align-content: flex-end;
       /* anchor the text at the bottom */
       padding-bottom: var(--sys-size-2);
@@ -1586,12 +1601,12 @@ var timespanBreakdownOverlay_css_default = `/*
    * styles below + keeping them here is clearer to read) */
     .timespan-breakdown-overlay-section:first-child {
       /* stylelint-disable-next-line declaration-no-important */
-      border-left-width: 1px !important;
+      border-left-width: var(--sys-size-1) !important;
     }
 
     .timespan-breakdown-overlay-section:last-child {
       /* stylelint-disable-next-line declaration-no-important */
-      border-right-width: 1px !important;
+      border-right-width: var(--sys-size-1) !important;
     }
   }
 
@@ -1675,9 +1690,11 @@ var timespanBreakdownOverlay_css_default = `/*
 
 /*# sourceURL=${import.meta.resolve("./timespanBreakdownOverlay.css")} */`;
 
-// gen/front_end/panels/timeline/overlays/components/TimespanBreakdownOverlay.js
+// ../../front_end/panels/timeline/overlays/components/TimespanBreakdownOverlay.ts
 var renderSection = (section, position) => {
-  const style = Directives3.styleMap({ left: position ? `${position.left}px` : void 0, width: position ? `${position.width}px` : void 0 });
+  const style = Directives3.styleMap(
+    { left: position ? `${position.left}px` : void 0, width: position ? `${position.width}px` : void 0 }
+  );
   const durationText = section.showDuration ? i18n7.TimeUtilities.formatMicroSecondsAsMillisFixed(section.bounds.range) : "";
   const labelText = section.label instanceof HTMLElement ? section.label.textContent || "" : section.label;
   const tooltip = durationText ? `${durationText} ${labelText}` : labelText;
@@ -1697,13 +1714,17 @@ var DEFAULT_VIEW = (input, _output, target) => {
     maxHeight: input.maxHeight !== null ? `${input.maxHeight}px` : void 0,
     position: "relative"
   });
-  render4(html4`
+  render4(
+    html4`
         <style>${timespanBreakdownOverlay_css_default}</style>
         <div style=${style} class=${input.className}>
           ${input.sections?.map((curr, index) => {
-    return renderSection(curr, input.positions[index]);
-  })}
-        </div>`, target, { container: { classes: ["devtools-timespan-breakdown-overlay"] } });
+      return renderSection(curr, input.positions[index]);
+    })}
+        </div>`,
+    target,
+    { container: { classes: ["devtools-timespan-breakdown-overlay"] } }
+  );
 };
 var TimespanBreakdownOverlay = class extends UI2.Widget.Widget {
   #canvasRect = null;

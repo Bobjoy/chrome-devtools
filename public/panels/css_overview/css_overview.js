@@ -4,12 +4,12 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/css_overview/CSSOverviewUnusedDeclarations.js
+// ../../front_end/panels/css_overview/CSSOverviewUnusedDeclarations.ts
 var CSSOverviewUnusedDeclarations_exports = {};
 __export(CSSOverviewUnusedDeclarations_exports, {
   CSSOverviewUnusedDeclarations: () => CSSOverviewUnusedDeclarations
 });
-import * as i18n from "./../../core/i18n/i18n.js";
+import * as i18n from "../../core/i18n/i18n.js";
 var UIStrings = {
   /**
    * @description Label to explain why top values are ignored.
@@ -114,14 +114,14 @@ var CSSOverviewUnusedDeclarations = class {
   }
 };
 
-// gen/front_end/panels/css_overview/CSSOverviewModel.js
+// ../../front_end/panels/css_overview/CSSOverviewModel.ts
 var CSSOverviewModel_exports = {};
 __export(CSSOverviewModel_exports, {
   CSSOverviewModel: () => CSSOverviewModel
 });
-import * as Common from "./../../core/common/common.js";
-import * as SDK from "./../../core/sdk/sdk.js";
-import * as ColorPicker from "./../../ui/legacy/components/color_picker/color_picker.js";
+import * as Common from "../../core/common/common.js";
+import * as SDK from "../../core/sdk/sdk.js";
+import * as ColorPicker from "../../ui/legacy/components/color_picker/color_picker.js";
 var CSSOverviewModel = class extends SDK.SDKModel.SDKModel {
   #runtimeAgent;
   #cssAgent;
@@ -172,13 +172,7 @@ var CSSOverviewModel = class extends SDK.SDKModel.SDKModel {
     };
     const formatColor = (color) => {
       if (color instanceof Common.Color.Legacy) {
-        return color.hasAlpha() ? color.asString(
-          "hexa"
-          /* Common.Color.Format.HEXA */
-        ) : color.asString(
-          "hex"
-          /* Common.Color.Format.HEX */
-        );
+        return color.hasAlpha() ? color.asString(Common.Color.Format.HEXA) : color.asString(Common.Color.Format.HEX);
       }
       return color.asString();
     };
@@ -293,10 +287,7 @@ var CSSOverviewModel = class extends SDK.SDKModel.SDKModel {
         const blendedBackgroundColor = textColor && layout.blendedBackgroundColors && layout.blendedBackgroundColors[idx] !== -1 ? Common.Color.parse(strings[layout.blendedBackgroundColors[idx]]) : null;
         if (textColor && blendedBackgroundColor) {
           const contrastInfo = new ColorPicker.ContrastInfo.ContrastInfo({
-            backgroundColors: [blendedBackgroundColor.asString(
-              "hexa"
-              /* Common.Color.Format.HEXA */
-            )],
+            backgroundColors: [blendedBackgroundColor.asString(Common.Color.Format.HEXA)],
             computedFontSize: fontSizeIdx !== -1 ? strings[fontSizeIdx] : "",
             computedFontWeight: fontWeightIdx !== -1 ? strings[fontWeightIdx] : ""
           });
@@ -351,12 +342,34 @@ var CSSOverviewModel = class extends SDK.SDKModel.SDKModel {
             }
           }
         }
-        CSSOverviewUnusedDeclarations.checkForUnusedPositionValues(unusedDeclarations, nodeId, strings, positionIdx, topIdx, leftIdx, rightIdx, bottomIdx);
+        CSSOverviewUnusedDeclarations.checkForUnusedPositionValues(
+          unusedDeclarations,
+          nodeId,
+          strings,
+          positionIdx,
+          topIdx,
+          leftIdx,
+          rightIdx,
+          bottomIdx
+        );
         if (!isSVGNode(strings[nodeName]) && !isReplacedContent(strings[nodeName])) {
-          CSSOverviewUnusedDeclarations.checkForUnusedWidthAndHeightValues(unusedDeclarations, nodeId, strings, displayIdx, widthIdx, heightIdx);
+          CSSOverviewUnusedDeclarations.checkForUnusedWidthAndHeightValues(
+            unusedDeclarations,
+            nodeId,
+            strings,
+            displayIdx,
+            widthIdx,
+            heightIdx
+          );
         }
         if (verticalAlignIdx !== -1 && !isTableElementWithDefaultStyles(strings[nodeName], strings[displayIdx])) {
-          CSSOverviewUnusedDeclarations.checkForInvalidVerticalAlignment(unusedDeclarations, nodeId, strings, displayIdx, verticalAlignIdx);
+          CSSOverviewUnusedDeclarations.checkForInvalidVerticalAlignment(
+            unusedDeclarations,
+            nodeId,
+            strings,
+            displayIdx,
+            verticalAlignIdx
+          );
         }
       }
     }
@@ -482,18 +495,18 @@ var CSSOverviewModel = class extends SDK.SDKModel.SDKModel {
     return result.value;
   }
 };
-SDK.SDKModel.SDKModel.register(CSSOverviewModel, { capabilities: 2, autostart: false });
+SDK.SDKModel.SDKModel.register(CSSOverviewModel, { capabilities: SDK.Target.Capability.DOM, autostart: false });
 
-// gen/front_end/panels/css_overview/CSSOverviewProcessingView.js
+// ../../front_end/panels/css_overview/CSSOverviewProcessingView.ts
 var CSSOverviewProcessingView_exports = {};
 __export(CSSOverviewProcessingView_exports, {
   CSSOverviewProcessingView: () => CSSOverviewProcessingView,
   DEFAULT_VIEW: () => DEFAULT_VIEW
 });
-import * as i18n3 from "./../../core/i18n/i18n.js";
-import * as Buttons from "./../../ui/components/buttons/buttons.js";
-import * as UI from "./../../ui/legacy/legacy.js";
-import { html, render } from "./../../ui/lit/lit.js";
+import * as i18n3 from "../../core/i18n/i18n.js";
+import * as Buttons from "../../ui/components/buttons/buttons.js";
+import * as UI from "../../ui/legacy/legacy.js";
+import { html, render } from "../../ui/lit/lit.js";
 
 // gen/front_end/panels/css_overview/cssOverviewProcessingView.css.js
 var cssOverviewProcessingView_css_default = `/**
@@ -504,31 +517,31 @@ var cssOverviewProcessingView_css_default = `/**
 
 .overview-processing-view {
   overflow: hidden;
-  padding: 16px;
+  padding: var(--sys-size-8);
   justify-content: center;
   align-items: center;
   height: 100%;
 }
 
 .overview-processing-view h1 {
-  font-size: 16px;
+  font-size: var(--sys-typescale-body1-size);
   text-align: center;
   font-weight: normal;
   margin: 0;
-  padding: 8px;
+  padding: var(--sys-size-5);
 }
 
 .overview-processing-view h2 {
-  font-size: 12px;
+  font-size: var(--sys-typescale-body4-size);
   text-align: center;
   font-weight: normal;
   margin: 0;
-  padding-top: 32px;
+  padding-top: var(--sys-size-13);
 }
 
 /*# sourceURL=${import.meta.resolve("./cssOverviewProcessingView.css")} */`;
 
-// gen/front_end/panels/css_overview/CSSOverviewProcessingView.js
+// ../../front_end/panels/css_overview/CSSOverviewProcessingView.ts
 var UIStrings2 = {
   /**
    * @description Text to cancel something.
@@ -538,7 +551,8 @@ var UIStrings2 = {
 var str_2 = i18n3.i18n.registerUIStrings("panels/css_overview/CSSOverviewProcessingView.ts", UIStrings2);
 var i18nString2 = i18n3.i18n.getLocalizedString.bind(void 0, str_2);
 var DEFAULT_VIEW = (input, _output, target) => {
-  render(html`
+  render(
+    html`
     <style>${cssOverviewProcessingView_css_default}</style>
     <div style="overflow:auto">
       <div class="vbox overview-processing-view">
@@ -547,10 +561,12 @@ var DEFAULT_VIEW = (input, _output, target) => {
           <devtools-button
               @click=${input.onCancel}
               .jslogContext=${"css-overview.cancel-processing"}
-              .variant=${"outlined"}>${i18nString2(UIStrings2.cancel)}</devtools-button>
+              .variant=${Buttons.Button.Variant.OUTLINED}>${i18nString2(UIStrings2.cancel)}</devtools-button>
         </div>
       </div>
-    </div>`, target);
+    </div>`,
+    target
+  );
 };
 var CSSOverviewProcessingView = class extends UI.Widget.Widget {
   #onCancel = () => {
@@ -570,7 +586,7 @@ var CSSOverviewProcessingView = class extends UI.Widget.Widget {
   }
 };
 
-// gen/front_end/panels/css_overview/CSSOverviewCompletedView.js
+// ../../front_end/panels/css_overview/CSSOverviewCompletedView.ts
 var CSSOverviewCompletedView_exports = {};
 __export(CSSOverviewCompletedView_exports, {
   CSSOverviewCompletedView: () => CSSOverviewCompletedView,
@@ -578,19 +594,19 @@ __export(CSSOverviewCompletedView_exports, {
   ELEMENT_DETAILS_DEFAULT_VIEW: () => ELEMENT_DETAILS_DEFAULT_VIEW,
   ElementDetailsView: () => ElementDetailsView
 });
-import "./../../ui/legacy/components/data_grid/data_grid.js";
-import "./../../ui/kit/kit.js";
-import * as Common2 from "./../../core/common/common.js";
-import * as i18n7 from "./../../core/i18n/i18n.js";
-import * as Platform from "./../../core/platform/platform.js";
-import * as SDK2 from "./../../core/sdk/sdk.js";
-import * as TextUtils from "./../../core/text_utils/text_utils.js";
-import * as Geometry from "./../../models/geometry/geometry.js";
-import * as Components from "./../../ui/legacy/components/utils/utils.js";
-import * as UI3 from "./../../ui/legacy/legacy.js";
-import { Directives as Directives2, html as html3, nothing, render as render3 } from "./../../ui/lit/lit.js";
-import * as VisualLogging2 from "./../../ui/visual_logging/visual_logging.js";
-import * as PanelsCommon from "./../common/common.js";
+import "../../ui/legacy/components/data_grid/data_grid.js";
+import "../../ui/kit/kit.js";
+import * as Common2 from "../../core/common/common.js";
+import * as i18n7 from "../../core/i18n/i18n.js";
+import * as Platform from "../../core/platform/platform.js";
+import * as SDK2 from "../../core/sdk/sdk.js";
+import * as TextUtils from "../../core/text_utils/text_utils.js";
+import * as Geometry from "../../ui/geometry/geometry.js";
+import * as Components from "../../ui/legacy/components/utils/utils.js";
+import * as UI3 from "../../ui/legacy/legacy.js";
+import { Directives as Directives2, html as html3, nothing, render as render3 } from "../../ui/lit/lit.js";
+import * as VisualLogging2 from "../../ui/visual_logging/visual_logging.js";
+import * as PanelsCommon from "../common/common.js";
 
 // gen/front_end/panels/css_overview/cssOverviewCompletedView.css.js
 var cssOverviewCompletedView_css_default = `/**
@@ -603,8 +619,8 @@ var cssOverviewCompletedView_css_default = `/**
   .overview-completed-view {
     overflow: auto;
 
-    --overview-default-padding: 28px;
-    --overview-icon-padding: 32px;
+    --overview-default-padding: var(--sys-size-12);
+    --overview-icon-padding: var(--sys-size-13);
   }
 
   .overview-completed-view .summary ul,
@@ -619,13 +635,13 @@ var cssOverviewCompletedView_css_default = `/**
   .overview-completed-view .summary ul {
     display: grid;
     grid-template-columns: repeat(auto-fill, 140px);
-    gap: 16px;
+    gap: var(--sys-size-8);
   }
 
   .overview-completed-view .colors ul li {
     display: inline-block;
-    margin: 0 0 16px;
-    padding: 0 8px 0 0;
+    margin: 0 0 var(--sys-size-8);
+    padding: 0 var(--sys-size-5) 0 0;
   }
 
   .overview-completed-view .summary ul li {
@@ -635,8 +651,8 @@ var cssOverviewCompletedView_css_default = `/**
   }
 
   .overview-completed-view li .label {
-    font-size: 12px;
-    padding-bottom: 2px;
+    font-size: var(--sys-typescale-body4-size);
+    padding-bottom: var(--sys-size-2);
   }
 
   .overview-completed-view li .value {
@@ -680,17 +696,17 @@ var cssOverviewCompletedView_css_default = `/**
     width: 65px;
     height: 25px;
     border-radius: 3px;
-    margin-right: 16px;
+    margin-right: var(--sys-size-8);
 
     &:focus-visible {
-      outline: 2px solid var(--sys-color-state-focus-ring);
-      outline-offset: 2px;
+      outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
+      outline-offset: var(--sys-size-2);
     }
   }
 
   .block-title {
-    padding-top: 4px;
-    font-size: 12px;
+    padding-top: var(--sys-size-3);
+    font-size: var(--sys-typescale-body4-size);
     color: var(--sys-color-on-surface);
     letter-spacing: 0;
     text-transform: uppercase;
@@ -708,7 +724,7 @@ var cssOverviewCompletedView_css_default = `/**
 
   .results-section {
     flex-shrink: 0;
-    border-bottom: 1px solid var(--sys-color-divider);
+    border-bottom: var(--sys-size-1) solid var(--sys-color-divider);
     padding: var(--overview-default-padding) 0 var(--overview-default-padding) 0;
   }
 
@@ -721,7 +737,7 @@ var cssOverviewCompletedView_css_default = `/**
     font-size: 15px;
     font-weight: normal;
     padding: 0;
-    margin: 0 0 20px;
+    margin: 0 0 var(--sys-size-9);
     padding-left: calc(var(--overview-default-padding) + var(--overview-icon-padding));
     position: relative;
     height: 26px;
@@ -774,8 +790,8 @@ var cssOverviewCompletedView_css_default = `/**
   }
 
   .results-section.colors h2 {
-    margin-top: 20px;
-    font-size: 13px;
+    margin-top: var(--sys-size-9);
+    font-size: var(--sys-typescale-body3-size);
     font-weight: normal;
   }
 
@@ -793,8 +809,8 @@ var cssOverviewCompletedView_css_default = `/**
   .overview-completed-view .unused-declarations ul li {
     display: grid;
     grid-template-columns: 2fr 3fr;
-    gap: 12px;
-    margin-bottom: 4px;
+    gap: var(--sys-size-6);
+    margin-bottom: var(--sys-size-3);
     align-items: center;
   }
 
@@ -803,7 +819,7 @@ var cssOverviewCompletedView_css_default = `/**
   .overview-completed-view .unused-declarations button .details {
     min-width: 100px;
     text-align: right;
-    margin-right: 8px;
+    margin-right: var(--sys-size-5);
     color: var(--sys-color-primary);
     pointer-events: none;
   }
@@ -818,10 +834,10 @@ var cssOverviewCompletedView_css_default = `/**
   .overview-completed-view .font-info button .bar,
   .overview-completed-view .media-queries button .bar,
   .overview-completed-view .unused-declarations button .bar {
-    height: 8px;
+    height: var(--sys-size-5);
     background: var(--sys-color-primary-bright);
-    border-radius: 2px;
-    min-width: 2px;
+    border-radius: var(--sys-size-2);
+    min-width: var(--sys-size-2);
   }
 
   .overview-completed-view .font-info button,
@@ -833,17 +849,17 @@ var cssOverviewCompletedView_css_default = `/**
     margin: 0;
     display: flex;
     align-items: center;
-    border-radius: 2px;
+    border-radius: var(--sys-size-2);
     cursor: pointer;
-    height: 28px;
+    height: var(--sys-size-12);
     background: none;
 
     &:focus-visible {
-      outline: 2px solid var(--sys-color-state-focus-ring);
+      outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
     }
 
     &:hover {
-      border-radius: 12px;
+      border-radius: var(--sys-shape-corner-medium-small);
       background: var(--sys-color-state-hover-on-subtle);
     }
 
@@ -862,7 +878,7 @@ var cssOverviewCompletedView_css_default = `/**
   .overview-completed-view .font-info .font-metric {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
+    gap: var(--sys-size-6);
   }
 
   .overview-completed-view .font-info ul {
@@ -874,13 +890,13 @@ var cssOverviewCompletedView_css_default = `/**
   }
 
   .overview-completed-view .font-info h2 {
-    font-size: 14px;
+    font-size: var(--sys-typescale-body2-size);
     font-weight: bold;
     margin: 0 0 1em;
   }
 
   .overview-completed-view .font-info h3 {
-    font-size: 13px;
+    font-size: var(--sys-typescale-body3-size);
     font-weight: normal;
     font-style: italic;
     margin: 0 0 0.5em;
@@ -905,7 +921,7 @@ var cssOverviewCompletedView_css_default = `/**
   .contrast-warning {
     display: flex;
     align-items: center;
-    margin-top: 2px;
+    margin-top: var(--sys-size-2);
   }
 
   .contrast-warning .threshold-label {
@@ -914,7 +930,7 @@ var cssOverviewCompletedView_css_default = `/**
   }
 
   .contrast-warning devtools-icon {
-    margin-left: 2px;
+    margin-left: var(--sys-size-2);
   }
 
   .contrast-preview {
@@ -933,7 +949,7 @@ var cssOverviewCompletedView_css_default = `/**
 
   ::part(node-id-column) {
     align-items: center;
-    height: 20px;
+    height: var(--sys-size-9);
 
     --show-element-display: none;
   }
@@ -945,8 +961,8 @@ var cssOverviewCompletedView_css_default = `/**
 
   ::part(show-element) {
     display: var(--show-element-display);
-    height: 16px;
-    width: 16px;
+    height: var(--sys-size-8);
+    width: var(--sys-size-8);
   }
 
   .results-section.colors {
@@ -956,18 +972,18 @@ var cssOverviewCompletedView_css_default = `/**
 
 /*# sourceURL=${import.meta.resolve("./cssOverviewCompletedView.css")} */`;
 
-// gen/front_end/panels/css_overview/CSSOverviewSidebarPanel.js
+// ../../front_end/panels/css_overview/CSSOverviewSidebarPanel.ts
 var CSSOverviewSidebarPanel_exports = {};
 __export(CSSOverviewSidebarPanel_exports, {
   CSSOverviewSidebarPanel: () => CSSOverviewSidebarPanel,
   DEFAULT_VIEW: () => DEFAULT_VIEW2
 });
-import "./../../ui/legacy/legacy.js";
-import * as i18n5 from "./../../core/i18n/i18n.js";
-import * as Buttons2 from "./../../ui/components/buttons/buttons.js";
-import * as UI2 from "./../../ui/legacy/legacy.js";
-import { Directives, html as html2, render as render2 } from "./../../ui/lit/lit.js";
-import * as VisualLogging from "./../../ui/visual_logging/visual_logging.js";
+import "../../ui/legacy/legacy.js";
+import * as i18n5 from "../../core/i18n/i18n.js";
+import * as Buttons2 from "../../ui/components/buttons/buttons.js";
+import * as UI2 from "../../ui/legacy/legacy.js";
+import { Directives, html as html2, render as render2 } from "../../ui/lit/lit.js";
+import * as VisualLogging from "../../ui/visual_logging/visual_logging.js";
 
 // gen/front_end/panels/css_overview/cssOverviewSidebarPanel.css.js
 var cssOverviewSidebarPanel_css_default = `/**
@@ -1006,7 +1022,7 @@ var cssOverviewSidebarPanel_css_default = `/**
   }
 
   .overview-toolbar {
-    border-bottom: 1px solid var(--sys-color-divider);
+    border-bottom: var(--sys-size-1) solid var(--sys-color-divider);
     flex: 0 0 auto;
   }
 
@@ -1031,7 +1047,7 @@ var cssOverviewSidebarPanel_css_default = `/**
 
 /*# sourceURL=${import.meta.resolve("./cssOverviewSidebarPanel.css")} */`;
 
-// gen/front_end/panels/css_overview/CSSOverviewSidebarPanel.js
+// ../../front_end/panels/css_overview/CSSOverviewSidebarPanel.ts
 var { classMap } = Directives;
 var UIStrings3 = {
   /**
@@ -1066,28 +1082,31 @@ var DEFAULT_VIEW2 = (input, _output, target) => {
     }
     event.consume(true);
   };
-  render2(html2`
+  render2(
+    html2`
       <style>${cssOverviewSidebarPanel_css_default}</style>
       <div class="overview-sidebar-panel" @click=${onClick} @keydown=${onKeyDown}
            aria-label=${i18nString3(UIStrings3.cssOverviewPanelSidebar)} role="tree">
         <div class="overview-toolbar">
           <devtools-toolbar>
             <devtools-button title=${i18nString3(UIStrings3.clearOverview)} @click=${input.onReset}
-                .iconName=${"clear"} .variant=${"toolbar"}
+                .iconName=${"clear"} .variant=${Buttons2.Button.Variant.TOOLBAR}
                 .jslogContext=${"css-overview.clear-overview"}></devtools-button>
           </devtools-toolbar>
         </div>
         ${input.items.map(({ id, name }) => {
-    const selected = id === input.selectedId;
-    return html2`
+      const selected = id === input.selectedId;
+      return html2`
             <div class="overview-sidebar-panel-item ${classMap({ selected })}"
                 ?autofocus=${selected}
                 role="treeitem" data-id=${id} tabindex="0"
                 jslog=${VisualLogging.item(`css-overview.${id}`).track({ click: true, keydown: "Enter|ArrowUp|ArrowDown" })}>
               ${name}
             </div>`;
-  })}
-      </div>`, target);
+    })}
+      </div>`,
+    target
+  );
 };
 var CSSOverviewSidebarPanel = class extends UI2.Widget.VBox {
   #view;
@@ -1163,7 +1182,7 @@ var CSSOverviewSidebarPanel = class extends UI2.Widget.VBox {
   }
 };
 
-// gen/front_end/panels/css_overview/CSSOverviewCompletedView.js
+// ../../front_end/panels/css_overview/CSSOverviewCompletedView.ts
 var { styleMap, ref } = Directives2;
 var { widget } = UI3.Widget;
 var UIStrings4 = {
@@ -1327,10 +1346,7 @@ var UIStrings4 = {
 var str_4 = i18n7.i18n.registerUIStrings("panels/css_overview/CSSOverviewCompletedView.ts", UIStrings4);
 var i18nString4 = i18n7.i18n.getLocalizedString.bind(void 0, str_4);
 function getBorderString(color) {
-  let { h, s, l } = color.as(
-    "hsl"
-    /* Common.Color.Format.HSL */
-  );
+  let { h, s, l } = color.as(Common2.Color.Format.HSL);
   h = Math.round(h * 360);
   s = Math.round(s * 100);
   l = Math.round(l * 100);
@@ -1349,22 +1365,23 @@ var DEFAULT_VIEW3 = (input, output, target) => {
       focusableElement?.focus();
     }
   }
-  render3(html3`
+  render3(
+    html3`
       <style>${cssOverviewCompletedView_css_default}</style>
       <devtools-split-view direction="column" sidebar-position="first" sidebar-initial-size="200">
         <devtools-widget slot="sidebar" ${widget(CSSOverviewSidebarPanel, {
-    minimumSize: new Geometry.Size(100, 25),
-    items: [
-      { name: i18nString4(UIStrings4.overviewSummary), id: "summary" },
-      { name: i18nString4(UIStrings4.colors), id: "colors" },
-      { name: i18nString4(UIStrings4.fontInfo), id: "font-info" },
-      { name: i18nString4(UIStrings4.unusedDeclarations), id: "unused-declarations" },
-      { name: i18nString4(UIStrings4.mediaQueries), id: "media-queries" }
-    ],
-    selectedId: input.selectedSection,
-    onItemSelected: input.onSectionSelected,
-    onReset: input.onReset
-  })}>
+      minimumSize: new Geometry.Size(100, 25),
+      items: [
+        { name: i18nString4(UIStrings4.overviewSummary), id: "summary" },
+        { name: i18nString4(UIStrings4.colors), id: "colors" },
+        { name: i18nString4(UIStrings4.fontInfo), id: "font-info" },
+        { name: i18nString4(UIStrings4.unusedDeclarations), id: "unused-declarations" },
+        { name: i18nString4(UIStrings4.mediaQueries), id: "media-queries" }
+      ],
+      selectedId: input.selectedSection,
+      onItemSelected: input.onSectionSelected,
+      onReset: input.onReset
+    })}>
         </devtools-widget>
         <devtools-split-view sidebar-position="second" slot="main" direction="row" sidebar-initial-size="minimized">
           <div class="vbox overview-completed-view" slot="main" @click=${input.onClick}>
@@ -1373,79 +1390,81 @@ var DEFAULT_VIEW3 = (input, output, target) => {
             <div class="results-section horizontally-padded summary"
                   jslog=${VisualLogging2.section("summary")}
                   ${ref((e) => {
-    output.revealSection.set("summary", revealSection.bind(null, e));
-  })}>
+      output.revealSection.set("summary", revealSection.bind(null, e));
+    })}>
               <h1>${i18nString4(UIStrings4.overviewSummary)}</h1>
               ${renderSummary(input.elementCount, input.globalStyleStats, input.mediaQueries)}
             </div>
             <div class="results-section horizontally-padded colors"
                 jslog=${VisualLogging2.section("colors")}
                 ${ref((e) => {
-    output.revealSection.set("colors", revealSection.bind(null, e));
-  })}>
+      output.revealSection.set("colors", revealSection.bind(null, e));
+    })}>
                 <h1>${i18nString4(UIStrings4.colors)}</h1>
                 ${renderColors(input.backgroundColors, input.textColors, input.textColorContrastIssues, input.fillColors, input.borderColors)}
               </div>
               <div class="results-section font-info"
                     jslog=${VisualLogging2.section("font-info")}
                     ${ref((e) => {
-    output.revealSection.set("font-info", revealSection.bind(null, e));
-  })}>
+      output.revealSection.set("font-info", revealSection.bind(null, e));
+    })}>
                 <h1>${i18nString4(UIStrings4.fontInfo)}</h1>
                 ${renderFontInfo(input.fontInfo)}
               </div>
               <div class="results-section unused-declarations"
                     jslog=${VisualLogging2.section("unused-declarations")}
                     ${ref((e) => {
-    output.revealSection.set("unused-declarations", revealSection.bind(null, e));
-  })}>
+      output.revealSection.set("unused-declarations", revealSection.bind(null, e));
+    })}>
                 <h1>${i18nString4(UIStrings4.unusedDeclarations)}</h1>
                 ${renderUnusedDeclarations(input.unusedDeclarations)}
               </div>
               <div class="results-section media-queries"
                     jslog=${VisualLogging2.section("media-queries")}
                     ${ref((e) => {
-    output.revealSection.set("media-queries", revealSection.bind(null, e));
-  })}>
+      output.revealSection.set("media-queries", revealSection.bind(null, e));
+    })}>
               <h1>${i18nString4(UIStrings4.mediaQueries)}</h1>
               ${renderMediaQueries(input.mediaQueries)}
             </div>
           </div>
           <devtools-widget slot="sidebar" ${widget((e) => {
-    const tabbedPane = new UI3.TabbedPane.TabbedPane(e);
-    output.closeAllTabs = () => {
-      tabbedPane.closeTabs(tabbedPane.tabIds());
-    };
-    output.addTab = (id, tabTitle, view, jslogContext) => {
-      if (!tabbedPane.hasTab(id)) {
-        tabbedPane.appendTab(
-          id,
-          tabTitle,
-          view,
-          void 0,
-          void 0,
-          /* isCloseable */
-          true,
-          void 0,
-          void 0,
-          jslogContext
-        );
-      }
-      tabbedPane.selectTab(id);
-      const splitView = tabbedPane.parentWidget();
-      splitView.setSidebarMinimized(false);
-    };
-    tabbedPane.addEventListener(UI3.TabbedPane.Events.TabClosed, (_) => {
-      if (tabbedPane.tabIds().length === 0) {
+      const tabbedPane = new UI3.TabbedPane.TabbedPane(e);
+      output.closeAllTabs = () => {
+        tabbedPane.closeTabs(tabbedPane.tabIds());
+      };
+      output.addTab = (id, tabTitle, view, jslogContext) => {
+        if (!tabbedPane.hasTab(id)) {
+          tabbedPane.appendTab(
+            id,
+            tabTitle,
+            view,
+            void 0,
+            void 0,
+            /* isCloseable */
+            true,
+            void 0,
+            void 0,
+            jslogContext
+          );
+        }
+        tabbedPane.selectTab(id);
         const splitView = tabbedPane.parentWidget();
-        splitView.setSidebarMinimized(true);
-      }
-    });
-    return tabbedPane;
-  })}>
+        splitView.setSidebarMinimized(false);
+      };
+      tabbedPane.addEventListener(UI3.TabbedPane.Events.TabClosed, (_) => {
+        if (tabbedPane.tabIds().length === 0) {
+          const splitView = tabbedPane.parentWidget();
+          splitView.setSidebarMinimized(true);
+        }
+      });
+      return tabbedPane;
+    })}>
           </devtools-widget>
         </devtools-split-view>
-      </devtools-split-view>`, target);
+      </devtools-split-view>`,
+    target
+  );
 };
 function renderSummary(elementCount, globalStyleStats, mediaQueries) {
   const renderSummaryItem = (label, value) => html3`
@@ -1502,11 +1521,11 @@ function renderFontMetrics(font, fontMetricInfo) {
       ${fontMetricInfo.map(({ label, values }) => html3`
         <div>
           <h3>${label}</h3>
-          ${renderGroup(values, "font-info", `${font}/${label}`)}
+          ${renderGroup(values, "font-info", `${font}/${label}`, label)}
         </div>`)}
     </div>`;
 }
-function renderGroup(values, type, path = "") {
+function renderGroup(values, type, path = "", groupLabel = "") {
   const total = values.reduce((prev, curr) => prev + curr.nodes.length, 0);
   return html3`
       <ul aria-label=${type}>
@@ -1517,7 +1536,7 @@ function renderGroup(values, type, path = "") {
             <div class="title">${title}</div>
             <button data-type=${type} data-path=${path} data-label=${title}
             jslog=${VisualLogging2.action().track({ click: true }).context(`css-overview.${type}`)}
-            aria-label=${`${title}: ${itemLabel}`}>
+            aria-label=${`${groupLabel ? `${groupLabel}, ` : ""}${title}: ${itemLabel}`}>
               <div class="details">${itemLabel}</div>
               <div class="bar-container">
                 <div class="bar" style=${styleMap({ width })}></div>
@@ -1542,14 +1561,8 @@ function renderContrastIssue(key, issues) {
       minContrastIssue = issue;
     }
   }
-  const color = minContrastIssue.textColor.asString(
-    "hexa"
-    /* Common.Color.Format.HEXA */
-  );
-  const backgroundColor = minContrastIssue.backgroundColor.asString(
-    "hexa"
-    /* Common.Color.Format.HEXA */
-  );
+  const color = minContrastIssue.textColor.asString(Common2.Color.Format.HEXA);
+  const backgroundColor = minContrastIssue.backgroundColor.asString(Common2.Color.Format.HEXA);
   const showAPCA = Common2.Settings.Settings.instance().resolve(SDK2.SDKSettings.apcaSettingDescriptor).get();
   const title = i18nString4(UIStrings4.textColorSOverSBackgroundResults, {
     PH1: color,
@@ -1868,7 +1881,8 @@ var CSSOverviewCompletedView = class _CSSOverviewCompletedView extends UI3.Widge
 };
 var ELEMENT_DETAILS_DEFAULT_VIEW = (input, _output, target) => {
   const { items, visibility } = input;
-  render3(html3`
+  render3(
+    html3`
     <div>
       <devtools-data-grid class="element-grid" striped inline
          name=${i18nString4(UIStrings4.cssOverviewElements)}>
@@ -1900,7 +1914,9 @@ var ELEMENT_DETAILS_DEFAULT_VIEW = (input, _output, target) => {
             </tr>`)}
         </table>
       </devtools-data-grid>
-    </div>`, target);
+    </div>`,
+    target
+  );
 };
 var ElementDetailsView = class extends UI3.Widget.Widget {
   #domModel;
@@ -2026,24 +2042,24 @@ function createCheckIcon() {
         style="color:var(--icon-checkmark-green);"></devtools-icon>`;
 }
 
-// gen/front_end/panels/css_overview/CSSOverviewPanel.js
+// ../../front_end/panels/css_overview/CSSOverviewPanel.ts
 var CSSOverviewPanel_exports = {};
 __export(CSSOverviewPanel_exports, {
   CSSOverviewPanel: () => CSSOverviewPanel,
   DEFAULT_VIEW: () => DEFAULT_VIEW5
 });
-import * as Host from "./../../core/host/host.js";
-import * as SDK3 from "./../../core/sdk/sdk.js";
-import * as UI5 from "./../../ui/legacy/legacy.js";
-import { render as render5 } from "./../../ui/lit/lit.js";
+import * as Host from "../../core/host/host.js";
+import * as SDK3 from "../../core/sdk/sdk.js";
+import * as UI5 from "../../ui/legacy/legacy.js";
+import { render as render5 } from "../../ui/lit/lit.js";
 
-// gen/front_end/panels/css_overview/CSSOverviewStartView.js
-import "./../../ui/components/panel_feedback/panel_feedback.js";
-import "./../../ui/components/panel_introduction_steps/panel_introduction_steps.js";
-import * as i18n9 from "./../../core/i18n/i18n.js";
-import * as Buttons3 from "./../../ui/components/buttons/buttons.js";
-import * as UI4 from "./../../ui/legacy/legacy.js";
-import { html as html4, render as render4 } from "./../../ui/lit/lit.js";
+// ../../front_end/panels/css_overview/CSSOverviewStartView.ts
+import "../../ui/components/panel_feedback/panel_feedback.js";
+import "../../ui/components/panel_introduction_steps/panel_introduction_steps.js";
+import * as i18n9 from "../../core/i18n/i18n.js";
+import * as Buttons3 from "../../ui/components/buttons/buttons.js";
+import * as UI4 from "../../ui/legacy/legacy.js";
+import { html as html4, render as render4 } from "../../ui/lit/lit.js";
 
 // gen/front_end/panels/css_overview/cssOverviewStartView.css.js
 var cssOverviewStartView_css_default = `/**
@@ -2058,7 +2074,7 @@ var cssOverviewStartView_css_default = `/**
   }
 
   .css-overview-start-view {
-    padding: 24px;
+    padding: var(--sys-size-11);
     display: flex;
     flex-direction: column;
     background-color: var(--sys-color-cdt-base-container);
@@ -2070,22 +2086,22 @@ var cssOverviewStartView_css_default = `/**
   }
 
   .preview-feature {
-    padding: 12px 16px;
-    border: 1px solid var(--sys-color-neutral-outline);
+    padding: var(--sys-size-6) var(--sys-size-8);
+    border: var(--sys-size-1) solid var(--sys-color-neutral-outline);
     color: var(--sys-color-on-surface);
-    font-size: 13px;
-    line-height: 20px;
-    border-radius: 12px;
+    font-size: var(--sys-typescale-body3-size);
+    line-height: var(--sys-typescale-body3-line-height);
+    border-radius: var(--sys-shape-corner-medium-small);
     margin: 42px 0;
     letter-spacing: 0.01em;
   }
 
   .preview-header {
     color: var(--sys-color-primary);
-    font-size: 13px;
-    line-height: 20px;
+    font-size: var(--sys-typescale-body3-size);
+    line-height: var(--sys-typescale-body3-line-height);
     letter-spacing: 0.01em;
-    margin: 9px 0 14px;
+    margin: 9px 0 var(--sys-size-7);
   }
 
   .preview-icon {
@@ -2093,7 +2109,7 @@ var cssOverviewStartView_css_default = `/**
   }
 
   .feedback-prompt {
-    margin-bottom: 24px;
+    margin-bottom: var(--sys-size-11);
   }
 
   .feedback-prompt .devtools-link {
@@ -2108,17 +2124,17 @@ var cssOverviewStartView_css_default = `/**
   }
 
   .thumbnail-wrapper {
-    width: 144px;
+    width: var(--sys-size-22);
     height: 92px;
-    margin-right: 20px;
+    margin-right: var(--sys-size-9);
   }
 
   .video-doc-header {
-    font-size: 13px;
-    line-height: 20px;
+    font-size: var(--sys-typescale-body3-size);
+    line-height: var(--sys-typescale-body3-line-height);
     letter-spacing: 0.04em;
     color: var(--sys-color-on-surface);
-    margin-bottom: 2px;
+    margin-bottom: var(--sys-size-2);
   }
 
   devtools-feedback-button {
@@ -2126,8 +2142,8 @@ var cssOverviewStartView_css_default = `/**
   }
 
   .resources .devtools-link {
-    font-size: 14px;
-    line-height: 22px;
+    font-size: var(--sys-typescale-body2-size);
+    line-height: var(--sys-size-10);
     letter-spacing: 0.04em;
     text-decoration-line: underline;
     color: var(--sys-color-primary);
@@ -2136,7 +2152,7 @@ var cssOverviewStartView_css_default = `/**
 
 /*# sourceURL=${import.meta.resolve("./cssOverviewStartView.css")} */`;
 
-// gen/front_end/panels/css_overview/CSSOverviewStartView.js
+// ../../front_end/panels/css_overview/CSSOverviewStartView.ts
 var UIStrings5 = {
   /**
    * @description Label for the capture button in the CSS overview panel.
@@ -2168,7 +2184,8 @@ var i18nString5 = i18n9.i18n.getLocalizedString.bind(void 0, str_5);
 var FEEDBACK_LINK = "https://g.co/devtools/css-overview-feedback";
 var DOC_LINK = "https://developer.chrome.com/docs/devtools/css-overview";
 var DEFAULT_VIEW4 = (input, output, target) => {
-  render4(html4`
+  render4(
+    html4`
     <style>${cssOverviewStartView_css_default}</style>
     <div class="css-overview-start-view">
       <devtools-panel-introduction-steps>
@@ -2181,23 +2198,25 @@ var DEFAULT_VIEW4 = (input, output, target) => {
         <devtools-button
           class="start-capture"
           autofocus
-          .variant=${"primary"}
+          .variant=${Buttons3.Button.Variant.PRIMARY}
           .jslogContext=${"css-overview.capture-overview"}
           @click=${input.onStartCapture}>
           ${i18nString5(UIStrings5.captureOverview)}
         </devtools-button>
       </div>
       <devtools-panel-feedback .data=${{
-    feedbackUrl: FEEDBACK_LINK,
-    quickStartUrl: DOC_LINK,
-    quickStartLinkText: i18nString5(UIStrings5.quickStartWithCSSOverview)
-  }}>
+      feedbackUrl: FEEDBACK_LINK,
+      quickStartUrl: DOC_LINK,
+      quickStartLinkText: i18nString5(UIStrings5.quickStartWithCSSOverview)
+    }}>
       </devtools-panel-feedback>
       <devtools-feedback-button .data=${{
-    feedbackUrl: FEEDBACK_LINK
-  }}>
+      feedbackUrl: FEEDBACK_LINK
+    }}>
       </devtools-feedback-button>
-    </div>`, target);
+    </div>`,
+    target
+  );
 };
 var CSSOverviewStartView = class extends UI4.Widget.Widget {
   #view;
@@ -2213,14 +2232,17 @@ var CSSOverviewStartView = class extends UI4.Widget.Widget {
   }
 };
 
-// gen/front_end/panels/css_overview/CSSOverviewPanel.js
+// ../../front_end/panels/css_overview/CSSOverviewPanel.ts
 var { widget: widget2 } = UI5.Widget;
 var DEFAULT_VIEW5 = (input, _output, target) => {
-  render5(input.state === "start" ? widget2(CSSOverviewStartView, { onStartCapture: input.onStartCapture }) : input.state === "processing" ? widget2(CSSOverviewProcessingView, { onCancel: input.onCancel }) : widget2(CSSOverviewCompletedView, {
-    onReset: input.onReset,
-    overviewData: input.overviewData,
-    target: input.target
-  }), target);
+  render5(
+    input.state === "start" ? widget2(CSSOverviewStartView, { onStartCapture: input.onStartCapture }) : input.state === "processing" ? widget2(CSSOverviewProcessingView, { onCancel: input.onCancel }) : widget2(CSSOverviewCompletedView, {
+      onReset: input.onReset,
+      overviewData: input.overviewData,
+      target: input.target
+    }),
+    target
+  );
 };
 var CSSOverviewPanel = class extends UI5.Panel.Panel {
   #currentUrl;
@@ -2240,7 +2262,11 @@ var CSSOverviewPanel = class extends UI5.Panel.Panel {
   constructor(view = DEFAULT_VIEW5) {
     super("css-overview");
     this.#currentUrl = SDK3.TargetManager.TargetManager.instance().inspectedURL();
-    SDK3.TargetManager.TargetManager.instance().addEventListener("InspectedURLChanged", this.#checkUrlAndResetIfChanged, this);
+    SDK3.TargetManager.TargetManager.instance().addEventListener(
+      SDK3.TargetManager.Events.INSPECTED_URL_CHANGED,
+      this.#checkUrlAndResetIfChanged,
+      this
+    );
     this.#view = view;
     SDK3.TargetManager.TargetManager.instance().observeTargets(this);
     this.#reset();

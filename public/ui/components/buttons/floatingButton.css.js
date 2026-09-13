@@ -69,8 +69,8 @@ button {
   }
 
   &:focus-visible {
-    outline: 2px solid var(--sys-color-state-focus-ring);
-    outline-offset: 2px;
+    outline: var(--sys-size-2) solid var(--sys-color-state-focus-ring);
+    outline-offset: var(--sys-size-2);
   }
 
   &:disabled > devtools-icon {
@@ -119,6 +119,31 @@ button {
 
   devtools-icon {
     color: var(--ref-palette-neutral100) !important; /* stylelint-disable-line declaration-no-important */
+  }
+}
+
+@media (forced-colors: active) {
+  button {
+    forced-color-adjust: none;
+    box-shadow: 0 0 0 var(--sys-size-1) ButtonText;
+
+    :host-context(:not(.theme-with-dark-background)) &,
+    :host-context(.theme-with-dark-background) &:not(:disabled) {
+      background-color: ButtonFace;
+    }
+
+    :host-context(:not(.theme-with-dark-background)) &:not(:disabled) > devtools-icon,
+    :host-context(.theme-with-dark-background) &:not(:disabled) > devtools-icon {
+      color: ButtonText;
+    }
+
+    &:focus-visible {
+      outline-color: ButtonText;
+    }
+
+    &:disabled > devtools-icon {
+      color: GrayText;
+    }
   }
 }
 

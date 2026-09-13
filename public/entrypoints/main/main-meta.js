@@ -1,15 +1,15 @@
-// gen/front_end/entrypoints/main/main-meta.prebundle.js
-import * as Common from "./../../core/common/common.js";
-import * as Host from "./../../core/host/host.js";
-import * as i18n from "./../../core/i18n/i18n.js";
-import * as Root from "./../../core/root/root.js";
-import * as SDK from "./../../core/sdk/sdk.js";
-import * as Badges from "./../../models/badges/badges.js";
-import * as Persistence from "./../../models/persistence/persistence.js";
-import * as Workspace from "./../../models/workspace/workspace.js";
-import * as Components from "./../../ui/legacy/components/utils/utils.js";
-import * as UI from "./../../ui/legacy/legacy.js";
-import * as SettingsUI from "./../../ui/settings/settings.js";
+// ../../front_end/entrypoints/main/main-meta.ts
+import * as Common from "../../core/common/common.js";
+import * as Host from "../../core/host/host.js";
+import * as i18n from "../../core/i18n/i18n.js";
+import * as Root from "../../core/root/root.js";
+import * as SDK from "../../core/sdk/sdk.js";
+import * as Badges from "../../models/badges/badges.js";
+import * as Persistence from "../../models/persistence/persistence.js";
+import * as Workspace from "../../models/workspace/workspace.js";
+import * as Components from "../../ui/legacy/components/utils/utils.js";
+import * as UI from "../../ui/legacy/legacy.js";
+import * as SettingsUI from "../../ui/settings/settings.js";
 var UIStrings = {
   /**
    * @description Title of a setting under the Persistence category in Settings.
@@ -281,12 +281,12 @@ async function loadMainModule() {
 }
 async function loadInspectorMainModule() {
   if (!loadedInspectorMainModule) {
-    loadedInspectorMainModule = await import("./../inspector_main/inspector_main.js");
+    loadedInspectorMainModule = await import("../inspector_main/inspector_main.js");
   }
   return loadedInspectorMainModule;
 }
 UI.ActionRegistration.registerActionExtension({
-  category: "DRAWER",
+  category: UI.ActionRegistration.ActionCategory.DRAWER,
   actionId: "inspector-main.focus-debuggee",
   async loadActionDelegate() {
     const InspectorMain = await loadInspectorMainModule();
@@ -296,7 +296,7 @@ UI.ActionRegistration.registerActionExtension({
   title: i18nLazyString(UIStrings.focusDebuggee)
 });
 UI.ActionRegistration.registerActionExtension({
-  category: "DRAWER",
+  category: UI.ActionRegistration.ActionCategory.DRAWER,
   actionId: "main.toggle-drawer",
   async loadActionDelegate() {
     return new UI.InspectorView.ActionDelegate();
@@ -310,7 +310,7 @@ UI.ActionRegistration.registerActionExtension({
   ]
 });
 UI.ActionRegistration.registerActionExtension({
-  category: "DRAWER",
+  category: UI.ActionRegistration.ActionCategory.DRAWER,
   actionId: "main.toggle-drawer-orientation",
   async loadActionDelegate() {
     return new UI.InspectorView.ActionDelegate();
@@ -325,43 +325,43 @@ UI.ActionRegistration.registerActionExtension({
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.next-tab",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.nextPanel),
   async loadActionDelegate() {
     return new UI.InspectorView.ActionDelegate();
   },
   bindings: [
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+]"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+]"
     }
   ]
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.previous-tab",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.previousPanel),
   async loadActionDelegate() {
     return new UI.InspectorView.ActionDelegate();
   },
   bindings: [
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+["
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+["
     }
   ]
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.debug-reload",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.reloadDevtools),
   async loadActionDelegate() {
     const Main = await loadMainModule();
@@ -374,7 +374,7 @@ UI.ActionRegistration.registerActionExtension({
   ]
 });
 UI.ActionRegistration.registerActionExtension({
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.restoreLastDockPosition),
   actionId: "main.toggle-dock",
   async loadActionDelegate() {
@@ -382,18 +382,18 @@ UI.ActionRegistration.registerActionExtension({
   },
   bindings: [
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+Shift+D"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+Shift+D"
     }
   ]
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.zoom-in",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.zoomIn),
   async loadActionDelegate() {
     const Main = await loadMainModule();
@@ -401,50 +401,50 @@ UI.ActionRegistration.registerActionExtension({
   },
   bindings: [
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+Plus",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+Shift+Plus"
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+NumpadPlus"
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+Shift+NumpadPlus"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+Plus",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+Shift+Plus"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+NumpadPlus"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+Shift+NumpadPlus"
     }
   ]
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.zoom-out",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.zoomOut),
   async loadActionDelegate() {
     const Main = await loadMainModule();
@@ -452,50 +452,50 @@ UI.ActionRegistration.registerActionExtension({
   },
   bindings: [
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+Minus",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+Shift+Minus"
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+NumpadMinus"
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+Shift+NumpadMinus"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+Minus",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+Shift+Minus"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+NumpadMinus"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+Shift+NumpadMinus"
     }
   ]
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.zoom-reset",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.resetZoomLevel),
   async loadActionDelegate() {
     const Main = await loadMainModule();
@@ -503,26 +503,26 @@ UI.ActionRegistration.registerActionExtension({
   },
   bindings: [
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+0"
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+Numpad0"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+Numpad0"
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+0"
     }
   ]
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.search-in-panel.find",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.searchInPanel),
   async loadActionDelegate() {
     const Main = await loadMainModule();
@@ -530,30 +530,30 @@ UI.ActionRegistration.registerActionExtension({
   },
   bindings: [
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+F",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+F",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     },
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "F3"
     }
   ]
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.search-in-panel.cancel",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.cancelSearch),
   async loadActionDelegate() {
     const Main = await loadMainModule();
@@ -568,7 +568,7 @@ UI.ActionRegistration.registerActionExtension({
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.search-in-panel.find-next",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.findNextResult),
   async loadActionDelegate() {
     const Main = await loadMainModule();
@@ -576,30 +576,30 @@ UI.ActionRegistration.registerActionExtension({
   },
   bindings: [
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+G",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+G"
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "F3",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     }
   ]
 });
 UI.ActionRegistration.registerActionExtension({
   actionId: "main.search-in-panel.find-previous",
-  category: "GLOBAL",
+  category: UI.ActionRegistration.ActionCategory.GLOBAL,
   title: i18nLazyString(UIStrings.findPreviousResult),
   async loadActionDelegate() {
     const Main = await loadMainModule();
@@ -607,29 +607,29 @@ UI.ActionRegistration.registerActionExtension({
   },
   bindings: [
     {
-      platform: "mac",
+      platform: UI.ActionRegistration.Platforms.MAC,
       shortcut: "Meta+Shift+G",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Ctrl+Shift+G"
     },
     {
-      platform: "windows,linux",
+      platform: UI.ActionRegistration.Platforms.WINDOWS_LINUX,
       shortcut: "Shift+F3",
       keybindSets: [
-        "devToolsDefault",
-        "vsCode"
+        UI.ActionRegistration.KeybindSet.DEVTOOLS_DEFAULT,
+        UI.ActionRegistration.KeybindSet.VS_CODE
       ]
     }
   ]
 });
 SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.uiThemeSettingDescriptor, {
-  category: "APPEARANCE",
+  category: Common.Settings.SettingCategory.APPEARANCE,
   title: i18nLazyString(UIStrings.theme),
   reloadRequired: false,
   options: [
@@ -655,7 +655,7 @@ SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.uiThemeSetting
   ]
 });
 SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.chromeThemeColorsSettingDescriptor, {
-  category: "APPEARANCE",
+  category: Common.Settings.SettingCategory.APPEARANCE,
   title: i18nLazyString(UIStrings.matchChromeColorScheme),
   options: [
     {
@@ -674,7 +674,7 @@ SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.chromeThemeCol
   }
 });
 SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.sidebarPositionSettingDescriptor, {
-  category: "APPEARANCE",
+  category: Common.Settings.SettingCategory.APPEARANCE,
   title: i18nLazyString(UIStrings.panelLayout),
   options: [
     {
@@ -695,7 +695,7 @@ SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.sidebarPositio
   ]
 });
 SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.languageSettingDescriptor, {
-  category: "APPEARANCE",
+  category: Common.Settings.SettingCategory.APPEARANCE,
   title: i18nLazyString(UIStrings.language),
   options: [
     {
@@ -707,23 +707,16 @@ SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.languageSettin
   ],
   reloadRequired: true
 });
-Common.Settings.registerSettingExtension({
-  category: "APPEARANCE",
-  storageType: "Synced",
-  title: Host.Platform.platform() === "mac" ? i18nLazyString(UIStrings.enableShortcutToSwitchPanels) : i18nLazyString(UIStrings.enableCtrlShortcutToSwitchPanels),
-  settingName: "shortcut-panel-switch",
-  settingType: "boolean",
-  defaultValue: false
+SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.shortcutPanelSwitchSettingDescriptor, {
+  category: Common.Settings.SettingCategory.APPEARANCE,
+  title: Host.Platform.platform() === "mac" ? i18nLazyString(UIStrings.enableShortcutToSwitchPanels) : i18nLazyString(UIStrings.enableCtrlShortcutToSwitchPanels)
 });
 SettingsUI.SettingUIRegistration.register(SDK.SDKSettings.disablePausedStateOverlaySettingDescriptor, {
-  category: "APPEARANCE",
+  category: Common.Settings.SettingCategory.APPEARANCE,
   title: i18nLazyString(UIStrings.disablePaused)
 });
-Common.Settings.registerSettingExtension({
-  category: "GLOBAL",
-  settingName: "currentDockState",
-  settingType: "enum",
-  defaultValue: "right",
+SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.currentDockStateSettingDescriptor, {
+  category: Common.Settings.SettingCategory.GLOBAL,
   options: [
     {
       value: "right",
@@ -747,11 +740,7 @@ Common.Settings.registerSettingExtension({
     }
   ]
 });
-Common.Settings.registerSettingExtension({
-  storageType: "Synced",
-  settingName: "active-keybind-set",
-  settingType: "enum",
-  defaultValue: "devToolsDefault",
+SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.activeKeybindSetSettingDescriptor, {
   options: [
     {
       value: "devToolsDefault",
@@ -775,55 +764,44 @@ function createOptionForLocale(localeString) {
     text: createLazyLocalizedLocaleSettingText(localeString)
   };
 }
-Common.Settings.registerSettingExtension({
-  category: "ACCOUNT",
-  // This name must be kept in sync with DevToolsSettings::kSyncDevToolsPreferencesFrontendName.
-  settingName: "sync-preferences",
-  settingType: "boolean",
+SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.syncPreferencesSettingDescriptor, {
+  category: Common.Settings.SettingCategory.ACCOUNT,
   title: i18nLazyString(UIStrings.saveSettings),
-  defaultValue: false,
   reloadRequired: true
 });
 SettingsUI.SettingUIRegistration.register(Badges.receiveGdpBadgesSettingDescriptor, {
-  category: "ACCOUNT",
+  category: Common.Settings.SettingCategory.ACCOUNT,
   title: i18nLazyString(UIStrings.earnBadges),
   reloadRequired: true
 });
-SettingsUI.SettingUIRegistration.register(Persistence.NetworkPersistenceManager.persistenceNetworkOverridesEnabledSettingDescriptor, {
-  category: "PERSISTENCE",
-  title: i18nLazyString(UIStrings.localOverrides),
-  tags: [
-    i18nLazyString(UIStrings.interception),
-    i18nLazyString(UIStrings.override),
-    i18nLazyString(UIStrings.network),
-    i18nLazyString(UIStrings.rewrite),
-    i18nLazyString(UIStrings.request)
-  ],
-  options: [
-    {
-      value: true,
-      title: i18nLazyString(UIStrings.enableOverrideNetworkRequests)
-    },
-    {
-      value: false,
-      title: i18nLazyString(UIStrings.disableOverrideNetworkRequests)
-    }
-  ]
-});
-Common.Settings.registerSettingExtension({
-  storageType: "Synced",
-  settingName: "user-shortcuts",
-  settingType: "array",
-  defaultValue: []
-});
-Common.Settings.registerSettingExtension({
-  category: "GLOBAL",
-  storageType: "Local",
+SettingsUI.SettingUIRegistration.register(
+  Persistence.NetworkPersistenceManager.persistenceNetworkOverridesEnabledSettingDescriptor,
+  {
+    category: Common.Settings.SettingCategory.PERSISTENCE,
+    title: i18nLazyString(UIStrings.localOverrides),
+    tags: [
+      i18nLazyString(UIStrings.interception),
+      i18nLazyString(UIStrings.override),
+      i18nLazyString(UIStrings.network),
+      i18nLazyString(UIStrings.rewrite),
+      i18nLazyString(UIStrings.request)
+    ],
+    options: [
+      {
+        value: true,
+        title: i18nLazyString(UIStrings.enableOverrideNetworkRequests)
+      },
+      {
+        value: false,
+        title: i18nLazyString(UIStrings.disableOverrideNetworkRequests)
+      }
+    ]
+  }
+);
+SettingsUI.SettingUIRegistration.register(SettingsUI.MainSettings.searchAsYouTypeSettingDescriptor, {
+  category: Common.Settings.SettingCategory.GLOBAL,
   title: i18nLazyString(UIStrings.searchAsYouTypeSetting),
-  settingName: "search-as-you-type",
-  settingType: "boolean",
   order: 3,
-  defaultValue: true,
   options: [
     {
       value: true,
@@ -836,22 +814,22 @@ Common.Settings.registerSettingExtension({
   ]
 });
 UI.ViewManager.registerLocationResolver({
-  name: "drawer-view",
-  category: "DRAWER",
+  name: UI.ViewManager.ViewLocationValues.DRAWER_VIEW,
+  category: UI.ViewManager.ViewLocationCategory.DRAWER,
   async loadResolver() {
     return UI.InspectorView.InspectorView.instance();
   }
 });
 UI.ViewManager.registerLocationResolver({
-  name: "drawer-sidebar",
-  category: "DRAWER_SIDEBAR",
+  name: UI.ViewManager.ViewLocationValues.DRAWER_SIDEBAR,
+  category: UI.ViewManager.ViewLocationCategory.DRAWER_SIDEBAR,
   async loadResolver() {
     return UI.InspectorView.InspectorView.instance();
   }
 });
 UI.ViewManager.registerLocationResolver({
-  name: "panel",
-  category: "PANEL",
+  name: UI.ViewManager.ViewLocationValues.PANEL,
+  category: UI.ViewManager.ViewLocationCategory.PANEL,
   async loadResolver() {
     return UI.InspectorView.InspectorView.instance();
   }
@@ -890,13 +868,13 @@ UI.ContextMenu.registerProvider({
 });
 UI.Toolbar.registerToolbarItem({
   separator: true,
-  location: "main-toolbar-left",
+  location: UI.Toolbar.ToolbarItemLocation.MAIN_TOOLBAR_LEFT,
   order: 100
 });
 UI.Toolbar.registerToolbarItem({
   separator: true,
   order: 96,
-  location: "main-toolbar-right"
+  location: UI.Toolbar.ToolbarItemLocation.MAIN_TOOLBAR_RIGHT
 });
 UI.Toolbar.registerToolbarItem({
   condition(config) {
@@ -910,7 +888,7 @@ UI.Toolbar.registerToolbarItem({
     return new Main.GlobalAiButton.GlobalAiButtonToolbarProvider();
   }),
   order: 98,
-  location: "main-toolbar-right"
+  location: UI.Toolbar.ToolbarItemLocation.MAIN_TOOLBAR_RIGHT
 });
 UI.Toolbar.registerToolbarItem({
   loadItem: Common.Lazy.lazy(async () => {
@@ -918,7 +896,7 @@ UI.Toolbar.registerToolbarItem({
     return new Main.MainImpl.SettingsButtonProvider();
   }),
   order: 99,
-  location: "main-toolbar-right"
+  location: UI.Toolbar.ToolbarItemLocation.MAIN_TOOLBAR_RIGHT
 });
 UI.Toolbar.registerToolbarItem({
   condition: () => !Root.Runtime.Runtime.isTraceApp(),
@@ -927,14 +905,14 @@ UI.Toolbar.registerToolbarItem({
     return new Main.MainImpl.MainMenuItem();
   }),
   order: 100,
-  location: "main-toolbar-right"
+  location: UI.Toolbar.ToolbarItemLocation.MAIN_TOOLBAR_RIGHT
 });
 UI.Toolbar.registerToolbarItem({
   async loadItem() {
     return UI.DockController.CloseButtonProvider.instance();
   },
   order: 101,
-  location: "main-toolbar-right"
+  location: UI.Toolbar.ToolbarItemLocation.MAIN_TOOLBAR_RIGHT
 });
 UI.AppProvider.registerAppProvider({
   async loadAppProvider() {

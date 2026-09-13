@@ -1,7 +1,6 @@
-(function (exports) {
-  'use strict';
-
-  // gen/front_end/panels/recorder/injected/Logger.js
+"use strict";
+(() => {
+  // ../../front_end/panels/recorder/injected/Logger.ts
   var noop = () => void 0;
   var Logger = class {
     #log;
@@ -32,7 +31,7 @@
     }
   };
 
-  // gen/front_end/panels/recorder/injected/MonotonicArray.js
+  // ../../front_end/panels/recorder/injected/MonotonicArray.ts
   var MonotonicArray = class {
     #values = /* @__PURE__ */ new WeakMap();
     #nextId = 1;
@@ -47,7 +46,7 @@
     };
   };
 
-  // gen/front_end/panels/recorder/injected/selectors/ARIASelector.js
+  // ../../front_end/panels/recorder/injected/selectors/ARIASelector.ts
   var ARIASelectorComputer = class {
     #bindings;
     constructor(bindings) {
@@ -74,7 +73,11 @@
             continue;
           }
         }
-        result = this.#queryA11yTreeOneByNameAndRole(parent, element.name, element.role);
+        result = this.#queryA11yTreeOneByNameAndRole(
+          parent,
+          element.name,
+          element.role
+        );
         if (result) {
           selectors.push(`${element.name}[role="${element.role}"]`);
           parent = result;
@@ -164,7 +167,10 @@
           }
         } else {
           elements.unshift({ name, role });
-          selector = this.#computeUniqueARIASelectorForElements(elements, current !== node);
+          selector = this.#computeUniqueARIASelectorForElements(
+            elements,
+            current !== node
+          );
           if (selector) {
             break;
           }
@@ -184,7 +190,7 @@
     return new ARIASelectorComputer(bindings).compute(node);
   };
 
-  // gen/front_end/panels/recorder/injected/selectors/Selector.js
+  // ../../front_end/panels/recorder/injected/selectors/Selector.ts
   var SelectorPart = class {
     value;
     optimized;
@@ -197,7 +203,7 @@
     }
   };
 
-  // gen/front_end/panels/recorder/injected/selectors/CSSSelector.js
+  // ../../front_end/panels/recorder/injected/selectors/CSSSelector.ts
   var idSelector = (id) => {
     return `#${CSS.escape(id)}`;
   };
@@ -296,7 +302,10 @@
     if (className !== void 0) {
       return new SelectorPart(classSelector(selector, className), true);
     }
-    return new SelectorPart(nthTypeSelector(selector, getTypeIndex(node, children)), false);
+    return new SelectorPart(
+      nthTypeSelector(selector, getTypeIndex(node, children)),
+      false
+    );
   };
   var findMinMax = ([min, max], fns) => {
     fns.self ??= (i) => i;
@@ -352,7 +361,12 @@
       let root;
       while (node instanceof Element) {
         root = node.getRootNode();
-        selectors.unshift(findMinMax([node, root], new SelectorRangeOps(attributes)));
+        selectors.unshift(
+          findMinMax(
+            [node, root],
+            new SelectorRangeOps(attributes)
+          )
+        );
         node = root instanceof ShadowRoot ? root.host : root;
       }
     } catch {
@@ -385,7 +399,7 @@
     return lists.flatMap((list) => [...list]);
   };
 
-  // gen/front_end/third_party/puppeteer/package/lib/puppeteer/injected/PierceQuerySelector.js
+  // ../../front_end/third_party/puppeteer/package/lib/puppeteer/injected/PierceQuerySelector.js
   var pierceQuerySelectorAll = (element, selector) => {
     const result = [];
     const collect2 = (root) => {
@@ -410,7 +424,7 @@
     return result;
   };
 
-  // gen/front_end/panels/recorder/injected/selectors/PierceSelector.js
+  // ../../front_end/panels/recorder/injected/selectors/PierceSelector.ts
   var PierceSelectorRangeOpts = class {
     #selector = [[]];
     #attributes;
@@ -425,7 +439,10 @@
       return node instanceof ShadowRoot ? node.host : node;
     }
     valueOf(node) {
-      const selector = findMinMax([node, node.getRootNode()], new SelectorRangeOps(this.#attributes));
+      const selector = findMinMax(
+        [node, node.getRootNode()],
+        new SelectorRangeOps(this.#attributes)
+      );
       if (this.#depth > 1) {
         this.#selector.unshift([selector]);
       } else {
@@ -448,7 +465,7 @@
     }
   };
 
-  // gen/front_end/third_party/puppeteer/package/lib/puppeteer/injected/TextContent.js
+  // ../../front_end/third_party/puppeteer/package/lib/puppeteer/injected/TextContent.js
   var TRIVIAL_VALUE_INPUT_TYPES = /* @__PURE__ */ new Set(["checkbox", "image", "radio"]);
   var isNonTrivialValueNode = (node) => {
     if (node instanceof HTMLSelectElement) {
@@ -543,7 +560,7 @@
     return value;
   };
 
-  // gen/front_end/third_party/puppeteer/package/lib/puppeteer/injected/TextQuerySelector.js
+  // ../../front_end/third_party/puppeteer/package/lib/puppeteer/injected/TextQuerySelector.js
   var textQuerySelectorAll = function* (root, selector) {
     let yielded = false;
     for (const node of root.childNodes) {
@@ -571,7 +588,7 @@
     }
   };
 
-  // gen/front_end/panels/recorder/injected/selectors/TextSelector.js
+  // ../../front_end/panels/recorder/injected/selectors/TextSelector.ts
   var MINIMUM_TEXT_LENGTH = 12;
   var MAXIMUM_TEXT_LENGTH = 64;
   var collect = (iter, max = Infinity) => {
@@ -604,7 +621,10 @@
     let right = content.length;
     while (left <= right) {
       const center = left + (right - left >> 2);
-      const elements = collect(textQuerySelectorAll(document, content.slice(0, center)), 2);
+      const elements = collect(
+        textQuerySelectorAll(document, content.slice(0, center)),
+        2
+      );
       if (elements.length !== 1 || elements[0] !== node) {
         left = center + 1;
       } else {
@@ -619,7 +639,7 @@
     return [content.slice(0, length + remainder.search(/ |$/))];
   };
 
-  // gen/front_end/panels/recorder/injected/selectors/XPath.js
+  // ../../front_end/panels/recorder/injected/selectors/XPath.ts
   var attributeSelector2 = (name, value) => {
     return `//*[@${name}=${JSON.stringify(value)}]`;
   };
@@ -707,7 +727,9 @@
         ++ownIndex;
       }
     }
-    throw new Error("This is impossible; a child must be the child of the parent");
+    throw new Error(
+      "This is impossible; a child must be the child of the parent"
+    );
   };
   var computeXPath = (node, optimized, attributes) => {
     if (node.nodeType === Node.DOCUMENT_NODE) {
@@ -742,7 +764,7 @@
     return selectors;
   };
 
-  // gen/front_end/panels/recorder/injected/SelectorComputer.js
+  // ../../front_end/panels/recorder/injected/SelectorComputer.ts
   var prefixSelector = (selector, prefix) => {
     if (selector === void 0) {
       return;
@@ -831,12 +853,18 @@
     }
     getXPathSelector(node) {
       return this.#logger.timed(`getXPathSelector: ${this.#nodes.getOrInsert(node)} ${node.nodeName}`, () => {
-        return prefixSelector(computeXPath(node, true, this.#customAttributes), "xpath");
+        return prefixSelector(
+          computeXPath(node, true, this.#customAttributes),
+          "xpath"
+        );
       });
     }
     getPierceSelector(node) {
       return this.#logger.timed(`getPierceSelector: ${this.#nodes.getOrInsert(node)} ${node.nodeName}`, () => {
-        return prefixSelector(computePierceSelector(node, this.#customAttributes), "pierce");
+        return prefixSelector(
+          computePierceSelector(node, this.#customAttributes),
+          "pierce"
+        );
       });
     }
     getARIASelector(node) {
@@ -846,7 +874,7 @@
     }
   };
 
-  // gen/front_end/panels/recorder/injected/util.js
+  // ../../front_end/panels/recorder/injected/util.ts
   function assert(condition) {
     if (!condition) {
       throw new Error("Assertion failed!");
@@ -899,7 +927,7 @@
     };
   };
 
-  // gen/front_end/panels/recorder/injected/RecordingClient.js
+  // ../../front_end/panels/recorder/injected/RecordingClient.ts
   var isIgnorableInputElement = (element) => {
     if (element instanceof HTMLInputElement) {
       switch (element.type) {
@@ -939,7 +967,12 @@
     constructor(bindings, options = _RecordingClient.defaultSetupOptions) {
       this.#logger = new Logger(options.debug ? "debug" : "silent");
       this.#logger.log("creating a RecordingClient");
-      this.#computer = new SelectorComputer(bindings, this.#logger, options.selectorAttribute, options.selectorTypesToRecord);
+      this.#computer = new SelectorComputer(
+        bindings,
+        this.#logger,
+        options.selectorAttribute,
+        options.selectorTypesToRecord
+      );
       if (options.allowUntrustedEvents) {
         this.#isTrustedEvent = () => true;
       }
@@ -1104,22 +1137,28 @@
     };
   };
 
-  // gen/front_end/panels/recorder/injected/SelectorPicker.js
+  // ../../front_end/panels/recorder/injected/SelectorPicker.ts
   var SelectorPicker = class {
     #logger;
     #computer;
     constructor(bindings, customAttribute = "", debug = true) {
       this.#logger = new Logger(debug ? "debug" : "silent");
       this.#logger.log("Creating a SelectorPicker");
-      this.#computer = new SelectorComputer(bindings, this.#logger, customAttribute);
+      this.#computer = new SelectorComputer(
+        bindings,
+        this.#logger,
+        customAttribute
+      );
     }
     #handleClickEvent = (event) => {
       haultImmediateEvent(event);
       const target = getClickableTargetFromEvent(event);
-      window.captureSelectors(JSON.stringify({
-        selectors: this.#computer.getSelectors(target),
-        ...getMouseEventOffsets(event, target)
-      }));
+      window.captureSelectors(
+        JSON.stringify({
+          selectors: this.#computer.getSelectors(target),
+          ...getMouseEventOffsets(event, target)
+        })
+      );
     };
     start = () => {
       this.#logger.log("Setting up selector listeners");
@@ -1135,7 +1174,7 @@
     };
   };
 
-  // gen/front_end/panels/recorder/injected/injected.prebundle.js
+  // ../../front_end/panels/recorder/injected/injected.ts
   var DevToolsRecorder = class {
     #recordingClient;
     startRecording(bindings, options) {
@@ -1145,7 +1184,10 @@
       if (this.#selectorPicker) {
         throw new Error("Selector picker is active.");
       }
-      this.#recordingClient = new RecordingClient(bindings, options);
+      this.#recordingClient = new RecordingClient(
+        bindings,
+        options
+      );
       this.#recordingClient.start();
     }
     stopRecording() {
@@ -1169,7 +1211,11 @@
       if (this.#recordingClient) {
         this.#recordingClient.stop();
       }
-      this.#selectorPicker = new SelectorPicker(bindings, customAttribute, debug);
+      this.#selectorPicker = new SelectorPicker(
+        bindings,
+        customAttribute,
+        debug
+      );
       this.#selectorPicker.start();
     }
     stopSelectorPicker() {
@@ -1186,14 +1232,9 @@
   if (!window.DevToolsRecorder) {
     window.DevToolsRecorder = new DevToolsRecorder();
   }
-  /**
-   * @license
-   * Copyright 2022 Google Inc.
-   * SPDX-License-Identifier: Apache-2.0
-   */
-
-  exports.findMinMax = findMinMax;
-
-  return exports;
-
-})({});
+})();
+/**
+ * @license
+ * Copyright 2022 Google Inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */

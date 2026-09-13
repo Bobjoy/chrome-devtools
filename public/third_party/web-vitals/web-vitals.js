@@ -4,7 +4,7 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/bfcache.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/bfcache.js
 var bfcacheRestoreTime = -1;
 var getBFCacheRestoreTime = () => bfcacheRestoreTime;
 var onBFCacheRestore = (cb) => {
@@ -16,7 +16,7 @@ var onBFCacheRestore = (cb) => {
   }, true);
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/bindReporter.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/bindReporter.js
 var getRating = (value, thresholds) => {
   if (value > thresholds[1]) {
     return "poor";
@@ -44,12 +44,12 @@ var bindReporter = (callback, metric, thresholds, reportAllChanges) => {
   };
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/doubleRAF.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/doubleRAF.js
 var doubleRAF = (cb) => {
-  requestAnimationFrame(() => requestAnimationFrame(cb));
+  requestAnimationFrame(() => requestAnimationFrame(() => cb()));
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/getNavigationEntry.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/getNavigationEntry.js
 var getNavigationEntry = () => {
   const navigationEntry = performance.getEntriesByType("navigation")[0];
   if (navigationEntry && navigationEntry.responseStart > 0 && navigationEntry.responseStart < performance.now()) {
@@ -57,12 +57,12 @@ var getNavigationEntry = () => {
   }
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/getActivationStart.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/getActivationStart.js
 var getActivationStart = () => {
   return getNavigationEntry()?.activationStart ?? 0;
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/getVisibilityWatcher.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/getVisibilityWatcher.js
 var firstHiddenTime = -1;
 var onHiddenFunctions = /* @__PURE__ */ new Set();
 var initHiddenTime = () => {
@@ -107,12 +107,12 @@ var getVisibilityWatcher = (reset = false) => {
   };
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/generateUniqueID.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/generateUniqueID.js
 var generateUniqueID = () => {
   return `v6-${Date.now()}-${Math.floor(Math.random() * (9e12 - 1)) + 1e12}`;
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/initMetric.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/initMetric.js
 var initMetric = (name, value = -1, navigationType, navigationId = 0, navigationInteractionId, navigationURL, navigationStartTime) => {
   const hardNavEntry = getNavigationEntry();
   const hardNavId = hardNavEntry?.navigationId || 0;
@@ -147,7 +147,7 @@ var initMetric = (name, value = -1, navigationType, navigationId = 0, navigation
   };
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/initUnique.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/initUnique.js
 var instanceMap = /* @__PURE__ */ new WeakMap();
 function initUnique(identityObj, ClassObj) {
   let classInstances = instanceMap.get(ClassObj);
@@ -161,7 +161,7 @@ function initUnique(identityObj, ClassObj) {
   return classInstances.get(identityObj);
 }
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/LayoutShiftManager.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/LayoutShiftManager.js
 var LayoutShiftManager = class {
   _onAfterProcessingUnexpectedShift;
   _sessionValue = 0;
@@ -182,7 +182,7 @@ var LayoutShiftManager = class {
   }
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/observe.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/observe.js
 var observe = (types, callback, opts = {}) => {
   try {
     const supportedTypes = types.filter((t) => PerformanceObserver.supportedEntryTypes.includes(t));
@@ -210,12 +210,15 @@ var observe = (types, callback, opts = {}) => {
   return;
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/softNavs.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/softNavs.js
 var checkSoftNavsEnabled = (opts) => {
-  return PerformanceObserver.supportedEntryTypes.includes("soft-navigation") && // Older implementations expose the value as an attribute rather than the
-  // method. We only support the newer method as that was what was launched
-  // to stable unflagged.
-  typeof globalThis.PerformanceSoftNavigation?.prototype?.getLargestInteractionContentfulPaint === "function" && opts && opts.reportSoftNavs;
+  return (
+    // Firefox has a preference to disable this, which some people use so add a guard
+    globalThis.PerformanceObserver?.supportedEntryTypes?.includes("soft-navigation") && // Older implementations expose the value as an attribute rather than the
+    // method. We only support the newer method as that was what was launched
+    // to stable unflagged.
+    typeof globalThis.PerformanceSoftNavigation?.prototype?.getLargestInteractionContentfulPaint === "function" && opts && opts.reportSoftNavs
+  );
 };
 var storeSoftNavEntry = (map, entry) => {
   map.set(entry.navigationId, entry);
@@ -227,7 +230,7 @@ var storeSoftNavEntry = (map, entry) => {
   }
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/runOnce.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/runOnce.js
 var runOnce = (cb) => {
   let called = false;
   return () => {
@@ -238,12 +241,12 @@ var runOnce = (cb) => {
   };
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/FCPEntryManager.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/FCPEntryManager.js
 var FCPEntryManager = class {
   _softNavigationEntryMap;
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/whenActivated.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/whenActivated.js
 var whenActivated = (callback) => {
   if (document.prerendering) {
     addEventListener("prerenderingchange", callback, true);
@@ -252,7 +255,7 @@ var whenActivated = (callback) => {
   }
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/onFCP.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/onFCP.js
 var FCPThresholds = [1800, 3e3];
 var onFCP = (onReport, opts = {}) => {
   const softNavsEnabled = checkSoftNavsEnabled(opts);
@@ -303,7 +306,7 @@ var onFCP = (onReport, opts = {}) => {
   });
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/onCLS.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/onCLS.js
 var CLSThresholds = [0.1, 0.25];
 var onCLS = (onReport, opts = {}) => {
   const visibilityWatcher = getVisibilityWatcher();
@@ -357,7 +360,7 @@ var onCLS = (onReport, opts = {}) => {
   }));
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/polyfills/interactionCountPolyfill.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/polyfills/interactionCountPolyfill.js
 var interactionCountEstimate = 0;
 var minKnownInteractionId = Infinity;
 var maxKnownInteractionId = 0;
@@ -382,13 +385,18 @@ var initInteractionCountPolyfill = () => {
   });
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/InteractionManager.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/InteractionManager.js
 var MAX_INTERACTIONS_TO_CONSIDER = 10;
-var prevInteractionCount = 0;
-var getInteractionCountForNavigation = () => {
-  return getInteractionCount() - prevInteractionCount;
-};
 var InteractionManager = class {
+  /**
+   * The interaction count at the start of the current navigation, so p98
+   * interaction latencies only consider interactions since then.
+   *
+   * This is per-instance rather than module state: `initUnique()` gives every
+   * `onINP()` call its own manager, and a shared counter would let whichever
+   * instance resets first hide the interactions from all the others.
+   */
+  _prevInteractionCount = 0;
   /**
    * A list of longest interactions on the page (by latency) sorted so the
    * longest one is first. The list is at most MAX_INTERACTIONS_TO_CONSIDER
@@ -402,8 +410,15 @@ var InteractionManager = class {
   _longestInteractionMap = /* @__PURE__ */ new Map();
   _onBeforeProcessingEntry;
   _onAfterProcessingINPCandidate;
+  /**
+   * Returns the interaction count since the start of the current navigation
+   * (or the full page lifecycle if there were no soft navs / bfcache restores).
+   */
+  _getInteractionCountForNavigation() {
+    return getInteractionCount() - this._prevInteractionCount;
+  }
   _resetInteractions() {
-    prevInteractionCount = getInteractionCount();
+    this._prevInteractionCount = getInteractionCount();
     this._longestInteractionList.length = 0;
     this._longestInteractionMap.clear();
   }
@@ -412,7 +427,7 @@ var InteractionManager = class {
    * interaction candidates and the interaction count for the current page.
    */
   _estimateP98LongestInteraction(navigationType) {
-    const interactionCountForNavigation = getInteractionCountForNavigation();
+    const interactionCountForNavigation = this._getInteractionCountForNavigation();
     const candidateInteractionIndex = Math.min(this._longestInteractionList.length - 1, Math.floor(interactionCountForNavigation / 50));
     if (interactionCountForNavigation && candidateInteractionIndex === -1 && (navigationType === "soft-navigation" || navigationType === "back-forward-cache")) {
       return {
@@ -431,7 +446,7 @@ var InteractionManager = class {
    */
   _processEntry(entry) {
     this._onBeforeProcessingEntry?.(entry);
-    if (!(entry.interactionId || entry.entryType === "first-input"))
+    if (!entry.interactionId)
       return;
     const minLongestInteraction = this._longestInteractionList.at(-1);
     let interaction = this._longestInteractionMap.get(entry.interactionId);
@@ -465,7 +480,7 @@ var InteractionManager = class {
   }
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/whenIdleOrHidden.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/whenIdleOrHidden.js
 var whenIdleOrHidden = (cb) => {
   const timeout = "requestIdleCallback" in globalThis ? 1e3 : 0;
   const rIC = globalThis.requestIdleCallback || setTimeout;
@@ -487,7 +502,7 @@ var whenIdleOrHidden = (cb) => {
   }
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/onINP.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/onINP.js
 var INPThresholds = [200, 500];
 var DEFAULT_DURATION_THRESHOLD = 40;
 var onINP = (onReport, opts = {}) => {
@@ -553,7 +568,7 @@ var onINP = (onReport, opts = {}) => {
   });
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/LCPEntryManager.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/LCPEntryManager.js
 var LCPEntryManager = class {
   _onBeforeProcessingEntry;
   _softNavigationEntryMap;
@@ -562,7 +577,7 @@ var LCPEntryManager = class {
   }
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/onLCP.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/onLCP.js
 var LCPThresholds = [2500, 4e3];
 var onLCP = (onReport, opts = {}) => {
   let isFinalized = false;
@@ -676,7 +691,7 @@ var onLCP = (onReport, opts = {}) => {
   });
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/onTTFB.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/onTTFB.js
 var TTFBThresholds = [800, 1800];
 var whenReady = (callback) => {
   if (document.prerendering) {
@@ -720,7 +735,7 @@ var onTTFB = (onReport, opts = {}) => {
   });
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/attribution/index.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/attribution/index.js
 var attribution_exports = {};
 __export(attribution_exports, {
   CLSThresholds: () => CLSThresholds,
@@ -735,7 +750,7 @@ __export(attribution_exports, {
   onTTFB: () => onTTFB2
 });
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/getLoadState.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/getLoadState.js
 var getLoadState = (timestamp) => {
   if (document.readyState === "loading") {
     return "loading";
@@ -753,7 +768,7 @@ var getLoadState = (timestamp) => {
   return "complete";
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/lib/getSelector.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/lib/getSelector.js
 var getName = (node) => {
   const name = node.nodeName;
   return node.nodeType === 1 ? name.toLowerCase() : name.toUpperCase().replace(/^#/, "");
@@ -779,7 +794,7 @@ var getSelector = (node) => {
   return sel;
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onCLS.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onCLS.js
 var getLargestLayoutShiftEntry = (entries) => {
   return entries.reduce((a, b) => a.value > b.value ? a : b);
 };
@@ -825,7 +840,7 @@ var onCLS2 = (onReport, opts = {}) => {
   }, opts);
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onFCP.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onFCP.js
 var onFCP2 = (onReport, opts = {}) => {
   opts = Object.assign({}, opts);
   const fcpEntryManager = initUnique(opts, FCPEntryManager);
@@ -874,7 +889,7 @@ var onFCP2 = (onReport, opts = {}) => {
   }, opts);
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onINP.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onINP.js
 var MAX_PENDING_FRAMES = 10;
 var onINP2 = (onReport, opts = {}) => {
   opts = Object.assign({}, opts);
@@ -932,7 +947,7 @@ var onINP2 = (onReport, opts = {}) => {
       };
       pendingEntriesGroups.push(group);
     }
-    if (entry.interactionId || entry.entryType === "first-input") {
+    if (entry.interactionId) {
       entryToEntriesGroupMap.set(entry, group);
     }
     queueCleanup();
@@ -1068,7 +1083,7 @@ var onINP2 = (onReport, opts = {}) => {
     }
     const firstEntry = metric.entries[0];
     const group = entryToEntriesGroupMap.get(firstEntry);
-    const processingStart = group.processingStart;
+    const processingStart = Math.max(group.processingStart, firstEntry.startTime);
     const nextPaintTime = Math.max(firstEntry.startTime + firstEntry.duration, processingStart);
     const processingEnd = Math.min(group.processingEnd, nextPaintTime);
     const processedEventEntries = group.entries.sort((a, b) => {
@@ -1105,9 +1120,23 @@ var onINP2 = (onReport, opts = {}) => {
   }, opts);
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onLCP.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onLCP.js
+var DEFAULT_RESOURCE_BUFFER_SIZE = 50;
+var resourceBufferSizeLimit = DEFAULT_RESOURCE_BUFFER_SIZE;
+var resourceBuffer = [];
+observe(["resource"], (entries) => {
+  for (const entry of entries) {
+    resourceBuffer.push(entry);
+    if (resourceBuffer.length > resourceBufferSizeLimit) {
+      resourceBuffer.shift();
+    }
+  }
+});
 var onLCP2 = (onReport, opts = {}) => {
   opts = Object.assign({}, opts);
+  if (opts.resourceBufferSize != void 0) {
+    resourceBufferSizeLimit = opts.resourceBufferSize;
+  }
   const lcpEntryManager = initUnique(opts, LCPEntryManager);
   const lcpTargetMap = /* @__PURE__ */ new WeakMap();
   if (checkSoftNavsEnabled(opts)) {
@@ -1131,7 +1160,7 @@ var onLCP2 = (onReport, opts = {}) => {
     };
     if (metric.entries.length) {
       const lcpEntry = metric.entries.at(-1);
-      const lcpResourceEntry = lcpEntry.url && performance.getEntriesByType("resource").find((e) => e.name === lcpEntry.url);
+      const lcpResourceEntry = lcpEntry.url && (resourceBuffer.findLast((e) => e.name === lcpEntry.url) || performance.getEntriesByType("resource").findLast((e) => e.name === lcpEntry.url));
       attribution.target = lcpTargetMap.get(lcpEntry);
       attribution.lcpEntry = lcpEntry;
       if (lcpEntry.url) {
@@ -1180,7 +1209,7 @@ var onLCP2 = (onReport, opts = {}) => {
   }, opts);
 };
 
-// gen/front_end/third_party/web-vitals/package/dist/modules/attribution/onTTFB.js
+// ../../front_end/third_party/web-vitals/package/dist/modules/attribution/onTTFB.js
 var attributeTTFB = (metric) => {
   const navigationEntry = metric.entries[0];
   let attribution = {

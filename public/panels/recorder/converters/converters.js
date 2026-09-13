@@ -4,16 +4,16 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// gen/front_end/panels/recorder/converters/Converter.js
+// ../../front_end/panels/recorder/converters/Converter.ts
 var Converter_exports = {};
 
-// gen/front_end/panels/recorder/converters/ExtensionConverter.js
+// ../../front_end/panels/recorder/converters/ExtensionConverter.ts
 var ExtensionConverter_exports = {};
 __export(ExtensionConverter_exports, {
   EXTENSION_PREFIX: () => EXTENSION_PREFIX,
   ExtensionConverter: () => ExtensionConverter
 });
-import * as PuppeteerReplay from "./../../../third_party/puppeteer-replay/puppeteer-replay.js";
+import * as PuppeteerReplay from "../../../third_party/puppeteer-replay/puppeteer-replay.js";
 var EXTENSION_PREFIX = "extension_";
 var ExtensionConverter = class {
   #idx;
@@ -32,7 +32,9 @@ var ExtensionConverter = class {
     return this.#extension.getMediaType();
   }
   getFilename(flow) {
-    const fileExtension = this.#mediaTypeToExtension(this.#extension.getMediaType());
+    const fileExtension = this.#mediaTypeToExtension(
+      this.#extension.getMediaType()
+    );
     return `${flow.title}${fileExtension}`;
   }
   async stringify(flow) {
@@ -59,20 +61,20 @@ var ExtensionConverter = class {
   }
 };
 
-// gen/front_end/panels/recorder/converters/JSONConverter.js
+// ../../front_end/panels/recorder/converters/JSONConverter.ts
 var JSONConverter_exports = {};
 __export(JSONConverter_exports, {
   JSONConverter: () => JSONConverter
 });
-import * as PuppeteerReplay2 from "./../../../third_party/puppeteer-replay/puppeteer-replay.js";
-import * as Models from "./../models/models.js";
+import * as PuppeteerReplay2 from "../../../third_party/puppeteer-replay/puppeteer-replay.js";
+import * as Models from "../models/models.js";
 var JSONConverter = class {
   #indent;
   constructor(indent) {
     this.#indent = indent;
   }
   getId() {
-    return "json";
+    return Models.ConverterIds.ConverterIds.JSON;
   }
   getFormatName() {
     return "JSON";
@@ -99,20 +101,20 @@ var JSONConverter = class {
   }
 };
 
-// gen/front_end/panels/recorder/converters/LighthouseConverter.js
+// ../../front_end/panels/recorder/converters/LighthouseConverter.ts
 var LighthouseConverter_exports = {};
 __export(LighthouseConverter_exports, {
   LighthouseConverter: () => LighthouseConverter
 });
-import * as PuppeteerReplay3 from "./../../../third_party/puppeteer-replay/puppeteer-replay.js";
-import * as Models2 from "./../models/models.js";
+import * as PuppeteerReplay3 from "../../../third_party/puppeteer-replay/puppeteer-replay.js";
+import * as Models2 from "../models/models.js";
 var LighthouseConverter = class {
   #indent;
   constructor(indent) {
     this.#indent = indent;
   }
   getId() {
-    return "lighthouse";
+    return Models2.ConverterIds.ConverterIds.LIGHTHOUSE;
   }
   getFormatName() {
     return "Puppeteer (including Lighthouse analysis)";
@@ -138,13 +140,13 @@ var LighthouseConverter = class {
   }
 };
 
-// gen/front_end/panels/recorder/converters/PuppeteerConverter.js
+// ../../front_end/panels/recorder/converters/PuppeteerConverter.ts
 var PuppeteerConverter_exports = {};
 __export(PuppeteerConverter_exports, {
   PuppeteerConverter: () => PuppeteerConverter
 });
-import * as PuppeteerReplay4 from "./../../../third_party/puppeteer-replay/puppeteer-replay.js";
-import * as Models3 from "./../models/models.js";
+import * as PuppeteerReplay4 from "../../../third_party/puppeteer-replay/puppeteer-replay.js";
+import * as Models3 from "../models/models.js";
 var PuppeteerConverter = class {
   #indent;
   #extension;
@@ -153,7 +155,7 @@ var PuppeteerConverter = class {
     this.#extension = this.createExtension();
   }
   getId() {
-    return "puppeteer";
+    return Models3.ConverterIds.ConverterIds.PUPPETEER;
   }
   createExtension() {
     return new PuppeteerReplay4.PuppeteerStringifyExtension();
@@ -183,16 +185,16 @@ var PuppeteerConverter = class {
   }
 };
 
-// gen/front_end/panels/recorder/converters/PuppeteerFirefoxConverter.js
+// ../../front_end/panels/recorder/converters/PuppeteerFirefoxConverter.ts
 var PuppeteerFirefoxConverter_exports = {};
 __export(PuppeteerFirefoxConverter_exports, {
   PuppeteerFirefoxConverter: () => PuppeteerFirefoxConverter
 });
-import * as PuppeteerReplay5 from "./../../../third_party/puppeteer-replay/puppeteer-replay.js";
-import * as Models4 from "./../models/models.js";
+import * as PuppeteerReplay5 from "../../../third_party/puppeteer-replay/puppeteer-replay.js";
+import * as Models4 from "../models/models.js";
 var PuppeteerFirefoxConverter = class extends PuppeteerConverter {
   getId() {
-    return "puppeteer-firefox";
+    return Models4.ConverterIds.ConverterIds.PUPPETEER_FIREFOX;
   }
   createExtension() {
     return new PuppeteerReplay5.PuppeteerStringifyExtension("firefox");
@@ -202,20 +204,20 @@ var PuppeteerFirefoxConverter = class extends PuppeteerConverter {
   }
 };
 
-// gen/front_end/panels/recorder/converters/PuppeteerReplayConverter.js
+// ../../front_end/panels/recorder/converters/PuppeteerReplayConverter.ts
 var PuppeteerReplayConverter_exports = {};
 __export(PuppeteerReplayConverter_exports, {
   PuppeteerReplayConverter: () => PuppeteerReplayConverter
 });
-import * as PuppeteerReplay6 from "./../../../third_party/puppeteer-replay/puppeteer-replay.js";
-import * as Models5 from "./../models/models.js";
+import * as PuppeteerReplay6 from "../../../third_party/puppeteer-replay/puppeteer-replay.js";
+import * as Models5 from "../models/models.js";
 var PuppeteerReplayConverter = class {
   #indent;
   constructor(indent) {
     this.#indent = indent;
   }
   getId() {
-    return "@puppeteer/replay";
+    return Models5.ConverterIds.ConverterIds.REPLAY;
   }
   getFormatName() {
     return "@puppeteer/replay";

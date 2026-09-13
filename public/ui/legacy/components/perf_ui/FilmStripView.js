@@ -11,30 +11,31 @@ import * as UI from '../../legacy.js';
 import filmStripViewStyles from './filmStripView.css.js';
 const UIStrings = {
     /**
-     * @description Element title in Film Strip View of the Performance panel
+     * @description Tooltip text for a screenshot frame in the film strip view of the Performance panel.
      */
-    doubleclickToZoomImageClickTo: 'Doubleclick to zoom image. Click to view preceding requests.',
+    doubleclickToZoomImageClickTo: 'Double-click to zoom image. Click to view preceding requests.',
     /**
-     * @description Aria label for captured screenshots in network panel.
+     * @description Accessible label for a screenshot frame in the film strip view of the Network panel.
      * @example {3ms} PH1
      */
     screenshotForSSelectToView: 'Screenshot for {PH1} - select to view preceding requests.',
     /**
-     * @description Text for one or a group of screenshots
+     * @description Alt text for a screenshot thumbnail image in the film strip view.
      */
     screenshot: 'Screenshot',
     /**
-     * @description Prev button title in Film Strip View of the Performance panel
+     * @description Tooltip text for the previous frame button in the film strip dialog.
      */
     previousFrame: 'Previous frame',
     /**
-     * @description Next button title in Film Strip View of the Performance panel
+     * @description Tooltip text for the next frame button in the film strip dialog.
      */
     nextFrame: 'Next frame',
 };
 const str_ = i18n.i18n.registerUIStrings('ui/legacy/components/perf_ui/FilmStripView.ts', UIStrings);
 const i18nString = i18n.i18n.getLocalizedString.bind(undefined, str_);
-export class FilmStripView extends Common.ObjectWrapper.eventMixin(UI.Widget.HBox) {
+const FilmStripViewBase = Common.ObjectWrapper.eventMixin(UI.Widget.HBox);
+export class FilmStripView extends FilmStripViewBase {
     statusLabel;
     zeroTime = Trace.Types.Timing.Milli(0);
     #filmStrip = null;
@@ -113,6 +114,12 @@ export class FilmStripView extends Common.ObjectWrapper.eventMixin(UI.Widget.HBo
         this.statusLabel.textContent = text;
     }
 }
+export var Events;
+(function (Events) {
+    Events["FRAME_SELECTED"] = "FrameSelected";
+    Events["FRAME_ENTER"] = "FrameEnter";
+    Events["FRAME_EXIT"] = "FrameExit";
+})(Events || (Events = {}));
 export class Dialog {
     widget;
     index;

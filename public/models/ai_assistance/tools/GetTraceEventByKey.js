@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 import * as Host from '../../../core/host/host.js';
 import * as i18n from '../../../core/i18n/i18n.js';
-import { PerformanceTraceContext } from '../contexts/PerformanceTraceContext.js';
 import { formatEventForAI } from '../data_formatters/PerformanceTraceFormatter.js';
 const UIStringsNotTranslate = {
     lookingAtTraceEvent: 'Looking at trace event',
@@ -11,7 +10,7 @@ const UIStringsNotTranslate = {
 const lockedString = i18n.i18n.lockedString;
 export class GetTraceEventByKeyTool {
     name = "getTraceEventByKey" /* ToolName.GET_TRACE_EVENT_BY_KEY */;
-    description = 'Get details for a specific trace event by its event key.';
+    description = 'Retrieves details for a specific trace event by its event key.';
     parameters = {
         type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
         description: 'Arguments for looking up a trace event.',
@@ -32,11 +31,11 @@ export class GetTraceEventByKeyTool {
         };
     }
     async handler(params, capabilities) {
-        const conversationContext = capabilities.conversationContext;
-        if (!conversationContext || !(conversationContext instanceof PerformanceTraceContext)) {
+        const performanceTraceContext = capabilities.getPerformanceTraceContext();
+        if (!performanceTraceContext) {
             return { error: 'Performance trace context is not available.' };
         }
-        const focus = conversationContext.getItem();
+        const focus = performanceTraceContext.getItem();
         const event = focus.lookupEvent(params.eventKey);
         if (!event) {
             return { error: `Could not find event with key "${params.eventKey}".` };

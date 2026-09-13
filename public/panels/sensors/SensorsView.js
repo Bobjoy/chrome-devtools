@@ -6,8 +6,8 @@ import * as Common from '../../core/common/common.js';
 import * as Host from '../../core/host/host.js';
 import * as i18n from '../../core/i18n/i18n.js';
 import * as SDK from '../../core/sdk/sdk.js';
-import * as Geometry from '../../models/geometry/geometry.js';
 import * as Buttons from '../../ui/components/buttons/buttons.js';
+import * as Geometry from '../../ui/geometry/geometry.js';
 import * as SettingsUI from '../../ui/legacy/components/settings_ui/settings_ui.js';
 import * as UI from '../../ui/legacy/legacy.js';
 import { Directives, html, render } from '../../ui/lit/lit.js';
@@ -922,6 +922,13 @@ export class SensorsView extends UI.Widget.VBox {
         container.append(checkbox, div);
     }
 }
+export var DeviceOrientationModificationSource;
+(function (DeviceOrientationModificationSource) {
+    DeviceOrientationModificationSource["USER_INPUT"] = "userInput";
+    DeviceOrientationModificationSource["USER_DRAG"] = "userDrag";
+    DeviceOrientationModificationSource["RESET_BUTTON"] = "resetButton";
+    DeviceOrientationModificationSource["SELECT_PRESET"] = "selectPreset";
+})(DeviceOrientationModificationSource || (DeviceOrientationModificationSource = {}));
 export const PressureOptions = {
     NoOverride: 'no-override',
     Nominal: 'nominal',

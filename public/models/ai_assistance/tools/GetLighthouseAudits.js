@@ -2,11 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import * as Host from '../../../core/host/host.js';
-import { AccessibilityContext } from '../contexts/AccessibilityContext.js';
 import { LighthouseFormatter } from '../data_formatters/LighthouseFormatter.js';
 export class GetLighthouseAuditsTool {
     name = "getLighthouseAudits" /* ToolName.GET_LIGHTHOUSE_AUDITS */;
-    description = 'Returns the audits for a specific Lighthouse category.';
+    description = 'Retrieves audit results and diagnostic details from the active Lighthouse report for a specific category (e.g., \'accessibility\').';
     parameters = {
         type: 6 /* Host.AidaClient.ParametersTypes.OBJECT */,
         description: 'Arguments for retrieving Lighthouse category audits.',
@@ -27,10 +26,10 @@ export class GetLighthouseAuditsTool {
         };
     }
     async handler(params, context) {
-        if (!(context.conversationContext instanceof AccessibilityContext)) {
+        const report = context.getLighthouseReport();
+        if (!report) {
             return { error: 'Error: Active context is not a Lighthouse report.' };
         }
-        const report = context.conversationContext.getItem();
         const audits = new LighthouseFormatter().audits(report, params.categoryId);
         return {
             result: { audits },

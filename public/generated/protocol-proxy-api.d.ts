@@ -322,6 +322,13 @@ declare namespace ProtocolProxyApi {
      */
     invoke_getAdMetrics(): Promise<Protocol.Ads.GetAdMetricsResponse>;
 
+    /**
+     * Retrieves ad scripts for the current page. To minimize payload size, this
+     * only returns the newly tracked ad scripts since the last call to
+     * getAdScripts (i.e., the delta).
+     */
+    invoke_getAdScripts(): Promise<Protocol.Ads.GetAdScriptsResponse>;
+
   }
   export interface AdsDispatcher {
   }
@@ -666,6 +673,13 @@ declare namespace ProtocolProxyApi {
      * --enable-automation is on the commandline.
      */
     invoke_getBrowserCommandLine(): Promise<Protocol.Browser.GetBrowserCommandLineResponse>;
+
+    /**
+     * Adds or updates a mock camera in the shared video capture device list for
+     * test automation. The mock camera is not scoped to a particular page or
+     * frame and is removed when the DevTools session that created it disconnects.
+     */
+    invoke_addMockCamera(params: Protocol.Browser.AddMockCameraRequest): Promise<Protocol.ProtocolResponseWithError>;
 
     /**
      * Get Chrome histograms.
@@ -4282,41 +4296,6 @@ declare namespace ProtocolProxyApi {
     invoke_clearTrustTokens(params: Protocol.Storage.ClearTrustTokensRequest): Promise<Protocol.Storage.ClearTrustTokensResponse>;
 
     /**
-     * Gets metadata for an origin's shared storage.
-     */
-    invoke_getSharedStorageMetadata(params: Protocol.Storage.GetSharedStorageMetadataRequest): Promise<Protocol.Storage.GetSharedStorageMetadataResponse>;
-
-    /**
-     * Gets the entries in an given origin's shared storage.
-     */
-    invoke_getSharedStorageEntries(params: Protocol.Storage.GetSharedStorageEntriesRequest): Promise<Protocol.Storage.GetSharedStorageEntriesResponse>;
-
-    /**
-     * Sets entry with `key` and `value` for a given origin's shared storage.
-     */
-    invoke_setSharedStorageEntry(params: Protocol.Storage.SetSharedStorageEntryRequest): Promise<Protocol.ProtocolResponseWithError>;
-
-    /**
-     * Deletes entry for `key` (if it exists) for a given origin's shared storage.
-     */
-    invoke_deleteSharedStorageEntry(params: Protocol.Storage.DeleteSharedStorageEntryRequest): Promise<Protocol.ProtocolResponseWithError>;
-
-    /**
-     * Clears all entries for a given origin's shared storage.
-     */
-    invoke_clearSharedStorageEntries(params: Protocol.Storage.ClearSharedStorageEntriesRequest): Promise<Protocol.ProtocolResponseWithError>;
-
-    /**
-     * Resets the budget for `ownerOrigin` by clearing all budget withdrawals.
-     */
-    invoke_resetSharedStorageBudget(params: Protocol.Storage.ResetSharedStorageBudgetRequest): Promise<Protocol.ProtocolResponseWithError>;
-
-    /**
-     * Enables/disables issuing of sharedStorageAccessed events.
-     */
-    invoke_setSharedStorageTracking(params: Protocol.Storage.SetSharedStorageTrackingRequest): Promise<Protocol.ProtocolResponseWithError>;
-
-    /**
      * Set tracking for a storage key's buckets.
      */
     invoke_setStorageBucketTracking(params: Protocol.Storage.SetStorageBucketTrackingRequest): Promise<Protocol.ProtocolResponseWithError>;
@@ -4358,18 +4337,6 @@ declare namespace ProtocolProxyApi {
      * The origin's IndexedDB database list has been modified.
      */
     indexedDBListUpdated(params: Protocol.Storage.IndexedDBListUpdatedEvent): void;
-
-    /**
-     * Shared storage was accessed by the associated page.
-     * The following parameters are included in all events.
-     */
-    sharedStorageAccessed(params: Protocol.Storage.SharedStorageAccessedEvent): void;
-
-    /**
-     * A shared storage run or selectURL operation finished its execution.
-     * The following parameters are included in all events.
-     */
-    sharedStorageWorkletOperationExecutionFinished(params: Protocol.Storage.SharedStorageWorkletOperationExecutionFinishedEvent): void;
 
     storageBucketCreatedOrUpdated(params: Protocol.Storage.StorageBucketCreatedOrUpdatedEvent): void;
 

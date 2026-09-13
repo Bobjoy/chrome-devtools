@@ -325,6 +325,28 @@ describeWithEnvironment('CommentAnchorResolver', () => {
             const anchorEl3 = Comments.CommentAnchorResolver.resolveCommentAnchorElement(classTab);
             assert.isNull(anchorEl3);
         });
+        it('excludes top-level Panel from commenting', () => {
+            const panel = document.createElement('div');
+            panel.setAttribute('jslog', 'Panel; context: sources');
+            panel.textContent = 'Sources Panel Content';
+            container.appendChild(panel);
+            const anchorEl = Comments.CommentAnchorResolver.resolveCommentAnchorElement(panel);
+            assert.isNull(anchorEl);
+        });
+        it('returns null when clicking an unanchored child element or background within a Panel', () => {
+            const panel = document.createElement('div');
+            panel.setAttribute('jslog', 'Panel; context: network');
+            const bgWrapper = document.createElement('div');
+            bgWrapper.classList.add('vbox', 'flex-auto');
+            const unanchoredElement = document.createElement('div');
+            unanchoredElement.classList.add('panel-background');
+            unanchoredElement.textContent = 'Some nested background text';
+            bgWrapper.appendChild(unanchoredElement);
+            panel.appendChild(bgWrapper);
+            container.appendChild(panel);
+            const anchorEl = Comments.CommentAnchorResolver.resolveCommentAnchorElement(unanchoredElement);
+            assert.isNull(anchorEl);
+        });
     });
     describe('resolveCommentAnchor', () => {
         it('constructs vePath, captures textSignature, and calculates sibling index without redundant panelName', () => {
@@ -404,7 +426,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
             assert.strictEqual(anchor1?.siblingIndex, 0);
             assert.strictEqual(anchor2?.siblingIndex, 1);
         });
-        it('captures backendNodeId from element or closest ancestor', () => {
+        it('does not capture node if data-target-id is missing', () => {
             const ancestor = document.createElement('div');
             ancestor.setAttribute('jslog', 'TreeItem; context: dom-node');
             ancestor.setAttribute('data-backend-node-id', '101');
@@ -415,7 +437,21 @@ describeWithEnvironment('CommentAnchorResolver', () => {
             container.appendChild(ancestor);
             const anchor = Comments.CommentAnchorResolver.resolveCommentAnchor(node);
             assert.isNotNull(anchor);
-            assert.strictEqual(anchor?.backendNodeId, 101);
+            assert.isUndefined(anchor?.node);
+        });
+        it('captures targetId along with backendNodeId from element or closest ancestor', () => {
+            const ancestor = document.createElement('div');
+            ancestor.setAttribute('jslog', 'TreeItem; context: dom-node');
+            ancestor.setAttribute('data-backend-node-id', '101');
+            ancestor.setAttribute('data-target-id', 'target-456');
+            const node = document.createElement('div');
+            node.setAttribute('jslog', 'TreeItem; context: child-node');
+            node.textContent = '<div>Hello</div>';
+            ancestor.appendChild(node);
+            container.appendChild(ancestor);
+            const anchor = Comments.CommentAnchorResolver.resolveCommentAnchor(node);
+            assert.isNotNull(anchor);
+            assert.deepEqual(anchor?.node, { backendNodeId: 101, targetId: 'target-456' });
         });
         it('returns null if element cannot be resolved to an anchor element', () => {
             const emptyEl = document.createElement('div');
@@ -492,6 +528,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, textEditor.editor.dom);
@@ -745,6 +782,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                         timestamp: Date.now(),
                     }],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, target);
@@ -763,6 +801,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, target);
@@ -777,13 +816,15 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.isNull(rematched);
         });
-        it('finds element using backendNodeId domain ID', () => {
+        it('finds element using backendNodeId and targetId domain IDs', () => {
             const el = document.createElement('div');
             el.setAttribute('data-backend-node-id', '99');
+            el.setAttribute('data-target-id', 'target-1');
             el.textContent = '<button>Submit</button>';
             container.appendChild(el);
             const thread = {
@@ -791,13 +832,45 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 anchor: {
                     vePath: 'Panel: elements > TreeItem: node',
                     textSignature: '<button>Submit</button>',
-                    backendNodeId: 99,
+                    node: {
+                        backendNodeId: 99,
+                        targetId: 'target-1',
+                    },
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, el);
+        });
+        it('disambiguates elements sharing same backendNodeId with different targetIds', () => {
+            const el1 = document.createElement('div');
+            el1.setAttribute('data-backend-node-id', '99');
+            el1.setAttribute('data-target-id', 'target-1');
+            el1.textContent = '<button>Submit</button>';
+            container.appendChild(el1);
+            const el2 = document.createElement('div');
+            el2.setAttribute('data-backend-node-id', '99');
+            el2.setAttribute('data-target-id', 'target-2');
+            el2.textContent = '<button>Submit</button>';
+            container.appendChild(el2);
+            const thread = {
+                id: 'comment-dom',
+                anchor: {
+                    vePath: 'Panel: elements > TreeItem: node',
+                    textSignature: '<button>Submit</button>',
+                    node: {
+                        backendNodeId: 99,
+                        targetId: 'target-2',
+                    },
+                },
+                comments: [],
+                status: 'ACTIVE',
+                index: 1,
+            };
+            const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
+            assert.strictEqual(rematched, el2);
         });
         it('finds element using VE path and textSignature fallback', () => {
             const item = document.createElement('div');
@@ -816,6 +889,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                         timestamp: Date.now(),
                     }],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, item);
@@ -841,6 +915,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, item2);
@@ -870,6 +945,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, item2);
@@ -895,6 +971,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 anchor: anchor,
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, sourcesEditor.editor.dom);
@@ -916,6 +993,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, editor2.editor.dom);
@@ -935,6 +1013,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.isNull(rematched);
@@ -954,6 +1033,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, editor.editor.dom);
@@ -973,6 +1053,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const cachedElements = Comments.CommentAnchorResolver.deepQuerySelectorAll(container, '[jslog]');
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container, cachedElements);
@@ -1008,6 +1089,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 anchor: anchorB2,
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, itemB2);
@@ -1033,6 +1115,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, item2);
@@ -1065,6 +1148,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 anchor: anchor2,
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, item2);
@@ -1086,6 +1170,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, tree);
@@ -1103,6 +1188,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.strictEqual(rematched, el);
@@ -1124,6 +1210,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, host);
             assert.strictEqual(rematched, target);
@@ -1144,6 +1231,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, host);
             assert.strictEqual(rematched, target);
@@ -1157,6 +1245,7 @@ describeWithEnvironment('CommentAnchorResolver', () => {
                 },
                 comments: [],
                 status: 'ACTIVE',
+                index: 1,
             };
             const rematched = Comments.CommentAnchorResolver.rematchCommentAnchor(thread, container);
             assert.isNull(rematched);
@@ -1181,6 +1270,210 @@ describeWithEnvironment('CommentAnchorResolver', () => {
             visibleEl.getBoundingClientRect = () => new DOMRect(10, 10, 100, 30);
             container.appendChild(visibleEl);
             assert.isTrue(Comments.CommentAnchorResolver.isElementVisible(visibleEl));
+        });
+    });
+    describe('computeVisibleRect', () => {
+        it('returns null for disconnected, hidden, or zero-sized elements', () => {
+            const disconnected = document.createElement('div');
+            assert.isNull(Comments.CommentAnchorResolver.computeVisibleRect(disconnected));
+            const hiddenEl = document.createElement('div');
+            hiddenEl.style.display = 'none';
+            container.appendChild(hiddenEl);
+            assert.isNull(Comments.CommentAnchorResolver.computeVisibleRect(hiddenEl));
+            const zeroSize = document.createElement('div');
+            zeroSize.getBoundingClientRect = () => new DOMRect(0, 0, 0, 0);
+            container.appendChild(zeroSize);
+            assert.isNull(Comments.CommentAnchorResolver.computeVisibleRect(zeroSize));
+        });
+        it('returns unclipped rect when element is inside unconstrained container', () => {
+            const el = document.createElement('div');
+            el.textContent = 'Unclipped';
+            el.getBoundingClientRect = () => new DOMRect(50, 100, 200, 60);
+            container.appendChild(el);
+            const rect = Comments.CommentAnchorResolver.computeVisibleRect(el);
+            assert.isNotNull(rect);
+            assert.strictEqual(rect?.left, 50);
+            assert.strictEqual(rect?.top, 100);
+            assert.strictEqual(rect?.width, 200);
+            assert.strictEqual(rect?.height, 60);
+            assert.strictEqual(rect?.right, 250);
+            assert.strictEqual(rect?.bottom, 160);
+        });
+        it('clips element rect to ancestor overflow: hidden / scroll container bounds', () => {
+            const scrollParent = document.createElement('div');
+            scrollParent.style.overflow = 'hidden';
+            scrollParent.style.position = 'relative';
+            scrollParent.getBoundingClientRect = () => new DOMRect(0, 50, 300, 100);
+            container.appendChild(scrollParent);
+            const child = document.createElement('div');
+            child.textContent = 'Partially visible child';
+            // Element starts at top: 30 (above parent top: 50) and extends to top: 120 (bottom: 120, inside parent bottom: 150)
+            child.getBoundingClientRect = () => new DOMRect(20, 30, 200, 90);
+            scrollParent.appendChild(child);
+            const rect = Comments.CommentAnchorResolver.computeVisibleRect(child);
+            assert.isNotNull(rect);
+            assert.strictEqual(rect?.top, 50);
+            assert.strictEqual(rect?.bottom, 120);
+            assert.strictEqual(rect?.height, 70);
+            assert.strictEqual(rect?.left, 20);
+            assert.strictEqual(rect?.right, 220);
+            assert.strictEqual(rect?.width, 200);
+        });
+        it('clips element rect extending past bottom of overflow container', () => {
+            const scrollParent = document.createElement('div');
+            scrollParent.style.overflowY = 'auto';
+            scrollParent.getBoundingClientRect = () => new DOMRect(0, 0, 400, 200);
+            container.appendChild(scrollParent);
+            const child = document.createElement('div');
+            child.textContent = 'Bottom overflowing child';
+            // Element starts at top: 150 and extends to bottom: 300 (past parent bottom: 200)
+            child.getBoundingClientRect = () => new DOMRect(10, 150, 100, 150);
+            scrollParent.appendChild(child);
+            const rect = Comments.CommentAnchorResolver.computeVisibleRect(child);
+            assert.isNotNull(rect);
+            assert.strictEqual(rect?.top, 150);
+            assert.strictEqual(rect?.bottom, 200);
+            assert.strictEqual(rect?.height, 50);
+            assert.strictEqual(rect?.left, 10);
+            assert.strictEqual(rect?.width, 100);
+        });
+        it('returns null when element is completely scrolled out of overflow container', () => {
+            const scrollParent = document.createElement('div');
+            scrollParent.style.overflow = 'hidden';
+            scrollParent.getBoundingClientRect = () => new DOMRect(0, 100, 400, 200);
+            container.appendChild(scrollParent);
+            const childScrolledAbove = document.createElement('div');
+            childScrolledAbove.textContent = 'Scrolled above';
+            childScrolledAbove.getBoundingClientRect = () => new DOMRect(0, 10, 100, 50);
+            scrollParent.appendChild(childScrolledAbove);
+            assert.isNull(Comments.CommentAnchorResolver.computeVisibleRect(childScrolledAbove));
+            const childScrolledBelow = document.createElement('div');
+            childScrolledBelow.textContent = 'Scrolled below';
+            childScrolledBelow.getBoundingClientRect = () => new DOMRect(0, 350, 100, 50);
+            scrollParent.appendChild(childScrolledBelow);
+            assert.isNull(Comments.CommentAnchorResolver.computeVisibleRect(childScrolledBelow));
+        });
+        it('clips correctly across Shadow DOM boundaries', () => {
+            const scrollParent = document.createElement('div');
+            scrollParent.style.overflow = 'hidden';
+            scrollParent.getBoundingClientRect = () => new DOMRect(0, 0, 300, 150);
+            container.appendChild(scrollParent);
+            const host = document.createElement('div');
+            const shadow = host.attachShadow({ mode: 'open' });
+            scrollParent.appendChild(host);
+            const innerChild = document.createElement('div');
+            innerChild.textContent = 'Shadow child';
+            innerChild.getBoundingClientRect = () => new DOMRect(0, 100, 400, 100);
+            shadow.appendChild(innerChild);
+            const rect = Comments.CommentAnchorResolver.computeVisibleRect(innerChild);
+            assert.isNotNull(rect);
+            assert.strictEqual(rect?.top, 100);
+            assert.strictEqual(rect?.bottom, 150);
+            assert.strictEqual(rect?.height, 50);
+            assert.strictEqual(rect?.left, 0);
+            assert.strictEqual(rect?.right, 300);
+            assert.strictEqual(rect?.width, 300);
+        });
+        it('supports custom targetRect parameter', () => {
+            const el = document.createElement('div');
+            container.appendChild(el);
+            const customRect = new DOMRect(15, 25, 80, 40);
+            const rect = Comments.CommentAnchorResolver.computeVisibleRect(el, customRect);
+            assert.isNotNull(rect);
+            assert.strictEqual(rect?.top, 25);
+            assert.strictEqual(rect?.left, 15);
+            assert.strictEqual(rect?.width, 80);
+            assert.strictEqual(rect?.height, 40);
+        });
+    });
+    describe('CustomAnchorResolver integration', () => {
+        let customElement;
+        let customResolver;
+        beforeEach(() => {
+            customElement = document.createElement('div');
+            customElement.classList.add('custom-canvas-target');
+            container.appendChild(customElement);
+            customResolver = {
+                matches(element) {
+                    return element.classList.contains('custom-canvas-target') ||
+                        Boolean(element.closest('.custom-canvas-target'));
+                },
+                resolve(element, options) {
+                    if (!this.matches(element)) {
+                        return null;
+                    }
+                    return {
+                        anchor: {
+                            vePath: 'Panel: custom > Canvas: main',
+                            textSignature: 'Custom Event',
+                            timeline: {
+                                traceId: 'trace-1',
+                                traceEventKey: 'custom-event-key',
+                                entryName: 'Custom Event',
+                                startTimeMicro: (options?.clientX ?? 10) * 1000,
+                                chartLocation: 'main',
+                            },
+                        },
+                        anchorElement: customElement,
+                        highlightRect: {
+                            top: options?.clientY ?? 50,
+                            left: options?.clientX ?? 50,
+                            width: 100,
+                            height: 20,
+                            visible: true,
+                        },
+                    };
+                },
+            };
+            Comments.CommentAnchorResolver.registerCustomAnchorResolver(customResolver);
+        });
+        afterEach(() => {
+            Comments.CommentAnchorResolver.clearCustomAnchorResolversForTest();
+        });
+        it('identifies custom resolver for matching element', () => {
+            const resolver = Comments.CommentAnchorResolver.getCustomAnchorResolverForElement(customElement);
+            assert.strictEqual(resolver, customResolver);
+            const otherDiv = document.createElement('div');
+            assert.isNull(Comments.CommentAnchorResolver.getCustomAnchorResolverForElement(otherDiv));
+        });
+        it('delegates resolveCommentAnchorElement to custom resolver', () => {
+            const anchorEl = Comments.CommentAnchorResolver.resolveCommentAnchorElement(customElement, { clientX: 20, clientY: 40 });
+            assert.strictEqual(anchorEl, customElement);
+        });
+        it('delegates resolveCommentAnchor to custom resolver with coordinates', () => {
+            const anchor = Comments.CommentAnchorResolver.resolveCommentAnchor(customElement, document, { clientX: 35, clientY: 70 });
+            assert.isNotNull(anchor);
+            assert.strictEqual(anchor?.vePath, 'Panel: custom > Canvas: main');
+            assert.strictEqual(anchor?.timeline?.traceId, 'trace-1');
+            assert.strictEqual(anchor?.timeline?.startTimeMicro, 35000);
+        });
+        it('restores default behavior when custom resolver is unregistered', () => {
+            Comments.CommentAnchorResolver.unregisterCustomAnchorResolver(customResolver);
+            const resolver = Comments.CommentAnchorResolver.getCustomAnchorResolverForElement(customElement);
+            assert.isNull(resolver);
+        });
+    });
+    describe('isDomTrackedAnchor', () => {
+        it('returns true for standard DOM anchors', () => {
+            const domAnchor = {
+                vePath: 'Panel: elements > TreeItem',
+                textSignature: 'div.header',
+            };
+            assert.isTrue(Comments.CommentAnchorResolver.isDomTrackedAnchor(domAnchor));
+        });
+        it('returns false for canvas timeline anchors', () => {
+            const timelineAnchor = {
+                vePath: 'Panel: timeline > FlameChart: main',
+                textSignature: 'Task',
+                timeline: {
+                    traceId: 'trace-1',
+                    traceEventKey: 'e-1',
+                    entryName: 'Task',
+                    startTimeMicro: 1000,
+                    chartLocation: 'main',
+                },
+            };
+            assert.isFalse(Comments.CommentAnchorResolver.isDomTrackedAnchor(timelineAnchor));
         });
     });
 });
